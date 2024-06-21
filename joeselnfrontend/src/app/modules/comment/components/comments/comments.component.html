@@ -1,0 +1,84 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *ngIf="create">
+
+<!--  <eworkbench-create-comment-->
+<!--    class="mb-4"-->
+<!--    [id]="id"-->
+<!--    [service]="service"-->
+<!--    [contentType]="contentType"-->
+<!--    (refresh)="loadComments()"-->
+<!--  ></eworkbench-create-comment>-->
+
+</ng-container>
+
+<ng-container *ngIf="!initialLoading">
+  <div class="flex justify-between pb-4">
+    <div>
+      <label class="mr-2" for="comment-state">State</label>
+      <ng-select
+        class="btn ewb-select inline-block text-left pl-0 min-w-[150px]"
+        [formControl]="dropdownStateControl"
+        labelForId="comment-state"
+        name="comment-state"
+        [searchable]="false"
+        [clearable]="false"
+        bindValue="value"
+        [items]="dropdownStates"
+        (change)="onChangeState($event)"
+      ></ng-select>
+    </div>
+
+    <div>
+      <label for="comment-sort">Sort per date</label>
+      <ng-select
+        class="btn ewb-select inline-block text-left pr-0 min-w-[160px]"
+        [formControl]="dropdownSortControl"
+        labelForId="comment-sort"
+        name="comment-sort"
+        [searchable]="false"
+        [clearable]="false"
+        (change)="onChangeSort($event)"
+      >
+        <ng-option [value]="2">
+          <div class="flex space-x-1 items-center">
+            <joeseln-icon [className]="'wb-sort-ascending'" class="text-base"></joeseln-icon>
+            <ng-container *transloco="let t">
+              <span>{{ t('comments.sort.ascending') }}</span>
+            </ng-container>
+          </div>
+        </ng-option>
+        <ng-option [value]="1">
+          <div class="flex space-x-1 items-center">
+            <joeseln-icon [className]="'wb-sort-descending'" class="text-base"></joeseln-icon>
+            <ng-container *transloco="let t">
+              <span>{{ t('comments.sort.descending') }}</span>
+            </ng-container>
+          </div>
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+
+  <eworkbench-table-view
+    #tableView
+    [columns]="listColumns"
+    [service]="service"
+    [params]="params"
+    [customId]="id"
+    [sort]="sort"
+    [sortBy]="sortBy"
+    [relation]="true"
+    [columnHeader]="false"
+    [rowHover]="false"
+    [noPadding]="true"
+    [paginationSize]="6"
+  ></eworkbench-table-view>
+</ng-container>
+
+<ng-template #containerCellTemplate let-row>
+  <eworkbench-comment class="comment-border" [comment]="row" [service]="service" (refresh)="loadComments()"></eworkbench-comment>
+</ng-template>

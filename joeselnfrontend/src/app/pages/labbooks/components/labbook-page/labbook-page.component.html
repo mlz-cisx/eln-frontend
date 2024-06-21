@@ -1,0 +1,316 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<!--<ng-container *transloco="let t">-->
+<!--    <eworkbench-header [title]="detailsTitle">-->
+<!--      <ng-container slot="elements" *ngIf="initialState">-->
+<!--          <label style="color: white; margin-right: 3px">Pencil: </label>-->
+<!--          <input type="number" id="line_width" name="line_width" step="1" value="2" min="1" max="10" size="5">-->
+<!--        <button type="button" class="btn ewb-button-big" style="color: white" (click)="restructure()">Restructure</button>-->
+<!--        <button type="button" class="btn ewb-button-big" style="color: white" (click)="goToBottom()">Page Bottom</button>-->
+<!--        <eworkbench-favorite-button-->
+<!--          class="inline-block mr-2"-->
+<!--          [id]="initialState?.pk"-->
+<!--          [contentType]="initialState?.content_type"-->
+<!--          [favorited]="initialState?.is_favourite"-->
+<!--          btnClass="btn bg-transparent ewb-button-big square-md text-white"-->
+<!--        ></eworkbench-favorite-button>-->
+<!--        <eworkbench-details-dropdown-->
+<!--          [service]="labBooksService"-->
+<!--          [id]="id"-->
+<!--          [redirectDestination]="[showSidebar ? '.' : '' + '/labbooks', id]"-->
+<!--          [newModalComponent]="newModalComponent"-->
+<!--          [initialState]="initialState"-->
+<!--          [duplicateElement]="false"-->
+<!--          [privileges]="privileges"-->
+<!--          *ngIf="privileges"-->
+<!--        ></eworkbench-details-dropdown>-->
+<!--      </ng-container>-->
+<!--    </eworkbench-header>-->
+<!--</ng-container>-->
+
+<!--<div *ngIf="!initialState" [class.with-sidebar]="showSidebar">-->
+<!--  <aside *ngIf="showSidebar">-->
+<!--    <eworkbench-sidebar-skeleton></eworkbench-sidebar-skeleton>-->
+<!--  </aside>-->
+<!--  <div class="skeleton-wrapper">-->
+<!--    <eworkbench-labbook-skeleton></eworkbench-labbook-skeleton>-->
+<!--  </div>-->
+<!--</div>-->
+
+<ng-container>
+  <ng-container *transloco="let t">
+    <div [class.with-sidebar]="showSidebar">
+      <aside *ngIf="showSidebar">
+        <!--        <eworkbench-project-sidebar [sidebarItem]="sidebarItem"></eworkbench-project-sidebar>-->
+      </aside>
+      <main style="padding: 0 1%  1% 1%">
+        <!--        <ng-container>-->
+        <div style="text-align: center"><strong>{{detailsTitle}}</strong>
+          <eworkbench-details-dropdown
+            [service]="labBooksService"
+            [id]="id"
+            [redirectDestination]="[showSidebar ? '.' : '' + '/labbooks', id]"
+            [newModalComponent]="newModalComponent"
+            [initialState]="initialState"
+            [duplicateElement]="false"
+            [privileges]="privileges"
+            *ngIf="privileges"
+          ></eworkbench-details-dropdown>
+        </div>
+        <!--        </ng-container>-->
+
+        <!--        <eworkbench-lock [id]="id" [lock]="lock" [lockUser]="lockUser" [service]="labBooksService"></eworkbench-lock>-->
+        <eworkbench-overview-collapse-element class="mb-4" [collapsed]="true"
+                                              style="margin-bottom: 2px !important; background-color: rgba(0, 49, 97, 0.04)">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="labbook"
+                errorTailor>
+            <div>
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.details')">
+                <ng-container slot="body">
+                  <div class="mb-4">
+                    <eworkbench-form-input
+                      [id]="title_id"
+                      for="title"
+                      [label]="t('labBook.details.title.label')"
+                      [loading]="loading"
+                      [onSubmit]="refreshResetValue"
+                      [required]="true"
+                    >
+                      <input
+                        type="text"
+                        class="form-control ewb-input"
+                        id="title"
+                        formControlName="labbook_title"
+                        name="title"
+                        [placeholder]="t('labBook.details.title.placeholder')"
+                        slot="input"
+                      />
+                    </eworkbench-form-input>
+                  </div>
+                  <div class="mb-4">
+                    <eworkbench-form-input for="isTemplate" [loading]="loading"
+                                           [onSubmit]="refreshResetValue">
+                      <div class="custom-control custom-checkbox" slot="input">
+                        <input
+                          class="custom-control-input"
+                          type="checkbox"
+                          formControlName="isTemplate"
+                          id="isTemplate"
+                          name="isTemplate"
+                        />
+                        <label class="custom-control-label"
+                               for="isTemplate">{{ t('labBook.details.isTemplate.label') }}</label>
+                      </div>
+                    </eworkbench-form-input>
+                  </div>
+                  <div class="mb-4">
+                    <eworkbench-form-input
+                      for="projects"
+                      [label]="t('labBook.details.projects.label')"
+                      [loading]="loading"
+                      [onSubmit]="refreshResetValue"
+                    >
+                      <ng-select
+                        class="ewb-select"
+                        formControlName="projects"
+                        labelForId="projects"
+                        name="projects"
+                        [placeholder]="privileges?.edit ? t('labBook.details.projects.placeholder') : t('formInput.notDefined.placeholder')"
+                        [multiple]="true"
+                        [typeahead]="projectInput$"
+                        [items]="projects"
+                        groupBy="is_favourite"
+                        bindLabel="name"
+                        bindValue="pk"
+                        slot="input"
+                      >
+                        <ng-template ng-label-tmp let-item="item"
+                                     let-clear="clear">
+                          {{ item.name }}
+                          <span class="ng-value-icon left" (click)="clear(item)"
+                                aria-hidden="true">×</span>
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item"
+                                     let-search="searchTerm">
+                          <joeseln-icon className="wb-favorite-3"
+                                        class="favorite-icon"
+                                        *ngIf="item.is_favourite"></joeseln-icon>
+                          <span
+                            [ngOptionHighlight]="search">{{ item.name }}</span>
+                        </ng-template>
+                        <ng-template ng-optgroup-tmp let-item="item">
+                          <ng-container
+                            *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>
+                          <ng-container
+                            *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>
+                        </ng-template>
+                        <ng-template ng-notfound-tmp>
+                          <div
+                            class="ng-option">{{ t('formInput.select.noMatch') }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </eworkbench-form-input>
+                  </div>
+                  <div class="mb-4">
+                    <label
+                      for="created-by">{{ t('labBook.details.createdBy.label') }}</label>
+                    <div class="flex items-center space-x-1">
+                      <!--                      <eworkbench-user-details-->
+                      <!--                        id="created-by"-->
+                      <!--                        class="inline-block"-->
+                      <!--                        [user]="initialState.created_by"-->
+                      <!--                      ></eworkbench-user-details>-->
+                      <span> | </span>
+                      <span
+                        id="created-at">{{ initialState?.created_at  }}</span>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <label
+                      for="last-modified-by">{{ t('labBook.details.lastModifiedBy.label') }}</label>
+                    <div class="flex items-center space-x-1">
+                      <!--                      <eworkbench-user-details id="last-modified-by" class="inline-block"-->
+                      <!--                                               [user]="initialState.last_modified_by">-->
+                      <!--                      </eworkbench-user-details>-->
+                      <span> | </span>
+                      <span
+                        id="last-modified-at">{{ initialState?.last_modified_at }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </eworkbench-details-collapse-element>
+
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.description')">
+                <ng-container slot="actions">
+                  <button
+                    *ngIf="!form.disabled"
+                    type="button"
+                    class="btn ewb-button-regular ewb-button-outline"
+                    (click)="onOpenDescriptionModal()"
+                    [disabled]="loading"
+                  >
+                    {{ t(descriptionTranslationKey) }}
+                  </button>
+                </ng-container>
+                <ng-container slot="body">
+                  <div class="mb-4">
+                    <div  [id]="preloaded_id"
+                      class="description-container"
+                      *ngIf="initialState?.description; else noDescription"
+                      [innerHTML]="initialState?.description"
+                    ></div>
+                    <ng-template #noDescription>
+                      <span
+                        [ngClass]="!privileges?.edit ? 'italic text-tum-disabled' : ''">
+                        {{ t('labBook.details.description.noDescription') }}
+                      </span>
+                    </ng-template>
+                  </div>
+                </ng-container>
+              </eworkbench-details-collapse-element>
+
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.metadata')">
+                <ng-container slot="body">
+                  <div class="mb-4">
+                    <eworkbench-metadata
+                      [selectedParameters]="initialState?.metadata ?? []"
+                      [editable]="privileges?.edit"
+                      [loading]="loading"
+                      [refresh]="refreshMetadata"
+                      (changed)="onUpdateMetadata($event)"
+                    ></eworkbench-metadata>
+                  </div>
+                </ng-container>
+              </eworkbench-details-collapse-element>
+            </div>
+            <div>
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.links')">
+                <ng-container slot="actions">
+                  <!--                  <eworkbench-link-->
+                  <!--                    [baseModel]="initialState"-->
+                  <!--                    [service]="labBooksService"-->
+                  <!--                    (refreshLinkList)="onRefreshLinkList()"-->
+                  <!--                  ></eworkbench-link>-->
+                </ng-container>
+                <ng-container slot="body">
+                  <!--                  <eworkbench-link-list-->
+                  <!--                    [id]="initialState.pk"-->
+                  <!--                    [service]="labBooksService"-->
+                  <!--                    [refresh]="refreshLinkList"-->
+                  <!--                  ></eworkbench-link-list>-->
+                </ng-container>
+              </eworkbench-details-collapse-element>
+            </div>
+            <div>
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.recentChanges')">
+                <ng-container slot="body">
+                                    <eworkbench-recent-changes
+                                      id="recent-changes"
+                                      [service]="labBooksService"
+                                      [changesId]="id"
+                                      [refresh]="refreshChanges"
+                                    ></eworkbench-recent-changes>
+                </ng-container>
+              </eworkbench-details-collapse-element>
+
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.versions')">
+                <ng-container slot="body">
+                  <eworkbench-versions
+                    id="versions"
+                    contentType="labBook"
+                    [service]="labBooksService"
+                    [versionId]="id"
+                    [lastModifiedAt]="initialState?.last_modified_at"
+                    [refresh]="refreshVersions"
+                    [editable]="privileges?.edit"
+                    [finalizeVersionAlwaysVisible]="true"
+                    (changed)="onVersionChanged()"
+                  ></eworkbench-versions>
+                </ng-container>
+              </eworkbench-details-collapse-element>
+
+<!--              <eworkbench-details-collapse-element-->
+<!--                [labelText]="t('labBook.details.element.comments')">-->
+<!--                <ng-container slot="actions">-->
+<!--                  <button-->
+<!--                    type="button"-->
+<!--                    class="btn ewb-button-regular ewb-button-outline"-->
+<!--                    (click)="onOpenNewCommentModal()"-->
+<!--                    [disabled]="loading"-->
+<!--                  >-->
+<!--                    {{ t('labBook.details.comments.newComment') }}-->
+<!--                  </button>-->
+<!--                </ng-container>-->
+<!--                <ng-container slot="body">-->
+<!--                  <eworkbench-comments-->
+<!--                    #comments-->
+<!--                    [service]="labBooksService"-->
+<!--                    [id]="id"-->
+<!--                    [contentType]="initialState?.content_type ?? 42"-->
+<!--                  ></eworkbench-comments>-->
+<!--                </ng-container>-->
+<!--              </eworkbench-details-collapse-element>-->
+            </div>
+          </form>
+        </eworkbench-overview-collapse-element>
+
+        <eworkbench-labbook-draw-board
+          #drawBoard
+          [id]="id"
+          [projects]="['abc']"
+          [editable]="true"
+        >
+        </eworkbench-labbook-draw-board>
+      </main>
+    </div>
+  </ng-container>
+</ng-container>

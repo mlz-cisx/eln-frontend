@@ -1,0 +1,163 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <div class="sidebar" [style.position]="sidebarPosition"
+       [style.top.px]="offsetHeader + offsetMargin">
+    <!--    <h1>{{ t('labBook.sidebar.add.header') }}</h1>-->
+    <ul class="list-unstyled m-0">
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="t('labBook.sidebar.add.note.tooltip')"
+          containerClass="tooltip-sm"
+          placement="right top"
+          [disabled]="!editable"
+          (click)="onOpenNewNoteElementModal()"
+        >
+          <joeseln-icon className="wb-comment"></joeseln-icon>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="t('labBook.sidebar.add.sketch.tooltip')"
+          containerClass="tooltip-sm"
+          placement="right"
+          [disabled]="!editable"
+          (click)="onOpenSketchModal()"
+        >
+          <joeseln-icon className="wb-pen"></joeseln-icon>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="t('labBook.sidebar.add.picture.tooltip')"
+          containerClass="tooltip-sm"
+          placement="right"
+          [disabled]="!editable"
+          (click)="onOpenNewPictureElementModal()"
+        >
+          <joeseln-icon className="wb-image"></joeseln-icon>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="t('labBook.sidebar.add.file.tooltip')"
+          containerClass="tooltip-sm"
+          placement="right"
+          [disabled]="!editable"
+          (click)="onOpenNewFileElementModal()"
+        >
+          <joeseln-icon className="wb-files"></joeseln-icon>
+        </button>
+      </li>
+      <li style="height: 1px; background-color: white"></li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="'Go to Page Top'"
+          containerClass="tooltip-sm"
+          placement="bottom left"
+          [disabled]="!editable"
+          (click)="gotoTop()"
+        >
+          Top
+        </button>
+      </li>
+      <li style="height: 1px; background-color: white"></li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="'Restructure this Labbook'"
+          containerClass="tooltip-sm"
+          placement="bottom left"
+          [disabled]="!editable"
+          (click)="restructure()"
+        >
+          RS
+        </button>
+      </li>
+      <li style="height: 1px; background-color: white"></li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="'Generate QR CODE'"
+          containerClass="tooltip-sm"
+          placement="bottom left"
+          [disabled]="!editable"
+          (click)="onOpenQRCodeModal()"
+        >
+          QR
+        </button>
+      </li>
+
+      <li style="height: 1px; background-color: white"></li>
+      <li>
+        <button
+          type="button"
+          class="btn ewb-button-regular text-white"
+          [tooltip]="'Continue Search'"
+          containerClass="tooltip-sm"
+          placement="bottom left"
+          [disabled]="!editable"
+          (click)="continue_search()"
+        >
+          <joeseln-icon className="wb-search"></joeseln-icon>
+        </button>
+      </li>
+
+
+      <!--           <li>
+                   <button
+                     type="button"
+                     class="btn ewb-button-regular text-white"
+                     [tooltip]="t('labBook.sidebar.add.plugin.tooltip')"
+                     containerClass="tooltip-sm"
+                     placement="right"
+                     [disabled]="!editable"
+                     (click)="onOpenNewPluginElementModal()"
+                   >
+                     <joeseln-icon className="wb-plugin"></joeseln-icon>
+                   </button>
+                 </li>
+                 <li>
+                   <button
+                     type="button"
+                     class="btn ewb-button-regular text-white"
+                     [tooltip]="t('labBook.sidebar.add.import.tooltip')"
+                     containerClass="tooltip-sm"
+                     placement="right"
+                     [disabled]="!editable"
+                     (click)="onOpenImportModal()"
+                   >
+                     <joeseln-icon className="wb-copy"></joeseln-icon>
+                   </button>
+                 </li>
+                 <li>
+                   <button
+                     type="button"
+                     class="btn ewb-button-regular text-white"
+                     [tooltip]="t('labBook.sidebar.add.section.tooltip')"
+                     containerClass="tooltip-sm"
+                     placement="right"
+                     [disabled]="!editable"
+                     (click)="onOpenNewSectionModal()"
+                   >
+                     <joeseln-icon className="wb-bars"></joeseln-icon>
+                   </button>
+                 </li>-->
+    </ul>
+  </div>
+</ng-container>

@@ -1,0 +1,522 @@
+@import '../node_modules/bootstrap/scss/_functions.scss';
+@import '../node_modules/bootstrap/scss/_variables.scss';
+@import '../node_modules/bootstrap/scss/mixins';
+@import '../node_modules/bootstrap/scss/_root.scss';
+@import '../node_modules/bootstrap/scss/_type.scss';
+@import '../node_modules/bootstrap/scss/_tables.scss';
+@import '../node_modules/bootstrap/scss/_forms.scss';
+@import '../node_modules/bootstrap/scss/_buttons.scss';
+@import '../node_modules/bootstrap/scss/_mixins.scss';
+@import '../node_modules/bootstrap/scss/_dropdown.scss';
+@import '../node_modules/bootstrap/scss/_button-group.scss';
+@import '../node_modules/bootstrap/scss/_input-group.scss';
+@import '../node_modules/bootstrap/scss/_custom-forms.scss';
+@import '../node_modules/bootstrap/scss/_nav.scss';
+@import '../node_modules/bootstrap/scss/_navbar.scss';
+@import '../node_modules/bootstrap/scss/_breadcrumb.scss';
+@import '../node_modules/bootstrap/scss/_badge.scss';
+@import '../node_modules/bootstrap/scss/_alert.scss';
+@import '../node_modules/bootstrap/scss/_progress.scss';
+@import '../node_modules/bootstrap/scss/_close.scss';
+@import '../node_modules/bootstrap/scss/_modal.scss';
+@import '../node_modules/bootstrap/scss/_tooltip.scss';
+@import '../node_modules/bootstrap/scss/_popover.scss';
+@import '../node_modules/bootstrap/scss/_spinners.scss';
+@import '../node_modules/bootstrap/scss/utilities';
+
+@import '../node_modules/tailwindcss/base.css';
+@import '../node_modules/tailwindcss/components.css';
+@import '../node_modules/tailwindcss/utilities.css';
+
+@import '../node_modules/bootstrap/scss/_reboot.scss';
+
+@import 'styles/_fonts.scss';
+@import 'styles/_colors.scss';
+@import 'styles/_variables.scss';
+
+@import '../node_modules/@angular/cdk/overlay-prebuilt.css';
+@import '../node_modules/ngx-toastr/toastr';
+@import '../node_modules/flatpickr/dist/flatpickr.min.css';
+
+@import '../libs/forms/src/forms.scss';
+
+* {
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+}
+
+* {
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+}
+
+.cursor-pointer {
+  background-color: $secondary-color;
+}
+
+pre {
+  font-family: monospace !important;
+  font-size: smaller;
+  //background-color: #fafafa;
+  //border: 1px solid #ccc;
+  //padding: 9.5px;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  font-size: $font-size;
+}
+
+a {
+  color: $primary-color;
+}
+
+main,
+.main {
+  padding: $main-padding-y-narrow $main-padding-x-narrow;
+
+  @media (min-width: $breakpoint-lg) {
+    padding: $main-padding-y-wide $main-padding-x-wide;
+  }
+}
+
+label {
+  font-weight: 600;
+}
+
+.nav-tabs .nav-link {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.search-input {
+  width: 100%;
+
+  @media (min-width: $breakpoint-lg) {
+    width: 415px;
+  }
+
+  &-lg {
+    width: 100%;
+
+    @media (min-width: $breakpoint-lg) {
+      width: 415px;
+    }
+  }
+}
+
+.search-input-group {
+  .form-control {
+    padding-right: 2rem;
+  }
+
+  .clear-input {
+    margin-left: -2rem;
+    z-index: 90;
+  }
+}
+
+.user-dropdown-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  overflow: hidden;
+}
+
+.sub-text {
+  color: $text-color;
+  opacity: 0.7;
+  text-overflow: ellipsis;
+}
+
+.square {
+  height: 25px;
+  width: 25px;
+  padding: 0;
+
+  &-md {
+    height: 30px;
+    width: 30px;
+    padding: 0;
+  }
+
+  &-icon {
+    width: 12px;
+    padding: 0;
+  }
+}
+
+.icon-size-md {
+  font-size: $font-size-md;
+}
+
+.flip-h {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.rotate90 {
+  display: inline-block;
+  transform: rotate(90deg);
+}
+
+.rotate-90 {
+  display: inline-block;
+  transform: rotate(-90deg);
+}
+
+.with-sidebar {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  height: 100%;
+}
+
+.filter-sidebar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  height: 100%;
+}
+
+ngneat-dialog {
+  .ngneat-dialog-backdrop {
+    align-items: unset;
+    overflow: auto;
+
+    .ngneat-dialog-content {
+      height: fit-content;
+      max-height: unset;
+      min-height: unset !important;
+      border-radius: 0;
+      overflow: visible;
+    }
+
+    .ngneat-dialog-content:has(#modal_qrcode) {
+      width: 348px !important;
+    }
+  }
+}
+
+.popover {
+  border-radius: 0;
+  border-color: $border-color;
+  line-height: unset;
+  font-family: unset;
+
+  &-body {
+    font-size: $font-size;
+  }
+}
+
+.alert {
+  margin-bottom: 0;
+
+  &-note {
+    background-color: transparent;
+    border-radius: 2px;
+    border-color: $alert-note-border-color;
+    color: $alert-note-color;
+    font-size: $font-size;
+  }
+
+  &-info {
+    background-color: $alert-info-background-color;
+    border-color: $alert-info-border-color;
+    border-radius: 2px;
+    color: $alert-info-color;
+    font-size: $font-size;
+  }
+
+  &-trashed-notice,
+  &-lock {
+    background-color: $alert-lock-background-color;
+    border-color: $alert-lock-border-color;
+    border-radius: 2px;
+    color: $alert-lock-color;
+    font-size: 11px;
+    padding: 0 !important;
+  }
+
+  &-link {
+    &-lock {
+      color: $alert-lock-link-color;
+    }
+  }
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.toast-container {
+  .ngx-toastr {
+    width: 348px;
+    padding: 22px 22px 22px 52px;
+    box-shadow: none;
+    background-position: 22px 50%;
+    background-size: 16px;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+.toast {
+  &-message {
+    word-break: break-word;
+  }
+
+  &-info {
+    background-color: $toast-info-background-color;
+    border: 1px solid #57687a;
+  }
+
+  &-success {
+    background-color: $toast-success-background-color;
+    border: 1px solid #7f890f;
+  }
+
+  &-error {
+    background-color: $toast-error-background-color;
+    border: 1px solid #c15951;
+  }
+}
+
+.tooltip {
+  .arrow {
+    display: none;
+  }
+
+  &.show {
+    opacity: 1;
+  }
+
+  &-inner {
+    font-size: $font-size-sm;
+    border-radius: 0;
+    background-color: $primary-color;
+    padding: 3.5px 10px;
+  }
+
+  &.tooltip-sm {
+    .tooltip {
+      &-inner {
+        font-size: $font-size-sm;
+        color: #000;
+        border-radius: 0;
+        border: 1px solid $border-color;
+        background-color: whitesmoke;
+        padding: 2.5px 5px;
+      }
+    }
+  }
+}
+
+.progress {
+  border-radius: 0;
+}
+
+.bg {
+  &-primary {
+    background-color: $primary-color !important;
+  }
+
+  &-success {
+    color: #333;
+    background-color: $success-color !important;
+  }
+
+  &-info {
+    color: #333;
+    background-color: $light-blue-color !important;
+  }
+
+  &-danger {
+    background-color: #c15951 !important;
+  }
+}
+
+.details-dropdown-menu {
+  border-radius: 0;
+  border-color: $border-color;
+}
+
+.menu-item-button {
+  border: 0;
+  border-left: 3px solid transparent;
+
+  &.active,
+  &:hover {
+    background-color: $secondary-color;
+    border-left-color: $primary-color;
+
+    button {
+      color: $primary-color;
+    }
+  }
+}
+
+.btn-link {
+  color: $primary-color;
+}
+
+.cdk-overlay-container {
+  z-index: 1060;
+}
+
+ng-select.is-invalid .ng-select-container {
+  border-color: $invalid-border-color !important;
+}
+
+bs-dropdown-container {
+  z-index: 1060 !important;
+}
+
+.tox {
+  &-editor-container {
+    .tox-editor-header {
+      border-bottom: 1px solid #e6e6e6;
+    }
+  }
+
+  &.tox-tinymce-aux {
+    /* stylelint-disable-next-line selector-class-pattern */
+    .tox-toolbar__overflow {
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+  }
+
+  &-tbtn--enabled {
+    svg {
+      fill: $primary-color !important;
+    }
+  }
+
+  &-tbtn {
+    background: none !important;
+    border-radius: 0 !important;
+    margin-right: 0.5rem !important;
+
+    &:hover,
+    &:active {
+      .tox-icon {
+        svg {
+          fill: $primary-color !important;
+        }
+      }
+    }
+  }
+
+  &-tinymce-inline {
+    z-index: 1100;
+  }
+}
+
+:root .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  min-height: unset !important;
+}
+
+eworkbench-dashboard-page {
+  .table-small tr {
+    height: 25px !important;
+
+    td {
+      padding: 0 10px !important;
+    }
+  }
+
+  .fc-daygrid-day-events {
+    margin-bottom: 0 !important;
+  }
+}
+
+.ewb {
+  &-ellipsis {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &-popover {
+    max-width: 520px;
+
+    .popover-body {
+      padding: 15px;
+    }
+  }
+
+  &-tabs {
+    .nav-tabs {
+      border-bottom: none;
+
+      .nav-item {
+        height: 25px;
+        background-color: $secondary-color;
+
+        a {
+          padding: 0 10.5px;
+          line-height: 25px;
+          font-size: 13px;
+          font-weight: normal;
+          border: none;
+        }
+      }
+
+      .active {
+        background-color: $primary-color;
+        color: #fff;
+      }
+    }
+  }
+
+  &-priority {
+    &-very-high {
+      color: $danger-color;
+    }
+
+    &-high {
+      color: $orange-color;
+    }
+
+    &-normal {
+      color: $light-blue-color;
+    }
+
+    &-low {
+      color: $primary-color;
+    }
+
+    &-very-low {
+      color: $primary-color-hover;
+    }
+  }
+
+  &-chip {
+    display: inline-block;
+    background-color: $secondary-color;
+    color: $text-color;
+    max-width: 250px;
+    padding: 3px 10px;
+    font-size: 13px;
+    border-radius: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.skeleton-wrapper {
+  padding: 40px 70px;
+}
+
+.custom-control-input[disabled] ~ .custom-control-label,
+.custom-control-input:disabled ~ .custom-control-label {
+  color: rgb(77 77 77 / 80%);
+}

@@ -1,0 +1,197 @@
+<div class="ewb-canvas-toolbar">
+  <div>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Select"
+      tooltip="Select"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Select)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-mouse-pointer"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Text"
+      tooltip="Text"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Text)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-font"></joeseln-icon>
+    </button>
+
+    <joeseln-icon class="square-icon icon-size-md rotate90" className="wb-minus"></joeseln-icon>
+
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Pen"
+      tooltip="Pencil"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Pen)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-pen"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Eraser"
+      tooltip="Eraser"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Eraser)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-eraser"></joeseln-icon>
+    </button>
+
+    <joeseln-icon class="square-icon icon-size-md rotate90" className="wb-minus"></joeseln-icon>
+
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Line"
+      tooltip="Line"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Line)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-bold-line"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Ellipse"
+      tooltip="Ellipse"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Ellipse)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-bold-ellipse"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Polygon"
+      tooltip="Polygon"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Polygon)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-bold-polygon"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      [class.active]="selectedTool === tools.Square"
+      tooltip="Rectangle"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="selectTool(tools.Square)"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-bold-square"></joeseln-icon>
+    </button>
+
+    <joeseln-icon class="square-icon icon-size-md rotate90" className="wb-minus"></joeseln-icon>
+
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      tooltip="Text and line color"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      [colorPicker]="getPrimaryColor()"
+      (colorPickerChange)="changePrimaryColor($event)"
+      (colorPickerClose)="changePrimaryColorHistory()"
+      cpOutputFormat="hex"
+      cpAlphaChannel="always"
+      cpPosition="bottom"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-font-color"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      tooltip="Fill color"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      [colorPicker]="getSecondaryColor()"
+      (colorPickerChange)="changeSecondaryColor($event)"
+      (colorPickerClose)="changeSecondaryColorHistory()"
+      cpOutputFormat="hex"
+      cpAlphaChannel="always"
+      cpPosition="bottom"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-color-bucket"></joeseln-icon>
+    </button>
+  </div>
+
+  <div>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-button-primary ewb-canvas-toolbar-button-save mr-2"
+      tooltip="Save changes"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="save()"
+    >
+      <joeseln-icon class="icon-size-md mr-2" className="wb-check"></joeseln-icon>
+      Save
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-button-secondary square-md mr-2"
+      tooltip="Delete shape"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !selectedShape"
+      *ngIf="selectedShape"
+      (click)="deleteShape()"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-trash-1"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-button-secondary square-md mr-2"
+      tooltip="Undo"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !canUndo"
+      (click)="undo()"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-undo"></joeseln-icon>
+    </button>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-button-secondary square-md mr-2"
+      tooltip="Redo"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !canRedo"
+      (click)="redo()"
+    >
+      <joeseln-icon class="icon-size-md flip-h" className="wb-undo"></joeseln-icon>
+    </button>
+    <eworkbench-picture-editor-details-dropdown
+      [picture]="picture"
+      [sketch]="sketch"
+      [backgroundImage]="backgroundImage"
+      [canvas]="canvas"
+      [service]="service"
+    ></eworkbench-picture-editor-details-dropdown>
+  </div>
+</div>

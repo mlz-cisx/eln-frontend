@@ -1,0 +1,180 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <eworkbench-loading [loading]="loading">
+    <ng-container *ngIf="appointment">
+      <div class="mb-4">
+        <label for="title-modal">{{ t('appointment.details.title.label') }}</label>
+        <input
+          type="text"
+          class="form-control ewb-input"
+          id="title-modal"
+          [placeholder]="t('appointment.details.title.placeholder')"
+          [disabled]="true"
+          [value]="appointment?.title"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="startDate-modal">{{ t('appointment.details.startDate.label') }}</label>
+        <input
+          type="text"
+          class="form-control ewb-input"
+          id="startDate-modal"
+          [placeholder]="t('appointment.details.startDate.placeholder')"
+          [disabled]="true"
+          [value]="appointment?.date_time_start | formatDate"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="endDate-modal">{{ t('appointment.details.endDate.label') }}</label>
+        <input
+          type="text"
+          class="form-control ewb-input"
+          id="endDate-modal"
+          [placeholder]="t('appointment.details.endDate.placeholder')"
+          [disabled]="true"
+          [value]="appointment?.date_time_end | formatDate"
+        />
+      </div>
+      <div class="mb-4">
+        <div class="custom-control custom-checkbox" slot="input">
+          <input class="custom-control-input" type="checkbox" id="fullDay-modal" [formControl]="fullDayControl" />
+          <label class="custom-control-label" for="fullDay-modal">{{ t('appointment.details.fullDay.label') }}</label>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="location-modal">{{ t('appointment.details.location.label') }}</label>
+        <input
+          type="text"
+          class="form-control ewb-input"
+          id="location-modal"
+          [placeholder]="t('formInput.notDefined.placeholder')"
+          [disabled]="true"
+          [value]="appointment?.location"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="resource-modal">{{ t('appointment.details.resource.label') }}</label>
+        <ng-select
+          class="ewb-select"
+          name="resource-modal"
+          [formControl]="resourceFormControl"
+          [placeholder]="t('formInput.notDefined.placeholder')"
+          [items]="resources"
+          bindLabel="display"
+          bindValue="pk"
+        ></ng-select>
+      </div>
+      <div class="mb-4">
+        <label for="attendees-modal">{{ t('appointment.details.attendees.label') }}</label>
+        <ng-select
+          #select
+          class="ewb-select"
+          name="attendees-modal"
+          [formControl]="assigneesFormControl"
+          [placeholder]="t('formInput.notDefined.placeholder')"
+          [multiple]="true"
+          [items]="assignees"
+          bindLabel="username"
+          bindValue="pk"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <div class="flex items-center user-option">
+              <eworkbench-user-details
+                class="inline-block mr-1"
+                [user]="item"
+                [chip]="true"
+                [modal]="false"
+                (click)="select.isOpen = false"
+              ></eworkbench-user-details>
+              <span class="sub-text">{{ item.email }}</span>
+            </div>
+          </ng-template>
+
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+            <eworkbench-user-details-dropdown class="inline-block mr-1" [user]="item" [search]="search"></eworkbench-user-details-dropdown>
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="mb-4">
+        <label for="attendingContacts-modal">{{ t('appointment.details.attendingContacts.label') }}</label>
+        <ng-select
+          class="ewb-select"
+          name="attendingContacts-modal"
+          [formControl]="contactsFormControl"
+          [placeholder]="t('formInput.notDefined.placeholder')"
+          [multiple]="true"
+          [items]="contacts"
+          bindLabel="display"
+          bindValue="pk"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            {{ item.display }}
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="mb-4">
+        <label for="description-modal">{{ t('appointment.details.description.label') }}</label>
+        <eworkbench-wysiwyg-editor [id]="'description-modal'" [formControl]="descriptionFormControl"></eworkbench-wysiwyg-editor>
+      </div>
+      <div class="mb-4">
+        <label for="projects-modal">{{ t('appointment.details.projects.label') }}</label>
+        <ng-select
+          class="ewb-select"
+          name="projects-modal"
+          [formControl]="projectsFormControl"
+          [placeholder]="t('appointment.details.projects.placeholder')"
+          [multiple]="true"
+          [items]="projects"
+          bindLabel="name"
+          bindValue="pk"
+          dropdownPosition="top"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            {{ item.name }}
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="mb-4">
+        <label for="metadata-modal">{{ t('appointment.details.metadata.label') }}</label>
+        <ng-container *ngIf="appointment?.metadata?.length">
+          <ng-container *ngFor="let field of appointment?.metadata">
+            <div class="mb-2">
+              <div class="mb-1">{{ field.field_info?.display }}</div>
+              <eworkbench-metadata-field
+                [uuid]="field.pk"
+                [id]="field.pk"
+                [baseType]="field.field_info?.base_type"
+                [typeSettings]="field.field_info?.type_settings"
+                [label]="field.field_info?.display"
+                [values]="field.values"
+                [editable]="false"
+              ></eworkbench-metadata-field>
+            </div>
+          </ng-container>
+        </ng-container>
+        <div class="text-tum-disabled italic" *ngIf="!appointment?.metadata?.length">
+          {{ t('formInput.notDefined.placeholder') }}
+        </div>
+      </div>
+
+      <div class="modal-footer p-0 mt-5">
+        <button type="button" class="btn ewb-button-big ewb-button-secondary mr-2" (click)="modalRef.close()" [disabled]="loading">
+          {{ t('versions.previewModal.close') }}
+        </button>
+        <button type="button" class="btn ewb-button-big ewb-button-primary" (click)="onRestoreVersion()" [disabled]="loading">
+          {{ t('versions.previewModal.restoreVersion') }}
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && !appointment">
+      <alert type="danger">
+        <eworkbench-icon className="wb-exclamation"></eworkbench-icon>
+        {{ t('versions.previewModal.notice.failedToLoad') }}
+      </alert>
+    </ng-container>
+  </eworkbench-loading>
+</ng-container>

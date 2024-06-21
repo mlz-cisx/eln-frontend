@@ -1,0 +1,447 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {
+  CommentsModalComponent
+} from '@app/modules/comment/components/modals/comments/comments.component';
+import {
+  PrivilegesModalComponent
+} from '@app/modules/details-dropdown/components/modals/privileges/privileges.component';
+import {
+  RecentChangesModalComponent
+} from '@app/modules/labbook/components/modals/recent-changes/recent-changes.component';
+import {
+  DeleteModalComponent
+} from '@app/modules/trash/components/modals/delete/delete.component';
+import {
+  //LabBookSectionsService,
+
+  LabbooksService
+} from '@app/services';
+//import { UserStore } from '@app/stores/user';
+import type {
+  ExportLink,
+  LabBookElement,
+  ModalCallback,
+  Privileges
+} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {switchMap, take} from 'rxjs/operators';
+import {v4 as uuidv4} from 'uuid';
+import {
+  MoveLabBookElementToLabBookModalComponent
+} from '../modals/move/element-to-labbook/element-to-labbook.component';
+import {
+  MoveLabBookElementToSectionModalComponent
+} from '../modals/move/element-to-section/element-to-section.component';
+import {
+  LabBookElementRemoveModalComponent
+} from '../modals/remove/remove.component';
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
+import {lastValueFrom} from "rxjs";
+import {HttpClient, HttpParams} from '@angular/common/http';
+
+interface ElementRemoval {
+  id: string;
+  gridReload: boolean;
+}
+
+@UntilDestroy()
+@Component({
+  selector: 'eworkbench-labbook-element-dropdown',
+  templateUrl: './element-dropdown.component.html',
+  styleUrls: ['./element-dropdown.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LabBookElementDropdownComponent implements OnInit {
+  @Input()
+  public service!: any;
+
+  @Input()
+  public id?: string;
+
+  @Input()
+  public labBookId!: string;
+
+  @Input()
+  public elementId!: string;
+
+  @Input()
+  public section?: string;
+
+  @Input()
+  public initialState?: any;
+
+  @Input()
+  public redirectDestination!: string;
+
+  @Input()
+  public privileges?: Privileges;
+
+  @Input()
+  public labBookEditable? = false;
+
+  @Input()
+  public newModalComponent?: any;
+
+  @Input()
+  public minimalistic = false;
+
+  @Output()
+  public removed = new EventEmitter<ElementRemoval>();
+
+  @Output()
+  public moved = new EventEmitter<ElementRemoval>();
+
+  public modalRef?: DialogRef;
+
+  public loading = false;
+
+  public uniqueHash = uuidv4();
+
+  public dropdown = true;
+
+  public detailsCollapsed = true;
+
+  public constructor(
+    //private readonly userStore: UserStore,
+    private readonly labBooksService: LabbooksService,
+    //private readonly labBookSectionsService: LabBookSectionsService,
+    private readonly modalService: DialogService,
+    private readonly toastrService: ToastrService,
+    private readonly translocoService: TranslocoService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
+    private readonly httpClient: HttpClient
+  ) {
+  }
+
+  public ngOnInit(): void {
+    this.breakpointObserver
+      .observe(['(min-width: 769px)'])
+      .pipe(untilDestroyed(this))
+      .subscribe(res => {
+        /* istanbul ignore if */
+        if (res.matches) {
+          this.dropdown = true;
+          this.detailsCollapsed = true;
+          this.cdr.markForCheck();
+          return;
+        }
+        this.dropdown = false;
+        this.cdr.markForCheck();
+      });
+  }
+
+  public onOpenPrivilegesModal(): void {
+    this.modalService.open(PrivilegesModalComponent, {
+      closeButton: false,
+      width: '800px',
+      data: {service: this.service, id: this.id, data: this.initialState},
+    });
+  }
+
+  public onExport(): void {
+    if (this.loading) {
+      return;
+    }
+    this.loading = true;
+
+    this.service
+      .export(this.id)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (exportLink: ExportLink) => {
+          //window.open(exportLink.url, '_blank');
+          this.onClick(exportLink.url, exportLink.filename)
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      );
+  }
+
+  public async onClick(export_link: string, filename: string): Promise<void> {
+    const response = await lastValueFrom(this.httpClient.get(export_link, {
+      responseType: 'blob',
+      observe: 'response'
+    }));
+    console.log(response)
+    const url = URL.createObjectURL(response.body!);
+    const anchor = document.createElement('a');
+
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+
+  public onDelete(): void {
+    // const userStoreValue = this.userStore.getValue();
+    const userSetting = 'SkipDialog-Trash';
+
+    // const skipTrashDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.[userSetting]);
+    const skipTrashDialog = true
+
+    if (skipTrashDialog) {
+      this.delete(this.id!);
+    } else {
+      this.modalRef = this.modalService.open(DeleteModalComponent, {
+        closeButton: false,
+        data: {id: this.id, service: this.service, userSetting},
+      });
+
+      this.modalRef.afterClosed$
+        .pipe(untilDestroyed(this), take(1))
+        .subscribe((callback: ModalCallback) => this.onDeleteModalClose(callback));
+    }
+  }
+
+  public delete(id: string): void {
+    if (this.loading) {
+      return;
+    }
+    this.loading = true;
+    this.service
+      .delete(id, this.labBookId)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        () => {
+          this.loading = false;
+          this.translocoService
+            .selectTranslate('labBook.elementDropdown.trashElement.toastr.success')
+            .pipe(untilDestroyed(this))
+            .subscribe(success => {
+              this.drawboardGridComponent.reload()
+              //  preloaded content has to be established
+              // ok this works
+              this.cdr.markForCheck()
+              this.cdr.detectChanges()
+              // this.labBooksService.getElements(this.labBookId).pipe(untilDestroyed(this))
+              //   .subscribe((elems) => {
+              //     this.removed.emit({id: this.elementId, gridReload: false});
+              //     this.loading = false;
+              //     this.cdr.markForCheck();
+              //   })
+              // this.toastrService.success(success);
+            });
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+  }
+
+  public onOpenMoveToSectionModal(): void {
+    this.modalRef = this.modalService.open(MoveLabBookElementToSectionModalComponent, {
+      closeButton: false,
+      data: {labBookId: this.labBookId, elementId: this.elementId},
+    });
+
+    this.modalRef.afterClosed$
+      .pipe(untilDestroyed(this), take(1))
+      .subscribe((callback: ModalCallback) => this.onMoveElementToSectionModalClose(callback));
+  }
+
+  public onOpenMoveBackToLabBookModal(): void {
+    // const userStoreValue = this.userStore.getValue();
+    //
+    // const skipTrashDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.['SkipDialog-MoveElementOutOfSection']);
+    const skipTrashDialog = true
+
+    if (skipTrashDialog) {
+      this.moveBackToLabBook();
+    } else {
+      this.modalRef = this.modalService.open(MoveLabBookElementToLabBookModalComponent, {
+        closeButton: false,
+        data: {
+          labBookId: this.labBookId,
+          elementId: this.elementId,
+          sectionId: this.section
+        },
+      });
+
+      this.modalRef.afterClosed$
+        .pipe(untilDestroyed(this), take(1))
+        .subscribe((callback: ModalCallback) => this.onMoveElementToLabBookModalClose(callback));
+    }
+  }
+
+  public moveBackToLabBook(): void {
+
+    // if (this.loading) {
+    //   return;
+    // }
+    // this.loading = true;
+    //
+    // // 1. Get all elements of section
+    // this.labBooksService
+    //   .getElements(this.labBookId, this.section)
+    //   .pipe(
+    //     untilDestroyed(this),
+    //     switchMap(elements => {
+    //       // 2. Filter elements of the section and patch it with the selected element removed
+    //       const childElements = elements.filter(element => element.pk !== this.elementId).map(element => element.pk);
+    //
+    //       return this.labBookSectionsService
+    //         .patch(this.section!, {
+    //           pk: this.section!,
+    //           child_elements: [...childElements],
+    //         })
+    //         .pipe(untilDestroyed(this));
+    //
+    //     }),
+    //     switchMap(() =>
+    //       // 3. Get all elements of main LabBook grid to calculate the new Y position in the next step
+    //       this.labBooksService.getElements(this.labBookId).pipe(untilDestroyed(this))
+    //     ),
+    //     switchMap(elements => {
+    //       // 4. Calculate and patch the new Y position for formerly removed element from the section
+    //       const filteredElements = elements.filter(element => element.pk !== this.elementId);
+    //
+    //       return this.labBooksService
+    //         .patchElement(this.labBookId, this.elementId, {
+    //           position_y: this.getMaxYPosition(filteredElements),
+    //         })
+    //         .pipe(untilDestroyed(this));
+    //     })
+    //   )
+    //   .subscribe(
+    //     () => {
+    //       this.onMoveElementToLabBookModalClose({
+    //         state: ModalState.Changed,
+    //         data: {id: this.elementId, gridReload: false},
+    //       });
+    //       this.loading = false;
+    //       this.cdr.markForCheck();
+    //       this.translocoService
+    //         .selectTranslate('labBook.moveElementToLabBookModal.toastr.success')
+    //         .pipe(untilDestroyed(this))
+    //         .subscribe(success => {
+    //           this.toastrService.success(success);
+    //         });
+    //     },
+    //     () => {
+    //       this.loading = false;
+    //       this.cdr.markForCheck();
+    //     }
+    //   );
+
+  }
+
+  public remove(): void {
+    if (this.loading) {
+      return;
+    }
+    this.loading = true;
+
+    this.labBooksService
+      .deleteElement(this.labBookId, this.elementId)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        () => {
+          this.removed.emit({id: this.elementId, gridReload: false});
+          this.loading = false;
+          this.translocoService
+            .selectTranslate('labBook.elementDropdown.removeFromLabBook.toastr.success')
+            .pipe(untilDestroyed(this))
+            .subscribe(success => {
+              // this.toastrService.success(success);
+            });
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+  }
+
+  public onOpenRecentChangesModal(): void {
+    this.modalService.open(RecentChangesModalComponent, {
+      closeButton: false,
+      data: {service: this.service, id: this.id},
+    });
+  }
+
+  public onRemove(): void {
+    // const userStoreValue = this.userStore.getValue();
+    //
+    // const skipTrashDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.['SkipDialog-RemoveElementFromLabbook']);
+
+    const skipTrashDialog = true
+
+    if (skipTrashDialog) {
+      this.remove();
+    } else {
+      this.modalRef = this.modalService.open(LabBookElementRemoveModalComponent, {
+        closeButton: false,
+      });
+
+      this.modalRef.afterClosed$
+        .pipe(untilDestroyed(this), take(1))
+        .subscribe((callback: ModalCallback) => this.onRemoveModalClose(callback));
+    }
+  }
+
+  public onOpenCommentsModal(): void {
+    this.modalService.open(CommentsModalComponent, {
+      closeButton: false,
+      width: '800px',
+      data: {service: this.service, element: this.initialState, create: true},
+    });
+  }
+
+  public onDeleteModalClose(callback?: ModalCallback): void {
+    if (callback?.state === ModalState.Changed) {
+      this.remove();
+    }
+  }
+
+  public onRemoveModalClose(callback?: ModalCallback): void {
+    if (callback?.state === ModalState.Changed) {
+      this.remove();
+    }
+  }
+
+  public onMoveElementToSectionModalClose(callback?: ModalCallback): void {
+    if (callback?.state === ModalState.Changed) {
+      this.moved.emit({id: this.elementId, gridReload: false});
+    }
+  }
+
+  public onMoveElementToLabBookModalClose(callback?: ModalCallback): void {
+    if (callback?.state === ModalState.Changed) {
+      this.moved.emit({id: this.elementId, gridReload: false});
+    }
+  }
+
+  public getMaxYPosition(elements: LabBookElement<any>[]): number {
+    if (!elements.length) {
+      return 0;
+    }
+
+    return Math.max(...elements.map(element => element.position_y + element.height));
+  }
+}

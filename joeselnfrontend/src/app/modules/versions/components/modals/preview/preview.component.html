@@ -1,0 +1,121 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <eworkbench-modal [modalFooter]="false">
+    <div slot="header">
+      {{ t('versions.previewModal.header') }}
+      <ng-container *ngIf="versionNumber">{{ versionNumber }}</ng-container>
+    </div>
+    <div slot="body">
+      <div class="mb-4">
+        <label
+          for="versionCreated">{{ t('versions.previewModal.versionCreated.label') }}</label>
+        <div class="flex items-center" id="versionCreated">
+          <span
+            class="mr-2">{{ version.created_at }}{{ ' ' }}{{ t('versions.by') }}</span>
+          <eworkbench-user-details class="inline-block"
+                                   [user]="version.created_by"
+                                   [modal]="false"></eworkbench-user-details>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label
+          for="versionSummary">{{ t('versions.previewModal.versionSummary.label') }}</label>
+        <div id="versionSummary">
+          <!--             [ngClass]="{ 'text-tum-disabled italic': !version.summary }"-->
+          <!--        >-->
+          {{ version.summary || t('formInput.notDefined.placeholder') }}
+        </div>
+      </div>
+
+      <hr/>
+    </div>
+  </eworkbench-modal>
+
+
+  <!--      <eworkbench-contact-preview-->
+  <!--        *ngIf="contentType === 'contact'"-->
+  <!--        [id]="version.object_id"-->
+  <!--        [version]="version.pk"-->
+  <!--        [versionInProgress]="versionInProgress"-->
+  <!--        [modalRef]="modalRef"-->
+  <!--        (closed)="onModalClose($event)"-->
+  <!--      ></eworkbench-contact-preview>-->
+
+  <eworkbench-note-preview
+    *ngIf="contentType === 'note'"
+    [id]="version.object_id"
+    [version]="version.pk"
+    [versionInProgress]="versionInProgress"
+    [modalRef]="modalRef"
+    (closed)="onModalClose($event)"
+  ></eworkbench-note-preview>
+
+  <!--      <eworkbench-appointment-preview-->
+  <!--        *ngIf="contentType === 'appointment'"-->
+  <!--        [id]="version.object_id"-->
+  <!--        [version]="version.pk"-->
+  <!--        [versionInProgress]="versionInProgress"-->
+  <!--        [modalRef]="modalRef"-->
+  <!--        (closed)="onModalClose($event)"-->
+  <!--      ></eworkbench-appointment-preview>-->
+
+  <!--      <eworkbench-task-preview-->
+  <!--        *ngIf="contentType === 'task'"-->
+  <!--        [id]="version.object_id"-->
+  <!--        [version]="version.pk"-->
+  <!--        [versionInProgress]="versionInProgress"-->
+  <!--        [modalRef]="modalRef"-->
+  <!--        (closed)="onModalClose($event)"-->
+  <!--      ></eworkbench-task-preview>-->
+
+  <eworkbench-labbook-preview
+    *ngIf="contentType === 'labBook'"
+    [id]="version.object_id"
+    [version]="version.pk"
+    [versionInProgress]="versionInProgress"
+    [modalRef]="modalRef"
+    (closed)="onModalClose($event)"
+  ></eworkbench-labbook-preview>
+
+  <!--      <eworkbench-plugin-data-preview-->
+  <!--        *ngIf="contentType === 'pluginData'"-->
+  <!--        [id]="version.object_id"-->
+  <!--        [version]="version.pk"-->
+  <!--        [versionInProgress]="versionInProgress"-->
+  <!--        [modalRef]="modalRef"-->
+  <!--        (closed)="onModalClose($event)"-->
+  <!--      ></eworkbench-plugin-data-preview>-->
+
+  <eworkbench-file-preview
+    *ngIf="contentType === 'file'"
+    [id]="version.object_id"
+    [version]="version.pk"
+    [versionInProgress]="versionInProgress"
+    [modalRef]="modalRef"
+    (closed)="onModalClose($event)"
+  ></eworkbench-file-preview>
+
+  <eworkbench-picture-preview
+    *ngIf="contentType === 'picture'"
+    [id]="version.object_id"
+    [version]="version.pk"
+    [versionInProgress]="versionInProgress"
+    [modalRef]="modalRef"
+    (closed)="onModalClose($event)"
+  ></eworkbench-picture-preview>
+
+  <!--      <eworkbench-dmp-preview-->
+  <!--        *ngIf="contentType === 'dmp'"-->
+  <!--        [id]="version.object_id"-->
+  <!--        [version]="version.pk"-->
+  <!--        [versionInProgress]="versionInProgress"-->
+  <!--        [modalRef]="modalRef"-->
+  <!--        (closed)="onModalClose($event)"-->
+  <!--      ></eworkbench-dmp-preview>-->
+  <!--    </div>-->
+  <!--  </eworkbench-modal>-->
+</ng-container>

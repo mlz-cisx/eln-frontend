@@ -1,0 +1,21 @@
+:host {
+  display: inline-block;
+}
+
+.ewb-button-regular {
+  height: unset;
+  min-height: 25px;
+}
+
+.table-dropdown-menu {
+  padding-bottom: 0;
+}
+
+.reset-columns {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #4d4d4d;
+  background-color: #f4f4f4;
+  height: 30px;
+}

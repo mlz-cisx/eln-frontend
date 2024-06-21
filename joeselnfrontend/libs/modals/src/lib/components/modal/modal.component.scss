@@ -1,0 +1,93 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import '../../../styles/colors';
+// @import 'colors';
+
+.modal-wrap {
+  display: block;
+}
+
+.modal-content {
+  background-clip: border-box;
+  border: 0;
+  border-radius: 0;
+}
+
+[slot='header'] {
+  width: 100%;
+}
+
+.modal-header {
+  border: 0;
+  border-radius: 0;
+  background-color: $primary-color;
+  color: #fff;
+  font-weight: 600;
+  padding: 14px 25px;
+  align-items: center;
+}
+
+.modal-danger {
+  .modal-header {
+    background-color: $danger-color;
+  }
+}
+
+.modal-body {
+  padding: 25px;
+  padding-right: 40px !important;
+}
+
+.ewb-canvas-resize-handle-right {
+  width: 100px !important;
+  right: -50px !important;
+}
+
+.modal-footer {
+  border: 0;
+  border-radius: 0;
+  padding: 25px;
+}
+
+.modal-close {
+  margin-left: 1rem;
+  font-size: 18px;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+ngneat-dialog {
+  .ngneat-dialog-backdrop {
+    background: none;
+    // backdrop styles
+    .ngneat-dialog-content {
+      position: absolute;
+      top: 10px;
+      bottom: 0;
+      //left: 700px;
+      z-index: 10040;
+      overflow: auto;
+
+      .ngneat-drag-marker {
+        height: 40px;
+        width: 90%;
+        margin-right: 10%;
+      }
+
+      .ngneat-close-dialog {
+        // 'X' icon for closing the dialog
+      }
+
+      .ngneat-dialog-primary-btn,
+      .ngneat-dialog-secondary-btn {
+        // the default dialogs action buttons
+      }
+    }
+  }
+}

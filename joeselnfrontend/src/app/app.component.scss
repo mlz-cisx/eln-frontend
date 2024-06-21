@@ -1,0 +1,18 @@
+:host {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 'navbar' 'main' 'footer';
+
+  .header {
+    grid-area: navbar;
+  }
+
+  .content {
+    grid-area: main;
+  }
+
+  .footer {
+    grid-area: footer;
+  }
+}

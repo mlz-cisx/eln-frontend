@@ -1,0 +1,20 @@
+<ng-container *transloco="let t">
+  <main>
+
+    <h4>Welcome</h4>
+
+    <div *ngIf="user">
+      <div>
+        Your Data: {{ user.name }}{{user.username}} {{ user.email }}
+      </div>
+      <div style="margin-top: 1%">
+        Your roles:
+        <ul *ngIf="user.realm_access">
+          <li *ngFor="let role of user.realm_access['roles']">
+            {{role}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</ng-container>

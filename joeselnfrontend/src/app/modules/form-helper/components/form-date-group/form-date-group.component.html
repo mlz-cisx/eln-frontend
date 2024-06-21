@@ -1,0 +1,79 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <div class="flex justify-between">
+    <div class="inline-block w-full pr-3">
+      <label [for]="'startDate' + uniqueHash" *ngIf="labels">
+        {{ t(customLabel.start ?? 'formDateGroup.startDate.label') }}
+        <eworkbench-form-asterisk class="inline-block" *ngIf="required"></eworkbench-form-asterisk>
+      </label>
+      <div class="input-group">
+        <input
+          #startDate
+          type="text"
+          class="form-control ewb-input"
+          [formControl]="f.start"
+          [id]="'startDate' + uniqueHash"
+          [name]="'startDate' + uniqueHash"
+          [placeholder]="
+            ngControl.disabled
+              ? t('formInput.notDefined.placeholder')
+              : placeholders
+              ? customPlaceholder.start ?? t('formDateGroup.startDate.placeholder')
+              : ''
+          "
+          autocomplete="off"
+        />
+        <div class="input-group-append cursor-pointer" (click)="startDate.click()" *ngIf="!f.start.disabled">
+          <span class="input-group-text ewb-input">
+            <joeseln-icon className="wb-calendar"></joeseln-icon>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="inline-block w-full" *ngIf="endDate">
+      <label [for]="'endDate' + uniqueHash" *ngIf="labels">
+        {{ t(customLabel.end ?? 'formDateGroup.endDate.label') }}
+        <eworkbench-form-asterisk class="inline-block" *ngIf="required"></eworkbench-form-asterisk>
+      </label>
+      <div class="input-group">
+        <input
+          #endDate
+          type="text"
+          class="form-control ewb-input"
+          [formControl]="f.end"
+          [id]="'endDate' + uniqueHash"
+          [name]="'endDate' + uniqueHash"
+          [placeholder]="
+            ngControl.disabled
+              ? t('formInput.notDefined.placeholder')
+              : placeholders
+              ? customPlaceholder.end ?? t('formDateGroup.endDate.placeholder')
+              : ''
+          "
+          autocomplete="off"
+        />
+        <div class="input-group-append cursor-pointer" (click)="endDate.click()" *ngIf="!f.end.disabled">
+          <span class="input-group-text ewb-input">
+            <joeseln-icon className="wb-calendar"></joeseln-icon>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="inline-block w-1/2 align whitespace-nowrap pl-3" *ngIf="fullDayToggle">
+      <div class="custom-control custom-checkbox" slot="input">
+        <input
+          class="custom-control-input"
+          type="checkbox"
+          [formControl]="f.fullDay"
+          [id]="'fullDay' + uniqueHash"
+          [name]="'fullDay' + uniqueHash"
+        />
+        <label class="custom-control-label" [for]="'fullDay' + uniqueHash">{{ t('formDateGroup.fullDay.label') }}</label>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,15 @@
+export enum ProjectSidebarItem {
+  Overview = 'overview',
+  LastActivities = 'last_activities',
+  Tasks = 'tasks',
+  TaskBoards = 'taskboards',
+  Contacts = 'contacts',
+  Calendar = 'calendar',
+  Appointments = 'appointments',
+  Resources = 'resources',
+  LabBooks = 'labbooks',
+  Files = 'files',
+  Pictures = 'pictures',
+  Storages = 'storages',
+  DMPs = 'dmps',
+}

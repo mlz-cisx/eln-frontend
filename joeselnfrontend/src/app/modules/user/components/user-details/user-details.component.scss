@@ -1,0 +1,87 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import '../../../../../styles/colors';
+
+$chip-size: 25px;
+
+:host {
+  display: block;
+
+  a {
+    color: $primary-color;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &.deactivated {
+      cursor: initial;
+      color: $text-color;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    &.inverted {
+      color: #fff;
+    }
+  }
+
+  .chip {
+    background-color: #f4f4f4;
+    border-radius: $chip-size;
+    height: $chip-size;
+    padding-left: 3px;
+    padding-right: 0.75rem;
+    font-size: 13px;
+
+    &.inverted {
+      background-color: $primary-color;
+      color: #fff;
+      font-weight: 300;
+
+      a {
+        color: #fff;
+      }
+    }
+  }
+
+  ::ng-deep {
+    .bs-popover-right,
+    .bs-popover-auto[x-placement^='right'] {
+      margin-left: 2px;
+    }
+
+    .bs-popover-left,
+    .bs-popover-auto[x-placement^='left'] {
+      margin-right: 2px;
+    }
+
+    .bs-popover-top,
+    .bs-popover-auto[x-placement^='top'] {
+      margin-bottom: 2px;
+    }
+
+    .bs-popover-bottom,
+    .bs-popover-auto[x-placement^='bottom'] {
+      margin-top: 2px;
+    }
+  }
+
+  .inactive-indicator {
+    color: #4d4d4d;
+    opacity: 0.5;
+    margin-left: 4px;
+  }
+
+  .inverted {
+    .inactive-indicator {
+      color: #fff;
+    }
+  }
+}

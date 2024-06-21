@@ -1,0 +1,47 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <!--  <button style="background-color: #003161; align-content: end"-->
+  <!--          type="button"-->
+  <!--          class="btn ewb-button-big text-white"-->
+  <!--          [tooltip]="'Continue Search'"-->
+  <!--          containerClass="tooltip-sm"-->
+  <!--          placement="bottom left"-->
+  <!--          (click)="continue_search()"-->
+  <!--  >-->
+  <!--    <joeseln-icon className="wb-search"></joeseln-icon>-->
+  <!--  </button>-->
+  <eworkbench-loading>
+    <!--    <div class="m-12 text-center" *ngIf="!drawBoardElements.length && !loading">-->
+    <!--      {{ section ? t('labBook.drawBoardNote.noChildElementsInSection') : t('labBook.drawBoardNote.noChildElements') }}-->
+    <!--    </div>-->
+
+    <gridster #drawBoard [options]="options"
+              *ngIf="!section || (section && drawBoardElements.length)">
+      <gridster-item [id]="'elem_' + item['element']['child_object_id'] "
+                     [item]="item"
+                     [style.z-index]="getItemZIndex(item)"
+                     [style.overflow]="getItemOverflow(item)"
+                     *ngFor="let item of drawBoardElements"
+      >
+
+        <eworkbench-labbook-draw-board-element
+          #elementComponent
+          [id]="id"
+          [element]="item['element']"
+          [section]="section"
+          [editable]="editable"
+          [closeSection]="closeSection"
+          [refreshElementRelations]="refreshElementRelations"
+          (removed)="onRemove($event)"
+          (moved)="onRemove($event)"
+          (expand)="onExpandSection($event)"
+        ></eworkbench-labbook-draw-board-element>
+
+      </gridster-item>
+    </gridster>
+  </eworkbench-loading>
+</ng-container>

@@ -1,0 +1,158 @@
+@import '../../../../../styles/colors';
+@import '../../../../../styles/variables';
+
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 150;
+  background-color: #fff;
+
+  nav {
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 2px;
+
+    @media (min-width: $breakpoint-lg) {
+      height: 50px;
+      padding: 0 20px;
+    }
+
+    .navbar {
+      &-nav {
+        @media (min-width: $breakpoint-lg) {
+          align-items: center;
+        }
+      }
+
+      &-brand {
+        color: $primary-color;
+        margin-right: 32px;
+        font-size: $font-size;
+
+        img {
+          max-height: 35px;
+          margin-right: 20px;
+          margin-left: 20px;
+        }
+      }
+
+      &-container {
+        display: block;
+
+        @media (min-width: $breakpoint-lg) {
+          display: grid;
+          grid-template-columns: 1fr auto;
+        }
+      }
+
+      &-right {
+        @media (min-width: $breakpoint-lg) {
+          margin-left: 0.75rem;
+        }
+      }
+
+      &-search {
+        @media (max-width: $breakpoint-lg) {
+          display: none;
+        }
+      }
+
+      &-user {
+        @media (max-width: $breakpoint-lg) {
+          margin-top: 10px;
+          flex: auto;
+        }
+      }
+    }
+
+    li {
+      a {
+        @media (min-width: $breakpoint-lg) {
+          border: 0;
+          border-bottom: 3px solid transparent;
+
+          &.active,
+          &:hover {
+            border-color: $primary-color;
+
+            .ewb-button-regular {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ewb-button-regular {
+  height: unset;
+  min-height: 25px;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.dropdown-active {
+  border: 0;
+  border-bottom: 3px solid transparent;
+
+  &:hover {
+    border-color: $primary-color;
+
+    > .ewb-button-regular {
+      color: $primary-color;
+    }
+  }
+}
+
+.menu-item-button {
+  &.active {
+    border-left-color: $primary-color;
+  }
+}
+
+.line {
+  border-color: $border-color;
+  margin: 0 5px 0 5px;
+}
+
+
+button {
+  min-width: 22px;
+  font-size: 14px;
+  text-align: center;
+
+  .hover {
+    display: none;
+  }
+
+  &:hover {
+    .default {
+      display: none;
+    }
+
+    .hover {
+      display: block;
+    }
+  }
+}
+
+.favorited {
+  color: #fc3 !important;
+
+  &:hover {
+    .default {
+      display: none;
+    }
+
+    .hover {
+      display: block;
+    }
+  }
+}
+
+button.ewb-button-big {
+  font-size: 18px;
+}

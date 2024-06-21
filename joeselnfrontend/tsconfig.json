@@ -1,0 +1,75 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": [
+      "es2020",
+      /**/
+      "dom"
+    ],
+    "paths": {
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@environments/*": [
+        "./src/environments/*"
+      ],
+      "@joeseln/types": [
+        "./libs/types/src/index.ts"
+      ],
+      "@joeseln/mocks": [
+        "./libs/mocks/src/index.ts"
+      ],
+      "@joeseln/forms": [
+        "./libs/forms/src/index.ts"
+      ],
+      "@joeseln/icons": [
+        "./libs/icons/src/index.ts"
+      ],
+      "@joeseln/table": [
+        "./libs/table/src/index.ts"
+      ],
+      "@joeseln/wysiwyg-editor": [
+        "./libs/wysiwyg-editor/src/index.ts"
+      ],
+      "@joeseln/picture-editor": [
+        "./libs/picture-editor/src/index.ts"
+      ],
+      "@joeseln/skeletons": [
+        "./libs/skeletons/src/index.ts"
+      ],
+      "@joeseln/modals": [
+        "./libs/modals/src/index.ts"
+      ],
+      "@joeseln/services": [
+        "./src/app/services/index.ts"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

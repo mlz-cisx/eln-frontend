@@ -1,0 +1,49 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <div class="profile-body">
+    <div class="text-center mb-4">
+      <eworkbench-user-avatar [user]="user" [scale]="5"></eworkbench-user-avatar>
+    </div>
+    <div class="center">
+      <div class="name-plate mb-4 mt-1">
+        <div class="semi-bold">
+          <ng-container
+            *ngIf="user.userprofile.first_name && user.userprofile.last_name; then userTemplate; else usernameTemplate"
+          ></ng-container>
+          <span *ngIf="!user?.is_active" class="inactive-indicator">- {{ t('user.details.inactive') }}</span>
+        </div>
+        <div *ngIf="user.userprofile.country" class="ml-3">{{ user.userprofile.country }}</div>
+      </div>
+      <div *ngIf="user.userprofile.org_zug_mitarbeiter_lang" class="mb-2">
+        {{ user.userprofile.org_zug_mitarbeiter_lang }}
+      </div>
+      <div *ngIf="user.userprofile.org_zug_student_lang" class="mb-2">{{ user.userprofile.org_zug_student_lang }}</div>
+      <div class="secondary-info mb-2" *ngIf="user.userprofile.phone">
+        <joeseln-icon className="wb-phone"></joeseln-icon><span class="ml-1">{{ user.userprofile.phone }}</span>
+      </div>
+      <div class="secondary-info mb-2" *ngIf="user.email">
+        <joeseln-icon className="wb-envelope"></joeseln-icon>
+        <a href="mailto:{{ user.email }}" class="ml-1">{{ user.email }}</a>
+      </div>
+      <div class="secondary-info mb-4" *ngIf="user.userprofile.website">
+        <joeseln-icon className="wb-globe"></joeseln-icon>
+        <a [href]="user.userprofile.website" target="_blank" class="ml-1">{{ user.userprofile.website }}</a>
+      </div>
+      <div *ngIf="user.userprofile.additional_information" [style.white-space]="'pre-line'">
+        {{ user.userprofile.additional_information }}
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #userTemplate>
+  {{ user.userprofile.academic_title }} {{ user.userprofile.first_name }} {{ user.userprofile.last_name }}
+</ng-template>
+
+<ng-template #usernameTemplate>
+  {{ user.username }}
+</ng-template>

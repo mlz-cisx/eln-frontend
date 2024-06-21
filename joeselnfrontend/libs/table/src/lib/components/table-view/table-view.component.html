@@ -1,0 +1,86 @@
+<div *ngIf="!firstDataLoaded" class="ssc">
+  <div class="ssc-head-line mb-2"></div>
+  <ng-container *ngFor="let _ of skeletonItems">
+    <div class="ssc-line mb-1"></div>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="firstDataLoaded">
+  <eworkbench-loading [loading]="!firstDataLoaded && loading">
+    <table cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="onColumnDrop($event)" cdk-table [dataSource]="dataSource$">
+      <ng-container cdkColumnDef="select">
+        <th cdk-header-cell *cdkHeaderCellDef>
+          <input type="checkbox" [indeterminate]="indeterminate" [checked]="allChecked" (change)="onSelectAll()" />
+        </th>
+        <td cdk-cell *cdkCellDef="let element">
+          <input type="checkbox" [checked]="selected.has(element.pk)" (change)="onSelect(element)" />
+        </td>
+      </ng-container>
+
+      <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.key">
+        <th
+          cdkDrag
+          [style.width]="column.width"
+          [ngClass]="{ 'p-0 border-0': !columnHeader }"
+          [cdkDragDisabled]="column.key === 'actions'"
+          cdkDragLockAxis="x"
+          cdk-header-cell
+          *cdkHeaderCellDef
+        >
+          <ng-container *ngIf="columnHeader">
+            {{ column.name }}
+            <eworkbench-table-sort
+              [class.invisible]="!column.sortable"
+              [column]="column"
+              [sortBy]="sortBy"
+              [sort]="sort"
+              (sortChanged)="onSortChanged($event)"
+            ></eworkbench-table-sort>
+          </ng-container>
+        </th>
+        <td cdk-cell *cdkCellDef="let element" [ngClass]="{ 'p-0': noPadding }">
+          <ng-container *ngIf="column.cellTemplate">
+            <ng-container [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{ $implicit: element }"></ng-container>
+          </ng-container>
+          <ng-container *ngIf="!column.cellTemplate">
+            {{ element[column.key] }}
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr cdk-header-row [class.hidden-header]="!columnHeader" *cdkHeaderRowDef="displayedColumns$.value"></tr>
+      <tr [class.row-hover]="rowHover" cdk-row *cdkRowDef="let row; columns: displayedColumns$.value"></tr>
+    </table>
+
+    <div *ngIf="!loading && !data?.length" class="no-result">No results</div>
+
+    <div *ngIf="loadingMore" class="flex justify-center items-center">
+      <div class="spinner-border mt-3" role="status"></div>
+    </div>
+
+    <div [class.d-none]="!data?.length">
+      <div
+        class="text-center mt-4"
+        *ngIf="pagination"
+      >
+        <button type="button" class="btn ewb-button-big ewb-button-table" (click)="onLoadMore()">show more</button>
+      </div>
+    </div>
+  </eworkbench-loading>
+</ng-container>
+
+<ng-template #firstTemplate>
+  <joeseln-icon className="wb-2-chevrons-up rotate-90"></joeseln-icon>
+</ng-template>
+
+<ng-template #lastTemplate>
+  <joeseln-icon className="wb-2-chevrons-down rotate-90"></joeseln-icon>
+</ng-template>
+
+<ng-template #previousTemplate>
+  <joeseln-icon className="wb-chevron-right-1 flip-h"></joeseln-icon>
+</ng-template>
+
+<ng-template #nextTemplate>
+  <joeseln-icon className="wb-chevron-right-1"></joeseln-icon>
+</ng-template>

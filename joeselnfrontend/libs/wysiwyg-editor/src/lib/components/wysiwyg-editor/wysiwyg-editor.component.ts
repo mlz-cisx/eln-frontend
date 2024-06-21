@@ -1,0 +1,150 @@
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  Self,
+  ViewChild
+} from '@angular/core';
+import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {EditorComponent} from '@tinymce/tinymce-angular';
+
+@Component({
+  selector: 'eworkbench-wysiwyg-editor',
+  templateUrl: './wysiwyg-editor.component.html',
+  styleUrls: ['./wysiwyg-editor.component.scss'],
+})
+export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+  @Input()
+  public id!: string;
+
+  @Input()
+  public maxHeight: number | undefined = 500;
+
+  public init = {
+    base_url: '/tinymce',
+    suffix: '.min',
+    menubar: false,
+    // https://www.tiny.cloud/docs/general-configuration-guide/multiple-editors/#multipleeditorinstancessharingthesameconfiguration
+    inline: false,
+    statusbar: false,
+    branding: false,
+    max_height: this.maxHeight,
+    plugins: [
+      'advlist autolink autoresize lists link image charmap print preview anchor searchreplace visualblocks code fullscreen',
+      'insertdatetime textpattern media table paste code help hr quickbars image imagetools ',
+    ],
+    toolbar_location: 'top',
+    toolbar:
+      'formatselect | bold italic underline strikethrough forecolor backcolor | table | removeformat | alignleft aligncenter alignright alignjustify | charmap superscript subscript | link image | numlist bullist outdent indent hr | code ',
+    quickbars_insert_toolbar: '',
+    quickbars_selection_toolbar:
+      'bold italic underline strikethrough forecolor backcolor | removeformat  | alignleft aligncenter alignright alignjustify | superscript subscript |',
+    contextmenu:
+      'formats | bold italic underline forecolor removeformat | align | inserttable cell row column deletetable | charmap superscript subscript | link | hr ',
+    paste_data_images: true,
+    content_css: '/assets/styles/tinymce.css',
+    content_style: 'img{max-width:90%;height:auto; margin-top: 10px}',
+    forced_root_block: false,
+    file_picker_types: 'image',
+    file_picker_callback: (cb: any) => {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+
+      input.onchange = () => {
+        if (input.files) {
+          const file: File = input.files[0];
+
+          const reader = new FileReader();
+          reader.onload = () => {
+            const id = `blobid${new Date().getTime()}`;
+            const blobCache = this.editor?.editor.editorUpload.blobCache;
+            if (reader.result) {
+              const base64 = (reader.result as string).split(',')[1];
+              const blobInfo = blobCache?.create(id, file, base64);
+
+              if (blobInfo) {
+                blobCache?.add(blobInfo);
+                cb(blobInfo.blobUri(), {title: file.name});
+              }
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      input.click();
+    },
+  };
+
+  @Input()
+  public initialValue?: string;
+
+  @Input()
+  public inline?: boolean = false;
+
+  @Input()
+  public disabled?: boolean = false;
+
+  @Input()
+  public tagName?: string = 'div';
+
+  @Input()
+  public plugins?: string;
+
+  @Input()
+  public toolbar?: string | string[];
+
+  @ViewChild(EditorComponent)
+  public editor?: EditorComponent;
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public onChanged: any = () => {
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public onTouched: any = () => {
+  };
+
+  public constructor(@Self() public readonly ngControl: NgControl, private readonly cdr: ChangeDetectorRef) {
+    ngControl.valueAccessor = this;
+  }
+
+  public ngOnInit(): void {
+    this.init.max_height = this.maxHeight;
+    // this.init.inline = true;
+  }
+
+  public ngAfterViewInit(): void {
+    this.ngControl.valueChanges?.subscribe(() => {
+      this.cdr.markForCheck();
+    });
+
+    setTimeout(() => this.editor?.editor.setMode(this.disabled ? 'readonly' : 'design'), 500);
+  }
+
+  public writeValue(value: string | null): void {
+    if (this.ngControl.value !== value) {
+      this.onChanged(value);
+    }
+  }
+
+  public mypageload(): void{
+    console.log('nearly loaded')
+  }
+
+  public registerOnChange(fn: any): void {
+    this.onChanged = fn;
+  }
+
+  public registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+}
+

@@ -1,0 +1,65 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <div class="p-6 border-b" [ngClass]="{ 'bg-tum-highlight': currentUser?.pk === comment.left_content_object.created_by.pk }">
+    <div class="flex justify-between mb-4">
+      <div class="flex space-x-1">
+        <div>
+          <div class="mr-2 cursor-pointer" (click)="openUserModal()">
+
+<!--            <eworkbench-user-avatar-->
+<!--              [user]="comment.left_content_object.created_by"-->
+<!--              [scale]="1.6"-->
+<!--              [ring]="currentUser?.pk === comment.left_content_object.created_by.pk"-->
+<!--            ></eworkbench-user-avatar>-->
+
+          </div>
+        </div>
+        <div>
+          <div class="font-bold">
+
+<!--            <eworkbench-user-details-->
+<!--              class="inline-block"-->
+<!--              [user]="comment.left_content_object.created_by"-->
+<!--              [avatar]="false"-->
+<!--            ></eworkbench-user-details>-->
+
+          </div>
+          <div class="text-gray-600">
+            {{ comment.left_content_object.created_at }}
+          </div>
+        </div>
+      </div>
+      <div class="self-center" *ngIf="currentUser?.pk === comment.left_content_object.created_by.pk">
+        <button type="button" class="btn ewb-button-small mr-2" (click)="onChangePrivateState()" [disabled]="loading">
+          <joeseln-icon
+            *ngIf="comment.private"
+            className="wb-locked"
+            [tooltip]="t('comments.privateComment.tooltip')"
+            containerClass="tooltip-sm"
+          ></joeseln-icon>
+          <joeseln-icon
+            *ngIf="!comment.private"
+            className="wb-unlock"
+            [tooltip]="t('comments.publicComment.tooltip')"
+            containerClass="tooltip-sm"
+          ></joeseln-icon>
+        </button>
+        <button type="button" class="btn ewb-button-small" (click)="onOpenDeleteModal()" [disabled]="loading">
+          <joeseln-icon
+            className="wb-remove"
+            [tooltip]="t('comments.deleteComment.tooltip')"
+            containerClass="tooltip-sm"
+          ></joeseln-icon>
+        </button>
+      </div>
+    </div>
+    <div>
+      <div class="font-bold mb-2">{{ comment.left_content_object.subject }}</div>
+      <div [innerHTML]="comment.left_content_object.content "></div>
+    </div>
+  </div>
+</ng-container>

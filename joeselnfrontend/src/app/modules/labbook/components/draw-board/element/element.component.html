@@ -1,0 +1,67 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <eworkbench-labbook-draw-board-note
+    #elementComponent
+    [id]="id"
+    [element]="element"
+    [section]="section"
+    [editable]="editable"
+    [refreshElementRelations]="refreshElementRelations"
+    (removed)="onRemove($event)"
+    (moved)="onMove($event)"
+    *ngIf="element.child_object_content_type_model === 'shared_elements.note'"
+  ></eworkbench-labbook-draw-board-note>
+  <eworkbench-labbook-draw-board-file
+    #elementComponent
+    [id]="id"
+    [element]="element"
+    [section]="section"
+    [editable]="editable"
+    [refreshElementRelations]="refreshElementRelations"
+    (removed)="onRemove($event)"
+    (moved)="onMove($event)"
+    *ngIf="element.child_object_content_type_model === 'shared_elements.file'"
+  ></eworkbench-labbook-draw-board-file>
+  <eworkbench-labbook-draw-board-picture
+    #elementComponent
+    [id]="id"
+    [element]="element"
+    [section]="section"
+    [editable]="editable"
+    [refreshElementRelations]="refreshElementRelations"
+    (removed)="onRemove($event)"
+    (moved)="onMove($event)"
+    *ngIf="element.child_object_content_type_model === 'pictures.picture'"
+  ></eworkbench-labbook-draw-board-picture>
+  <eworkbench-labbook-draw-board-plugin-data
+    #elementComponent
+    [id]="id"
+    [element]="element"
+    [section]="section"
+    [editable]="editable"
+    [refreshElementRelations]="refreshElementRelations"
+    (removed)="onRemove($event)"
+    (moved)="onMove($event)"
+    *ngIf="element.child_object_content_type_model === 'plugins.plugininstance'"
+  ></eworkbench-labbook-draw-board-plugin-data>
+  <eworkbench-labbook-draw-board-section
+    #elementComponent
+    [id]="id"
+    [element]="element"
+    [editable]="editable"
+    [closeSection]="closeSection"
+    (removed)="onRemove($event)"
+    (expand)="onExpandSection($event)"
+    *ngIf="element.child_object_content_type_model === 'labbooks.labbooksection' && !section"
+  ></eworkbench-labbook-draw-board-section>
+  <eworkbench-labbook-draw-board-permission-denied
+    [id]="id"
+    [element]="element"
+    (removed)="onRemove($event)"
+    *ngIf="!element.child_object"
+  ></eworkbench-labbook-draw-board-permission-denied>
+</ng-container>

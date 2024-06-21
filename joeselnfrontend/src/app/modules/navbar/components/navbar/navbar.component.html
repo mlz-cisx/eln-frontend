@@ -1,0 +1,70 @@
+<ng-container>
+  <nav class="navbar navbar-light navbar-expand-lg">
+    <ng-container>
+      <a
+        routerLink="/"
+      >
+        Home</a>
+    </ng-container>
+    <div class="line"></div>
+    <ng-container>
+      <a
+        routerLink="/profile"
+      >
+        Profile</a>
+    </ng-container>
+    <!--    <div class="line"></div>-->
+    <!--    <ng-container>-->
+    <!--      <a-->
+    <!--        [routerLink]="['/helppage']"-->
+    <!--      >-->
+    <!--        Helppage</a>-->
+    <!--    </ng-container>-->
+    <div class="line"></div>
+    <ng-container>
+      <a
+        routerLink="/labbooks"
+      >
+        Labbooks</a>
+    </ng-container>
+    <div class="line"></div>
+    <ng-container>
+      <a
+        routerLink="/notes"
+      >
+        Notes</a>
+    </ng-container>
+    <div class="line"></div>
+    <ng-container>
+      <a
+        routerLink="/pictures"
+      >
+        Pictures</a>
+    </ng-container>
+    <div class="line"></div>
+    <ng-container>
+      <a
+        routerLink="/files"
+      >
+        Files</a>
+    </ng-container>
+    <div class="line"></div>
+    <ng-container>
+      <button type="button" class="btn ewb-button-regular" (click)="logout()">
+        Logout
+      </button>
+    </ng-container>
+    <ng-container>
+      <span style="margin-right: 3px">Pencil:</span>
+      <input type="number" id="line_width" name="line_width" step="1" value="2"
+             min="1" max="10" size="5">
+    </ng-container>
+    <!--    <ng-container>-->
+    <!--      <ul class="navbar-nav navbar-search h-full" *ngIf="true">-->
+    <!--        <li class="h-full flex items-center mr-3">-->
+    <!--          <eworkbench-global-search></eworkbench-global-search>-->
+    <!--        </li>-->
+    <!--      </ul>-->
+    <!--    </ng-container>-->
+  </nav>
+</ng-container>
