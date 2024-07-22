@@ -301,6 +301,12 @@
 <ng-template #createdByCellTemplate let-row>
   <eworkbench-user-details [user]="row.created_by"></eworkbench-user-details>
 </ng-template>
+<ng-template #lastModifiedAtCellTemplate let-row>
+  {{ row.last_modified_at | formatDate }}
+</ng-template>
+<ng-template #lastModifiedByCellTemplate let-row>
+  <eworkbench-user-details [user]="row.last_modified_by"></eworkbench-user-details>
+</ng-template>
 <ng-template #actionsCellTemplate let-row>
   <div class="whitespace-nowrap text-right">
 <!--    <eworkbench-favorite-button-->

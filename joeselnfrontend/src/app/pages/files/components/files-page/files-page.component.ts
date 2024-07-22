@@ -3,33 +3,53 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpParams } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { ProjectSidebarItem } from '@app/enums/project-sidebar-item.enum';
+import {HttpParams} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
 //import { LeaveProjectModalComponent } from '@app/pages/projects/components/modals/leave/leave.component';
-import { AuthService,
+import {
+  AuthService,
   // DrivesService,
   // DssContainersService,
   FilesService,
   // PageTitleService,
   // ProjectsService
 } from '@app/services';
-import { UserService,
+import {
+  UserService,
   // UserStore
 } from '@app/services';
-import { TableColumn, TableColumnChangedEvent, TableSortChangedEvent, TableViewComponent } from '@joeseln/table';
-import type { Drive, DssContainer, ModalCallback, Project, User } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { keyBy, merge, values } from 'lodash';
-import { Observable, of, Subject } from 'rxjs';
-import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';
-import { NewFileModalComponent } from '../modals/new.component';
+import {
+  TableColumn,
+  TableColumnChangedEvent,
+  TableSortChangedEvent,
+  TableViewComponent
+} from '@joeseln/table';
+import type {
+  Drive,
+  DssContainer,
+  ModalCallback,
+  Project,
+  User
+} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {keyBy, merge, values} from 'lodash';
+import {Observable, of, Subject} from 'rxjs';
+import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
+import {NewFileModalComponent} from '../modals/new.component';
 
 @UntilDestroy()
 @Component({
@@ -48,28 +68,33 @@ export class FilesPageComponent implements OnInit {
 
   public sidebarItem = ProjectSidebarItem.Files;
 
-  @ViewChild('tableView', { static: true })
+  @ViewChild('tableView', {static: true})
   public tableView!: TableViewComponent;
 
-  @ViewChild('titleCellTemplate', { static: true })
+  @ViewChild('titleCellTemplate', {static: true})
   public titleCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('nameCellTemplate', { static: true })
+  @ViewChild('nameCellTemplate', {static: true})
   public nameCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('fileSizeCellTemplate', { static: true })
+  @ViewChild('fileSizeCellTemplate', {static: true})
   public fileSizeCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('createdAtCellTemplate', { static: true })
+  @ViewChild('createdAtCellTemplate', {static: true})
   public createdAtCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('createdByCellTemplate', { static: true })
+  @ViewChild('createdByCellTemplate', {static: true})
   public createdByCellTemplate!: TemplateRef<any>;
+  @ViewChild('lastModifiedAtCellTemplate', {static: true})
+  public lastModifiedAtCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('mimeTypeCellTemplate', { static: true })
+  @ViewChild('lastModifiedByCellTemplate', {static: true})
+  public lastModifiedByCellTemplate!: TemplateRef<any>;
+
+  @ViewChild('mimeTypeCellTemplate', {static: true})
   public mimeTypeCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('actionsCellTemplate', { static: true })
+  @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
 
   public modalRef?: DialogRef;
@@ -130,17 +155,18 @@ export class FilesPageComponent implements OnInit {
     private readonly titleService: Title,
     private readonly authService: AuthService,
     //private readonly userStore: UserStore
-  ) {}
+  ) {
+  }
 
   public get filtersChanged(): boolean {
     /* eslint-disable */
     return Boolean(
       this.projectsControl.value ||
-        this.usersControl.value ||
-        this.searchControl.value ||
-        this.dssContainersControl.value ||
-        this.storageControl.value ||
-        this.favoritesControl.value
+      this.usersControl.value ||
+      this.searchControl.value ||
+      this.dssContainersControl.value ||
+      this.storageControl.value ||
+      this.favoritesControl.value
     );
     /* eslint-enable */
   }
@@ -220,6 +246,18 @@ export class FilesPageComponent implements OnInit {
             cellTemplate: this.createdByCellTemplate,
             name: column.createdBy,
             key: 'created_by',
+            sortable: true,
+          },
+          {
+            cellTemplate: this.lastModifiedAtCellTemplate,
+            name: column.lastModifiedAt,
+            key: 'last_modified_at',
+            sortable: true,
+          },
+          {
+            cellTemplate: this.lastModifiedByCellTemplate,
+            name: column.lastModifiedBy,
+            key: 'last_modified_by',
             sortable: true,
           },
           {
@@ -757,18 +795,18 @@ export class FilesPageComponent implements OnInit {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
 
-    this.projectsControl.setValue(null, { emitEvent: false });
+    this.projectsControl.setValue(null, {emitEvent: false});
     this.projects = [];
 
-    this.usersControl.setValue(null, { emitEvent: false });
+    this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];
 
-    this.searchControl.setValue(null, { emitEvent: false });
+    this.searchControl.setValue(null, {emitEvent: false});
 
-    this.dssContainersControl.setValue(null, { emitEvent: false });
+    this.dssContainersControl.setValue(null, {emitEvent: false});
     this.dssContainers = [];
 
-    this.storageControl.setValue(null, { emitEvent: false });
+    this.storageControl.setValue(null, {emitEvent: false});
 
     this.favoritesControl.setValue(null);
   }
@@ -800,11 +838,11 @@ export class FilesPageComponent implements OnInit {
   }
 
   public openNewModal(): void {
-    const initialState = this.project ? { projects: [this.project] } : null;
+    const initialState = this.project ? {projects: [this.project]} : null;
 
     this.modalRef = this.modalService.open(NewFileModalComponent, {
       closeButton: false,
-      data: { withSidebar: this.showSidebar, initialState: initialState },
+      data: {withSidebar: this.showSidebar, initialState: initialState},
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
@@ -812,7 +850,7 @@ export class FilesPageComponent implements OnInit {
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.navigate) {
-      void this.router.navigate(callback.navigate, { relativeTo: this.route });
+      void this.router.navigate(callback.navigate, {relativeTo: this.route});
     } else if (callback?.state === ModalState.Changed) {
       this.tableView.loadData();
     }

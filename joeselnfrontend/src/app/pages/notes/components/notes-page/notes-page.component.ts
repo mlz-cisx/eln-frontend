@@ -3,26 +3,39 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpParams } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { AuthService, NotesService,
+import {HttpParams} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {
+  AuthService, NotesService,
   // PageTitleService,
   // ProjectsService
 } from '@app/services';
-import { UserService } from '@app/services';
-import { TableColumn, TableColumnChangedEvent, TableSortChangedEvent, TableViewComponent } from '@joeseln/table';
-import type { ModalCallback, Project, User } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { keyBy, merge, values } from 'lodash';
-import { of, Subject } from 'rxjs';
-import { debounceTime, skip, switchMap, take } from 'rxjs/operators';
-import { NewNoteModalComponent } from '../modals/new/new.component';
+import {UserService} from '@app/services';
+import {
+  TableColumn,
+  TableColumnChangedEvent,
+  TableSortChangedEvent,
+  TableViewComponent
+} from '@joeseln/table';
+import type {ModalCallback, Project, User} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {keyBy, merge, values} from 'lodash';
+import {of, Subject} from 'rxjs';
+import {debounceTime, skip, switchMap, take} from 'rxjs/operators';
+import {NewNoteModalComponent} from '../modals/new/new.component';
 
 @UntilDestroy()
 @Component({
@@ -40,19 +53,25 @@ export class NotesPageComponent implements OnInit {
 
   public listColumns: TableColumn[] = [];
 
-  @ViewChild('tableView', { static: true })
+  @ViewChild('tableView', {static: true})
   public tableView!: TableViewComponent;
 
-  @ViewChild('subjectCellTemplate', { static: true })
+  @ViewChild('subjectCellTemplate', {static: true})
   public subjectCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('createdAtCellTemplate', { static: true })
+  @ViewChild('createdAtCellTemplate', {static: true})
   public createdAtCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('createdByCellTemplate', { static: true })
+  @ViewChild('createdByCellTemplate', {static: true})
   public createdByCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('actionsCellTemplate', { static: true })
+    @ViewChild('lastModifiedAtCellTemplate', { static: true })
+  public lastModifiedAtCellTemplate!: TemplateRef<any>;
+
+  @ViewChild('lastModifiedByCellTemplate', { static: true })
+  public lastModifiedByCellTemplate!: TemplateRef<any>;
+
+  @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
 
   public modalRef?: DialogRef;
@@ -100,7 +119,8 @@ export class NotesPageComponent implements OnInit {
     // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly authService: AuthService
-  ) {}
+  ) {
+  }
 
   public get filtersChanged(): boolean {
     /* eslint-disable */
@@ -160,6 +180,18 @@ export class NotesPageComponent implements OnInit {
             cellTemplate: this.createdByCellTemplate,
             name: column.createdBy,
             key: 'created_by',
+            sortable: true,
+          },
+          {
+            cellTemplate: this.lastModifiedAtCellTemplate,
+            name: column.lastModifiedAt,
+            key: 'last_modified_at',
+            sortable: true,
+          },
+          {
+            cellTemplate: this.lastModifiedByCellTemplate,
+            name: column.lastModifiedBy,
+            key: 'last_modified_by',
             sortable: true,
           },
           {
@@ -597,23 +629,23 @@ export class NotesPageComponent implements OnInit {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
 
-    this.projectsControl.setValue(null, { emitEvent: false });
+    this.projectsControl.setValue(null, {emitEvent: false});
     this.projects = [];
 
-    this.usersControl.setValue(null, { emitEvent: false });
+    this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];
 
-    this.searchControl.setValue(null, { emitEvent: false });
+    this.searchControl.setValue(null, {emitEvent: false});
 
     this.favoritesControl.setValue(null);
   }
 
   public openNewModal(): void {
-    const initialState = this.project ? { projects: [this.project] } : null;
+    const initialState = this.project ? {projects: [this.project]} : null;
 
     this.modalRef = this.modalService.open(NewNoteModalComponent, {
       closeButton: false,
-      data: { service: this.notesService, initialState: initialState },
+      data: {service: this.notesService, initialState: initialState},
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));

@@ -1958,6 +1958,8 @@
   "notes.columns.subject": "Subject",
   "notes.columns.createdAt": "Created at",
   "notes.columns.createdBy": "Created by",
+  "notes.columns.lastModifiedAt": "Last modified at",
+  "notes.columns.lastModifiedBy": "Last modified by",
   "appointments.columns.title": "Title",
   "appointments.columns.location": "Location",
   "appointments.columns.startTime": "Start time",
@@ -2034,6 +2036,8 @@
   "files.columns.fileName": "File name",
   "files.columns.fileSize": "File size",
   "files.columns.mimeType": "Mime type",
+  "files.columns.lastModifiedAt": "Last modified at",
+  "files.columns.lastModifiedBy": "Last modified by",
   "pictures.columns.title": "Title",
   "pictures.columns.createdAt": "Created at",
   "pictures.columns.createdBy": "Created by",
@@ -2042,8 +2046,6 @@
   "pictures.columns.height": "Height",
   "pictures.columns.preview": "Preview",
   "pictures.columns.width": "Width",
-
-
   "comments.columns": "comments.columns",
   "comments.state": "comments.state"
 }
