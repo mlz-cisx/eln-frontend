@@ -30,12 +30,15 @@ import {
 import type {
   LabBookDrawBoardComponent
 } from '@app/modules/labbook/components/draw-board/draw-board/draw-board.component';
-import {DescriptionModalComponent} from '@app/modules/shared/modals/description/description.component';
+import {
+  DescriptionModalComponent
+} from '@app/modules/shared/modals/description/description.component';
 // import {PendingChangesModalComponent} from '@app/modules/shared/modals/pending-changes/pending-changes.component';
 // import {LeaveProjectModalComponent} from '@app/pages/projects/components/modals/leave/leave.component';
 // import {AuthService, LabbooksService, PageTitleService, ProjectsService, WebSocketService} from '@joeseln/services';
 import {WebSocketService} from '@joeseln/services';
 import {LabbooksService} from '@joeseln/services';
+import {UserService} from "@app/services";
 // import {UserStore} from '@app/stores/user';
 import type {
   LabBook,
@@ -97,7 +100,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public sidebarItem = ProjectSidebarItem.LabBooks;
 
-  public currentUser: User = mockUser;
+  public currentUser: User | null = null;
 
   public initialState?: LabBook;
 
@@ -159,6 +162,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     // private readonly pageTitleService: PageTitleService,
     // private readonly titleService: Title,
     private readonly modalService: DialogService,
+    private user_service: UserService,
     // private readonly userStore: UserStore,
     private renderer2: Renderer2
   ) {
@@ -199,9 +203,11 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
 
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      console.log('user ', this.currentUser)
+    });
+
 
     this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
