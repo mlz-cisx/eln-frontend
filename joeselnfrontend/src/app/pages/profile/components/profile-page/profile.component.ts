@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "@app/services";
-import {KeykloakUser, Test} from "@joeseln/types";
+import {KeykloakUser, User, Test} from "@joeseln/types";
+import {UserStore} from "@app/services/user/user.store";
 
 @Component({
   selector: 'joeseln-profile-page',
@@ -9,9 +10,11 @@ import {KeykloakUser, Test} from "@joeseln/types";
 })
 export class ProfilePageComponent implements OnInit {
   test: Test[] = []
-  user: KeykloakUser | undefined;
+  user: User | undefined;
 
-  constructor(private user_service: UserService) {
+  constructor(private user_service: UserService,
+              private readonly userStore: UserStore
+  ) {
   }
 
   ngOnInit(): void {
@@ -22,6 +25,7 @@ export class ProfilePageComponent implements OnInit {
     this.user_service.getUserMe()
       .subscribe(user => {
           this.user = user
+          this.userStore.update(() => ({user, loggedIn: Boolean(user)}));
         }
       );
   }

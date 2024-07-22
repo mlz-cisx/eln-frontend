@@ -3,17 +3,24 @@ import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap, switchMap} from 'rxjs/operators';
-import type {KeykloakUser, Test} from "@joeseln/types";
+import type {KeykloakUser, User, Test} from "@joeseln/types";
 import {AuthGuardService, AuthService} from "@app/services";
 import {Router} from "@angular/router";
 import {KeycloakService} from 'keycloak-angular';
+import {UserState, UserStore} from "@app/services/user/user.store";
+import {UserQuery} from "@app/services/user/user.query";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService  {
+export class UserService {
 
-  constructor(private readonly httpClient: HttpClient, private _auth: AuthService, private router: Router) {
+  constructor(private readonly httpClient: HttpClient,
+              private _auth: AuthService,
+              private router: Router,
+              private readonly userStore: UserStore,
+              private readonly userQuery: UserQuery,
+  ) {
 
   }
 
@@ -30,12 +37,15 @@ export class UserService  {
     })
   }
 
-  public getUserMe(): Observable<KeykloakUser> {
-    return this.httpClient.get<KeykloakUser>(`${environment.apiUrl}/users/me`).pipe(catchError(this.handleError))
+  public getUserMe(): Observable<User> {
+    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(this.handleError))
   }
 
+  public get user$(): Observable<UserState> {
+    return this.userQuery.user$ as any;
+  }
 
-  public handleError(error: HttpErrorResponse ) {
+  public handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);

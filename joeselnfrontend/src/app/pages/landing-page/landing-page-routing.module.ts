@@ -1,14 +1,14 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {
-  HelpPageComponent
-} from "@app/pages/help-page/help-page/help-page.component";
+  LandingPageComponent
+} from "@app/pages/landing-page/landing-page/landing-page.component";
 import {AuthGuardService} from "@app/services";
 
 const routes: Routes = [
   {
     path: '',
-    component: HelpPageComponent,
+    component: LandingPageComponent,
     canActivate: [AuthGuardService],
   }
 
@@ -19,5 +19,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class HelpPageRoutingModule {
+export class LandingPageRoutingModule {
 }

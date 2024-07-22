@@ -7,6 +7,13 @@ export const mockExternalUser: User = {
   is_active: true,
   is_staff: false,
   last_login: null,
+  sub: 'user',
+  email_verified: true,
+  name: 'user',
+  preferred_username: 'user',
+  given_name: 'user',
+  family_name: 'user',
+  realm_access: '',
   userprofile: {
     first_name: '',
     last_name: '',

@@ -34,6 +34,13 @@ export interface User {
   url?: string;
   username?: string;
   userprofile: UserProfile;
+  sub: string | null;
+  email_verified: boolean | null;
+  name: string | null;
+  preferred_username: string | null;
+  given_name: string | null;
+  family_name: string | null;
+  realm_access: any | null;
 }
 
 export interface UserState {

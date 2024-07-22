@@ -5,22 +5,35 @@ import {
 import {Test} from "@joeseln/types";
 import {FormControl} from '@angular/forms';
 import {Router} from '@angular/router'
+import {UserService} from "@app/services";
+import {UserStore} from "@app/services/user/user.store";
 
 @Component({
-  selector: 'app-help-page',
-  templateUrl: './help-page.component.html',
-  styleUrls: ['./help-page.component.scss'],
+  selector: 'app-landing-page',
+  templateUrl: './landing-page.component.html',
+  styleUrls: ['./landing-page.component.scss'],
 })
-export class HelpPageComponent implements OnInit {
+export class LandingPageComponent implements OnInit {
   test: Test[] = []
   name = new FormControl('');
   intervalID: any;
 
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private user_service: UserService,
+              private readonly userStore: UserStore) {
+  }
+
+  getUser(): void {
+    this.user_service.getUserMe()
+      .subscribe(user => {
+          this.userStore.update(() => ({user, loggedIn: Boolean(user)}));
+        }
+      );
   }
 
   public ngOnInit(): void {
+    this.getUser()
     const state_url = localStorage.getItem('state_url')
     localStorage.removeItem('state_url')
     if (state_url && state_url.startsWith('/labbooks/')) {

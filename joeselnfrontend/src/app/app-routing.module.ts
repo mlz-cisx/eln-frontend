@@ -6,7 +6,7 @@ import {CommonModule} from "@angular/common";
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('@app/pages/help-page/help-page.module').then(m => m.HelpPageModule),
+    loadChildren: () => import('@app/pages/landing-page/landing-page.module').then(m => m.LandingPageModule),
   },
   {
     path: 'labbooks',
