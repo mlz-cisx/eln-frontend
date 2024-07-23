@@ -5,7 +5,7 @@ import {
 import {Test} from "@joeseln/types";
 import {FormControl} from '@angular/forms';
 import {Router} from '@angular/router'
-import {UserService} from "@app/services";
+import {UserService, WebSocketService} from "@app/services";
 import {UserStore} from "@app/services/user/user.store";
 
 @Component({
@@ -21,7 +21,9 @@ export class LandingPageComponent implements OnInit {
 
   constructor(private router: Router,
               private user_service: UserService,
-              private readonly userStore: UserStore) {
+              private websockket_service: WebSocketService,
+              private readonly userStore: UserStore,
+  ) {
   }
 
   getUser(): void {
@@ -33,8 +35,10 @@ export class LandingPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.websockket_service.connect()
     this.getUser()
     const state_url = localStorage.getItem('state_url')
+    // for qr code integration
     localStorage.removeItem('state_url')
     if (state_url && state_url.startsWith('/labbooks/')) {
       this.router.navigate([state_url])

@@ -16,6 +16,6 @@ export class AppComponent implements OnInit {
   title = 'joeseln';
 
   public ngOnInit(): void {
-    this.websocketService.connect();
+    // this.websocketService.connect();
   }
 }
