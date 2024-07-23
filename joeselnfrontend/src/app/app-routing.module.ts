@@ -32,6 +32,7 @@ const routes: Routes = [
     path: 'pictures',
     loadChildren: () => import('@app/pages/pictures/pictures-page.module').then(m => m.PicturesPageModule),
   },
+  {path: '401', redirectTo: '/'},
   {path: '404', redirectTo: '/'},
   {path: '**', redirectTo: '/'}
 

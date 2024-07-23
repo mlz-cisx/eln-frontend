@@ -29,10 +29,11 @@ import type {
   VersionsService,
 } from '@joeseln/types';
 import type {Observable} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
 import {mockNoteVersion, mockPrivileges} from "@joeseln/mocks";
+import {ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',
@@ -43,11 +44,12 @@ export class FilesService
 
   public privileges_list$ = new BehaviorSubject<any>('');
 
-  public constructor(private readonly httpClient: HttpClient) {
+  public constructor(private readonly httpClient: HttpClient,
+                     private readonly errorservice: ErrorserviceService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: File[] }> {
-    return this.httpClient.get<File[]>(this.apiUrl, {params}).pipe(
+    return this.httpClient.get<File[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
       map(data => ({
         total: data.length,
         data: data,
@@ -69,7 +71,7 @@ export class FilesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<File>> {
-    return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(
+    return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
       switchMap(file =>
         this.getUserPrivileges(id, userId, file.deleted).pipe(
           map(privileges => {
@@ -137,7 +139,7 @@ export class FilesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError),map(data => data));
   }
 
   // public oldversions(id: string, params = new HttpParams()): Observable<Version[]> {

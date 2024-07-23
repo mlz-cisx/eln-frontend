@@ -25,7 +25,7 @@ import type {
   VersionsService,
 } from '@joeseln/types';
 import type {OperatorFunction} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {
   mockLabBook,
   mockLabBooksList,
@@ -43,7 +43,7 @@ import {
   mockRelationList, mockRelation, MockService,
 } from "@joeseln/mocks";
 import {BehaviorSubject, Observable, of} from "rxjs";
-
+import {ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root'
@@ -55,11 +55,14 @@ export class LabbooksService {
 
   public lab_book_list$ = new BehaviorSubject<any>('');
 
-  constructor(public mockService: MockService, private readonly httpClient: HttpClient, private readonly privilegesService: PrivilegesService) {
+  constructor(public mockService: MockService,
+              private readonly httpClient: HttpClient,
+              private readonly privilegesService: PrivilegesService,
+              private readonly errorservice: ErrorserviceService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: LabBook[] }> {
-    return this.httpClient.get<LabBook[]>(this.apiUrl, {params}).pipe(
+    return this.httpClient.get<LabBook[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
       map(data => ({
         total: data.length,
         data: data,
@@ -111,7 +114,7 @@ export class LabbooksService {
 
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
-    return this.httpClient.get<LabBook>(`${this.apiUrl}${id}/`, {params}).pipe(
+    return this.httpClient.get<LabBook>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
       switchMap(labBook =>
         of(mockPrivileges).pipe(
           map(privileges => {
@@ -209,7 +212,7 @@ export class LabbooksService {
 
   public getElement(labBookId: string, id: string): Observable<LabBookElement<any>> {
     let _lb_elem = <LabBookElement<any>><unknown>[]
-    return this.lab_book_list$.pipe(
+    return this.lab_book_list$.pipe(catchError(this.errorservice.handleError),
       map(() => {
           [mockLabBookNoteElement].forEach((elem) => {
             if (elem.labbook_id === labBookId && elem.child_object_id === id) {
@@ -323,7 +326,7 @@ export class LabbooksService {
   // }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError), map(data => data));
   }
 
 

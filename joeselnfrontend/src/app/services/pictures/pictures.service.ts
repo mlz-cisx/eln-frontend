@@ -49,9 +49,10 @@ import {
   mockPrivilegesApi, mockNoteVersion
 } from "@joeseln/mocks";
 import type {Observable} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
+import {ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',
@@ -62,11 +63,12 @@ export class PicturesService
 
   public privileges_list$ = new BehaviorSubject<any>('');
 
-  public constructor(private readonly httpClient: HttpClient) {
+  public constructor(private readonly httpClient: HttpClient,
+                     private readonly errorservice: ErrorserviceService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Picture[] }> {
-    return this.httpClient.get<Picture[]>(this.apiUrl, {params}).pipe(
+    return this.httpClient.get<Picture[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
       map(data => ({
         total: data.length,
         data: data,
@@ -97,7 +99,7 @@ export class PicturesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
-    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(
+    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(this.errorservice.handleError),
       switchMap(picture =>
         this.getUserPrivileges(id, userId, picture.deleted).pipe(
           map(privileges => {
@@ -163,7 +165,7 @@ export class PicturesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError),map(data => data));
   }
 
   // public versions(id: string, params = new HttpParams()): Observable<Version[]> {

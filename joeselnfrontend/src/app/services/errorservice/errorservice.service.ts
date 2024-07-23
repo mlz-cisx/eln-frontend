@@ -8,22 +8,13 @@ import type {Test} from "@joeseln/types";
 @Injectable({
   providedIn: 'root'
 })
-export class TestserviceService {
-  public readonly apiUrl = `${environment.apiUrl}/testservice/`;
+export class ErrorserviceService {
 
-  constructor(private readonly httpClient: HttpClient) {
+  constructor() {
   }
 
 
-  public getTest(params = new HttpParams()): Observable<Test[]> {
-    return this.httpClient.get<Test[]>(this.apiUrl)
-      .pipe(
-        catchError(this.handleError)
-      )
-  }
-
-
-  public handleError(error: HttpErrorResponse ) {
+  public handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);

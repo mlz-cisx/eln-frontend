@@ -29,7 +29,7 @@ import type {
   VersionsService,
 } from '@joeseln/types';
 import type {Observable} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {BehaviorSubject} from "rxjs";
 import {
   mockLabBooksList,
@@ -37,6 +37,7 @@ import {
   mockNoteVersion,
   mockPrivileges
 } from "@joeseln/mocks";
+import {ErrorserviceService} from "@app/services";
 
 
 
@@ -49,11 +50,12 @@ export class NotesService
 
   public privileges_list$ = new BehaviorSubject<any>('');
 
-  public constructor(private readonly httpClient: HttpClient) {
+  public constructor(private readonly httpClient: HttpClient,
+                     private readonly errorservice: ErrorserviceService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Note[] }> {
-    return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(
+    return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
       map(data => ({
         total: data.length,
         data: data,
@@ -66,7 +68,7 @@ export class NotesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
-    return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(
+    return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
       switchMap(note =>
         this.getUserPrivileges(id, userId, note.deleted).pipe(
           map(privileges => {
@@ -133,7 +135,7 @@ export class NotesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError),map(data => data));
   }
 
     // TODO: needs proper interface for return type, maybe with a generic?

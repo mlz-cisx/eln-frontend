@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 import {KeycloakService} from 'keycloak-angular';
 import {UserState, UserStore} from "@app/services/user/user.store";
 import {UserQuery} from "@app/services/user/user.query";
+import {ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class UserService {
               private router: Router,
               private readonly userStore: UserStore,
               private readonly userQuery: UserQuery,
+              private readonly errorservice: ErrorserviceService
   ) {
 
   }
@@ -29,36 +31,20 @@ export class UserService {
     var data = new FormData()
     data.append('username', payload['username'])
     data.append('password', payload['password'])
-    this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(this.handleError)).subscribe((res: any) => {
+    this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(this.errorservice.handleError)).subscribe((res: any) => {
       if (res.access_token) {
         this._auth.setDataInLocalStorage('token', res.access_token)
-        this.router.navigate(['/profile'])
+        this.router.navigate(['/'])
       }
     })
   }
 
   public getUserMe(): Observable<User> {
-    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(this.handleError))
+    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(this.errorservice.handleError))
   }
 
   public get user$(): Observable<UserState> {
     return this.userQuery.user$ as any;
   }
 
-  public handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
-    } else {
-      if (error.status > 400 && 500 > error.status) {
-        localStorage.clear();
-        window.location.reload()
-      }
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
-    }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
-  }
 }

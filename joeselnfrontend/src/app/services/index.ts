@@ -1,4 +1,4 @@
-export * from './testservice/testservice.service'
+export * from './errorservice/errorservice.service'
 export * from './labbooks/labbooks.service'
 export * from './pictures/pictures.service'
 export * from './notes/notes.service'
