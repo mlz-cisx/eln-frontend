@@ -205,7 +205,6 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      console.log('user ', this.currentUser)
     });
 
 
@@ -314,15 +313,15 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public initDetails(formChanges = true): void {
 
-    if (!this.currentUser?.pk) {
-      return;
-    }
+    // if (!this.currentUser?.pk) {
+    //   return;
+    // }
 
     this.preloaded_id = `${this.id}_preloaded_id`;
     this.title_id = `${this.id}_title_id`;
 
     this.labBooksService
-      .get(this.id, this.currentUser.pk)
+      .get(this.id, 1)
       .pipe(
         untilDestroyed(this),
         map(privilegesData => {
