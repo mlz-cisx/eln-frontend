@@ -2,8 +2,15 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.5.
 
-## Installation
+## Requirements
 
+- nodejs version >= v22.5.1
+- npm install npm@latest -g  with version 10.8.2
+- npm install -g @angular/cli@13.3.5
+
+## Installation 
+
+- cd joeselnfrontend
 - npm install
 
 ## Development server
