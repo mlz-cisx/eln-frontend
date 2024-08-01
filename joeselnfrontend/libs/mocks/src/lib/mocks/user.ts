@@ -16,6 +16,7 @@ export const mockUser: User = {
   given_name: 'user',
   family_name: 'user',
   realm_access: '',
+  groups: '',
   userprofile: {
     academic_title: '',
     additional_information: '',
@@ -56,6 +57,7 @@ export const mockUserWithoutNames: User = {
   given_name: 'user',
   family_name: 'user',
   realm_access: '',
+  groups: '',
   userprofile: {
     academic_title: '',
     additional_information: '',
@@ -87,6 +89,7 @@ export const mockAnonymousUser: User = {
   given_name: 'user',
   family_name: 'user',
   realm_access: '',
+  groups: '',
   userprofile: {
     academic_title: '',
     additional_information: '',

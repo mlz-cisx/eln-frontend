@@ -90,6 +90,7 @@ export const mockMetadataDecimalField: MetadataField = {
     given_name: 'user',
     family_name: 'user',
     realm_access: '',
+    groups: '',
     userprofile: {
       first_name: 'Test',
       last_name: 'User',
@@ -129,6 +130,7 @@ export const mockMetadataDecimalField: MetadataField = {
     given_name: 'user',
     family_name: 'user',
     realm_access: '',
+    groups: '',
     userprofile: {
       first_name: 'Test',
       last_name: 'User',

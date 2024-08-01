@@ -9,9 +9,9 @@
       </div>
       <div style="margin-top: 1%">
         Your roles:
-        <ul *ngIf="user.realm_access">
-          <li *ngFor="let role of user.realm_access['roles']">
-            {{role}}
+        <ul *ngIf="user.groups">
+          <li *ngFor="let group of user.groups">
+            {{group}}
           </li>
         </ul>
       </div>
