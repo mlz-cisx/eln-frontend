@@ -21,7 +21,7 @@ export const gridsterConfig: GridsterConfig = {
   maxCols: 20,
   minRows: 50,
   maxRows: 100000,
-  minItemCols: 1,
+  minItemCols: 5,
   maxItemCols: 20,
   minItemRows: 1,
   maxItemRows: 10000,
