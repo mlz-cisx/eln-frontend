@@ -1,5 +1,6 @@
 import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
+import {Privileges} from "./privileges.interface";
 
 export interface LabBookPayload {
   title: string;
@@ -16,6 +17,7 @@ export interface LabBookChildElement {
   version_number: number;
   viewable: boolean;
 }
+
 
 export interface LabBook {
   title: string;
@@ -37,3 +39,9 @@ export interface LabBook {
   child_elements?: LabBookChildElement[];
   is_favourite: boolean;
 }
+
+export interface Lab_Book {
+  labbook: LabBook,
+  privileges: Privileges
+}
+

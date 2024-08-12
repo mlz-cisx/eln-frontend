@@ -6,7 +6,7 @@ import type {
   DjangoAPI,
   ExportLink,
   ExportService,
-  FinalizeVersion,
+  FinalizeVersion, Lab_Book,
   LabBook,
   LabBookElement,
   LabBookElementPayload,
@@ -113,14 +113,15 @@ export class LabbooksService {
   }
 
 
-  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
-    return this.httpClient.get<LabBook>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
+  public get_without_privileges(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
+    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
       switchMap(labBook =>
         of(mockPrivileges).pipe(
           map(privileges => {
+            console.log(labBook)
             const privilegesData: PrivilegesData<LabBook> = {
               privileges,
-              data: labBook,
+              data: labBook.labbook,
             };
             return privilegesData;
           })
@@ -130,10 +131,23 @@ export class LabbooksService {
   }
 
 
+  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
+    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
+      map(labBook => {
+        let privileges = labBook.privileges
+        const privilegesData: PrivilegesData<LabBook> = {
+          privileges,
+          data: labBook.labbook,
+        };
+        return privilegesData;
+      })
+    );
+  }
+
+
   public getUserPrivileges(id: string, userId: number, deleted: boolean): Observable<Privileges> {
     return this.httpClient
-      .get<PrivilegesApi>(`${this.apiUrl}${id}/privileges/${userId}/`)
-      .pipe(map(privileges => this.privilegesService.transform(privileges, deleted)));
+      .get<Privileges>(`${this.apiUrl}${id}/privileges/${userId}/`)
   }
 
 
