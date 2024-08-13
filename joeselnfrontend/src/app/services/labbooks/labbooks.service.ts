@@ -44,6 +44,7 @@ import {
 } from "@joeseln/mocks";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {ErrorserviceService} from "@app/services";
+import {AuthGuardService} from "@app/services";
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +59,9 @@ export class LabbooksService {
   constructor(public mockService: MockService,
               private readonly httpClient: HttpClient,
               private readonly privilegesService: PrivilegesService,
-              private readonly errorservice: ErrorserviceService) {
+              private readonly errorservice: ErrorserviceService,
+              private authguard :AuthGuardService
+              ) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: LabBook[] }> {
@@ -132,7 +135,7 @@ export class LabbooksService {
 
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
-    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice._handleError(err, this.authguard)),
       map(labBook => {
         let privileges = labBook.privileges
         const privilegesData: PrivilegesData<LabBook> = {
