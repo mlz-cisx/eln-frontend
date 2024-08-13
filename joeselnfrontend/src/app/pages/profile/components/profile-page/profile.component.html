@@ -8,7 +8,7 @@
         Your Data: {{ user.name }}{{user.username}} {{ user.email }}
       </div>
       <div style="margin-top: 1%">
-        Your roles:
+        Your groups:
         <ul *ngIf="user.groups">
           <li *ngFor="let group of user.groups">
             {{group}}
