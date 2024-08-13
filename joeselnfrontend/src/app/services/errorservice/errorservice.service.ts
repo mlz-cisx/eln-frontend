@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import {environment} from '@environments/environment';
+import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
-import {catchError, map, tap, switchMap} from 'rxjs/operators';
-import type {Test} from "@joeseln/types";
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +18,12 @@ export class ErrorserviceService {
       console.error('An error occurred:', error.error);
     } else {
       if (error.status > 400 && 500 > error.status) {
-        localStorage.clear();
-        window.location.reload()
+        localStorage.clear()
+        if (document.getElementById('logout_button')) {
+          // @ts-ignore
+          document.getElementById('logout_button').click()
+        }
+
       }
       // The response body may contain clues as to what went wrong.
       console.error(
