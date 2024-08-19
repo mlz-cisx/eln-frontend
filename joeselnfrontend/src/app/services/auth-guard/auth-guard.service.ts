@@ -37,6 +37,7 @@ export class AuthGuardService extends KeycloakAuthGuard {
   }
 
   public logout() {
+    // TODO maybe another way to clear some history
     window.history.pushState({}, "", "/")
     if (this._authService.getToken()) {
       // logout for username/password

@@ -33,7 +33,7 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
 import {mockNoteVersion, mockPrivileges} from "@joeseln/mocks";
-import {ErrorserviceService} from "@app/services";
+import {AuthGuardService, ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',
@@ -45,11 +45,12 @@ export class FilesService
   public privileges_list$ = new BehaviorSubject<any>('');
 
   public constructor(private readonly httpClient: HttpClient,
-                     private readonly errorservice: ErrorserviceService) {
+                     private readonly errorservice: ErrorserviceService,
+                     private authguard: AuthGuardService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: File[] }> {
-    return this.httpClient.get<File[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<File[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(data => ({
         total: data.length,
         data: data,
@@ -71,7 +72,7 @@ export class FilesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<File>> {
-    return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       switchMap(file =>
         this.getUserPrivileges(id, userId, file.deleted).pipe(
           map(privileges => {
@@ -139,7 +140,7 @@ export class FilesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError),map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   // public oldversions(id: string, params = new HttpParams()): Observable<Version[]> {
@@ -153,22 +154,19 @@ export class FilesService
 
 
   public old_previewVersion(id: string, version: string): Observable<any> {
-        return this.privileges_list$.pipe(
+    return this.privileges_list$.pipe(
       map(() => {
-           return mockNoteVersion.metadata
+          return mockNoteVersion.metadata
         }
       )
     )
   }
 
 
-
-
   // TODO: needs proper interface for return type, maybe with a generic?
   public previewVersion(id: string, version: string): Observable<any> {
     return this.httpClient.get<any>(`${this.apiUrl}${id}/versions/${version}/preview/`);
   }
-
 
 
   public addVersion(id: string, version?: FinalizeVersion): Observable<File> {

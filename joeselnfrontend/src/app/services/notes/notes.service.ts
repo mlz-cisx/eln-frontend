@@ -37,8 +37,7 @@ import {
   mockNoteVersion,
   mockPrivileges
 } from "@joeseln/mocks";
-import {ErrorserviceService} from "@app/services";
-
+import {AuthGuardService, ErrorserviceService} from "@app/services";
 
 
 @Injectable({
@@ -51,11 +50,12 @@ export class NotesService
   public privileges_list$ = new BehaviorSubject<any>('');
 
   public constructor(private readonly httpClient: HttpClient,
-                     private readonly errorservice: ErrorserviceService) {
+                     private readonly errorservice: ErrorserviceService,
+                     private authguard: AuthGuardService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Note[] }> {
-    return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(data => ({
         total: data.length,
         data: data,
@@ -68,7 +68,7 @@ export class NotesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
-    return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       switchMap(note =>
         this.getUserPrivileges(id, userId, note.deleted).pipe(
           map(privileges => {
@@ -135,10 +135,10 @@ export class NotesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError),map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
-    // TODO: needs proper interface for return type, maybe with a generic?
+  // TODO: needs proper interface for return type, maybe with a generic?
   public previewVersion(id: string, version: string): Observable<any> {
     return this.httpClient.get<any>(`${this.apiUrl}${id}/versions/${version}/preview/`);
   }

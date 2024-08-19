@@ -52,7 +52,7 @@ import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
-import {ErrorserviceService} from "@app/services";
+import {AuthGuardService, ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',
@@ -64,11 +64,12 @@ export class PicturesService
   public privileges_list$ = new BehaviorSubject<any>('');
 
   public constructor(private readonly httpClient: HttpClient,
-                     private readonly errorservice: ErrorserviceService) {
+                     private readonly errorservice: ErrorserviceService,
+                     private authguard: AuthGuardService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Picture[] }> {
-    return this.httpClient.get<Picture[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<Picture[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(data => ({
         total: data.length,
         data: data,
@@ -99,7 +100,7 @@ export class PicturesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
-    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       switchMap(picture =>
         this.getUserPrivileges(id, userId, picture.deleted).pipe(
           map(privileges => {
@@ -165,7 +166,7 @@ export class PicturesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError),map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   // public versions(id: string, params = new HttpParams()): Observable<Version[]> {

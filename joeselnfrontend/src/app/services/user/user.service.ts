@@ -21,7 +21,8 @@ export class UserService {
               private router: Router,
               private readonly userStore: UserStore,
               private readonly userQuery: UserQuery,
-              private readonly errorservice: ErrorserviceService
+              private readonly errorservice: ErrorserviceService,
+              private authguard: AuthGuardService
   ) {
 
   }
@@ -31,7 +32,7 @@ export class UserService {
     var data = new FormData()
     data.append('username', payload['username'])
     data.append('password', payload['password'])
-    this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(this.errorservice.handleError)).subscribe((res: any) => {
+    this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(err => this.errorservice.handleError(err, this.authguard))).subscribe((res: any) => {
       if (res.access_token) {
         this._auth.setDataInLocalStorage('token', res.access_token)
         this.router.navigate(['/'])
@@ -40,7 +41,7 @@ export class UserService {
   }
 
   public getUserMe(): Observable<User> {
-    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(this.errorservice.handleError))
+    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)))
   }
 
   public get user$(): Observable<UserState> {

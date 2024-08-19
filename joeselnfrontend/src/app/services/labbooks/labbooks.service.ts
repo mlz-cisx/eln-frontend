@@ -60,12 +60,12 @@ export class LabbooksService {
               private readonly httpClient: HttpClient,
               private readonly privilegesService: PrivilegesService,
               private readonly errorservice: ErrorserviceService,
-              private authguard :AuthGuardService
-              ) {
+              private authguard: AuthGuardService
+  ) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: LabBook[] }> {
-    return this.httpClient.get<LabBook[]>(this.apiUrl, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<LabBook[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(data => ({
         total: data.length,
         data: data,
@@ -117,7 +117,7 @@ export class LabbooksService {
 
 
   public get_without_privileges(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
-    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(this.errorservice.handleError),
+    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(
       switchMap(labBook =>
         of(mockPrivileges).pipe(
           map(privileges => {
@@ -135,7 +135,7 @@ export class LabbooksService {
 
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
-    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice._handleError(err, this.authguard)),
+    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(labBook => {
         let privileges = labBook.privileges
         const privilegesData: PrivilegesData<LabBook> = {
@@ -221,15 +221,15 @@ export class LabbooksService {
 
   public getElements(id: string, section?: string): Observable<LabBookElement<any>[]> {
     if (section) {
-      return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/?section=${section}`);
+      return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/?section=${section}`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
     }
-    return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/`);
+    return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)))
   }
 
 
   public getElement(labBookId: string, id: string): Observable<LabBookElement<any>> {
     let _lb_elem = <LabBookElement<any>><unknown>[]
-    return this.lab_book_list$.pipe(catchError(this.errorservice.handleError),
+    return this.lab_book_list$.pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(() => {
           [mockLabBookNoteElement].forEach((elem) => {
             if (elem.labbook_id === labBookId && elem.child_object_id === id) {
@@ -343,7 +343,7 @@ export class LabbooksService {
   // }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(this.errorservice.handleError), map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
 
