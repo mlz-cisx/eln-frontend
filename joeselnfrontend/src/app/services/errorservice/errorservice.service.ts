@@ -40,7 +40,7 @@ export class ErrorserviceService {
       console.error('An error occurred:', error.error);
     } else {
       if (error.status > 400 && 500 > error.status) {
-        auth_guard.logout()
+        auth_guard.redirect_start_page()
       }
       // The response body may contain clues as to what went wrong.
       console.error(

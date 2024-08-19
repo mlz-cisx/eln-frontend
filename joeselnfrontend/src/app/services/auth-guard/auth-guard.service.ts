@@ -37,6 +37,7 @@ export class AuthGuardService extends KeycloakAuthGuard {
   }
 
   public logout() {
+    window.history.pushState({}, "", "/")
     if (this._authService.getToken()) {
       // logout for username/password
       this._authService.clearStorage()
@@ -50,6 +51,10 @@ export class AuthGuardService extends KeycloakAuthGuard {
         });
       }
     }
+  }
+
+  public redirect_start_page(){
+    this._router.navigate(['/'])
   }
 
 }
