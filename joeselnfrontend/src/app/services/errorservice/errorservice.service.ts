@@ -9,7 +9,7 @@ import {AuthGuardService} from "@app/services";
 })
 export class ErrorserviceService {
 
-  constructor(private authguard: AuthGuardService) {
+  constructor() {
   }
 
 
@@ -18,12 +18,14 @@ export class ErrorserviceService {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else {
-      if (error.status > 400 && 500 > error.status) {
+      if (error.status == 401) {
+        // 401: token expired, unauthorized
+        auth_guard.logout()
+      }
+      if (error.status > 401 && 500 > error.status) {
+        // 404: access denied to resource
         auth_guard.redirect_start_page()
       }
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));
