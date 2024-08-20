@@ -173,7 +173,6 @@ export class NewLabBookModalComponent implements OnInit {
         () => {
           this.loading = false;
           this.cdr.markForCheck();
-          location.reload()
         }
       );
   }

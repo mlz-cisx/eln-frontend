@@ -99,7 +99,7 @@ export class LabbooksService {
     // @ts-ignore
     delete (labbook.is_template)
     delete (labbook.metadata)
-    return this.httpClient.post<LabBook>(this.apiUrl, labbook);
+    return this.httpClient.post<LabBook>(this.apiUrl, labbook).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
   }
 
 
