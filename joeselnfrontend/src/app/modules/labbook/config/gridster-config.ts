@@ -51,19 +51,19 @@ export const gridsterConfig: GridsterConfig = {
   resizable: {
     enabled: true,
     handles: {
-      s: false,
+      s: true,
       e: false,
-      n: false,
+      n: true,
       w: false,
-      se: true,
-      ne: true,
-      sw: true,
-      nw: true,
+      se: false,
+      ne: false,
+      sw: false,
+      nw: false,
     }
   },
-  swap: true,
+  swap: false,
   pushItems: true,
-  disablePushOnDrag: false,
+  disablePushOnDrag: true,
   disablePushOnResize: false,
   pushDirections: {
     north: true,

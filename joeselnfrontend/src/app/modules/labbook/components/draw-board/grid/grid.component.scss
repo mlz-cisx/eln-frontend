@@ -10,7 +10,7 @@
 
   ::ng-deep {
     gridster {
-      background-color: #f9f9f9;
+      background-color: rgba(0, 49, 97, 0.03);
 
       .gridster-column {
         border-left: none !important;
@@ -20,6 +20,10 @@
       .gridster-row {
         border-bottom: 1px solid $border-color !important;
         border-top: 1px solid $border-color !important;
+      }
+
+      gridster-item {
+        border-radius: 15px;
       }
     }
   }

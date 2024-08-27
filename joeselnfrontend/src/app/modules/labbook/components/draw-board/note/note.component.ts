@@ -395,7 +395,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
           position_x: this.element.width,
           position_y: this.element.position_y,
           width: 20 - this.element.width,
-          height: 4,
+          height: this.element.height,
         };
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
