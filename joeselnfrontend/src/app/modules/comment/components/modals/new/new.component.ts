@@ -6,7 +6,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { ModalState } from '@app/enums/modal-state.enum';
-// import { CommentsService } from '@app/services';
+import { CommentsService } from '@app/services';
 //import { AuthService } from '@app/services/auth/auth.service';
 import type { CommentPayload, User } from '@joeseln/types';
 import { DialogRef } from '@ngneat/dialog';
@@ -59,7 +59,7 @@ export class NewCommentModalComponent implements OnInit {
 
   public constructor(
     public readonly modalRef: DialogRef,
-    //private readonly commentsService: CommentsService,
+    private readonly commentsService: CommentsService,
     private readonly fb: FormBuilder,
     //private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
@@ -105,31 +105,31 @@ export class NewCommentModalComponent implements OnInit {
     }
     this.loading = true;
 
-    // this.commentsService
-    //   .add(this.comment)
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     () => {
-    //       this.state = ModalState.Changed;
-    //       this.form.reset();
-    //       this.form.markAsPristine();
-    //       this.loading = false;
-    //       this.created.emit();
-    //       this.refresh?.next(true);
-    //
-    //       this.modalRef.close({ state: this.state, data: event });
-    //       this.translocoService
-    //         .selectTranslate('comments.newCommentModal.toastr.success')
-    //         .pipe(untilDestroyed(this))
-    //         .subscribe(success => {
-    //           this.toastrService.success(success);
-    //         });
-    //     },
-    //     () => {
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //     }
-    //   );
+    this.commentsService
+      .add(this.comment)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        () => {
+          this.state = ModalState.Changed;
+          this.form.reset();
+          this.form.markAsPristine();
+          this.loading = false;
+          this.created.emit();
+          this.refresh?.next(true);
+
+          this.modalRef.close({ state: this.state, data: event });
+          this.translocoService
+            .selectTranslate('comments.newCommentModal.toastr.success')
+            .pipe(untilDestroyed(this))
+            .subscribe(success => {
+              this.toastrService.success(success);
+            });
+        },
+        () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      );
 
   }
 }

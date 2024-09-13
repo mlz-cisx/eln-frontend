@@ -189,13 +189,15 @@ export class NotesService
   }
 
   public getRelations(id: string, params = new HttpParams()): Observable<{ total: number; data: Relation[] }> {
-    return this.httpClient.get<DjangoAPI<Relation[]>>(`${this.apiUrl}${id}/relations/`, {params}).pipe(
+    return this.httpClient.get<Relation[]>(`${this.apiUrl}${id}/relations/`, {params}).pipe(
       map(data => ({
-        total: data.count,
-        data: data.results,
+        total: data.length,
+        data: data,
       }))
     );
   }
+
+
 
   public addRelation(id: string, payload: RelationPayload): Observable<Relation> {
     return this.httpClient.post<Relation>(`${this.apiUrl}${id}/relations/`, payload);

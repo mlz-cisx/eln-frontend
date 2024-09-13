@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
-// import {CommentsService} from '@app/services';
+import {CommentsService} from '@app/services';
 import {AuthGuardService} from '@app/services';
 import type {CommentPayload, User} from '@joeseln/types';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -66,7 +66,7 @@ export class CreateCommentComponent implements OnInit {
   });
 
   public constructor(
-    //private readonly commentsService: CommentsService,
+    private readonly commentsService: CommentsService,
     private readonly fb: FormBuilder,
     private readonly authService: AuthGuardService,
     private readonly cdr: ChangeDetectorRef,
@@ -101,27 +101,28 @@ export class CreateCommentComponent implements OnInit {
     }
     this.loading = true;
 
-    // this.commentsService
-    //   .add(this.comment)
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     () => {
-    //       this.form.reset();
-    //       this.form.markAsPristine();
-    //       this.loading = false;
-    //       this.refresh.next(true);
-    //
-    //       this.translocoService
-    //         .selectTranslate('comments.newCommentModal.toastr.success')
-    //         .pipe(untilDestroyed(this))
-    //         .subscribe(success => {
-    //           this.toastrService.success(success);
-    //         });
-    //     },
-    //     () => {
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //     }
-    //   );
+    this.commentsService
+      .add(this.comment)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        () => {
+          // page is blocked if you reset here
+          // this.form.reset();
+          this.form.markAsPristine();
+          this.loading = false;
+          this.refresh.next(true);
+
+          this.translocoService
+            .selectTranslate('comments.newCommentModal.toastr.success')
+            .pipe(untilDestroyed(this))
+            .subscribe(success => {
+              this.toastrService.success(success);
+            });
+        },
+        () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      );
   }
 }

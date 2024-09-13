@@ -104,6 +104,7 @@ export class CommentsComponent implements OnInit {
 
   public initSitePreferences(): void {
 
+
     // this.sitePreferencesService
     //   .get()
     //   .pipe(untilDestroyed(this))
@@ -112,6 +113,7 @@ export class CommentsComponent implements OnInit {
     //     this.initialLoading = false;
     //     this.cdr.markForCheck();
     //   });
+    this.initialLoading = false;
 
   }
 

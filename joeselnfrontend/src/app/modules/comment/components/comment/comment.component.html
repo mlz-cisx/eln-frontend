@@ -8,32 +8,32 @@
     <div class="flex justify-between mb-4">
       <div class="flex space-x-1">
         <div>
-          <div class="mr-2 cursor-pointer" (click)="openUserModal()">
+<!--          <div class="mr-2 cursor-pointer" (click)="openUserModal()">-->
 
-<!--            <eworkbench-user-avatar-->
-<!--              [user]="comment.left_content_object.created_by"-->
-<!--              [scale]="1.6"-->
-<!--              [ring]="currentUser?.pk === comment.left_content_object.created_by.pk"-->
-<!--            ></eworkbench-user-avatar>-->
+<!--&lt;!&ndash;            <eworkbench-user-avatar&ndash;&gt;-->
+<!--&lt;!&ndash;              [user]="comment.left_content_object.created_by"&ndash;&gt;-->
+<!--&lt;!&ndash;              [scale]="1.6"&ndash;&gt;-->
+<!--&lt;!&ndash;              [ring]="currentUser?.pk === comment.left_content_object.created_by.pk"&ndash;&gt;-->
+<!--&lt;!&ndash;            ></eworkbench-user-avatar>&ndash;&gt;-->
 
-          </div>
+<!--          </div>-->
         </div>
         <div>
-          <div class="font-bold">
+<!--          <div class="font-bold">-->
 
-<!--            <eworkbench-user-details-->
-<!--              class="inline-block"-->
-<!--              [user]="comment.left_content_object.created_by"-->
-<!--              [avatar]="false"-->
-<!--            ></eworkbench-user-details>-->
+<!--&lt;!&ndash;            <eworkbench-user-details&ndash;&gt;-->
+<!--&lt;!&ndash;              class="inline-block"&ndash;&gt;-->
+<!--&lt;!&ndash;              [user]="comment.left_content_object.created_by"&ndash;&gt;-->
+<!--&lt;!&ndash;              [avatar]="false"&ndash;&gt;-->
+<!--&lt;!&ndash;            ></eworkbench-user-details>&ndash;&gt;-->
 
-          </div>
+<!--          </div>-->
           <div class="text-gray-600">
             {{ comment.left_content_object.created_at }}
           </div>
         </div>
       </div>
-      <div class="self-center" *ngIf="currentUser?.pk === comment.left_content_object.created_by.pk">
+      <div class="self-center" *ngIf="currentUser?.pk === currentUser?.pk ">
         <button type="button" class="btn ewb-button-small mr-2" (click)="onChangePrivateState()" [disabled]="loading">
           <joeseln-icon
             *ngIf="comment.private"

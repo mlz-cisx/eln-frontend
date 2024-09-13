@@ -16,7 +16,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ToastrModule } from 'ngx-toastr';
 import { CommentComponent } from './components/comment/comment.component';
 import { CommentsComponent } from './components/comments/comments.component';
-// import { CreateCommentComponent } from './components/create-comment/create-comment.component';
+import { CreateCommentComponent } from './components/create-comment/create-comment.component';
 import { CommentsModalComponent } from './components/modals/comments/comments.component';
 import { DeleteCommentModalComponent } from './components/modals/delete/delete.component';
 import { NewCommentModalComponent } from './components/modals/new/new.component';
@@ -29,7 +29,7 @@ import { SharedModule } from '../shared/shared.module';
 @NgModule({
   declarations: [
     CommentComponent,
-    // CreateCommentComponent,
+    CreateCommentComponent,
     CommentsComponent,
     CommentsModalComponent,
     NewCommentModalComponent,
