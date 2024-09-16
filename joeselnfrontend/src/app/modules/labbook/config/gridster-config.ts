@@ -52,9 +52,9 @@ export const gridsterConfig: GridsterConfig = {
     enabled: true,
     handles: {
       s: true,
-      e: false,
+      e: true,
       n: true,
-      w: false,
+      w: true,
       se: false,
       ne: false,
       sw: false,
