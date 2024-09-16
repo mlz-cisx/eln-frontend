@@ -384,8 +384,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         };
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
+            localStorage.setItem('pageVerticalposition', String((this.element.position_y + this.element.height) * 36))
             this.drawboardGridComponent.reload();
-            setTimeout(() => this.scroll_to_position((this.element.position_y + this.element.height) * 36), 3000);
           }
         );
       }
@@ -411,8 +411,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         };
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
+            localStorage.setItem('pageVerticalposition', String((this.element.position_y) * 36))
             this.drawboardGridComponent.reload();
-            setTimeout(() => this.scroll_to_position((this.element.position_y) * 36), 3000);
           }
         );
       }

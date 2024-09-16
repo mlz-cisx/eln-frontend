@@ -220,11 +220,12 @@ export class PicturesService
     return this.httpClient.get<ExportLink>(`${this.apiUrl}${id}/get_export_link/`);
   }
 
+
   public getRelations(id: string, params = new HttpParams()): Observable<{ total: number; data: Relation[] }> {
-    return this.httpClient.get<DjangoAPI<Relation[]>>(`${this.apiUrl}${id}/relations/`, {params}).pipe(
+    return this.httpClient.get<Relation[]>(`${this.apiUrl}${id}/relations/`, {params}).pipe(
       map(data => ({
-        total: data.count,
-        data: data.results,
+        total: data.length,
+        data: data,
       }))
     );
   }

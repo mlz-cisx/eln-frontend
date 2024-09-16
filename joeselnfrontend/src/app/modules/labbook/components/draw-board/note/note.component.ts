@@ -17,9 +17,9 @@ import {Validators} from '@angular/forms';
 import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
-// import {
-//   LabBookDrawBoardGridComponent
-// } from "@app/modules/labbook/components/draw-board/grid/grid.component";
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 import {
 //  AuthService,
   LabbooksService,
@@ -132,7 +132,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
-    // private readonly drawboardGridComponent: LabBookDrawBoardGridComponent
+    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent
   ) {
   }
 
@@ -374,7 +374,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         };
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
-            setTimeout(() => this.scroll_to_position((this.element.position_y + this.element.height) * 36), 3000);
+            localStorage.setItem('pageVerticalposition', String((this.element.position_y + this.element.height) * 36))
+            this.drawboardGridComponent.reload();
           }
         );
       }
@@ -399,7 +400,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         };
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
-            setTimeout(() => this.scroll_to_position((this.element.position_y) * 36), 3000);
+            localStorage.setItem('pageVerticalposition', String((this.element.position_y) * 36))
+            this.drawboardGridComponent.reload();
           }
         );
       }
