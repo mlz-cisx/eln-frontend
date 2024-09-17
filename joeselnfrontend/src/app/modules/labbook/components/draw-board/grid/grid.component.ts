@@ -385,6 +385,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.initDetails();
   }
 
+  public reload_given_drawboard(): void {
+    this.softReload()
+  }
+
 
   public softReload(): void {
     if (this.socketLoading) {
@@ -572,6 +576,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     localStorage.removeItem('content_type');
     let search_text = localStorage.getItem('search_text') || 0
     localStorage.removeItem('search_text');
+    let note_inserted = localStorage.getItem('note_inserted') || 0
+    localStorage.removeItem('note_inserted');
 
     // get all possibilities for header and title also for file
     if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file' ||
@@ -624,7 +630,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 
-    if (content_type == 0) {
+    if (note_inserted !== 0) {
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 

@@ -375,7 +375,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
             localStorage.setItem('pageVerticalposition', String((this.element.position_y + this.element.height) * 36))
-            this.drawboardGridComponent.reload();
+            localStorage.setItem('note_inserted', String(1))
+            this.drawboardGridComponent.reload_given_drawboard()
           }
         );
       }
@@ -401,7 +402,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
             localStorage.setItem('pageVerticalposition', String((this.element.position_y) * 36))
-            this.drawboardGridComponent.reload();
+            localStorage.setItem('note_inserted', String(1))
+            this.drawboardGridComponent.reload_given_drawboard()
           }
         );
       }
