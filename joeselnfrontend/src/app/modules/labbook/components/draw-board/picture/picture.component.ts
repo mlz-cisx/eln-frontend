@@ -386,7 +386,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
           () => {
             localStorage.setItem('pageVerticalposition', String((this.element.position_y + this.element.height) * 36))
             localStorage.setItem('note_inserted', String(1))
-            this.drawboardGridComponent.reload_given_drawboard()
+            location.reload()
+            //this.drawboardGridComponent.reload_given_drawboard()
           }
         );
       }
@@ -414,7 +415,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
           () => {
             localStorage.setItem('pageVerticalposition', String((this.element.position_y) * 36))
             localStorage.setItem('note_inserted', String(1))
-            this.drawboardGridComponent.reload_given_drawboard()
+            location.reload()
+            //this.drawboardGridComponent.reload_given_drawboard()
           }
         );
       }
