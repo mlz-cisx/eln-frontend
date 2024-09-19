@@ -126,7 +126,7 @@ export class PicturePreviewComponent implements OnInit {
               this.cdr.markForCheck()
               this.cdr.detectChanges()
               // TODO try to get rid of this
-              window.location.reload()
+              location.reload()
             });
         },
         () => {
