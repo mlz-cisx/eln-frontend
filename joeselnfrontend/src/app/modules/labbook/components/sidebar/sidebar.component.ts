@@ -248,6 +248,11 @@ export class LabBookSidebarComponent implements OnInit {
     let max_position = 0;
     let space_count = 0
 
+    var bodyRect = 0
+    if (document.body.getBoundingClientRect()) {
+      bodyRect = -document.body.getBoundingClientRect().y
+    }
+
     this.labBooksService
       .getElements(this.id)
       .pipe(untilDestroyed(this))
@@ -281,7 +286,9 @@ export class LabBookSidebarComponent implements OnInit {
             .subscribe(
               () => {
                 this.cdr.markForCheck();
-                this.drawboardGridComponent.reload();
+                location.reload();
+                localStorage.setItem('pageVerticalposition', String(bodyRect))
+                localStorage.setItem('elem_deleted', String(1))
               },
               () => {
                 this.cdr.markForCheck();

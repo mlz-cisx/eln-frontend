@@ -225,6 +225,12 @@ export class LabBookElementDropdownComponent implements OnInit {
       return;
     }
     this.loading = true;
+    var bodyRect = 0
+    if (document.body.getBoundingClientRect()) {
+      bodyRect = -document.body.getBoundingClientRect().y
+    }
+
+
     this.service
       .delete(id, this.labBookId)
       .pipe(untilDestroyed(this))
@@ -240,6 +246,8 @@ export class LabBookElementDropdownComponent implements OnInit {
               // ok this works
               this.cdr.markForCheck()
               this.cdr.detectChanges()
+              localStorage.setItem('pageVerticalposition', String(bodyRect))
+              localStorage.setItem('elem_deleted', String(1))
               // this.labBooksService.getElements(this.labBookId).pipe(untilDestroyed(this))
               //   .subscribe((elems) => {
               //     this.removed.emit({id: this.elementId, gridReload: false});
