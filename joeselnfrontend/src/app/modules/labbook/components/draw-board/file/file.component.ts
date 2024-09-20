@@ -327,6 +327,13 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
 
   public create_new_note_below(): void {
+    var bodyRect = 0
+    if (document.body.getBoundingClientRect()) {
+      bodyRect = -document.body.getBoundingClientRect().y
+    } else {
+      bodyRect = (this.element.position_y + this.element.height) * 36
+    }
+
     const new_note = {
       subject: this.translocoService.translate('labBook.newNoteElementModal.subject.placeholder'),
       content: '<p></p>',
@@ -345,10 +352,9 @@ export class LabBookDrawBoardFileComponent implements OnInit {
         };
         this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
           () => {
-            localStorage.setItem('pageVerticalposition', String((this.element.position_y + this.element.height) * 36))
+            localStorage.setItem('pageVerticalposition', String(bodyRect))
             localStorage.setItem('note_inserted', String(1))
             location.reload()
-            //this.drawboardGridComponent.reload_given_drawboard()
           }
         );
       }
