@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DialogRef } from '@ngneat/dialog';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {DialogRef} from '@ngneat/dialog';
+import {UntilDestroy} from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
@@ -21,5 +21,18 @@ export class CommentsModalComponent {
 
   public create: any = this.modalRef.data.create;
 
-  public constructor(public readonly modalRef: DialogRef) {}
+  public constructor(public readonly modalRef: DialogRef) {
+  }
+
+
+  public on_click() {
+    this.modalRef.close()
+    var bodyRect = 0
+    if (document.body.getBoundingClientRect()) {
+      bodyRect = -document.body.getBoundingClientRect().y
+    }
+    localStorage.setItem('pageVerticalposition', String(bodyRect))
+    localStorage.setItem('note_inserted', String(1))
+    location.reload()
+  }
 }
