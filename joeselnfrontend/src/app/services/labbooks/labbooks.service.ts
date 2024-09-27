@@ -263,7 +263,7 @@ export class LabbooksService {
 
 
   public addElement(id: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {
-    return this.httpClient.post<LabBookElement<any>>(`${this.apiUrl}${id}/elements/`, element);
+    return this.httpClient.post<LabBookElement<any>>(`${this.apiUrl}${id}/elements/`, element).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
   }
 
 
@@ -314,7 +314,7 @@ export class LabbooksService {
   }
 
   public updateAllElements(id: string, elements: LabBookElementPayload[]): Observable<string[]> {
-    return this.httpClient.put<string[]>(`${this.apiUrl}${id}/elements/update_all/`, elements);
+    return this.httpClient.put<string[]>(`${this.apiUrl}${id}/elements/update_all/`, elements).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
   }
 
 
