@@ -27,12 +27,12 @@ export class CommentsModalComponent {
 
   public on_click() {
     this.modalRef.close()
-    var bodyRect = 0
-    if (document.body.getBoundingClientRect()) {
-      bodyRect = -document.body.getBoundingClientRect().y
-    }
-    localStorage.setItem('pageVerticalposition', String(bodyRect))
-    localStorage.setItem('note_inserted', String(1))
-    location.reload()
+    // var bodyRect = 0
+    // if (document.body.getBoundingClientRect()) {
+    //   bodyRect = -document.body.getBoundingClientRect().y
+    // }
+    // localStorage.setItem('pageVerticalposition', String(bodyRect))
+    // localStorage.setItem('note_inserted', String(1))
+    // location.reload()
   }
 }
