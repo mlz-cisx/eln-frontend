@@ -172,8 +172,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
-        console.log('picture pipe ', data)
-
         this.picturesService
           .get(this.initialState!.pk, 123)
           .pipe(untilDestroyed(this))
