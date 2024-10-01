@@ -7,8 +7,9 @@
   <ng-container *ngIf="user">
     <ng-container *ngIf="user?.userprofile">
       <ng-container *ngIf="user?.userprofile?.anonymized">
-        <div class="flex items-center whitespace-nowrap" [class.chip]="chip" [class.inverted]="inverted">
-<!--          <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>-->
+        <div class="flex items-center whitespace-nowrap" [class.chip]="chip"
+             [class.inverted]="inverted">
+          <!--          <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>-->
           <div [class.text-gray-600]="!inverted">
             {{ t('user.details.anonymizedUser') }}
           </div>
@@ -22,10 +23,11 @@
     </ng-container>
   </ng-container>
   <ng-container *ngIf="!user || !user?.userprofile">
-    <div class="flex items-center whitespace-nowrap" [class.chip]="chip" [class.inverted]="inverted">
-<!--      <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>-->
+    <div class="flex items-center whitespace-nowrap" [class.chip]="chip"
+         [class.inverted]="inverted">
+      <!--      <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>-->
       <div>
-        {{ t('user.details.unknownUser') }}
+        {{ user?.username}}
       </div>
     </div>
   </ng-container>
@@ -53,7 +55,8 @@
       >
         {{ user?.userprofile?.first_name }} {{ user?.userprofile?.last_name }}
       </a>
-      <span *ngIf="!user?.is_active" class="inactive-indicator">{{ t('user.details.inactive') }}</span>
+      <span *ngIf="!user?.is_active"
+            class="inactive-indicator">{{ t('user.details.inactive') }}</span>
     </div>
   </ng-template>
 
@@ -80,7 +83,8 @@
       >
         {{ user?.username }}
       </a>
-      <span *ngIf="!user?.is_active" class="inactive-indicator">{{ t('user.details.inactive') }}</span>
+      <span *ngIf="!user?.is_active"
+            class="inactive-indicator">{{ t('user.details.inactive') }}</span>
     </div>
   </ng-template>
 </ng-container>
