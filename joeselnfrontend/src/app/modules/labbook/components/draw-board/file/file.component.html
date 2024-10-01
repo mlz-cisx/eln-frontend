@@ -7,7 +7,7 @@
   <ng-container *transloco="let t">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="element"
           errorTailor>
-      <div class="header" [id]="title_id" >
+      <div class="header" [id]="title_id">
         <div class="flex justify-between">
           <div class="header_container">
             <div class="flex-fill">
@@ -109,7 +109,7 @@
             [user]="element.child_object?.last_modified_by"
             class="last-modified-by"></eworkbench-user-details>
           {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
-          {{ element.child_object?.last_modified_at }}
+          {{ element.child_object?.last_modified_at | formatDate}}
         </div>
         <div class="actions">
           <!--          <a [routerLink]="['/files', element.child_object_id]" target="_blank">-->
