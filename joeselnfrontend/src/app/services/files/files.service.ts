@@ -93,7 +93,6 @@ export class FilesService
 
 
   public getUserPrivileges(id: string, userId: number, deleted: boolean): Observable<Privileges> {
-    console.log('privileges user is', userId)
     return this.privileges_list$.pipe(
       map(() => {
           return mockPrivileges

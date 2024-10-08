@@ -14,7 +14,7 @@ import type {
   ExportService,
   FinalizeVersion,
   LockService,
-  Note,
+  Note, Note_with_privileges,
   NotePayload,
   PermissionsService,
   Privileges,
@@ -38,6 +38,7 @@ import {
   mockPrivileges
 } from "@joeseln/mocks";
 import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {Lab_Book, LabBook} from "@joeseln/types";
 
 
 @Injectable({
@@ -67,7 +68,7 @@ export class NotesService
     return this.httpClient.post<Note>(this.apiUrl, note, {params});
   }
 
-  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
+  public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
     return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       switchMap(note =>
         this.getUserPrivileges(id, userId, note.deleted).pipe(
@@ -80,6 +81,20 @@ export class NotesService
           })
         )
       )
+    );
+  }
+
+
+  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
+    return this.httpClient.get<Note_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+      map(note => {
+        let privileges = note.privileges
+        const privilegesData: PrivilegesData<Note> = {
+          privileges,
+          data: note.note,
+        };
+        return privilegesData;
+      })
     );
   }
 
@@ -196,7 +211,6 @@ export class NotesService
       }))
     );
   }
-
 
 
   public addRelation(id: string, payload: RelationPayload): Observable<Relation> {

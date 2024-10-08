@@ -319,7 +319,6 @@ export class LabbooksService {
 
 
   public history(id: string): Observable<RecentChanges[]> {
-    console.log('history ', id)
     return this.lab_book_list$.pipe(
       map(() => {
           return mockLabBookHistory.results

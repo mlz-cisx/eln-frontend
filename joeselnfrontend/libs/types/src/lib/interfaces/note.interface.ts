@@ -1,5 +1,7 @@
 import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
+import {Privileges} from "./privileges.interface";
+import {LabBook} from "./labbook.interface";
 
 export interface NotePayload {
   subject: string;
@@ -25,4 +27,9 @@ export interface Note {
   created_by: User;
   pk: string;
   is_favourite: boolean;
+}
+
+export interface Note_with_privileges {
+  note: Note,
+  privileges: Privileges
 }
