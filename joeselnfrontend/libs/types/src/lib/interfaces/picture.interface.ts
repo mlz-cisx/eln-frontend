@@ -1,5 +1,7 @@
 import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
+import {Privileges} from "./privileges.interface";
+import {Note} from "./note.interface";
 
 export interface PicturePayload {
   title: string;
@@ -56,3 +58,9 @@ export interface Picture {
   version_number: number;
   is_favourite: boolean;
 }
+
+export interface Pic_with_privileges {
+  picture: Picture,
+  privileges: Privileges
+}
+

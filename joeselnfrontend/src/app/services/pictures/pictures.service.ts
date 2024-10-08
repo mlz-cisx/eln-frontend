@@ -15,7 +15,7 @@ import type {
   ExportService,
   FinalizeVersion,
   LockService,
-  PermissionsService,
+  PermissionsService, Pic_with_privileges,
   Picture,
   PictureEditorPayload,
   PicturePayload,
@@ -53,6 +53,7 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
 import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {Note, Note_with_privileges} from "@joeseln/types";
 
 @Injectable({
   providedIn: 'root',
@@ -99,7 +100,7 @@ export class PicturesService
     return this.httpClient.post<Picture>(this.apiUrl, formData, {params});
   }
 
-  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
+  public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
     return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       switchMap(picture =>
         this.getUserPrivileges(id, userId, picture.deleted).pipe(
@@ -112,6 +113,21 @@ export class PicturesService
           })
         )
       )
+    );
+  }
+
+
+
+    public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
+    return this.httpClient.get<Pic_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+      map(pic => {
+        let privileges = pic.privileges
+        const privilegesData: PrivilegesData<Picture> = {
+          privileges,
+          data: pic.picture,
+        };
+        return privilegesData;
+      })
     );
   }
 
