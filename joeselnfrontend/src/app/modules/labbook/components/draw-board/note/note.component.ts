@@ -104,7 +104,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public title_id = '';
 
-  public display_toolbar_button = true;
 
   public background_color = '';
 
@@ -171,7 +170,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     this.initPrivileges();
     if (this.element.child_object.created_by.username === 'admin') {
       this.background_color = 'background-color: #fff4c2';
-      this.display_toolbar_button = false;
     }
 
 

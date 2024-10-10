@@ -138,7 +138,7 @@ export class NotesService
   }
 
   public patch(id: string, note: NotePayload, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/`, note, {params});
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/`, note, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public restore(id: string, params = new HttpParams()): Observable<Note> {

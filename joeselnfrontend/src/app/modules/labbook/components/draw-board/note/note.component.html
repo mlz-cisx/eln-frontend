@@ -33,7 +33,7 @@
 <!--              </button>-->
               <button type="button" class="btn ewb-button-big"
                       (click)="load_editor()"
-                      *ngIf="editable && this.display_toolbar_button">
+                      *ngIf="editable">
                 Open Editor
               </button>
               <button type="button"
@@ -92,12 +92,12 @@
         </ng-container>
       </div>
       <div class="footer">
-        <!--        <div>-->
-        <!--          {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}-->
-        <!--          <eworkbench-user-details [user]="element.child_object?.last_modified_by" class="last-modified-by"></eworkbench-user-details>-->
-        <!--          {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}-->
-        <!--          {{ element.child_object?.last_modified_at | formatDate }}-->
-        <!--        </div>-->
+                <div>
+                  {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}
+                  <eworkbench-user-details [user]="element.child_object?.last_modified_by" class="last-modified-by"></eworkbench-user-details>
+                  {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
+                  {{ element.child_object?.last_modified_at | formatDate }}
+                </div>
         <div class="actions">
           <!--          <a [routerLink]="['/notes', element.child_object_id]" target="_blank">-->
           <!--            <button type="button" class="btn ewb-button-big ewb-button-background mr-2">-->
