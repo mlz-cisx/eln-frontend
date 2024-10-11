@@ -134,7 +134,7 @@ export class NotesService
   }
 
   public delete(id: string, labbook_pk: string, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params});
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public patch(id: string, note: NotePayload, params = new HttpParams()): Observable<Note> {
