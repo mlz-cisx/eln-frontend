@@ -74,7 +74,15 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public metadata?: Metadata[];
 
-  public privileges?: Privileges;
+  // some initialization
+  public privileges: Privileges = {
+    fullAccess: false,
+    view: false,
+    edit: false,
+    delete: false,
+    trash: false,
+    restore: false
+  };
 
   public lock: Lock | null = null;
 
@@ -318,34 +326,34 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
           return privilegesData;
         }),
-        switchMap(privilegesData => {
-
-          // if (privilegesData.data.projects.length) {
-          //   return from(privilegesData.data.projects).pipe(
-          //     mergeMap(id =>
-          //       this.projectsService.get(id).pipe(
-          //         untilDestroyed(this),
-          //         catchError(() =>
-          //           of({
-          //             pk: id,
-          //             name: this.translocoService.translate('formInput.unknownProject'),
-          //             is_favourite: false,
-          //           } as Project)
-          //         )
-          //       )
-          //     ),
-          //     map(project => {
-          //       this.projects = [...this.projects, project]
-          //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-          //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-          //       this.cdr.markForCheck();
-          //     }),
-          //     switchMap(() => of(privilegesData))
-          //   );
-          // }
-
-          return of(privilegesData);
-        })
+        // switchMap(privilegesData => {
+        //
+        //   // if (privilegesData.data.projects.length) {
+        //   //   return from(privilegesData.data.projects).pipe(
+        //   //     mergeMap(id =>
+        //   //       this.projectsService.get(id).pipe(
+        //   //         untilDestroyed(this),
+        //   //         catchError(() =>
+        //   //           of({
+        //   //             pk: id,
+        //   //             name: this.translocoService.translate('formInput.unknownProject'),
+        //   //             is_favourite: false,
+        //   //           } as Project)
+        //   //         )
+        //   //       )
+        //   //     ),
+        //   //     map(project => {
+        //   //       this.projects = [...this.projects, project]
+        //   //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
+        //   //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+        //   //       this.cdr.markForCheck();
+        //   //     }),
+        //   //     switchMap(() => of(privilegesData))
+        //   //   );
+        //   // }
+        //
+        //   return of(privilegesData);
+        // })
       )
       .subscribe(
         privilegesData => {
