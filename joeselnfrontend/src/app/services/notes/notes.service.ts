@@ -142,7 +142,7 @@ export class NotesService
   }
 
   public restore(id: string, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params});
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {

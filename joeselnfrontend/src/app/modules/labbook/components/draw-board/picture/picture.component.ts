@@ -159,7 +159,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     // });
 
     this.initDetails();
-    // this.initPrivileges();
+    this.initPrivileges();
 
     if (this.element.child_object.created_by.username === 'admin') {
       this.background_color = 'background-color: #fff4c2';
@@ -208,10 +208,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
       .subscribe(privilegesData => {
         const privileges = privilegesData.privileges;
         this.privileges = {...privileges};
-        if (this.element.child_object.created_by.username === 'admin') {
-          this.privileges.trash = false;
-          this.privileges.delete = false;
-        }
         if (!this.privileges.edit) {
           this.form.disable({emitEvent: false});
         }
