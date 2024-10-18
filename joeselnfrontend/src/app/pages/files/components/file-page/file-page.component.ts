@@ -379,7 +379,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
           this.initialState = { ...file };
           this.privileges = { ...privileges };
-          this.initDirectoryDetails();
+          // this.initDirectoryDetails();
+
+          console.log(this.privileges)
 
           this.loading = false;
 

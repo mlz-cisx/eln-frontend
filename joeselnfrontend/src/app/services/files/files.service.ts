@@ -12,7 +12,7 @@ import type {
   DjangoAPI,
   ExportLink,
   ExportService,
-  File,
+  File, File_with_privileges,
   FilePayload,
   FinalizeVersion,
   LockService,
@@ -34,6 +34,7 @@ import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
 import {mockNoteVersion, mockPrivileges} from "@joeseln/mocks";
 import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {Note} from "@joeseln/types";
 
 @Injectable({
   providedIn: 'root',
@@ -72,6 +73,19 @@ export class FilesService
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<File>> {
+    return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+      map(file => {
+        let privileges = file.privileges
+        const privilegesData: PrivilegesData<File> = {
+          privileges,
+          data: file.file,
+        };
+        return privilegesData;
+      })
+    );
+  }
+
+  public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<File>> {
     return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       switchMap(file =>
         this.getUserPrivileges(id, userId, file.deleted).pipe(
@@ -139,7 +153,7 @@ export class FilesService
   }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});
   }
 
   // public oldversions(id: string, params = new HttpParams()): Observable<Version[]> {

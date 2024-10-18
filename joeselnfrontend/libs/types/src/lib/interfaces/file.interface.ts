@@ -1,6 +1,8 @@
 import type {Directory} from './directory.interface';
 import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
+import {Privileges} from "./privileges.interface";
+import {Note} from "./note.interface";
 
 export interface FilePayload {
   title: string;
@@ -42,4 +44,9 @@ export interface File {
   url: string;
   version_number: number;
   is_favourite: boolean;
+}
+
+export interface File_with_privileges {
+  file: File,
+  privileges: Privileges
 }

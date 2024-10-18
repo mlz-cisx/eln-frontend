@@ -276,8 +276,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
             {emitEvent: false}
           );
 
-          console.log(privileges)
-
           if (!privileges.edit) {
             this.form.disable({emitEvent: false});
           }
@@ -323,10 +321,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
 
           this.initialState = {...note};
           this.privileges = {...privileges};
-          if (!this.privileges.fullAccess) {
-            this.privileges.trash = false;
-            this.privileges.edit = false;
-          }
 
           this.loading = false;
 

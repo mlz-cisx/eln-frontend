@@ -84,14 +84,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public initialState?: File;
 
-  public privileges: Privileges = {
-    fullAccess: true,
-    view: true,
-    edit: true,
-    delete: true,
-    trash: true,
-    restore: true,
-  };
+  public privileges?: Privileges;
 
   public lock: Lock | null = null;
 
@@ -229,22 +222,16 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
     this.title_id = `${this.initialState!.pk}_title_id`;
 
-    if (!this.currentUser?.pk) {
-      return;
-    }
+    // if (!this.currentUser?.pk) {
+    //   return;
+    // }
 
     this.filesService
-      .get(this.initialState!.pk, this.currentUser.pk)
+      .get(this.initialState!.pk, 123)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
         const privileges = privilegesData.privileges;
         this.privileges = {...privileges};
-
-        if (!this.privileges.fullAccess) {
-          this.privileges.trash = false;
-          this.privileges.edit = false;
-        }
-
         if (!this.privileges.edit) {
           this.form.disable({emitEvent: false});
         }
