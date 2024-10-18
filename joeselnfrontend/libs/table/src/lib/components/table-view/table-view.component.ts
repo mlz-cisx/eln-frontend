@@ -279,6 +279,7 @@ export class TableViewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             this.data = event.data;
           }
+          console.log(this.data)
           this.total = event.total;
 
           this.loading = false;
