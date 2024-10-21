@@ -18,7 +18,7 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
 // import {LeaveProjectModalComponent} from '@app/pages/projects/components/modals/leave/leave.component';
 // import {AuthService, LabBooksService, PageTitleService, ProjectsService} from '@app/services';
-import {LabbooksService} from '@joeseln/services';
+import {LabbooksService, UserService} from '@joeseln/services';
 // import {UserService, UserStore} from '@app/stores/user';
 import {environment} from '@environments/environment';
 import {
@@ -52,6 +52,8 @@ export class LabBooksPageComponent implements OnInit {
   public title = '';
 
   public currentUser: User | null = null;
+
+  public add_wb_button: Boolean = false;
 
   public defaultColumns: TableColumn[] = [];
 
@@ -124,6 +126,7 @@ export class LabBooksPageComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
+    private user_service: UserService,
     // private readonly projectsService: ProjectsService,
     // private readonly userService: UserService,
     // private readonly pageTitleService: PageTitleService,
@@ -148,9 +151,13 @@ export class LabBooksPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      console.log(this.currentUser)
+      if (this.currentUser && this.currentUser.username === 'admin'){
+        this.add_wb_button = true
+      }
+    });
 
     this.initTranslations(this.showSidebar);
     this.initSidebar();
@@ -213,27 +220,27 @@ export class LabBooksPageComponent implements OnInit {
           },
         ];
 
-        if (this.currentUser?.userprofile.ui_settings?.tables?.labbooks) {
-
-          //   const merged = merge(
-          //     keyBy(this.currentUser.userprofile.ui_settings.tables.labbooks, 'key'),
-          //     keyBy(
-          //       this.defaultColumns.map(column => ({
-          //         cellTemplate: column.cellTemplate,
-          //         name: column.name,
-          //         key: column.key,
-          //         sortable: column.sortable,
-          //         hideable: column.hidden,
-          //         width: column.width,
-          //       })),
-          //       'key'
-          //     )
-          //   );
-          //   this.listColumns = values(merged);
-          //
-        } else {
+        // if (this.currentUser?.userprofile.ui_settings?.tables?.labbooks) {
+        //
+        //   //   const merged = merge(
+        //   //     keyBy(this.currentUser.userprofile.ui_settings.tables.labbooks, 'key'),
+        //   //     keyBy(
+        //   //       this.defaultColumns.map(column => ({
+        //   //         cellTemplate: column.cellTemplate,
+        //   //         name: column.name,
+        //   //         key: column.key,
+        //   //         sortable: column.sortable,
+        //   //         hideable: column.hidden,
+        //   //         width: column.width,
+        //   //       })),
+        //   //       'key'
+        //   //     )
+        //   //   );
+        //   //   this.listColumns = values(merged);
+        //   //
+        // } else {
           this.listColumns = [...this.defaultColumns];
-        }
+        // }
 
         // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.labbooks) {
         //   this.sorting = this.currentUser.userprofile.ui_settings.tables_sort.labbooks;

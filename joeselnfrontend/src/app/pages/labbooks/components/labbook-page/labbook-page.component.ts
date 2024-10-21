@@ -205,6 +205,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
+      // console.log(this.currentUser)
     });
 
 
