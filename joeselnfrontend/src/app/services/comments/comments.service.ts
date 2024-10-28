@@ -23,6 +23,7 @@ import type {
 import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {Note} from "@joeseln/types";
+import {AuthGuardService, ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +31,10 @@ import {Note} from "@joeseln/types";
 export class CommentsService implements TableViewService, PermissionsService {
   public readonly apiUrl = `${environment.apiUrl}/comments/`;
 
-  public constructor(private readonly httpClient: HttpClient, private readonly privilegesService: PrivilegesService) {
+  public constructor(private readonly httpClient: HttpClient,
+                     private readonly privilegesService: PrivilegesService,
+                     private readonly errorservice: ErrorserviceService,
+                     private authguard: AuthGuardService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Comment[] }> {
@@ -54,7 +58,7 @@ export class CommentsService implements TableViewService, PermissionsService {
 
 
   public add(comment: CommentPayload, params = new HttpParams()): Observable<Comment> {
-    return this.httpClient.post<Comment>(this.apiUrl, comment, {params});
+    return this.httpClient.post<Comment>(this.apiUrl, comment, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Comment>> {
@@ -72,8 +76,6 @@ export class CommentsService implements TableViewService, PermissionsService {
       )
     );
   }
-
-
 
 
   public getPrivilegesList(id: string): Observable<PrivilegesApi[]> {

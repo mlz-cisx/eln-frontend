@@ -170,7 +170,7 @@ export class PicturesService
   }
 
   public patch(id: string, task: Optional<PicturePayload>, params = new HttpParams()): Observable<Picture> {
-    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/`, {pk: id, ...task}, {params});
+    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public restore(id: string, params = new HttpParams()): Observable<Picture> {
