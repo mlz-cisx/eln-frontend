@@ -5,12 +5,22 @@
 
     <div *ngIf="user">
       <div>
-        Your Data: {{ user.name }}{{user.username}} {{ user.email }}
+        Username:  &nbsp;  {{user.username}} <br>
+        Mail:    &nbsp;    {{ user.email }}  <br>
+        Admin:   &nbsp;    {{ user.admin}}
       </div>
       <div style="margin-top: 1%">
         Your groups:
         <ul *ngIf="user.groups">
           <li *ngFor="let group of user.groups">
+            {{group}}
+          </li>
+        </ul>
+      </div>
+            <div style="margin-top: 1%">
+        Your groups as groupadmnin:
+        <ul *ngIf="user.admin_groups">
+          <li *ngFor="let group of user.admin_groups">
             {{group}}
           </li>
         </ul>

@@ -25,6 +25,7 @@ export class ProfilePageComponent implements OnInit {
     this.user_service.getUserMe()
       .subscribe(user => {
           this.user = user
+        console.log(this.user)
           this.userStore.update(() => ({user, loggedIn: Boolean(user)}));
         }
       );

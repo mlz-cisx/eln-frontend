@@ -42,6 +42,8 @@ export interface User {
   family_name: string | null;
   realm_access: any | null;
   groups: any | null;
+  admin: boolean | null;
+  admin_groups: any | null;
 }
 
 export interface UserState {
