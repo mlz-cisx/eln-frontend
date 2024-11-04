@@ -68,7 +68,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public sidebarItem = ProjectSidebarItem.Pictures;
 
-  public currentUser: User = mockUser;
+  public currentUser: User | null = null;
 
   public initialState?: Picture;
 
@@ -144,6 +144,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
+    private user_service: UserService,
     // private readonly userStore: UserStore
   ) {}
 
@@ -177,9 +178,10 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
     this.websocketService.subscribe([{ model: 'picture', pk: this.id }]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
@@ -297,12 +299,12 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public initDetails(formChanges = true): void {
 
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
+    if (!this.currentUser?.pk) {
+      return;
+    }
 
     this.picturesService
-      .get(this.id, 123)
+      .get(this.id, this.currentUser.pk)
       .pipe(
         untilDestroyed(this),
         map(privilegesData => {

@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {CommentsService} from '@app/services';
+import {CommentsService, UserService} from '@app/services';
 import {AuthGuardService} from '@app/services';
 import type {CommentPayload, User} from '@joeseln/types';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -71,7 +71,8 @@ export class CreateCommentComponent implements OnInit {
     private readonly authService: AuthGuardService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
-    private readonly toastrService: ToastrService
+    private readonly toastrService: ToastrService,
+    private user_service: UserService,
   ) {
   }
 
@@ -90,9 +91,10 @@ export class CreateCommentComponent implements OnInit {
 
 
   public ngOnInit(): void {
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
   }
 
   public onSubmit(): void {

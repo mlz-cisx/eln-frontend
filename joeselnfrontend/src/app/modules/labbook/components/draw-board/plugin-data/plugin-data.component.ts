@@ -8,11 +8,11 @@ import { Validators } from '@angular/forms';
 import { CommentsModalComponent } from '@app/modules/comment/components/modals/comments/comments.component';
 import {
   //AuthService,
-  LabbooksService,
+  LabbooksService, UserService,
 
   //PluginInstancesService,
 
- // WebSocketService
+  // WebSocketService
 } from '@app/services';
 import type { LabBookElement, Lock, PluginInstance, PluginInstancePayload, Privileges, User } from '@joeseln/types';
 import { DialogService } from '@ngneat/dialog';
@@ -87,7 +87,8 @@ export class LabBookDrawBoardPluginDataComponent implements OnInit {
     //private readonly authService: AuthService,
     //private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
-    private readonly modalService: DialogService
+    private readonly modalService: DialogService,
+    private user_service: UserService,
   ) {}
 
   public get f() {
@@ -114,10 +115,10 @@ export class LabBookDrawBoardPluginDataComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
     this.initDetails();
     this.initPrivileges();

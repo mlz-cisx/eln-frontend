@@ -120,6 +120,7 @@ export class PicturesPageComponent implements OnInit {
     // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly authService: AuthService,
+    private user_service: UserService,
     // private readonly userStore: UserStore
   ) {}
 
@@ -138,9 +139,10 @@ export class PicturesPageComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
     this.initTranslations(this.showSidebar);
     this.initSidebar();
@@ -217,36 +219,36 @@ export class PicturesPageComponent implements OnInit {
           },
         ];
 
-        if (this.currentUser?.userprofile.ui_settings?.tables?.pictures) {
-          const merged = merge(
-            keyBy(this.currentUser.userprofile.ui_settings.tables.pictures, 'key'),
-            keyBy(
-              this.defaultColumns.map(column => ({
-                cellTemplate: column.cellTemplate,
-                name: column.name,
-                key: column.key,
-                sortable: column.sortable,
-                hideable: column.hidden,
-                width: column.width,
-              })),
-              'key'
-            )
-          );
-          this.listColumns = values(merged);
-        } else {
-          this.listColumns = [...this.defaultColumns];
-        }
+        // if (this.currentUser?.userprofile.ui_settings?.tables?.pictures) {
+        //   const merged = merge(
+        //     keyBy(this.currentUser.userprofile.ui_settings.tables.pictures, 'key'),
+        //     keyBy(
+        //       this.defaultColumns.map(column => ({
+        //         cellTemplate: column.cellTemplate,
+        //         name: column.name,
+        //         key: column.key,
+        //         sortable: column.sortable,
+        //         hideable: column.hidden,
+        //         width: column.width,
+        //       })),
+        //       'key'
+        //     )
+        //   );
+        //   this.listColumns = values(merged);
+        // } else {
+         this.listColumns = [...this.defaultColumns];
+        // }
 
-        if (this.currentUser?.userprofile.ui_settings?.tables_sort?.pictures) {
-          this.sorting = this.currentUser.userprofile.ui_settings.tables_sort.pictures;
-        }
-
-        if (this.currentUser?.userprofile.ui_settings?.filter_settings?.pictures) {
-          const filters = this.currentUser.userprofile.ui_settings?.filter_settings?.pictures;
-
-          if (filters.active) {
-            this.savedFilters = true;
-          }
+        // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.pictures) {
+        //   this.sorting = this.currentUser.userprofile.ui_settings.tables_sort.pictures;
+        // }
+        //
+        // if (this.currentUser?.userprofile.ui_settings?.filter_settings?.pictures) {
+        //   const filters = this.currentUser.userprofile.ui_settings?.filter_settings?.pictures;
+        //
+        //   if (filters.active) {
+        //     this.savedFilters = true;
+        //   }
 
           // if (filters.users) {
           //   this.userService
@@ -274,20 +276,20 @@ export class PicturesPageComponent implements OnInit {
           //   this.params = this.params.set('projects_recursive', filters.projects);
           // }
 
-          if (filters.search) {
-            this.searchControl.setValue(filters.search);
-            this.params = this.params.set('search', filters.search);
-          }
-
-          if (filters.favorites) {
-            this.favoritesControl.setValue(Boolean(filters.favorites));
-            this.params = this.params.set('favourite', filters.favorites);
-          }
-
-          if (filters.active) {
-            this.tableView.loadData(false, this.params);
-          }
-        }
+        //   if (filters.search) {
+        //     this.searchControl.setValue(filters.search);
+        //     this.params = this.params.set('search', filters.search);
+        //   }
+        //
+        //   if (filters.favorites) {
+        //     this.favoritesControl.setValue(Boolean(filters.favorites));
+        //     this.params = this.params.set('favourite', filters.favorites);
+        //   }
+        //
+        //   if (filters.active) {
+        //     this.tableView.loadData(false, this.params);
+        //   }
+        // }
       });
   }
 

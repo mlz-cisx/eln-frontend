@@ -24,7 +24,7 @@ import {
 //  AuthService,
   LabbooksService,
   NotesService,
-  PicturesService,
+  PicturesService, UserService,
   WebSocketService
 } from '@app/services';
 import type {
@@ -131,6 +131,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
+    private user_service: UserService,
     private readonly drawboardGridComponent: LabBookDrawBoardGridComponent
   ) {
   }
@@ -161,9 +162,10 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
 
     this.initDetails();
@@ -231,9 +233,9 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
 
   public initPrivileges(): void {
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
+    if (!this.currentUser?.pk) {
+      return;
+    }
 
     this.enlarge_rows_id = `${this.initialState!.pk}_rows_id`;
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
@@ -241,7 +243,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
 
     this.notesService
-      .get(this.initialState!.pk, 123)
+      .get(this.initialState!.pk, this.currentUser.pk)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
         const privileges = privilegesData.privileges;

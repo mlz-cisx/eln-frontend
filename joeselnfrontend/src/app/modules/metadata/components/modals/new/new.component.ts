@@ -3,16 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { MetadataService } from '@app/services';
-import type { DropdownElement, MetadataPayload, User } from '@joeseln/types';
-import { DialogRef } from '@ngneat/dialog';
-import { FormArray, FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {MetadataService, UserService} from '@app/services';
+import type {DropdownElement, MetadataPayload, User} from '@joeseln/types';
+import {DialogRef} from '@ngneat/dialog';
+import {FormArray, FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
 
 interface FormMetadata {
   name: FormControl<string | null>;
@@ -65,8 +70,10 @@ export class NewMetadataFieldComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
-    private readonly toastrService: ToastrService
-  ) {}
+    private readonly toastrService: ToastrService,
+    private user_service: UserService,
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -113,6 +120,11 @@ export class NewMetadataFieldComponent implements OnInit {
     //   }
     //   this.cdr.markForCheck();
     // });
+
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
     this.initTranslations();
     this.patchFormValues();
@@ -189,7 +201,7 @@ export class NewMetadataFieldComponent implements OnInit {
         multipleSelect: true,
         thousandsSeparator: true,
       },
-      { emitEvent: false }
+      {emitEvent: false}
     );
   }
 
@@ -205,7 +217,7 @@ export class NewMetadataFieldComponent implements OnInit {
       .subscribe(
         metadata => {
           this.state = ModalState.Changed;
-          this.modalRef.close({ state: this.state, data: metadata.pk });
+          this.modalRef.close({state: this.state, data: metadata.pk});
           this.translocoService
             .selectTranslate('metadata.newModal.toastr.success')
             .pipe(untilDestroyed(this))

@@ -14,6 +14,7 @@ import { cloneDeep } from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { of, Subject } from 'rxjs';
 import { debounceTime, map, skip, switchMap } from 'rxjs/operators';
+import {UserService} from "@app/services";
 
 interface InitialPrivileges {
   [key: number]: PrivilegesApi;
@@ -70,7 +71,8 @@ export class PrivilegesModalComponent implements OnInit {
     // private readonly fb: FormBuilder,
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private user_service: UserService,
   ) {}
 
   public ngOnInit(): void {

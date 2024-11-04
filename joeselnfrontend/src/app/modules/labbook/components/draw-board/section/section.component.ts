@@ -15,25 +15,37 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { ModalState } from '@app/enums/modal-state.enum';
+import {Validators} from '@angular/forms';
+import {ModalState} from '@app/enums/modal-state.enum';
 import {
+  UserService
   //AuthService,
   //LabBookSectionsService,
   //WebSocketService
 } from '@app/services';
-import type { DatePickerConfig, LabBookElement, LabBookSectionPayload, Lock, ModalCallback, User } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import type {
+  DatePickerConfig,
+  LabBookElement,
+  LabBookSectionPayload,
+  Lock,
+  ModalCallback,
+  User
+} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import flatpickr from 'flatpickr';
-import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
-import { DeleteLabBookSectionElementModalComponent } from '../../modals/delete-section/delete-section.component';
-import type { LabBookDrawBoardGridComponent } from '../grid/grid.component';
-import { LabBookPendingChangesModalComponent } from '../modals/pending-changes/pending-changes.component';
+import {ToastrService} from 'ngx-toastr';
+import {take} from 'rxjs/operators';
+import {v4 as uuidv4} from 'uuid';
+import {
+  DeleteLabBookSectionElementModalComponent
+} from '../../modals/delete-section/delete-section.component';
+import type {LabBookDrawBoardGridComponent} from '../grid/grid.component';
+import {
+  LabBookPendingChangesModalComponent
+} from '../modals/pending-changes/pending-changes.component';
 
 interface FormSection {
   date: FormControl<string | null>;
@@ -108,8 +120,10 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
     private readonly toastrService: ToastrService,
     // private readonly authService: AuthService,
     // private readonly websocketService: WebSocketService,
-    private readonly translocoService: TranslocoService
-  ) {}
+    private readonly translocoService: TranslocoService,
+    private user_service: UserService,
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -118,13 +132,13 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
   public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
     if (this.lock) {
       if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return { ownUser: true, user: this.lock.lock_details?.locked_by };
+        return {ownUser: true, user: this.lock.lock_details?.locked_by};
       }
 
-      return { ownUser: false, user: this.lock.lock_details?.locked_by };
+      return {ownUser: false, user: this.lock.lock_details?.locked_by};
     }
 
-    return { ownUser: false, user: null };
+    return {ownUser: false, user: null};
   }
 
   public get section(): LabBookSectionPayload {
@@ -137,9 +151,12 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
+
+
     //
     // this.websocketService.subscribe([{ model: 'labbooksection', pk: this.element.child_object_id }]);
     // this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
@@ -177,11 +194,11 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
         date: this.element.child_object.date,
         title: this.element.child_object.title,
       },
-      { emitEvent: false }
+      {emitEvent: false}
     );
 
     if (!this.editable) {
-      this.form.disable({ emitEvent: false });
+      this.form.disable({emitEvent: false});
     }
   }
 
@@ -197,7 +214,7 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
 
     this.modalRef = this.modalService.open(LabBookPendingChangesModalComponent, {
       closeButton: false,
-      data: { id: this.element.child_object_id },
+      data: {id: this.element.child_object_id},
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback?: ModalCallback) => {
@@ -262,7 +279,11 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
   public onDelete(): void {
     this.modalRef = this.modalService.open(DeleteLabBookSectionElementModalComponent, {
       closeButton: false,
-      data: { labBookId: this.id, sectionId: this.element.pk, elementId: this.element.child_object_id },
+      data: {
+        labBookId: this.id,
+        sectionId: this.element.pk,
+        elementId: this.element.child_object_id
+      },
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
@@ -270,7 +291,10 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.state === ModalState.Changed) {
-      this.removed.emit({ id: this.element.pk, gridReload: callback.data.gridReload });
+      this.removed.emit({
+        id: this.element.pk,
+        gridReload: callback.data.gridReload
+      });
     }
   }
 }

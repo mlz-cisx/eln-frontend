@@ -13,6 +13,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { DeleteCommentModalComponent } from '../modals/delete/delete.component';
+import {UserService} from "@app/services";
 
 @UntilDestroy()
 @Component({
@@ -42,13 +43,15 @@ export class CommentComponent implements OnInit {
     private readonly modalService: DialogService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
-    private readonly toastrService: ToastrService
+    private readonly toastrService: ToastrService,
+    private user_service: UserService,
   ) {}
 
   public ngOnInit(): void {
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
   }
 
   public onChangePrivateState(): void {

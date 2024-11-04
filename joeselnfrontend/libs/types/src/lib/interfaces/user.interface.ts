@@ -55,14 +55,3 @@ export interface ExternalUserPayload {
   message: string;
 }
 
-export interface KeykloakUser {
-  sub: string | null;
-  email_verified: boolean | null;
-  name: string | null;
-  username: string | null;
-  preferred_username: string | null;
-  given_name: string | null;
-  family_name: string | null;
-  email: string | null;
-  realm_access: any | null;
-}

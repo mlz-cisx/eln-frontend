@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap, switchMap} from 'rxjs/operators';
-import type {KeykloakUser, User, Test} from "@joeseln/types";
+import type {User, Test} from "@joeseln/types";
 import {AuthGuardService, AuthService} from "@app/services";
 import {Router} from "@angular/router";
 import {KeycloakService} from 'keycloak-angular';

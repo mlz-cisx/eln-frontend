@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -14,32 +14,57 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { ProjectSidebarItem } from '@app/enums/project-sidebar-item.enum';
-import { CommentsComponent } from '@app/modules/comment/components/comments/comments.component';
-import { NewCommentModalComponent } from '@app/modules/comment/components/modals/new/new.component';
+import {Validators} from '@angular/forms';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
+import {
+  CommentsComponent
+} from '@app/modules/comment/components/comments/comments.component';
+import {
+  NewCommentModalComponent
+} from '@app/modules/comment/components/modals/new/new.component';
 // import { DescriptionModalComponent } from '@app/modules/shared/modals/description/description.component';
 // import { PendingChangesModalComponent } from '@app/modules/shared/modals/pending-changes/pending-changes.component';
 // import { LeaveProjectModalComponent } from '@app/pages/projects/components/modals/leave/leave.component';
-import { AuthService,
+import {
+  AuthService,
   // DrivesService,
-  FilesService,
+  FilesService, UserService,
   // PageTitleService,
   // ProjectsService,
-  WebSocketService } from '@app/services';
+  WebSocketService
+} from '@app/services';
 // import { UserService, UserStore } from '@app/stores/user';
-import type { Directory, Drive, File, FilePayload, Lock, Metadata, ModalCallback, Privileges, Project, User } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { from, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, map, mergeMap, skip, switchMap, take } from 'rxjs/operators';
-import { NewFileModalComponent } from '../modals/new.component';
+import type {
+  Directory,
+  Drive,
+  File,
+  FilePayload,
+  Lock,
+  Metadata,
+  ModalCallback,
+  Privileges,
+  Project,
+  User
+} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {from, Observable, of, Subject} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  skip,
+  switchMap,
+  take
+} from 'rxjs/operators';
+import {NewFileModalComponent} from '../modals/new.component';
 import {mockUser} from "@joeseln/mocks";
 
 
@@ -66,7 +91,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public sidebarItem = ProjectSidebarItem.Files;
 
-  public currentUser: User = mockUser;
+  public currentUser: User | null = null;
 
   public initialState?: File;
 
@@ -140,8 +165,10 @@ export class FilePageComponent implements OnInit, OnDestroy {
     //private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
+    private user_service: UserService,
     //private readonly userStore: UserStore
-  ) {}
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -150,13 +177,13 @@ export class FilePageComponent implements OnInit, OnDestroy {
   public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
     if (this.lock) {
       if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return { ownUser: true, user: this.lock.lock_details?.locked_by };
+        return {ownUser: true, user: this.lock.lock_details?.locked_by};
       }
 
-      return { ownUser: false, user: this.lock.lock_details?.locked_by };
+      return {ownUser: false, user: this.lock.lock_details?.locked_by};
     }
 
-    return { ownUser: false, user: null };
+    return {ownUser: false, user: null};
   }
 
   public get descriptionTranslationKey(): string {
@@ -181,11 +208,12 @@ export class FilePageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      console.log(this.currentUser)
+    });
 
-    this.websocketService.subscribe([{ model: 'file', pk: this.id }]);
+    this.websocketService.subscribe([{model: 'file', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.element_lock_changed?.model_pk === this.id) {
         this.lock = data.element_lock_changed;
@@ -317,11 +345,11 @@ export class FilePageComponent implements OnInit, OnDestroy {
               storage: file.directory_id,
               projects: file.projects,
             },
-            { emitEvent: false }
+            {emitEvent: false}
           );
 
           if (!privileges.edit) {
-            this.form.disable({ emitEvent: false });
+            this.form.disable({emitEvent: false});
           }
 
           return privilegesData;
@@ -377,8 +405,8 @@ export class FilePageComponent implements OnInit, OnDestroy {
           this.detailsTitle = file.title;
           //void this.pageTitleService.set(file.display);
 
-          this.initialState = { ...file };
-          this.privileges = { ...privileges };
+          this.initialState = {...file};
+          this.privileges = {...privileges};
           // this.initDirectoryDetails();
 
           console.log(this.privileges)
@@ -443,7 +471,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
           this.detailsTitle = file.title;
           //void this.pageTitleService.set(file.display);
 
-          this.initialState = { ...file };
+          this.initialState = {...file};
           this.initDirectoryDetails();
           this.form.markAsPristine();
           this.refreshChanges.next(true);

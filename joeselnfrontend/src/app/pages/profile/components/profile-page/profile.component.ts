@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "@app/services";
-import {KeykloakUser, User, Test} from "@joeseln/types";
+import {User, Test} from "@joeseln/types";
 import {UserStore} from "@app/services/user/user.store";
 
 @Component({

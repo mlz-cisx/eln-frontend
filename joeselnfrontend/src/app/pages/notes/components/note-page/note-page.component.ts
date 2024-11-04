@@ -23,7 +23,7 @@ import {NewCommentModalComponent} from '@app/modules/comment/components/modals/n
 import {
   AuthService,
   LabbooksService,
-  NotesService,
+  NotesService, UserService,
   // PageTitleService,
   // ProjectsService,
   WebSocketService
@@ -61,7 +61,7 @@ export class NotePageComponent implements OnInit, OnDestroy {
 
   public id = this.route.snapshot.paramMap.get('id')!;
 
-  public currentUser: User = mockUser;
+  public currentUser: User | null = null;
 
   public initialState?: Note;
 
@@ -117,7 +117,8 @@ export class NotePageComponent implements OnInit, OnDestroy {
     // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
-    private readonly labbooksService: LabbooksService
+    private readonly labbooksService: LabbooksService,
+    private user_service: UserService,
   ) {
   }
 
@@ -149,9 +150,10 @@ export class NotePageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
     this.websocketService.subscribe([{model: 'note', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
@@ -255,12 +257,12 @@ export class NotePageComponent implements OnInit, OnDestroy {
   }
 
   public initDetails(formChanges = true): void {
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
+    if (!this.currentUser?.pk) {
+      return;
+    }
 
     this.notesService
-      .get(this.id, 123)
+      .get(this.id, this.currentUser.pk)
       .pipe(
         untilDestroyed(this),
         map(privilegesData => {

@@ -3,18 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { CommentsService } from '@app/services';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {CommentsService, UserService} from '@app/services';
 //import { AuthService } from '@app/services/auth/auth.service';
-import type { CommentPayload, User } from '@joeseln/types';
-import { DialogRef } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { v4 as uuidv4 } from 'uuid';
+import type {CommentPayload, User} from '@joeseln/types';
+import {DialogRef} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {v4 as uuidv4} from 'uuid';
 
 interface FormComment {
   content: FormControl<string | null>;
@@ -64,8 +72,10 @@ export class NewCommentModalComponent implements OnInit {
     //private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
-    private readonly toastrService: ToastrService
-  ) {}
+    private readonly toastrService: ToastrService,
+    private user_service: UserService,
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -81,9 +91,10 @@ export class NewCommentModalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.authService.user$.pipe(untilDestroyed(this)).subscribe(state => {
-    //   this.currentUser = state.user;
-    // });
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+      // console.log(this.currentUser)
+    });
 
     if (!this.id) {
       this.id = this.modalRef.data.id;
@@ -117,7 +128,7 @@ export class NewCommentModalComponent implements OnInit {
           this.created.emit();
           this.refresh?.next(true);
 
-          this.modalRef.close({ state: this.state, data: event });
+          this.modalRef.close({state: this.state, data: event});
           this.translocoService
             .selectTranslate('comments.newCommentModal.toastr.success')
             .pipe(untilDestroyed(this))
