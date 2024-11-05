@@ -44,6 +44,10 @@ export class UserService {
     return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)))
   }
 
+  public changePassword(password: string): Observable<any> {
+    return this.httpClient.put<any>(`${environment.apiUrl}/change_password`, {password}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+  }
+
   public get user$(): Observable<UserState> {
     return this.userQuery.user$ as any;
   }

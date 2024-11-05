@@ -1,13 +1,14 @@
 <ng-container *transloco="let t">
   <main>
 
-    <h4>Welcome</h4>
+
 
     <div *ngIf="user">
+      <h4>Welcome {{user.username}}</h4>
       <div>
-        Username:  &nbsp;  {{user.username}} <br>
-        Mail:    &nbsp;    {{ user.email }}  <br>
-        Admin:   &nbsp;    {{ user.admin}}
+        Username: &nbsp; {{user.username}} <br>
+        Mail: &nbsp; {{ user.email }}  <br>
+        Admin: &nbsp; {{ user.admin}}
       </div>
       <div style="margin-top: 1%">
         Your groups:
@@ -17,7 +18,7 @@
           </li>
         </ul>
       </div>
-            <div style="margin-top: 1%">
+      <div style="margin-top: 1%">
         Your groups as groupadmin:
         <ul *ngIf="user.admin_groups">
           <li *ngFor="let group of user.admin_groups">
@@ -25,6 +26,46 @@
           </li>
         </ul>
       </div>
+    </div>
+    <h4>Password Reset</h4>
+    <div *ngIf="user">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor
+            *ngIf="!user.oidc_user">
+        <div class="mb-4">
+          <label for="password">
+            {{ t('changePassword.newPassword') }}
+            <eworkbench-form-asterisk
+              class="inline-block"></eworkbench-form-asterisk>
+          </label>
+          <input
+            type="password"
+            class="form-control ewb-input"
+            id="password"
+            formControlName="password"
+            name="password"
+            [placeholder]="t('changePassword.newPassword')"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="passwordConfirm">
+            {{ t('changePassword.confirmNewPassword') }}
+            <eworkbench-form-asterisk
+              class="inline-block"></eworkbench-form-asterisk>
+          </label>
+          <input
+            type="password"
+            class="form-control ewb-input"
+            id="passwordConfirm"
+            formControlName="passwordConfirm"
+            name="passwordConfirm"
+            [placeholder]="t('changePassword.confirmNewPassword')"
+          />
+        </div>
+        <button type="submit" class="btn ewb-button-big ewb-button-primary"
+                [disabled]="loading || form.invalid">
+          {{ t('changePassword.confirm') }}
+        </button>
+      </form>
     </div>
   </main>
 </ng-container>

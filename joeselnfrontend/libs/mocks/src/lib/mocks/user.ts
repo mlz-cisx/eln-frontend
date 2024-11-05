@@ -19,6 +19,7 @@ export const mockUser: User = {
   groups: '',
   admin: true,
   admin_groups: '',
+  oidc_user: false,
   userprofile: {
     academic_title: '',
     additional_information: '',
@@ -62,6 +63,7 @@ export const mockUserWithoutNames: User = {
   groups: '',
   admin: true,
   admin_groups: '',
+  oidc_user: false,
   userprofile: {
     academic_title: '',
     additional_information: '',
@@ -96,6 +98,7 @@ export const mockAnonymousUser: User = {
   groups: '',
   admin: true,
   admin_groups: '',
+  oidc_user: false,
   userprofile: {
     academic_title: '',
     additional_information: '',
