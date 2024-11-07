@@ -29,6 +29,7 @@
     </div>
     <h4>Password Reset</h4>
     <div *ngIf="user">
+      <div>Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and must be between eight and sixteen characters in length.</div>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor
             *ngIf="!user.oidc_user">
         <div class="mb-4">

@@ -22,8 +22,8 @@ export class ProfilePageComponent implements OnInit {
 
   public form = this.fb.group(
     {
-      password: [null, [Validators.required, Validators.minLength(8)]],
-      passwordConfirm: [null, [Validators.required, Validators.minLength(8)]],
+      password: [null, [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s])\\S{8,16}')]],
+      passwordConfirm: [null, [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s])\\S{8,16}')]],
     },
     {validators: [this.MustMatch('password', 'passwordConfirm')]}
   );
@@ -59,6 +59,7 @@ export class ProfilePageComponent implements OnInit {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
+
 
       if (matchingControl.errors && !matchingControl.errors['mustmatch']) {
         return;
