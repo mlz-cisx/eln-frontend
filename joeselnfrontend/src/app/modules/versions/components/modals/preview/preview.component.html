@@ -15,7 +15,7 @@
           for="versionCreated">{{ t('versions.previewModal.versionCreated.label') }}</label>
         <div class="flex items-center" id="versionCreated">
           <span
-            class="mr-2">{{ version.created_at }}{{ ' ' }}{{ t('versions.by') }}</span>
+            class="mr-2">{{ version.created_at| formatDate }}{{ ' ' }}{{ t('versions.by') }}</span>
           <eworkbench-user-details class="inline-block"
                                    [user]="version.created_by"
                                    [modal]="false"></eworkbench-user-details>

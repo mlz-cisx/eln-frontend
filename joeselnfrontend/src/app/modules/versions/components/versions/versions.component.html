@@ -18,7 +18,7 @@
 <ng-template #numberCellTemplate let-row>v{{ row.number }}</ng-template>
 <ng-template #createdAtCellTemplate let-row>
   <ng-container *transloco="let t">
-    <div *ngIf="row.created_at" class="whitespace-nowrap">{{ row.created_at }}</div>
+    <div *ngIf="row.created_at" class="whitespace-nowrap">{{ row.created_at| formatDate }}</div>
     <div *ngIf="!row.created_at">{{ t('versions.draft') }}</div>
   </ng-container>
 </ng-template>
