@@ -134,7 +134,7 @@ export class LabbooksService {
   }
 
 
-  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
+  public get(id: string,  params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
     return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(labBook => {
         let privileges = labBook.privileges

@@ -85,7 +85,7 @@ export class NotesService
   }
 
 
-  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
+  public get(id: string,  params = new HttpParams()): Observable<PrivilegesData<Note>> {
     return this.httpClient.get<Note_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(note => {
         let privileges = note.privileges

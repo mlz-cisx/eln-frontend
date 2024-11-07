@@ -257,12 +257,12 @@ export class NotePageComponent implements OnInit, OnDestroy {
   }
 
   public initDetails(formChanges = true): void {
-    if (!this.currentUser?.pk) {
-      return;
-    }
+    // if (!this.currentUser?.pk) {
+    //   return;
+    // }
 
     this.notesService
-      .get(this.id, this.currentUser.pk)
+      .get(this.id)
       .pipe(
         untilDestroyed(this),
         map(privilegesData => {

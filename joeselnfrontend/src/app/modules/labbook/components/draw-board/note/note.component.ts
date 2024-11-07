@@ -185,7 +185,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       if (data.model_pk === this.initialState!.pk) {
         if (!this.submitted) {
           this.notesService
-            .get(this.initialState!.pk, 123)
+            .get(this.initialState!.pk)
             .pipe(untilDestroyed(this))
             .subscribe(privilegesData => {
               this.form.patchValue(
@@ -233,9 +233,9 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
 
   public initPrivileges(): void {
-    if (!this.currentUser?.pk) {
-      return;
-    }
+    // if (!this.currentUser?.pk) {
+    //   return;
+    // }
 
     this.enlarge_rows_id = `${this.initialState!.pk}_rows_id`;
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
@@ -243,7 +243,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
 
     this.notesService
-      .get(this.initialState!.pk, this.currentUser.pk)
+      .get(this.initialState!.pk)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
         const privileges = privilegesData.privileges;

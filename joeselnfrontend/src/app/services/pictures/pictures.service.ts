@@ -118,7 +118,7 @@ export class PicturesService
 
 
 
-    public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
+    public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
     return this.httpClient.get<Pic_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(pic => {
         let privileges = pic.privileges

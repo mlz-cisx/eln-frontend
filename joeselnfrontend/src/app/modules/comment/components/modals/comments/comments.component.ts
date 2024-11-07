@@ -6,6 +6,9 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DialogRef} from '@ngneat/dialog';
 import {UntilDestroy} from '@ngneat/until-destroy';
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 @UntilDestroy()
 @Component({
@@ -21,12 +24,13 @@ export class CommentsModalComponent {
 
   public create: any = this.modalRef.data.create;
 
-  public constructor(public readonly modalRef: DialogRef) {
+  public constructor(public readonly modalRef: DialogRef, private readonly drawboardGridComponent: LabBookDrawBoardGridComponent) {
   }
 
 
   public on_click() {
     this.modalRef.close()
+    console.log(this.element)
     // var bodyRect = 0
     // if (document.body.getBoundingClientRect()) {
     //   bodyRect = -document.body.getBoundingClientRect().y

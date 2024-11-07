@@ -174,7 +174,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       if (data.model_pk === this.initialState!.pk) {
         if (!this.submitted) {
           this.filesService
-            .get(this.initialState!.pk, 123)
+            .get(this.initialState!.pk)
             .pipe(untilDestroyed(this))
             .subscribe(privilegesData => {
               this.form.patchValue(
@@ -224,14 +224,14 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
     this.title_id = `${this.initialState!.pk}_title_id`;
 
-    if (!this.currentUser?.pk) {
-      return;
-    }
+    // if (!this.currentUser?.pk) {
+    //   return;
+    // }
 
-    console.log(this.currentUser)
+
 
     this.filesService
-      .get(this.initialState!.pk, this.currentUser.pk)
+      .get(this.initialState!.pk)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
         const privileges = privilegesData.privileges;

@@ -72,7 +72,7 @@ export class FilesService
     return this.httpClient.post<File>(this.apiUrl, formData, {params});
   }
 
-  public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<File>> {
+  public get(id: string,  params = new HttpParams()): Observable<PrivilegesData<File>> {
     return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(file => {
         let privileges = file.privileges
