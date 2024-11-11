@@ -45,6 +45,7 @@ import {
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {ErrorserviceService} from "@app/services";
 import {AuthGuardService} from "@app/services";
+import {Note} from "@joeseln/types";
 
 @Injectable({
   providedIn: 'root'
@@ -134,7 +135,7 @@ export class LabbooksService {
   }
 
 
-  public get(id: string,  params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
+  public get(id: string, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
     return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(labBook => {
         let privileges = labBook.privileges
@@ -179,35 +180,11 @@ export class LabbooksService {
 
 
   public restore(id: string): Observable<LabBook> {
-    let _labbook = <LabBook><unknown>[]
-    return this.lab_book_list$.pipe(
-      map(() => {
-          mockLabBooksList.results.forEach((elem) => {
-            if (elem.pk === id) {
-              _labbook = elem;
-              return
-            }
-          })
-          return _labbook
-        }
-      )
-    )
+    return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/restore/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public delete(id: string): Observable<LabBook> {
-    let _labbook = <LabBook><unknown>[]
-    return this.lab_book_list$.pipe(
-      map(() => {
-          mockLabBooksList.results.forEach((elem) => {
-            if (elem.pk === id) {
-              _labbook = elem;
-              return
-            }
-          })
-          return _labbook
-        }
-      )
-    )
+    return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/soft_delete/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public getElements_old(id: string, section?: string): Observable<LabBookElement<any>[]> {

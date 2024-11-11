@@ -153,7 +153,7 @@ export class LabBooksPageComponent implements OnInit {
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      if (this.currentUser && this.currentUser.username === 'admin'){
+      if (this.currentUser && this.currentUser.admin) {
         this.add_wb_button = true
       }
     });
@@ -238,7 +238,7 @@ export class LabBooksPageComponent implements OnInit {
         //   //   this.listColumns = values(merged);
         //   //
         // } else {
-          this.listColumns = [...this.defaultColumns];
+        this.listColumns = [...this.defaultColumns];
         // }
 
         // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.labbooks) {

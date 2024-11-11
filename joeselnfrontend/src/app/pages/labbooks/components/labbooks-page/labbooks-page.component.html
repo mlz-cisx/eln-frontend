@@ -5,7 +5,8 @@
 
 <ng-container *transloco="let t">
   <div style="display: flex; justify-content: center">
-    <ul class="navbar-nav navbar-search h-full" *ngIf="true" style="width: 50% !important;">
+    <ul class="navbar-nav navbar-search h-full" *ngIf="true"
+        style="width: 50% !important;">
       <li class="h-full flex items-center mr-3">
         <eworkbench-global-search></eworkbench-global-search>
       </li>
@@ -41,7 +42,8 @@
   <!--      </div>-->
   <!--    </ng-container>-->
   <div style="display: flex; justify-content: center">
-    <button class="btn ewb-button-big ewb-button-background"  style="" *ngIf="add_wb_button"
+    <button class="btn ewb-button-big ewb-button-background" style=""
+            *ngIf="add_wb_button"
             (click)="openNewModal()">
       <joeseln-icon className="wb-plus-circle"></joeseln-icon>
       {{ t('labbooks.labbook') }}
@@ -56,15 +58,17 @@
   </aside>
 
   <main>
-    <!--    <div class="flex justify-between pb-4 mb-5 border-0 border-b-[3px] border-solid border-tum-border-gray">-->
-    <!--      <eworkbench-trashed-items-filter (stateChanged)="onFilterItems($event)"></eworkbench-trashed-items-filter>-->
-    <!--      <eworkbench-table-manage-columns-->
-    <!--        class="flex justify-end"-->
-    <!--        [columns]="listColumns"-->
-    <!--        [defaultColumns]="defaultColumns"-->
-    <!--        (columnsChanged)="onColumnsChanged($event)"-->
-    <!--      ></eworkbench-table-manage-columns>-->
-    <!--    </div>-->
+    <div
+      class="flex justify-between pb-4 mb-5 border-0 border-b-[3px] border-solid border-tum-border-gray">
+      <eworkbench-trashed-items-filter
+        (stateChanged)="onFilterItems($event)"></eworkbench-trashed-items-filter>
+      <eworkbench-table-manage-columns
+        class="flex justify-end"
+        [columns]="listColumns"
+        [defaultColumns]="defaultColumns"
+        (columnsChanged)="onColumnsChanged($event)"
+      ></eworkbench-table-manage-columns>
+    </div>
 
     <ng-container *transloco="let t">
       <div class="flex justify-between pb-4 mb-5">
@@ -81,14 +85,14 @@
             >{{ t('filterHeader.createdBy') }}{{ ' '
               }}{{ getFilterSelectedUser.pk === currentUser?.pk ? t('filterHeader.createdBy.myself') : '' }}</span
             >
-            <!--            <eworkbench-user-details-->
-            <!--              *ngIf="getFilterSelectedUser.pk !== currentUser?.pk"-->
-            <!--              class="inline-block mr-2"-->
-            <!--              [user]="getFilterSelectedUser"-->
-            <!--              [active]="false"-->
-            <!--              [inverted]="true"-->
-            <!--              [avatarScale]="0.7"-->
-            <!--            ></eworkbench-user-details>-->
+            <eworkbench-user-details
+              *ngIf="getFilterSelectedUser.pk !== currentUser?.pk"
+              class="inline-block mr-2"
+              [user]="getFilterSelectedUser"
+              [active]="false"
+              [inverted]="true"
+              [avatarScale]="0.7"
+            ></eworkbench-user-details>
             <button
               type="button"
               class="btn ewb-button-small text-white"
@@ -335,15 +339,15 @@
     <!--      [contentType]="row.content_type"-->
     <!--      [favorited]="row.is_favourite"-->
     <!--    ></eworkbench-favorite-button>-->
-    <!--    <eworkbench-trash-button-->
-    <!--      *ngIf="!row.deleted"-->
-    <!--      class="inline-block"-->
-    <!--      [service]="labbooksService"-->
-    <!--      [id]="row.pk"-->
-    <!--      [tableView]="tableView"-->
-    <!--    ></eworkbench-trash-button>-->
+    <eworkbench-trash-button
+      *ngIf="!row.deleted && currentUser && currentUser.admin"
+      class="inline-block"
+      [service]="labbooksService"
+      [id]="row.pk"
+      [tableView]="tableView"
+    ></eworkbench-trash-button>
     <eworkbench-restore-button
-      *ngIf="row.deleted"
+      *ngIf="row.deleted && currentUser && currentUser.admin"
       class="inline-block"
       [service]="labbooksService"
       [id]="row.pk"

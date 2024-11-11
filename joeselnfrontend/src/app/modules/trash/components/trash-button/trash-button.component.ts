@@ -3,16 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ModalState } from '@app/enums/modal-state.enum';
-import type { TableViewComponent, TreeViewComponent } from '@joeseln/table';
-import type { ModalCallback } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs/operators';
-import { DeleteModalComponent } from '../modals/delete/delete.component';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
+import {ModalState} from '@app/enums/modal-state.enum';
+import type {TableViewComponent, TreeViewComponent} from '@joeseln/table';
+import type {ModalCallback} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {take} from 'rxjs/operators';
+import {DeleteModalComponent} from '../modals/delete/delete.component';
 
 @UntilDestroy()
 @Component({
@@ -46,7 +52,8 @@ export class TrashButtonComponent {
     private readonly modalService: DialogService,
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService
-  ) {}
+  ) {
+  }
 
   public delete(id: string): void {
     if (this.loading) {
@@ -76,21 +83,24 @@ export class TrashButtonComponent {
   }
 
   public onDelete(id: string): void {
-    // for now deleting here is not possible
-    return
 
-    // const skipTrashDialog = true
-    //
-    // if (skipTrashDialog) {
-    //   this.delete(id);
-    // } else {
-    //   this.modalRef = this.modalService.open(DeleteModalComponent, {
-    //     closeButton: false,
-    //     data: { id: this.id, service: this.service, userSetting: this.skipDialogKey },
-    //   });
-    //
-    //   this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
-    // }
+
+    const skipTrashDialog = true
+
+    if (skipTrashDialog) {
+      this.delete(id);
+    } else {
+      this.modalRef = this.modalService.open(DeleteModalComponent, {
+        closeButton: false,
+        data: {
+          id: this.id,
+          service: this.service,
+          userSetting: this.skipDialogKey
+        },
+      });
+
+      this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
+    }
   }
 
   public onModalClose(callback?: ModalCallback): void {
