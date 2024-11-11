@@ -163,7 +163,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     this.initDetails();
     this.initPrivileges();
 
-    if (this.element.child_object.created_by.username === 'admin') {
+    if (this.element.child_object.created_by.admin) {
       this.background_color = 'background-color: #fff4c2';
     }
 
