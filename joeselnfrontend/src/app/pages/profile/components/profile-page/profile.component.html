@@ -2,7 +2,6 @@
   <main>
 
 
-
     <div *ngIf="user">
       <h4>Welcome {{user.username}}</h4>
       <div>
@@ -27,46 +26,51 @@
         </ul>
       </div>
     </div>
-    <h4>Password Reset</h4>
-    <div *ngIf="user">
-      <div>Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and must be between eight and sixteen characters in length.</div>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor
-            *ngIf="!user.oidc_user">
-        <div class="mb-4">
-          <label for="password">
-            {{ t('changePassword.newPassword') }}
-            <eworkbench-form-asterisk
-              class="inline-block"></eworkbench-form-asterisk>
-          </label>
-          <input
-            type="password"
-            class="form-control ewb-input"
-            id="password"
-            formControlName="password"
-            name="password"
-            [placeholder]="t('changePassword.newPassword')"
-          />
+    <div *ngIf="user && !user.oidc_user">
+      <h4>Password Reset</h4>
+      <div *ngIf="user">
+        <div>Password must contain at least one lowercase letter, one uppercase
+          letter, one digit, one special character, and must be between eight
+          and sixteen characters in length.
         </div>
-        <div class="mb-4">
-          <label for="passwordConfirm">
-            {{ t('changePassword.confirmNewPassword') }}
-            <eworkbench-form-asterisk
-              class="inline-block"></eworkbench-form-asterisk>
-          </label>
-          <input
-            type="password"
-            class="form-control ewb-input"
-            id="passwordConfirm"
-            formControlName="passwordConfirm"
-            name="passwordConfirm"
-            [placeholder]="t('changePassword.confirmNewPassword')"
-          />
-        </div>
-        <button type="submit" class="btn ewb-button-big ewb-button-primary"
-                [disabled]="loading || form.invalid">
-          {{ t('changePassword.confirm') }}
-        </button>
-      </form>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor
+              *ngIf="!user.oidc_user">
+          <div class="mb-4">
+            <label for="password">
+              {{ t('changePassword.newPassword') }}
+              <eworkbench-form-asterisk
+                class="inline-block"></eworkbench-form-asterisk>
+            </label>
+            <input
+              type="password"
+              class="form-control ewb-input"
+              id="password"
+              formControlName="password"
+              name="password"
+              [placeholder]="t('changePassword.newPassword')"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="passwordConfirm">
+              {{ t('changePassword.confirmNewPassword') }}
+              <eworkbench-form-asterisk
+                class="inline-block"></eworkbench-form-asterisk>
+            </label>
+            <input
+              type="password"
+              class="form-control ewb-input"
+              id="passwordConfirm"
+              formControlName="passwordConfirm"
+              name="passwordConfirm"
+              [placeholder]="t('changePassword.confirmNewPassword')"
+            />
+          </div>
+          <button type="submit" class="btn ewb-button-big ewb-button-primary"
+                  [disabled]="loading || form.invalid">
+            {{ t('changePassword.confirm') }}
+          </button>
+        </form>
+      </div>
     </div>
   </main>
 </ng-container>
