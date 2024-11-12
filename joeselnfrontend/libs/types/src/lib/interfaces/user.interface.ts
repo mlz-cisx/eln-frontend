@@ -44,6 +44,7 @@ export interface User {
   groups: any | null;
   admin: boolean | null;
   admin_groups: any | null;
+  user_groups: any | null;
   oidc_user: boolean | null;
 }
 

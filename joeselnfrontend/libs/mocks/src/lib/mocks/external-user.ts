@@ -18,6 +18,7 @@ export const mockExternalUser: User = {
   admin: true,
   admin_groups: '',
   oidc_user: false,
+  user_groups: '',
   userprofile: {
     first_name: '',
     last_name: '',
