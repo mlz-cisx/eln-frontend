@@ -363,7 +363,7 @@
   "metadata.newModal.cancel": "Cancel",
   "metadata.newModal.create": "Create metadata field",
   "metadata.newModal.sendSuggestion": "Send suggestion",
-  "navbar.globalSearch.placeholder": "Search",
+  "navbar.globalSearch.placeholder": "Global Search",
   "navbar.globalSearch.restrictSearch": "Restrict search for types",
   "navbar.globalSearch.createdBy": "Created by",
   "navbar.menu.metadataSearch": "Metadata Search",

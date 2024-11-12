@@ -12,44 +12,45 @@
       </li>
     </ul>
   </div>
-  <!--  <eworkbench-header [title]="title">-->
-  <!--    <ng-container slot="search">-->
-  <!--      <div class="flex items-center">-->
-  <!--        <div class="search-input">-->
-  <!--          <div class="input-group search-input-group">-->
-  <!--            <input-->
-  <!--              type="text"-->
-  <!--              class="form-control ewb-input"-->
-  <!--              id="search-header"-->
-  <!--              name="search-header"-->
-  <!--              [formControl]="searchControl"-->
-  <!--              [placeholder]="t('labbooks.header.search.placeholder')"-->
-  <!--            />-->
-  <!--            <button type="button" class="btn btn-sm bg-transparent clear-input" *ngIf="!searchControl.value">-->
-  <!--              <joeseln-icon className="wb-search"></joeseln-icon>-->
-  <!--            </button>-->
-  <!--            <button-->
-  <!--              type="button"-->
-  <!--              class="btn btn-sm bg-transparent clear-input"-->
-  <!--              (click)="searchControl.patchValue(null)"-->
-  <!--              *ngIf="searchControl.value"-->
-  <!--            >-->
-  <!--              <joeseln-icon className="wb-remove"></joeseln-icon>-->
-  <!--            </button>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--&lt;!&ndash;        <button type="button" class="btn ewb-button-big" style="color: white" (click)="go_to_eln()">ELNExporter</button>&ndash;&gt;-->
-  <!--      </div>-->
-  <!--    </ng-container>-->
-  <div style="display: flex; justify-content: center">
-    <button class="btn ewb-button-big ewb-button-background" style=""
-            *ngIf="add_wb_button"
-            (click)="openNewModal()">
-      <joeseln-icon className="wb-plus-circle"></joeseln-icon>
-      {{ t('labbooks.labbook') }}
-    </button>
-  </div>
-  <!--  </eworkbench-header>-->
+<!--  <eworkbench-header [title]="title">-->
+    <ng-container slot="search">
+      <div class="flex items-center " style="display: flex; justify-content: center">
+        <div class="search-input">
+          <div class="input-group search-input-group">
+            <input
+              type="text"
+              class="form-control ewb-input"
+              id="search-header"
+              name="search-header"
+              [formControl]="searchControl"
+              [placeholder]="t('labbooks.header.search.placeholder')"
+            />
+            <button type="button" class="btn btn-sm bg-transparent clear-input"
+                    *ngIf="!searchControl.value">
+              <joeseln-icon className="wb-search"></joeseln-icon>
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm bg-transparent clear-input"
+              (click)="searchControl.patchValue(null)"
+              *ngIf="searchControl.value"
+            >
+              <joeseln-icon className="wb-remove"></joeseln-icon>
+            </button>
+          </div>
+        </div>
+        <!--        <button type="button" class="btn ewb-button-big" style="color: white" (click)="go_to_eln()">ELNExporter</button>-->
+      </div>
+    </ng-container>
+    <div style="display: flex; justify-content: center">
+      <button class="btn ewb-button-big ewb-button-background" style=""
+              *ngIf="add_wb_button"
+              (click)="openNewModal()">
+        <joeseln-icon className="wb-plus-circle"></joeseln-icon>
+        {{ t('labbooks.labbook') }}
+      </button>
+    </div>
+<!--  </eworkbench-header>-->
 </ng-container>
 
 <div [class.filter-sidebar]="!showSidebar" [class.with-sidebar]="showSidebar">
