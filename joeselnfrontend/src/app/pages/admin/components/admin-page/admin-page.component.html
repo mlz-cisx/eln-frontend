@@ -1,0 +1,25 @@
+<ng-container *transloco="let t">
+  <main>
+    <div style="height: 100px"></div>
+    <div *ngIf="currentUser && currentUser.admin">
+      <div>
+        <button (click)="go_to_osers()">
+          USERS
+        </button>
+      </div>
+      <div>
+        <button (click)="go_to_groups()">
+          GROUPS
+        </button>
+      </div>
+      <div>
+        <button (click)="go_to_admins()">
+          ADMINS
+        </button>
+      </div>
+    </div>
+    <div *ngIf="currentUser && !currentUser.admin">
+      <h3>Admin Rights Required</h3>
+    </div>
+  </main>
+</ng-container>

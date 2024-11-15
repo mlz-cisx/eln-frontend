@@ -2047,5 +2047,34 @@
   "pictures.columns.preview": "Preview",
   "pictures.columns.width": "Width",
   "comments.columns": "comments.columns",
-  "comments.state": "comments.state"
+  "comments.state": "comments.state",
+
+  "users.columns.username": "Username",
+  "users.columns.first_name": "First Name",
+  "users.columns.last_name": "Last Name",
+  "users.columns.email": "Email",
+  "users.columns.createdAt": "Created at",
+  "users.columns.lastModifiedAt": "Last modified at",
+  "users.new": "User",
+
+  "user.newModal.header": "New user",
+  "user.newModal.username.label": "Username",
+  "user.newModal.username.placeholder": "Username",
+  "user.newModal.first_name.label": "First Name",
+  "user.newModal.first_name.placeholder": "Username",
+  "user.newModal.last_name.label": "Last Name",
+  "user.newModal.last_name.placeholder": "Username",
+  "user.newModal.email.label": "Email",
+  "user.newModal.email.placeholder": "Email",
+  "user.newModal.password.label": "Password",
+  "user.newModal.password.placeholder": "Password",
+  "user.newModal.password_confirm.label": "Password Confirm",
+  "user.newModal.password_confirmed.placeholder": "Password Confirm",
+
+  "user.newModal.content.label": "Content",
+  "user.newModal.projects.label": "Projects",
+  "user.newModal.projects.placeholder": "Search & select projects",
+  "user.newModal.cancel": "Cancel",
+
+  "user.newModal.create": "Create User"
 }

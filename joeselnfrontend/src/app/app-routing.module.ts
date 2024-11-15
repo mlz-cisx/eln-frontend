@@ -32,6 +32,14 @@ const routes: Routes = [
     path: 'pictures',
     loadChildren: () => import('@app/pages/pictures/pictures-page.module').then(m => m.PicturesPageModule),
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('@app/pages/admin/admin-page.module').then(m => m.AdminPageModule),
+  },
+  {
+    path: 'admin/users',
+    loadChildren: () => import('@app/pages/admin/admin-page.module').then(m => m.AdminPageModule),
+  },
   {path: '401', redirectTo: '/'},
   {path: '404', redirectTo: '/'},
   {path: '**', redirectTo: '/'}

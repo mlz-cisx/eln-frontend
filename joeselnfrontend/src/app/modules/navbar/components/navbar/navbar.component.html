@@ -50,7 +50,15 @@
     </ng-container>
     <div class="line"></div>
     <ng-container>
-      <button type="button" class="btn ewb-button-regular"  id="logout_button" (click)="logout()">
+      <a
+        routerLink="/admin"
+      >
+        Admin</a>
+    </ng-container>
+    <div class="line"></div>
+    <ng-container>
+      <button type="button" class="btn ewb-button-regular" id="logout_button"
+              (click)="logout()">
         Logout
       </button>
     </ng-container>

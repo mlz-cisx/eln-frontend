@@ -1,3 +1,7 @@
+import {Privileges} from "./privileges.interface";
+import {Note} from "./note.interface";
+import {Metadata} from "./metadata.interface";
+
 export interface UserProfile {
   academic_title: string;
   additional_information: string;
@@ -40,6 +44,8 @@ export interface User {
   preferred_username: string | null;
   given_name: string | null;
   family_name: string | null;
+    first_name: string | null;
+  last_name: string | null;
   realm_access: any | null;
   groups: any | null;
   admin: boolean | null;
@@ -59,3 +65,16 @@ export interface ExternalUserPayload {
   message: string;
 }
 
+export interface User_with_privileges {
+  user: User,
+  privileges: Privileges
+}
+
+export interface UserPayload {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  password_confirmed: string;
+}

@@ -13,6 +13,8 @@ export const mockExternalUser: User = {
   preferred_username: 'user',
   given_name: 'user',
   family_name: 'user',
+  first_name: 'user',
+  last_name: 'user',
   realm_access: '',
   groups: '',
   admin: true,
