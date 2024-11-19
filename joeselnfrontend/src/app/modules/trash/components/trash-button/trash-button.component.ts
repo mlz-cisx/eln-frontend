@@ -28,6 +28,10 @@ import {DeleteModalComponent} from '../modals/delete/delete.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrashButtonComponent {
+
+  @Input()
+  public customId?: string;
+
   @Input()
   public id!: string;
 
@@ -60,9 +64,8 @@ export class TrashButtonComponent {
       return;
     }
     this.loading = true;
-
     this.service
-      .delete(id)
+      .delete(id, this.customId)
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {

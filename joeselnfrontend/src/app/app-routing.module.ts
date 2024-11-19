@@ -40,6 +40,16 @@ const routes: Routes = [
     path: 'admin/users',
     loadChildren: () => import('@app/pages/admin/admin-page.module').then(m => m.AdminPageModule),
   },
+
+  {
+    path: 'admin/group/groupadmins',
+    loadChildren: () => import('@app/pages/admin-group-groupadmins/admin-group-groupadmins.module').then(m => m.AdminGroupGroupadminsModule),
+  },
+  {
+    path: 'admin/group/groupusers',
+    loadChildren: () => import('@app/pages/admin-group-users/admin-group-users.module').then(m => m.AdminGroupUsersModule),
+  },
+
   {path: '401', redirectTo: '/'},
   {path: '404', redirectTo: '/'},
   {path: '**', redirectTo: '/'}

@@ -17,6 +17,10 @@ import { ToastrService } from 'ngx-toastr';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RestoreButtonComponent {
+
+  @Input()
+  public customId?: string;
+
   @Input()
   public id!: string;
 
@@ -42,9 +46,8 @@ export class RestoreButtonComponent {
       return;
     }
     this.loading = true;
-
     this.service
-      .restore(id)
+      .restore(id, this.customId)
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {

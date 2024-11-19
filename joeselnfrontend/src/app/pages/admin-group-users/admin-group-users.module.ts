@@ -41,33 +41,20 @@ import {ErrorTailorModule} from '@ngneat/error-tailor';
 import {TranslocoService} from '@ngneat/transloco';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
-import {AdminPageComponent} from './components/admin-page/admin-page.component';
 import {
-  UsersPageComponent
-} from "@app/pages/admin/components/admin-users/users-page.component";
+  GroupUsersComponent
+} from "@app/pages/admin-group-users/components/admin-group-users/group-users.component";
 import {
-  UserPageComponent
-} from "@app/pages/admin/components/admin-user/user-page.component";
-import {
-  NewUserModalComponent
-} from "@app/pages/admin/components/user_modals/new/new.component";
-import {
-  AdminPageRoutingModule
-} from "@app/pages/admin/admin-page-routing.module";
-import {
-  ElnadminsPageComponent
-} from "@app/pages/admin/components/admin-admins/elnadmins-page.component";
-import {
-  GroupsPageComponent
-} from "@app/pages/admin/components/admin-groups/groups-page.component";
-
+  AdminGroupUsersRoutingModule
+} from "@app/pages/admin-group-users/admin-group-users-routing.module";
 
 
 @NgModule({
-  declarations: [ AdminPageComponent, UsersPageComponent, ElnadminsPageComponent, GroupsPageComponent, UserPageComponent, NewUserModalComponent],
+  declarations: [
+  GroupUsersComponent],
   imports: [
     CommonModule,
-    AdminPageRoutingModule,
+    AdminGroupUsersRoutingModule,
     TranslocoRootModule,
     // HeaderModule,
     TableModule,
@@ -108,4 +95,4 @@ import {
     TooltipModule.forRoot(),
   ],
 })
-export class AdminPageModule {}
+export class AdminGroupUsersModule {}

@@ -42,7 +42,7 @@
       {{ t('users.new') }}
     </button>
   </ng-container>
-  <!--  </eworkbench-header>-->
+  <div><h3 style="text-align: center">{{title}} Groupadmins</h3></div>
 </ng-container>
 
 <div class="filter-sidebar">
@@ -145,8 +145,9 @@
     <eworkbench-table-view
       #tableView
       [columns]="listColumns"
-      [service]="admin_users_service"
+      [service]="admin_groupadmins_service"
       [params]="params"
+      [customId]="id"
       [sortBy]="sorting?.key"
       [sort]="sorting?.direction"
       (orderChanged)="onColumnsChanged($event)"
@@ -325,17 +326,19 @@
     <!--      [favorited]="row.is_favourite"-->
     <!--    ></eworkbench-favorite-button>-->
     <eworkbench-trash-button
-      *ngIf="!row.deleted"
+      *ngIf="row.in_group"
       class="inline-block"
-      [service]="admin_users_service"
+      [service]="admin_groupadmins_service"
       [id]="row.id"
+      [customId]="id"
       [tableView]="tableView"
     ></eworkbench-trash-button>
     <eworkbench-restore-button
-      *ngIf="row.deleted"
+      *ngIf="!row.in_group"
       class="inline-block"
-      [service]="admin_users_service"
+      [service]="admin_groupadmins_service"
       [id]="row.id"
+      [customId]="id"
       [tableView]="tableView"
       (restored)="onRestore($event)"
     ></eworkbench-restore-button>

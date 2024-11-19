@@ -48,11 +48,12 @@ export class AdminPageComponent implements OnInit {
   }
 
   public go_to_groups() {
-    console.log('groups')
+        this._router.navigate(['/admin/groups'])
   }
 
   public go_to_admins() {
     console.log('admins')
+    this._router.navigate(['/admin/admins'])
   }
 
 }

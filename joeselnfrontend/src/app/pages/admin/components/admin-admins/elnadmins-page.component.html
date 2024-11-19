@@ -36,12 +36,14 @@
     </div>
   </ng-container>
   <ng-container slot="elements">
-    <button class="btn ewb-button-big ewb-button-background"
-            (click)="openNewModal()">
-      <joeseln-icon className="wb-plus-circle"></joeseln-icon>
-      {{ t('users.new') }}
-    </button>
+    <!--    <button class="btn ewb-button-big ewb-button-background"-->
+    <!--            (click)="openNewModal()">-->
+    <!--      <joeseln-icon className="wb-plus-circle"></joeseln-icon>-->
+    <!--      {{ t('users.new') }}-->
+    <!--    </button>-->
+
   </ng-container>
+  <div><h3 style="text-align: center">Manage Admins</h3></div>
   <!--  </eworkbench-header>-->
 </ng-container>
 
@@ -145,7 +147,7 @@
     <eworkbench-table-view
       #tableView
       [columns]="listColumns"
-      [service]="admin_users_service"
+      [service]="admin_admins_service"
       [params]="params"
       [sortBy]="sorting?.key"
       [sort]="sorting?.direction"
@@ -325,16 +327,16 @@
     <!--      [favorited]="row.is_favourite"-->
     <!--    ></eworkbench-favorite-button>-->
     <eworkbench-trash-button
-      *ngIf="!row.deleted"
+      *ngIf="row.admin"
       class="inline-block"
-      [service]="admin_users_service"
+      [service]="admin_admins_service"
       [id]="row.id"
       [tableView]="tableView"
     ></eworkbench-trash-button>
     <eworkbench-restore-button
-      *ngIf="row.deleted"
+      *ngIf="!row.admin"
       class="inline-block"
-      [service]="admin_users_service"
+      [service]="admin_admins_service"
       [id]="row.id"
       [tableView]="tableView"
       (restored)="onRestore($event)"

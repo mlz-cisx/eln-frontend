@@ -6,6 +6,9 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {AdminPageComponent} from './components/admin-page/admin-page.component';
+import {
+  ElnadminsPageComponent
+} from './components/admin-admins/elnadmins-page.component';
 import {AuthGuardService} from "@app/services";
 import {
   UsersPageComponent
@@ -13,6 +16,10 @@ import {
 import {
   UserPageComponent
 } from './components/admin-user/user-page.component';
+import {
+  GroupsPageComponent
+} from "@app/pages/admin/components/admin-groups/groups-page.component";
+
 
 const routes: Routes = [
   {
@@ -20,9 +27,19 @@ const routes: Routes = [
     component: AdminPageComponent,
     canActivate: [AuthGuardService],
   },
-    {
+  {
     path: 'users',
     component: UsersPageComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'admins',
+    component: ElnadminsPageComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'groups',
+    component: GroupsPageComponent,
     canActivate: [AuthGuardService],
   },
   {
