@@ -2048,7 +2048,6 @@
   "pictures.columns.width": "Width",
   "comments.columns": "comments.columns",
   "comments.state": "comments.state",
-
   "users.columns.username": "Username",
   "users.columns.first_name": "First Name",
   "users.columns.last_name": "Last Name",
@@ -2056,7 +2055,6 @@
   "users.columns.createdAt": "Created at",
   "users.columns.lastModifiedAt": "Last modified at",
   "users.new": "User",
-
   "user.newModal.header": "New user",
   "user.newModal.username.label": "Username",
   "user.newModal.username.placeholder": "Username",
@@ -2070,11 +2068,16 @@
   "user.newModal.password.placeholder": "Password",
   "user.newModal.password_confirm.label": "Password Confirm",
   "user.newModal.password_confirmed.placeholder": "Password Confirm",
-
   "user.newModal.content.label": "Content",
   "user.newModal.projects.label": "Projects",
   "user.newModal.projects.placeholder": "Search & select projects",
   "user.newModal.cancel": "Cancel",
+  "user.newModal.create": "Create User",
 
-  "user.newModal.create": "Create User"
+  "groups.new": "Group",
+  "group.newModal.cancel": "Cancel",
+  "group.newModal.create": "Create Group",
+  "group.newModal.header": "New Group",
+  "group.newModal.groupname.label": "Groupname",
+  "group.newModal.groupname.placeholder": "Groupname"
 }

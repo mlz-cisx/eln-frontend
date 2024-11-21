@@ -59,3 +59,4 @@ export * from './lib/interfaces/version.interface';
 export * from './lib/interfaces/versions-service.interface';
 export * from './lib/interfaces/websocket-element.interface';
 export * from './lib/interfaces/testservice.interface';
+export * from './lib/interfaces/group.interface';

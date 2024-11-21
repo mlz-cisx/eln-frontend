@@ -36,7 +36,7 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {keyBy, merge, values} from 'lodash';
 import {of, Subject} from 'rxjs';
 import {debounceTime, skip, switchMap, take} from 'rxjs/operators';
-import {NewUserModalComponent} from '../user_modals/new/new.component';
+import {NewGroupModalComponent} from '../group_modals/new/new.component';
 import {
   AdminGroupsService
 } from "@app/services/admin_users/admin-groups.service";
@@ -676,7 +676,7 @@ export class GroupsPageComponent implements OnInit {
   public openNewModal(): void {
     const initialState = this.project ? {projects: [this.project]} : null;
 
-    this.modalRef = this.modalService.open(NewUserModalComponent, {
+    this.modalRef = this.modalService.open(NewGroupModalComponent, {
       closeButton: false,
       data: {service: this.admin_groups_service, initialState: initialState},
     });

@@ -7,7 +7,7 @@ import type {
   DjangoAPI,
   ExportLink,
   ExportService,
-  FinalizeVersion,
+  FinalizeVersion, Group, GroupPayload,
   LockService,
   Note, Note_with_privileges,
   NotePayload,
@@ -88,8 +88,8 @@ export class AdminGroupsService implements TableViewService {
     return this.httpClient.patch<User>(`${this.apiUrl}${id}/restore/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
-  public add(user: UserPayload): Observable<User> {
-    console.log(user)
-    return this.httpClient.post<User>(this.apiUrl, user).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+  public add(group: GroupPayload): Observable<Group> {
+    console.log(group)
+    return this.httpClient.post<Group>(this.apiUrl, group).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
   }
 }

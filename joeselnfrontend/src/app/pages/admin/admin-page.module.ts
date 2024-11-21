@@ -60,11 +60,14 @@ import {
 import {
   GroupsPageComponent
 } from "@app/pages/admin/components/admin-groups/groups-page.component";
+import {
+  NewGroupModalComponent
+} from "@app/pages/admin/components/group_modals/new/new.component";
 
 
 
 @NgModule({
-  declarations: [ AdminPageComponent, UsersPageComponent, ElnadminsPageComponent, GroupsPageComponent, UserPageComponent, NewUserModalComponent],
+  declarations: [ AdminPageComponent, UsersPageComponent, ElnadminsPageComponent, GroupsPageComponent, UserPageComponent, NewUserModalComponent, NewGroupModalComponent],
   imports: [
     CommonModule,
     AdminPageRoutingModule,
