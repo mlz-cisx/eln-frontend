@@ -44,7 +44,7 @@ export interface User {
   preferred_username: string | null;
   given_name: string | null;
   family_name: string | null;
-    first_name: string | null;
+  first_name: string | null;
   last_name: string | null;
   realm_access: any | null;
   groups: any | null;
@@ -77,4 +77,11 @@ export interface UserPayload {
   email: string;
   password: string;
   password_confirmed: string;
+}
+
+export interface UserPatchPayload {
+  username: string;
+  first_name: string;
+  last_name: string;
+  user_email: string;
 }

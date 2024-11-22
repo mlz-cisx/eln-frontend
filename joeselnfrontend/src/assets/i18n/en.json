@@ -2074,6 +2074,24 @@
   "user.newModal.cancel": "Cancel",
   "user.newModal.create": "Create User",
 
+  "user.details.username.label": "Username",
+  "user.details.username.placeholder": "Username",
+
+  "user.details.first_name.label": "First Name",
+  "user.details.first_name.placeholder": "First Name",
+
+  "user.details.last_name.label": "Last Name",
+  "user.details.last_name.placeholder": "Last  Name",
+
+  "user.details.email.label": "Email",
+  "user.details.email.placeholder": "Email",
+  "user.details.toastr.success": "User updated",
+
+
+  "user.details.content.label": "Content",
+  "user.details.projects.label": "Projects",
+  "user.details.projects.placeholder": "Search & select projects",
+  "user.details.metadata.label": "Metadata",
   "groups.new": "Group",
   "group.newModal.cancel": "Cancel",
   "group.newModal.create": "Create Group",

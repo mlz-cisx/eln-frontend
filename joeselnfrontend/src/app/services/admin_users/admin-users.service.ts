@@ -19,7 +19,7 @@ import type {
   RecentChangesService,
   Relation,
   RelationPayload,
-  RelationPutPayload, User, User_with_privileges, UserPayload,
+  RelationPutPayload, User, User_with_privileges, UserPatchPayload, UserPayload,
   Version,
   VersionsService,
 } from '@joeseln/types';
@@ -80,7 +80,10 @@ export class AdminUsersService implements TableViewService {
   }
 
   public add(user: UserPayload): Observable<User> {
-    console.log(user)
     return this.httpClient.post<User>(this.apiUrl, user).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+  }
+
+  public patch(id: string, user: UserPatchPayload, params = new HttpParams()): Observable<User> {
+    return this.httpClient.patch<User>(`${this.apiUrl}${id}/`, user, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 }

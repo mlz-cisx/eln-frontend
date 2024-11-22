@@ -14,7 +14,9 @@ import {NgControl} from '@angular/forms';
 import {
   LabBookDrawBoardNoteComponent
 } from "@app/modules/labbook/components/draw-board/note/note.component";
-import {LabBookDrawBoardFileComponent} from "@app/modules/labbook/components/draw-board/file/file.component";
+import {
+  LabBookDrawBoardFileComponent
+} from "@app/modules/labbook/components/draw-board/file/file.component";
 import {NotesService} from "@app/services";
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {cloneDeep, isEqual} from 'lodash';
@@ -74,7 +76,23 @@ export class FormInputComponent implements AfterViewInit {
     })
 
 
-    if (this.ngControl?.name === 'labbook_title' ) {
+    if (this.ngControl?.name === 'labbook_title') {
+      return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
+    }
+
+    if (this.ngControl?.name === 'username') {
+      return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
+    }
+
+    if (this.ngControl?.name === 'first_name') {
+      return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
+    }
+
+    if (this.ngControl?.name === 'last_name') {
+      return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
+    }
+
+    if (this.ngControl?.name === 'user_email') {
       return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
     }
 

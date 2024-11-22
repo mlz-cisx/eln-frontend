@@ -17,8 +17,12 @@ import {Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {CommentsComponent} from '@app/modules/comment/components/comments/comments.component';
-import {NewCommentModalComponent} from '@app/modules/comment/components/modals/new/new.component';
+import {
+  CommentsComponent
+} from '@app/modules/comment/components/comments/comments.component';
+import {
+  NewCommentModalComponent
+} from '@app/modules/comment/components/modals/new/new.component';
 // import {PendingChangesModalComponent} from '@app/modules/shared/modals/pending-changes/pending-changes.component';
 import {
   AdminUsersService,
@@ -29,22 +33,40 @@ import {
   // ProjectsService,
   WebSocketService
 } from '@app/services';
-import type {Lock, Metadata, ModalCallback, Note, NotePayload, Privileges, Project, User} from '@joeseln/types';
+import type {
+  Lock,
+  Metadata,
+  ModalCallback,
+  Note,
+  NotePayload,
+  Privileges,
+  Project,
+  User, UserPatchPayload, UserPayload
+} from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {from, Observable, of, Subject} from 'rxjs';
-import {catchError, debounceTime, map, mergeMap, skip, switchMap, take} from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  skip,
+  switchMap,
+  take
+} from 'rxjs/operators';
 import {NewUserModalComponent} from '../user_modals/new/new.component';
 import {mockUser} from "@joeseln/mocks";
 
 
-interface FormNote {
-  subject: FormControl<string | null>;
-  content: string | null;
-  projects: FormControl<string[]>;
+interface FormUser {
+  username: FormControl<string | null>;
+  first_name: FormControl<string | null>;
+  last_name: FormControl<string | null>;
+  user_email: FormControl<string | null>;
 }
 
 @UntilDestroy()
@@ -98,10 +120,11 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public projectInput$ = new Subject<string>();
 
-  public form = this.fb.group<FormNote>({
-    subject: this.fb.control(null, Validators.required),
-    content: null,
-    projects: this.fb.control([]),
+  public form = this.fb.group<FormUser>({
+    username: this.fb.control(null, Validators.required),
+    first_name: this.fb.control(null, Validators.required),
+    last_name: this.fb.control(null, Validators.required),
+    user_email: this.fb.control(null, Validators.required),
   });
 
   public constructor(
@@ -120,7 +143,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
     private readonly modalService: DialogService,
     private readonly labbooksService: LabbooksService,
     private user_service: UserService,
-        public readonly admin_users_service : AdminUsersService
+    public readonly admin_users_service: AdminUsersService
   ) {
   }
 
@@ -140,12 +163,13 @@ export class UserPageComponent implements OnInit, OnDestroy {
     return {ownUser: false, user: null};
   }
 
-  private get note(): NotePayload {
+  private get user(): UserPatchPayload {
     return {
-      subject: this.f.subject.value!,
-      content: this.f.content.value ?? '',
-      projects: this.f.projects.value,
-      metadata: this.metadata!,
+      username: this.f.username.value!,
+      first_name: this.f.first_name.value!,
+      last_name: this.f.last_name.value!,
+      user_email: this.f.user_email.value!
+
     };
   }
 
@@ -185,21 +209,21 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public initFormChanges(): void {
-    // this.form.valueChanges
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     skip(1),
-    //     debounceTime(500),
-    //     switchMap(() => {
-    //       this.cdr.markForCheck();
-    //       if (!this.lock?.locked) {
-    //         return this.notesService.lock(this.id);
-    //       }
-    //
-    //       return of([]);
-    //     })
-    //   )
-    //   .subscribe();
+    this.form.valueChanges
+      .pipe(
+        untilDestroyed(this),
+        skip(1),
+        debounceTime(500),
+        switchMap(() => {
+          this.cdr.markForCheck();
+          // if (!this.lock?.locked) {
+          //   return this.notesService.lock(this.id);
+          // }
+
+          return of([]);
+        })
+      )
+      .subscribe();
   }
 
   public initSidebar(): void {
@@ -277,9 +301,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
           this.form.patchValue(
             {
-              subject: user.username,
-              content: user.preferred_username,
-              projects: [],
+              username: user.username,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              user_email: user.email
             },
             {emitEvent: false}
           );
@@ -355,45 +380,45 @@ export class UserPageComponent implements OnInit, OnDestroy {
     }
     this.loading = true;
 
-    // this.admin_users_service
-    //   .patch(this.id, this.note)
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     note => {
-    //       if (this.lock?.locked && this.lockUser.ownUser) {
-    //         this.notesService.unlock(this.id);
-    //       }
-    //
-    //       this.detailsTitle = note.subject;
-    //       // void this.pageTitleService.set(note.display);
-    //
-    //       this.initialState = {...note};
-    //       this.form.markAsPristine();
-    //       this.refreshChanges.next(true);
-    //       this.refreshVersions.next(true);
-    //       this.refreshMetadata.next(true);
-    //       this.refreshLinkList.next(true);
-    //       this.refreshResetValue.next(true);
-    //
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //       this.translocoService
-    //         .selectTranslate('note.details.toastr.success')
-    //         .pipe(untilDestroyed(this))
-    //         .subscribe(success => {
-    //           this.toastrService.success(success);
-    //         });
-    //     },
-    //     () => {
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //     }
-    //   );
+    this.admin_users_service
+      .patch(this.id, this.user)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        user => {
+          // if (this.lock?.locked && this.lockUser.ownUser) {
+          //   this.notesService.unlock(this.id);
+          // }
+
+          this.detailsTitle = user.username;
+          // void this.pageTitleService.set(note.display);
+
+          this.initialState = {...user};
+          this.form.markAsPristine();
+          this.refreshChanges.next(true);
+          this.refreshVersions.next(true);
+          this.refreshMetadata.next(true);
+          this.refreshLinkList.next(true);
+          this.refreshResetValue.next(true);
+
+          this.loading = false;
+          this.cdr.markForCheck();
+          this.translocoService
+            .selectTranslate('user.details.toastr.success')
+            .pipe(untilDestroyed(this))
+            .subscribe(success => {
+              this.toastrService.success(success);
+            });
+        },
+        () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      );
   }
 
   public pendingChanges(): Observable<boolean> {
 
-    // if (this.form.dirty) {
+    if (this.form.dirty) {
     //   this.modalRef = this.modalService.open(PendingChangesModalComponent, {
     //     closeButton: false,
     //   });
@@ -403,7 +428,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
     //     take(1),
     //     map(val => Boolean(val))
     //   );
-    // }
+    //
+ }
 
     return of(true);
   }
@@ -442,34 +468,34 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.metadata = metadata;
   }
 
-  public go_to_note(): void {
-    this.labbooksService
-      .getList()
-      .pipe(
-        untilDestroyed(this),
-      ).subscribe(
-      labbooks => {
-        labbooks.data.forEach(
-          lb => {
-            this.labbooksService
-              .getElements(lb.pk)
-              .pipe(untilDestroyed(this))
-              .subscribe(labBookElements => {
-                labBookElements.map(element => {
-                  if (element.child_object.pk === this.id) {
-                    localStorage.setItem('pageVerticalposition', String((element.position_y) * 36))
-                    void this.router.navigate([`/labbooks/${lb.pk}`])
-                    //
-                  }
-                })
-              });
-          }
-        )
-      }
-    )
-
-
-  }
+  // public go_to_note(): void {
+  //   this.labbooksService
+  //     .getList()
+  //     .pipe(
+  //       untilDestroyed(this),
+  //     ).subscribe(
+  //     labbooks => {
+  //       labbooks.data.forEach(
+  //         lb => {
+  //           this.labbooksService
+  //             .getElements(lb.pk)
+  //             .pipe(untilDestroyed(this))
+  //             .subscribe(labBookElements => {
+  //               labBookElements.map(element => {
+  //                 if (element.child_object.pk === this.id) {
+  //                   localStorage.setItem('pageVerticalposition', String((element.position_y) * 36))
+  //                   void this.router.navigate([`/labbooks/${lb.pk}`])
+  //                   //
+  //                 }
+  //               })
+  //             });
+  //         }
+  //       )
+  //     }
+  //   )
+  //
+  //
+  // }
 
 
 }

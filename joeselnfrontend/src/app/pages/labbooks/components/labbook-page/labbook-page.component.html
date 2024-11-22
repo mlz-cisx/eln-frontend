@@ -199,10 +199,10 @@
                 </ng-container>
                 <ng-container slot="body">
                   <div class="mb-4">
-                    <div  [id]="preloaded_id"
-                      class="description-container"
-                      *ngIf="initialState?.description; else noDescription"
-                      [innerHTML]="initialState?.description"
+                    <div [id]="preloaded_id"
+                         class="description-container"
+                         *ngIf="initialState?.description; else noDescription"
+                         [innerHTML]="initialState?.description"
                     ></div>
                     <ng-template #noDescription>
                       <span
@@ -252,12 +252,12 @@
               <eworkbench-details-collapse-element
                 [labelText]="t('labBook.details.element.recentChanges')">
                 <ng-container slot="body">
-                                    <eworkbench-recent-changes
-                                      id="recent-changes"
-                                      [service]="labBooksService"
-                                      [changesId]="id"
-                                      [refresh]="refreshChanges"
-                                    ></eworkbench-recent-changes>
+                  <eworkbench-recent-changes
+                    id="recent-changes"
+                    [service]="labBooksService"
+                    [changesId]="id"
+                    [refresh]="refreshChanges"
+                  ></eworkbench-recent-changes>
                 </ng-container>
               </eworkbench-details-collapse-element>
 
@@ -278,27 +278,27 @@
                 </ng-container>
               </eworkbench-details-collapse-element>
 
-<!--              <eworkbench-details-collapse-element-->
-<!--                [labelText]="t('labBook.details.element.comments')">-->
-<!--                <ng-container slot="actions">-->
-<!--                  <button-->
-<!--                    type="button"-->
-<!--                    class="btn ewb-button-regular ewb-button-outline"-->
-<!--                    (click)="onOpenNewCommentModal()"-->
-<!--                    [disabled]="loading"-->
-<!--                  >-->
-<!--                    {{ t('labBook.details.comments.newComment') }}-->
-<!--                  </button>-->
-<!--                </ng-container>-->
-<!--                <ng-container slot="body">-->
-<!--                  <eworkbench-comments-->
-<!--                    #comments-->
-<!--                    [service]="labBooksService"-->
-<!--                    [id]="id"-->
-<!--                    [contentType]="initialState?.content_type ?? 42"-->
-<!--                  ></eworkbench-comments>-->
-<!--                </ng-container>-->
-<!--              </eworkbench-details-collapse-element>-->
+              <!--              <eworkbench-details-collapse-element-->
+              <!--                [labelText]="t('labBook.details.element.comments')">-->
+              <!--                <ng-container slot="actions">-->
+              <!--                  <button-->
+              <!--                    type="button"-->
+              <!--                    class="btn ewb-button-regular ewb-button-outline"-->
+              <!--                    (click)="onOpenNewCommentModal()"-->
+              <!--                    [disabled]="loading"-->
+              <!--                  >-->
+              <!--                    {{ t('labBook.details.comments.newComment') }}-->
+              <!--                  </button>-->
+              <!--                </ng-container>-->
+              <!--                <ng-container slot="body">-->
+              <!--                  <eworkbench-comments-->
+              <!--                    #comments-->
+              <!--                    [service]="labBooksService"-->
+              <!--                    [id]="id"-->
+              <!--                    [contentType]="initialState?.content_type ?? 42"-->
+              <!--                  ></eworkbench-comments>-->
+              <!--                </ng-container>-->
+              <!--              </eworkbench-details-collapse-element>-->
             </div>
           </form>
         </eworkbench-overview-collapse-element>
