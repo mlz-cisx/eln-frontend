@@ -80,8 +80,8 @@ export class AdminGroupsService implements TableViewService {
     );
   }
 
-  public delete(id: string, params = new HttpParams()): Observable<User> {
-    return this.httpClient.patch<User>(`${this.apiUrl}${id}/soft_delete/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+  public delete(id: string, params = new HttpParams()): Observable<any> {
+    return this.httpClient.patch<any>(`${this.apiUrl}${id}/soft_delete/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
   public restore(id: string, params = new HttpParams()): Observable<User> {
