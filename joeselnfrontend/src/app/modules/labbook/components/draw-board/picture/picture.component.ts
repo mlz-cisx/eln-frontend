@@ -89,13 +89,15 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   public initialState?: Picture;
 
+  public title_editable: Boolean = false
+
   public privileges: Privileges = {
-    fullAccess: true,
-    view: true,
-    edit: true,
-    delete: true,
-    trash: true,
-    restore: true,
+    fullAccess: false,
+    view: false,
+    edit: false,
+    delete: false,
+    trash: false,
+    restore: false,
   };
 
   public lock: Lock | null = null;
@@ -197,6 +199,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.initialState = {...this.element.child_object};
     this.title_id = `${this.initialState!.pk}_title_id`;
+    console.log(this.element.child_object.created_by.admin)
   }
 
   public initPrivileges(): void {
@@ -213,7 +216,12 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         if (!this.privileges.edit) {
           this.form.disable({emitEvent: false});
         }
-        // TODO think about this
+        if (this.element.child_object.created_by.admin && this.privileges.restore) {
+          this.title_editable = true
+        }
+        if (!this.element.child_object.created_by.admin && this.privileges.edit) {
+          this.title_editable = true
+        }
         this.cdr.markForCheck();
       });
 

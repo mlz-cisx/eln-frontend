@@ -23,7 +23,7 @@
                   name="title"
                   [placeholder]="t('labBook.drawBoardPicture.details.title.placeholder')"
                   slot="input"
-                  readonly
+                  [readOnly]= !this.title_editable
                 />
               </eworkbench-form-input>
             </div>
