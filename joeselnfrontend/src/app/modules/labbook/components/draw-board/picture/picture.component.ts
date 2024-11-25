@@ -53,7 +53,7 @@ interface ElementRemoval {
 }
 
 interface FormPicture {
-  title: FormControl<string | null>;
+  pic_title: FormControl<string | null>;
 }
 
 @UntilDestroy()
@@ -115,7 +115,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   public refreshResetValue = new EventEmitter<boolean>();
 
   public form = this.fb.group<FormPicture>({
-    title: this.fb.control(null, Validators.required),
+    pic_title: this.fb.control(null, Validators.required),
   });
 
   public constructor(
@@ -152,7 +152,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   private get picture(): Pick<PicturePayload, 'title'> {
     return {
-      title: this.f.title.value!,
+      title: this.f.pic_title.value!,
     };
   }
 
@@ -192,7 +192,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   public initDetails(): void {
     this.form.patchValue(
       {
-        title: this.element.child_object.title,
+        pic_title: this.element.child_object.title,
       },
       {emitEvent: false}
     );
