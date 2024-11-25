@@ -9,7 +9,7 @@
         Mail: &nbsp; {{ user.email }}  <br>
         Admin: &nbsp; {{ user.admin}}
       </div>
-      <div style="margin-top: 1%">
+      <div style="margin-top: 1%" *ngIf="!user.admin">
         Your groups:
         <ul *ngIf="user.groups">
           <li *ngFor="let group of user.groups">
@@ -17,7 +17,7 @@
           </li>
         </ul>
       </div>
-      <div style="margin-top: 1%">
+      <div style="margin-top: 1%" *ngIf="!user.admin">
         Your groups as groupadmin:
         <ul *ngIf="user.admin_groups">
           <li *ngFor="let group of user.admin_groups">

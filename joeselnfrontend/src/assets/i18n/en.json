@@ -2087,6 +2087,9 @@
   "user.details.email.placeholder": "Email",
   "user.details.toastr.success": "User updated",
 
+  "user.details.password_reset.label": "Reset Passwort",
+  "user.details.password_reset.placeholder": "New Password",
+
 
   "user.details.content.label": "Content",
   "user.details.projects.label": "Projects",

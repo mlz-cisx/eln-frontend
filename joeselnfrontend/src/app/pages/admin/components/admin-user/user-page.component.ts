@@ -38,7 +38,7 @@ import type {
   Metadata,
   ModalCallback,
   Note,
-  NotePayload,
+  NotePayload, PasswordPatchPayload,
   Privileges,
   Project,
   User, UserPatchPayload, UserPayload
@@ -67,6 +67,10 @@ interface FormUser {
   first_name: FormControl<string | null>;
   last_name: FormControl<string | null>;
   user_email: FormControl<string | null>;
+}
+
+interface FormPassword {
+  password_patch: FormControl<string | null>;
 }
 
 @UntilDestroy()
@@ -127,6 +131,11 @@ export class UserPageComponent implements OnInit, OnDestroy {
     user_email: this.fb.control(null, Validators.required),
   });
 
+
+  public passwword_form = this.fb.group<FormPassword>({
+    password_patch: this.fb.control(null, [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s])\\S{8,16}')]),
+  });
+
   public constructor(
     public readonly notesService: NotesService,
     private readonly fb: FormBuilder,
@@ -151,6 +160,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
+  public get pw_f() {
+    return this.passwword_form.controls;
+  }
+
   public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
     if (this.lock) {
       if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
@@ -170,6 +183,12 @@ export class UserPageComponent implements OnInit, OnDestroy {
       last_name: this.f.last_name.value!,
       user_email: this.f.user_email.value!
 
+    };
+  }
+
+  private get password(): PasswordPatchPayload {
+    return {
+      password_patch: this.pw_f.password_patch.value!
     };
   }
 
@@ -416,20 +435,62 @@ export class UserPageComponent implements OnInit, OnDestroy {
       );
   }
 
+  public password_reset(): void {
+    if (this.loading) {
+      return;
+    }
+    this.loading = true;
+
+    this.admin_users_service
+      .patch_password(this.id, this.password)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        user => {
+          // if (this.lock?.locked && this.lockUser.ownUser) {
+          //   this.notesService.unlock(this.id);
+          // }
+
+          this.detailsTitle = user.username;
+          // void this.pageTitleService.set(note.display);
+
+          this.initialState = {...user};
+          this.form.markAsPristine();
+          this.refreshChanges.next(true);
+          this.refreshVersions.next(true);
+          this.refreshMetadata.next(true);
+          this.refreshLinkList.next(true);
+          this.refreshResetValue.next(true);
+
+          this.loading = false;
+          this.cdr.markForCheck();
+          this.translocoService
+            .selectTranslate('user.details.toastr.success')
+            .pipe(untilDestroyed(this))
+            .subscribe(success => {
+              this.toastrService.success(success);
+            });
+        },
+        () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      );
+  }
+
   public pendingChanges(): Observable<boolean> {
 
     if (this.form.dirty) {
-    //   this.modalRef = this.modalService.open(PendingChangesModalComponent, {
-    //     closeButton: false,
-    //   });
-    //
-    //   return this.modalRef.afterClosed$.pipe(
-    //     untilDestroyed(this),
-    //     take(1),
-    //     map(val => Boolean(val))
-    //   );
-    //
- }
+      //   this.modalRef = this.modalService.open(PendingChangesModalComponent, {
+      //     closeButton: false,
+      //   });
+      //
+      //   return this.modalRef.afterClosed$.pipe(
+      //     untilDestroyed(this),
+      //     take(1),
+      //     map(val => Boolean(val))
+      //   );
+      //
+    }
 
     return of(true);
   }

@@ -89,7 +89,7 @@
                   </eworkbench-form-input>
                 </div>
 
-                                <div class="mb-4">
+                <div class="mb-4">
                   <eworkbench-form-input
                     for="first_name"
                     [label]="t('user.details.first_name.label')"
@@ -149,108 +149,108 @@
                 </div>
 
 
-<!--                <div class="mb-4">-->
-<!--                  <eworkbench-form-input-->
-<!--                    for="projects"-->
-<!--                    [label]="t('note.details.projects.label')"-->
-<!--                    [loading]="loading"-->
-<!--                    [onSubmit]="refreshResetValue"-->
-<!--                  >-->
-<!--                    <ng-select-->
-<!--                      class="ewb-select"-->
-<!--                      formControlName="projects"-->
-<!--                      labelForId="projects"-->
-<!--                      name="projects"-->
-<!--                      [placeholder]="t('note.details.projects.placeholder')"-->
-<!--                      [multiple]="true"-->
-<!--                      [typeahead]="projectInput$"-->
-<!--                      [items]="projects"-->
-<!--                      groupBy="is_favourite"-->
-<!--                      bindLabel="name"-->
-<!--                      bindValue="pk"-->
-<!--                      slot="input"-->
-<!--                    >-->
-<!--                      <ng-template ng-label-tmp let-item="item"-->
-<!--                                   let-clear="clear">-->
-<!--                        {{ item.name }}-->
-<!--                        <span class="ng-value-icon left" (click)="clear(item)"-->
-<!--                              aria-hidden="true">×</span>-->
-<!--                      </ng-template>-->
-<!--                      <ng-template ng-option-tmp let-item="item"-->
-<!--                                   let-search="searchTerm">-->
-<!--                        <joeseln-icon className="wb-favorite-3"-->
-<!--                                      class="favorite-icon"-->
-<!--                                      *ngIf="item.is_favourite"></joeseln-icon>-->
-<!--                        <span-->
-<!--                          [ngOptionHighlight]="search">{{ item.name }}</span>-->
-<!--                      </ng-template>-->
-<!--                      <ng-template ng-optgroup-tmp let-item="item">-->
-<!--                        <ng-container-->
-<!--                          *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
-<!--                        <ng-container-->
-<!--                          *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
-<!--                      </ng-template>-->
-<!--                      <ng-template ng-notfound-tmp>-->
-<!--                        <div-->
-<!--                          class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
-<!--                      </ng-template>-->
-<!--                    </ng-select>-->
-<!--                  </eworkbench-form-input>-->
-<!--                </div>-->
-<!--                <div class="mb-4">-->
-<!--                  <label-->
-<!--                    for="created-by">{{ t('note.details.createdBy.label') }}</label>-->
-<!--                  <div class="flex items-center space-x-1">-->
-<!--                    &lt;!&ndash;                    <eworkbench-user-details&ndash;&gt;-->
-<!--                    &lt;!&ndash;                      id="created-by"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                      class="inline-block"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                      [user]="initialState?.created_by"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    ></eworkbench-user-details>&ndash;&gt;-->
-<!--                    <span> | </span>-->
-<!--                    &lt;!&ndash;                    <span id="created-at">{{ initialState?.created_at | formatDate }}</span>&ndash;&gt;-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="mb-4">-->
-<!--                  &lt;!&ndash;                  <label for="last-modified-by">{{ t('note.details.lastModifiedBy.label') }}</label>&ndash;&gt;-->
-<!--                  <div class="flex items-center space-x-1">-->
-<!--                    &lt;!&ndash;                    <eworkbench-user-details id="last-modified-by" class="inline-block" [user]="initialState?.last_modified_by">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </eworkbench-user-details>&ndash;&gt;-->
-<!--                    <span> | </span>-->
-<!--                    &lt;!&ndash;                    <span id="last-modified-at">{{ initialState?.last_modified_at | formatDate }}</span>&ndash;&gt;-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="mb-4">-->
-<!--                  <eworkbench-form-input-->
-<!--                    for="content"-->
-<!--                    [label]="t('note.details.content.label')"-->
-<!--                    [loading]="loading"-->
-<!--                    [onSubmit]="refreshResetValue"-->
-<!--                  >-->
-<!--                    <eworkbench-wysiwyg-editor [id]="'content'"-->
-<!--                                               formControlName="content"-->
-<!--                                               slot="input"-->
-<!--                                               [disabled]="loading || !privileges?.fullAccess"-->
-<!--                                               toolbar="-&#45;&#45;">-->
-<!--                    </eworkbench-wysiwyg-editor>-->
-<!--                  </eworkbench-form-input>-->
-<!--                </div>-->
+                <!--                <div class="mb-4">-->
+                <!--                  <eworkbench-form-input-->
+                <!--                    for="projects"-->
+                <!--                    [label]="t('note.details.projects.label')"-->
+                <!--                    [loading]="loading"-->
+                <!--                    [onSubmit]="refreshResetValue"-->
+                <!--                  >-->
+                <!--                    <ng-select-->
+                <!--                      class="ewb-select"-->
+                <!--                      formControlName="projects"-->
+                <!--                      labelForId="projects"-->
+                <!--                      name="projects"-->
+                <!--                      [placeholder]="t('note.details.projects.placeholder')"-->
+                <!--                      [multiple]="true"-->
+                <!--                      [typeahead]="projectInput$"-->
+                <!--                      [items]="projects"-->
+                <!--                      groupBy="is_favourite"-->
+                <!--                      bindLabel="name"-->
+                <!--                      bindValue="pk"-->
+                <!--                      slot="input"-->
+                <!--                    >-->
+                <!--                      <ng-template ng-label-tmp let-item="item"-->
+                <!--                                   let-clear="clear">-->
+                <!--                        {{ item.name }}-->
+                <!--                        <span class="ng-value-icon left" (click)="clear(item)"-->
+                <!--                              aria-hidden="true">×</span>-->
+                <!--                      </ng-template>-->
+                <!--                      <ng-template ng-option-tmp let-item="item"-->
+                <!--                                   let-search="searchTerm">-->
+                <!--                        <joeseln-icon className="wb-favorite-3"-->
+                <!--                                      class="favorite-icon"-->
+                <!--                                      *ngIf="item.is_favourite"></joeseln-icon>-->
+                <!--                        <span-->
+                <!--                          [ngOptionHighlight]="search">{{ item.name }}</span>-->
+                <!--                      </ng-template>-->
+                <!--                      <ng-template ng-optgroup-tmp let-item="item">-->
+                <!--                        <ng-container-->
+                <!--                          *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
+                <!--                        <ng-container-->
+                <!--                          *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
+                <!--                      </ng-template>-->
+                <!--                      <ng-template ng-notfound-tmp>-->
+                <!--                        <div-->
+                <!--                          class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
+                <!--                      </ng-template>-->
+                <!--                    </ng-select>-->
+                <!--                  </eworkbench-form-input>-->
+                <!--                </div>-->
+                <!--                <div class="mb-4">-->
+                <!--                  <label-->
+                <!--                    for="created-by">{{ t('note.details.createdBy.label') }}</label>-->
+                <!--                  <div class="flex items-center space-x-1">-->
+                <!--                    &lt;!&ndash;                    <eworkbench-user-details&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                      id="created-by"&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                      class="inline-block"&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                      [user]="initialState?.created_by"&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    ></eworkbench-user-details>&ndash;&gt;-->
+                <!--                    <span> | </span>-->
+                <!--                    &lt;!&ndash;                    <span id="created-at">{{ initialState?.created_at | formatDate }}</span>&ndash;&gt;-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--                <div class="mb-4">-->
+                <!--                  &lt;!&ndash;                  <label for="last-modified-by">{{ t('note.details.lastModifiedBy.label') }}</label>&ndash;&gt;-->
+                <!--                  <div class="flex items-center space-x-1">-->
+                <!--                    &lt;!&ndash;                    <eworkbench-user-details id="last-modified-by" class="inline-block" [user]="initialState?.last_modified_by">&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    </eworkbench-user-details>&ndash;&gt;-->
+                <!--                    <span> | </span>-->
+                <!--                    &lt;!&ndash;                    <span id="last-modified-at">{{ initialState?.last_modified_at | formatDate }}</span>&ndash;&gt;-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--                <div class="mb-4">-->
+                <!--                  <eworkbench-form-input-->
+                <!--                    for="content"-->
+                <!--                    [label]="t('note.details.content.label')"-->
+                <!--                    [loading]="loading"-->
+                <!--                    [onSubmit]="refreshResetValue"-->
+                <!--                  >-->
+                <!--                    <eworkbench-wysiwyg-editor [id]="'content'"-->
+                <!--                                               formControlName="content"-->
+                <!--                                               slot="input"-->
+                <!--                                               [disabled]="loading || !privileges?.fullAccess"-->
+                <!--                                               toolbar="-&#45;&#45;">-->
+                <!--                    </eworkbench-wysiwyg-editor>-->
+                <!--                  </eworkbench-form-input>-->
+                <!--                </div>-->
               </ng-container>
             </eworkbench-details-collapse-element>
 
-<!--            <eworkbench-details-collapse-element-->
-<!--              [labelText]="t('note.details.element.metadata')">-->
-<!--              <ng-container slot="body">-->
-<!--                <div class="mb-4">-->
-<!--                  &lt;!&ndash;                  <eworkbench-metadata&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    [selectedParameters]="initialState?.metadata ?? []"&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    [editable]="privileges?.edit"&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    [loading]="loading"&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    [refresh]="refreshMetadata"&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    (changed)="onUpdateMetadata($event)"&ndash;&gt;-->
-<!--                  &lt;!&ndash;                  ></eworkbench-metadata>&ndash;&gt;-->
-<!--                </div>-->
-<!--              </ng-container>-->
-<!--            </eworkbench-details-collapse-element>-->
+            <!--            <eworkbench-details-collapse-element-->
+            <!--              [labelText]="t('note.details.element.metadata')">-->
+            <!--              <ng-container slot="body">-->
+            <!--                <div class="mb-4">-->
+            <!--                  &lt;!&ndash;                  <eworkbench-metadata&ndash;&gt;-->
+            <!--                  &lt;!&ndash;                    [selectedParameters]="initialState?.metadata ?? []"&ndash;&gt;-->
+            <!--                  &lt;!&ndash;                    [editable]="privileges?.edit"&ndash;&gt;-->
+            <!--                  &lt;!&ndash;                    [loading]="loading"&ndash;&gt;-->
+            <!--                  &lt;!&ndash;                    [refresh]="refreshMetadata"&ndash;&gt;-->
+            <!--                  &lt;!&ndash;                    (changed)="onUpdateMetadata($event)"&ndash;&gt;-->
+            <!--                  &lt;!&ndash;                  ></eworkbench-metadata>&ndash;&gt;-->
+            <!--                </div>-->
+            <!--              </ng-container>-->
+            <!--            </eworkbench-details-collapse-element>-->
           </div>
           <div>
             <eworkbench-details-collapse-element
@@ -271,12 +271,12 @@
             <eworkbench-details-collapse-element
               [labelText]="t('note.details.element.recentChanges')">
               <ng-container slot="body">
-<!--                <eworkbench-recent-changes-->
-<!--                  id="recent-changes"-->
-<!--                  [service]="admin_users_service"-->
-<!--                  [changesId]="id"-->
-<!--                  [refresh]="refreshChanges"-->
-<!--                ></eworkbench-recent-changes>-->
+                <!--                <eworkbench-recent-changes-->
+                <!--                  id="recent-changes"-->
+                <!--                  [service]="admin_users_service"-->
+                <!--                  [changesId]="id"-->
+                <!--                  [refresh]="refreshChanges"-->
+                <!--                ></eworkbench-recent-changes>-->
               </ng-container>
             </eworkbench-details-collapse-element>
 
@@ -319,6 +319,43 @@
             </eworkbench-details-collapse-element>
           </div>
         </form>
+
+
+        <form [formGroup]="passwword_form" (ngSubmit)="password_reset()"
+              errorTailor>
+          <div class="mb-4">
+            <ng-container slot="body">
+              <div class="mb-4">
+                <eworkbench-form-input
+                  for="password_patch"
+                  [label]="t('user.details.password_reset.label')"
+                  [loading]="loading"
+                  [onSubmit]="refreshResetValue"
+                  [required]="true"
+                >
+                  <input style="width: 30%"
+                         type="password"
+                         autocomplete="off"
+                         readonly
+                         onfocus="this.removeAttribute('readonly');"
+                         class="form-control ewb-input"
+                         id="password_patch"
+                         formControlName="password_patch"
+                         name="password_patch"
+                         slot="input"
+                  />
+                </eworkbench-form-input>
+              </div>
+            </ng-container>
+          </div>
+        </form>
+
+        <div style="width: 30%">Password must contain at least one lowercase
+          letter, one uppercase letter, one digit, one special character, and
+          must be between eight
+          and sixteen characters in length.
+        </div>
+
       </main>
     </div>
   </ng-container>

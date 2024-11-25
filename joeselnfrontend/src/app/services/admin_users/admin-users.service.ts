@@ -10,7 +10,7 @@ import type {
   FinalizeVersion,
   LockService,
   Note, Note_with_privileges,
-  NotePayload,
+  NotePayload, PasswordPatchPayload,
   PermissionsService,
   Privileges,
   PrivilegesApi,
@@ -85,5 +85,10 @@ export class AdminUsersService implements TableViewService {
 
   public patch(id: string, user: UserPatchPayload, params = new HttpParams()): Observable<User> {
     return this.httpClient.patch<User>(`${this.apiUrl}${id}/`, user, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+  }
+
+  public patch_password(id: string, password: PasswordPatchPayload, params = new HttpParams()): Observable<User> {
+    console.log(password)
+    return this.httpClient.patch<User>(`${this.apiUrl}${id}/foo/`, password, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 }

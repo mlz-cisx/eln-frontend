@@ -85,3 +85,7 @@ export interface UserPatchPayload {
   last_name: string;
   user_email: string;
 }
+
+export interface PasswordPatchPayload {
+  password_patch: string;
+}
