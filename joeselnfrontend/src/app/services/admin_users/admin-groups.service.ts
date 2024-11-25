@@ -89,7 +89,6 @@ export class AdminGroupsService implements TableViewService {
   }
 
   public add(group: GroupPayload): Observable<Group> {
-    console.log(group)
     return this.httpClient.post<Group>(this.apiUrl, group).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
   }
 }
