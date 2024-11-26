@@ -91,94 +91,95 @@
                       />
                     </eworkbench-form-input>
                   </div>
-                  <div class="mb-4">
-                    <eworkbench-form-input for="isTemplate" [loading]="loading"
-                                           [onSubmit]="refreshResetValue">
-                      <div class="custom-control custom-checkbox" slot="input">
-                        <input
-                          class="custom-control-input"
-                          type="checkbox"
-                          formControlName="isTemplate"
-                          id="isTemplate"
-                          name="isTemplate"
-                        />
-                        <label class="custom-control-label"
-                               for="isTemplate">{{ t('labBook.details.isTemplate.label') }}</label>
-                      </div>
-                    </eworkbench-form-input>
-                  </div>
-                  <div class="mb-4">
-                    <eworkbench-form-input
-                      for="projects"
-                      [label]="t('labBook.details.projects.label')"
-                      [loading]="loading"
-                      [onSubmit]="refreshResetValue"
-                    >
-                      <ng-select
-                        class="ewb-select"
-                        formControlName="projects"
-                        labelForId="projects"
-                        name="projects"
-                        [placeholder]="privileges?.edit ? t('labBook.details.projects.placeholder') : t('formInput.notDefined.placeholder')"
-                        [multiple]="true"
-                        [typeahead]="projectInput$"
-                        [items]="projects"
-                        groupBy="is_favourite"
-                        bindLabel="name"
-                        bindValue="pk"
-                        slot="input"
-                      >
-                        <ng-template ng-label-tmp let-item="item"
-                                     let-clear="clear">
-                          {{ item.name }}
-                          <span class="ng-value-icon left" (click)="clear(item)"
-                                aria-hidden="true">×</span>
-                        </ng-template>
-                        <ng-template ng-option-tmp let-item="item"
-                                     let-search="searchTerm">
-                          <joeseln-icon className="wb-favorite-3"
-                                        class="favorite-icon"
-                                        *ngIf="item.is_favourite"></joeseln-icon>
-                          <span
-                            [ngOptionHighlight]="search">{{ item.name }}</span>
-                        </ng-template>
-                        <ng-template ng-optgroup-tmp let-item="item">
-                          <ng-container
-                            *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>
-                          <ng-container
-                            *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>
-                        </ng-template>
-                        <ng-template ng-notfound-tmp>
-                          <div
-                            class="ng-option">{{ t('formInput.select.noMatch') }}</div>
-                        </ng-template>
-                      </ng-select>
-                    </eworkbench-form-input>
-                  </div>
+<!--                  <div class="mb-4">-->
+<!--                    <eworkbench-form-input for="isTemplate" [loading]="loading"-->
+<!--                                           [onSubmit]="refreshResetValue">-->
+<!--                      <div class="custom-control custom-checkbox" slot="input">-->
+<!--                        <input-->
+<!--                          class="custom-control-input"-->
+<!--                          type="checkbox"-->
+<!--                          formControlName="isTemplate"-->
+<!--                          id="isTemplate"-->
+<!--                          name="isTemplate"-->
+<!--                        />-->
+<!--                        <label class="custom-control-label"-->
+<!--                               for="isTemplate">{{ t('labBook.details.isTemplate.label') }}</label>-->
+<!--                      </div>-->
+<!--                    </eworkbench-form-input>-->
+<!--                  </div>-->
+<!--                  <div class="mb-4">-->
+<!--                    <eworkbench-form-input-->
+<!--                      for="projects"-->
+<!--                      [label]="t('labBook.details.projects.label')"-->
+<!--                      [loading]="loading"-->
+<!--                      [onSubmit]="refreshResetValue"-->
+<!--                    >-->
+<!--                      <ng-select-->
+<!--                        class="ewb-select"-->
+<!--                        formControlName="projects"-->
+<!--                        labelForId="projects"-->
+<!--                        name="projects"-->
+<!--                        [placeholder]="privileges?.edit ? t('labBook.details.projects.placeholder') : t('formInput.notDefined.placeholder')"-->
+<!--                        [multiple]="true"-->
+<!--                        [typeahead]="projectInput$"-->
+<!--                        [items]="projects"-->
+<!--                        groupBy="is_favourite"-->
+<!--                        bindLabel="name"-->
+<!--                        bindValue="pk"-->
+<!--                        slot="input"-->
+<!--                      >-->
+<!--                        <ng-template ng-label-tmp let-item="item"-->
+<!--                                     let-clear="clear">-->
+<!--                          {{ item.name }}-->
+<!--                          <span class="ng-value-icon left" (click)="clear(item)"-->
+<!--                                aria-hidden="true">×</span>-->
+<!--                        </ng-template>-->
+<!--                        <ng-template ng-option-tmp let-item="item"-->
+<!--                                     let-search="searchTerm">-->
+<!--                          <joeseln-icon className="wb-favorite-3"-->
+<!--                                        class="favorite-icon"-->
+<!--                                        *ngIf="item.is_favourite"></joeseln-icon>-->
+<!--                          <span-->
+<!--                            [ngOptionHighlight]="search">{{ item.name }}</span>-->
+<!--                        </ng-template>-->
+<!--                        <ng-template ng-optgroup-tmp let-item="item">-->
+<!--                          <ng-container-->
+<!--                            *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
+<!--                          <ng-container-->
+<!--                            *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
+<!--                        </ng-template>-->
+<!--                        <ng-template ng-notfound-tmp>-->
+<!--                          <div-->
+<!--                            class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
+<!--                        </ng-template>-->
+<!--                      </ng-select>-->
+<!--                    </eworkbench-form-input>-->
+<!--                  </div>-->
                   <div class="mb-4">
                     <label
                       for="created-by">{{ t('labBook.details.createdBy.label') }}</label>
                     <div class="flex items-center space-x-1">
-                      <!--                      <eworkbench-user-details-->
-                      <!--                        id="created-by"-->
-                      <!--                        class="inline-block"-->
-                      <!--                        [user]="initialState.created_by"-->
-                      <!--                      ></eworkbench-user-details>-->
+                      <eworkbench-user-details
+                        id="created-by"
+                        class="inline-block"
+                        [user]="initialState?.created_by"
+                      ></eworkbench-user-details>
                       <span> | </span>
                       <span
-                        id="created-at">{{ initialState?.created_at  }}</span>
+                        id="created-at">{{ initialState?.created_at | formatDate }}</span>
                     </div>
                   </div>
                   <div class="mb-4">
                     <label
                       for="last-modified-by">{{ t('labBook.details.lastModifiedBy.label') }}</label>
                     <div class="flex items-center space-x-1">
-                      <!--                      <eworkbench-user-details id="last-modified-by" class="inline-block"-->
-                      <!--                                               [user]="initialState.last_modified_by">-->
-                      <!--                      </eworkbench-user-details>-->
+                      <eworkbench-user-details id="last-modified-by"
+                                               class="inline-block"
+                                               [user]="initialState?.last_modified_by">
+                      </eworkbench-user-details>
                       <span> | </span>
                       <span
-                        id="last-modified-at">{{ initialState?.last_modified_at }}</span>
+                        id="last-modified-at">{{ initialState?.last_modified_at | formatDate }}</span>
                     </div>
                   </div>
                 </ng-container>
@@ -249,17 +250,17 @@
               </eworkbench-details-collapse-element>
             </div>
             <div>
-<!--              <eworkbench-details-collapse-element-->
-<!--                [labelText]="t('labBook.details.element.recentChanges')">-->
-<!--                <ng-container slot="body">-->
-<!--                  <eworkbench-recent-changes-->
-<!--                    id="recent-changes"-->
-<!--                    [service]="labBooksService"-->
-<!--                    [changesId]="id"-->
-<!--                    [refresh]="refreshChanges"-->
-<!--                  ></eworkbench-recent-changes>-->
-<!--                </ng-container>-->
-<!--              </eworkbench-details-collapse-element>-->
+              <eworkbench-details-collapse-element
+                [labelText]="t('labBook.details.element.recentChanges')">
+                <ng-container slot="body">
+                  <eworkbench-recent-changes
+                    id="recent-changes"
+                    [service]="labBooksService"
+                    [changesId]="id"
+                    [refresh]="refreshChanges"
+                  ></eworkbench-recent-changes>
+                </ng-container>
+              </eworkbench-details-collapse-element>
 
               <eworkbench-details-collapse-element
                 [labelText]="t('labBook.details.element.versions')">
@@ -271,7 +272,7 @@
                     [versionId]="id"
                     [lastModifiedAt]="initialState?.last_modified_at"
                     [refresh]="refreshVersions"
-                    [editable]="privileges?.edit"
+                    [editable]="privileges?.restore"
                     [finalizeVersionAlwaysVisible]="true"
                     (changed)="onVersionChanged()"
                   ></eworkbench-versions>
@@ -307,7 +308,7 @@
           #drawBoard
           [id]="id"
           [projects]="['abc']"
-          [editable]="true"
+          [editable]="privileges?.edit"
         >
         </eworkbench-labbook-draw-board>
       </main>

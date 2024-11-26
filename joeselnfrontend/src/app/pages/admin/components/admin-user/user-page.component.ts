@@ -508,15 +508,15 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public onOpenNewCommentModal(): void {
-    this.modalRef = this.modalService.open(NewCommentModalComponent, {
-      closeButton: false,
-      width: '912px',
-      data: {
-        id: this.id,
-        contentType: this.initialState?.username,
-        service: this.admin_users_service,
-      },
-    });
+    // this.modalRef = this.modalService.open(NewCommentModalComponent, {
+    //   closeButton: false,
+    //   width: '912px',
+    //   data: {
+    //     id: this.id,
+    //     contentType: this.initialState?.username,
+    //     service: this.admin_users_service,
+    //   },
+    // });
 
     // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
     //   if (callback.state === ModalState.Changed) {

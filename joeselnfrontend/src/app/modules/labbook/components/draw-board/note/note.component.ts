@@ -250,6 +250,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         this.privileges = {...privileges};
         if (!this.privileges.edit) {
           this.form.disable({emitEvent: false});
+
         }
         // this.cdr.markForCheck();
         // restore old note content
@@ -523,13 +524,15 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public load_editor(): void {
-    const title = document.getElementById(this.title_id)
-    // @ts-ignore
-    if (title) {
-      title.style.border = ''
+    if (this.privileges?.edit) {
+      const title = document.getElementById(this.title_id)
+      // @ts-ignore
+      if (title) {
+        title.style.border = ''
+      }
+      this.editor_loaded = true;
+      this.cdr.detectChanges()
     }
-    this.editor_loaded = true;
-    this.cdr.detectChanges()
   }
 
 

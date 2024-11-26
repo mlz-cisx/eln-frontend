@@ -570,7 +570,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
   }
 
   public onOpenDescriptionModal(): void {
-    this.filesService.lock(this.id).pipe(take(1)).subscribe();
+    // this.filesService.lock(this.id).pipe(take(1)).subscribe();
 
     // this.modalRef = this.modalService.open(DescriptionModalComponent, {
     //   closeButton: false,

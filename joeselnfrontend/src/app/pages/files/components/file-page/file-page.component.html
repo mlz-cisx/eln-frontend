@@ -18,7 +18,7 @@
         [service]="filesService"
         [id]="id"
         [redirectDestination]="[showSidebar ? '.' : '' + '/files', id]"
-        [newModalComponent]="newModalComponent"
+
         [initialState]="initialState"
         [privileges]="privileges"
         *ngIf="privileges"
@@ -82,6 +82,7 @@
                       name="title"
                       [placeholder]="t('file.details.title.placeholder')"
                       slot="input"
+                      readonly
                     />
                   </eworkbench-form-input>
                 </div>
@@ -101,6 +102,7 @@
                       name="name"
                       [placeholder]="t('file.details.name.placeholder')"
                       slot="input"
+                      readonly
                     />
                   </eworkbench-form-input>
                 </div>
@@ -120,168 +122,168 @@
                   </div>
                 </div>
 
-                <div class="mb-4" *ngIf="privileges?.edit">
-                  <label for="uploadFile">{{ t('file.details.upload.label') }}</label>
-                  <div>
-                    <input
-                      #uploadInput
-                      type="file"
-                      class="ewb-file-button"
-                      [disabled]="loading || !privileges?.edit"
-                      (change)="onUpload($event)"
-                      id="uploadFile"
-                      name="uploadFile"
-                    />
-                    <label for="uploadFile" class="btn ewb-button-regular ewb-button-secondary">
-                      <joeseln-icon className="wb-upload" class="mr-1"></joeseln-icon>
-                      {{ t('file.details.updateFile') }}
-                    </label>
-                  </div>
-                </div>
+<!--                <div class="mb-4" *ngIf="privileges?.edit">-->
+<!--                  <label for="uploadFile">{{ t('file.details.upload.label') }}</label>-->
+<!--                  <div>-->
+<!--                    <input-->
+<!--                      #uploadInput-->
+<!--                      type="file"-->
+<!--                      class="ewb-file-button"-->
+<!--                      [disabled]="loading || !privileges?.edit"-->
+<!--                      (change)="onUpload($event)"-->
+<!--                      id="uploadFile"-->
+<!--                      name="uploadFile"-->
+<!--                    />-->
+<!--                    <label for="uploadFile" class="btn ewb-button-regular ewb-button-secondary">-->
+<!--                      <joeseln-icon className="wb-upload" class="mr-1"></joeseln-icon>-->
+<!--                      {{ t('file.details.updateFile') }}-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <div class="mb-4">
-                  <ng-container *ngIf="privileges?.fullAccess">
-                    <eworkbench-form-input
-                      for="storage"
-                      [label]="t('file.details.storage.label')"
-                      [loading]="loading"
-                      [onSubmit]="refreshResetValue"
-                      *ngIf="directories.length"
-                    >
-                      <ng-select
-                        class="ewb-select"
-                        formControlName="storage"
-                        labelForId="storage"
-                        name="storage"
-                        [placeholder]="privileges?.edit ? t('file.details.storage.placeholder') : t('formInput.notDefined.placeholder')"
-                        [items]="directories"
-                        bindLabel="display"
-                        bindValue="pk"
-                        [clearable]="true"
-                        [searchable]="true"
-                        slot="input"
-                      >
-                        <ng-template ng-label-tmp let-item="item">
-                          <joeseln-icon [className]="item.is_virtual_root ? 'wb-storages' : 'wb-folder'"></joeseln-icon>{{ ' '
-                          }}{{ item.display }}
-                        </ng-template>
+<!--                <div class="mb-4">-->
+<!--                  <ng-container *ngIf="privileges?.fullAccess">-->
+<!--                    <eworkbench-form-input-->
+<!--                      for="storage"-->
+<!--                      [label]="t('file.details.storage.label')"-->
+<!--                      [loading]="loading"-->
+<!--                      [onSubmit]="refreshResetValue"-->
+<!--                      *ngIf="directories.length"-->
+<!--                    >-->
+<!--                      <ng-select-->
+<!--                        class="ewb-select"-->
+<!--                        formControlName="storage"-->
+<!--                        labelForId="storage"-->
+<!--                        name="storage"-->
+<!--                        [placeholder]="privileges?.edit ? t('file.details.storage.placeholder') : t('formInput.notDefined.placeholder')"-->
+<!--                        [items]="directories"-->
+<!--                        bindLabel="display"-->
+<!--                        bindValue="pk"-->
+<!--                        [clearable]="true"-->
+<!--                        [searchable]="true"-->
+<!--                        slot="input"-->
+<!--                      >-->
+<!--                        <ng-template ng-label-tmp let-item="item">-->
+<!--                          <joeseln-icon [className]="item.is_virtual_root ? 'wb-storages' : 'wb-folder'"></joeseln-icon>{{ ' '-->
+<!--                          }}{{ item.display }}-->
+<!--                        </ng-template>-->
 
-                        <ng-template ng-option-tmp let-item="item">
-                          <div [style.padding-left.px]="item.is_virtual_root ? 0 : item.level * 10">
-                            <joeseln-icon [className]="item.is_virtual_root ? 'wb-storages' : 'wb-folder'"></joeseln-icon>{{ ' '
-                            }}{{ item.display }}
-                          </div>
-                        </ng-template>
-                      </ng-select>
-                    </eworkbench-form-input>
-                    <ng-container *ngIf="!directories.length">
-                      <div class="flex align-items-center gap-3">
-                        <div>
-                          {{ initialState?.directory?.display || t('formInput.notDefined.placeholder') }}
-                        </div>
-                        <button
-                          type="button"
-                          class="btn ewb-button-small ewb-button-primary cursor-help rounded text-monospace"
-                          [tooltip]="t('file.details.storage.notDefined.tooltip')"
-                          placement="right"
-                        >
-                          i
-                        </button>
-                      </div>
-                    </ng-container>
-                  </ng-container>
+<!--                        <ng-template ng-option-tmp let-item="item">-->
+<!--                          <div [style.padding-left.px]="item.is_virtual_root ? 0 : item.level * 10">-->
+<!--                            <joeseln-icon [className]="item.is_virtual_root ? 'wb-storages' : 'wb-folder'"></joeseln-icon>{{ ' '-->
+<!--                            }}{{ item.display }}-->
+<!--                          </div>-->
+<!--                        </ng-template>-->
+<!--                      </ng-select>-->
+<!--                    </eworkbench-form-input>-->
+<!--                    <ng-container *ngIf="!directories.length">-->
+<!--                      <div class="flex align-items-center gap-3">-->
+<!--                        <div>-->
+<!--                          {{ initialState?.directory?.display || t('formInput.notDefined.placeholder') }}-->
+<!--                        </div>-->
+<!--                        <button-->
+<!--                          type="button"-->
+<!--                          class="btn ewb-button-small ewb-button-primary cursor-help rounded text-monospace"-->
+<!--                          [tooltip]="t('file.details.storage.notDefined.tooltip')"-->
+<!--                          placement="right"-->
+<!--                        >-->
+<!--                          i-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                    </ng-container>-->
+<!--                  </ng-container>-->
 
-                  <ng-container *ngIf="!privileges?.fullAccess">
-                    <label>{{ t('file.details.storage.label') }}</label>
-                    <div class="flex align-items-center gap-3">
-                      <ng-container *ngIf="initialState?.directory_id">
-                        <div class="ewb-chip">
-                          <joeseln-icon
-                            [className]="initialState?.directory?.is_virtual_root ? 'wb-storages' : 'wb-folder'"
-                            class="mr-1"
-                            *ngIf="initialState?.directory"
-                          ></joeseln-icon>
-                          <ng-container *ngIf="storagePrivileges?.view">
-                            <a
-                              [routerLink]="['/storages', getStorageIdForDirectory(initialState.directory_id)]"
-                              [tooltip]="initialState.directory?.display"
-                              containerClass="tooltip-sm"
-                              [delay]="500"
-                              ><ng-container *ngIf="initialState.directory?.is_virtual_root">{{
-                                initialState.directory?.display
-                              }}</ng-container
-                              ><ng-container *ngIf="!initialState.directory?.is_virtual_root"
-                                >
-<!--                              {{ getStorageNameForDirectory(initialState.directory_id) }} |-->
-                                {{ initialState.directory?.display }}
-                            </ng-container
-                              ></a
-                            >
-                          </ng-container>
-                          <ng-container *ngIf="!storagePrivileges?.view">
-                            {{ t('file.details.storage.unknown.label') }}
-                          </ng-container>
-                        </div>
-                        <ng-container *ngIf="!storagePrivileges?.edit">
-                          <button
-                            type="button"
-                            class="btn ewb-button-small ewb-button-primary cursor-help rounded text-monospace"
-                            [tooltip]="t('file.details.storage.noEditPermission.tooltip')"
-                            placement="right"
-                          >
-                            i
-                          </button>
-                        </ng-container>
-                      </ng-container>
-                      <div class="italic text-tum-disabled" *ngIf="!initialState?.directory_id">
-                        {{ t('formInput.notDefined.placeholder') }}
-                      </div>
-                    </div>
-                  </ng-container>
-                </div>
-                <div class="mb-4" *ngIf="initialState?.is_dss_file">
-                  <label>{{ t('file.details.dssLocation.label') }}</label>
-                  <div>{{ initialState?.location }}</div>
-                </div>
-                <div class="mb-4">
-                  <eworkbench-form-input
-                    for="projects"
-                    [label]="t('file.details.projects.label')"
-                    [loading]="loading"
-                    [onSubmit]="refreshResetValue"
-                  >
-                    <ng-select
-                      class="ewb-select"
-                      formControlName="projects"
-                      labelForId="projects"
-                      name="projects"
-                      [placeholder]="privileges?.edit ? t('file.details.projects.placeholder') : t('formInput.notDefined.placeholder')"
-                      [multiple]="true"
-                      [typeahead]="projectInput$"
-                      [items]="projects"
-                      groupBy="is_favourite"
-                      bindLabel="name"
-                      bindValue="pk"
-                      slot="input"
-                    >
-                      <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                        {{ item.name }}
-                        <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
-                      </ng-template>
-                      <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                        <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>
-                        <span [ngOptionHighlight]="search">{{ item.name }}</span>
-                      </ng-template>
-                      <ng-template ng-optgroup-tmp let-item="item">
-                        <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>
-                        <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>
-                      </ng-template>
-                      <ng-template ng-notfound-tmp>
-                        <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>
-                      </ng-template>
-                    </ng-select>
-                  </eworkbench-form-input>
-                </div>
+<!--                  <ng-container *ngIf="!privileges?.fullAccess">-->
+<!--                    <label>{{ t('file.details.storage.label') }}</label>-->
+<!--                    <div class="flex align-items-center gap-3">-->
+<!--                      <ng-container *ngIf="initialState?.directory_id">-->
+<!--                        <div class="ewb-chip">-->
+<!--                          <joeseln-icon-->
+<!--                            [className]="initialState?.directory?.is_virtual_root ? 'wb-storages' : 'wb-folder'"-->
+<!--                            class="mr-1"-->
+<!--                            *ngIf="initialState?.directory"-->
+<!--                          ></joeseln-icon>-->
+<!--                          <ng-container *ngIf="storagePrivileges?.view">-->
+<!--                            <a-->
+<!--                              [routerLink]="['/storages', getStorageIdForDirectory(initialState.directory_id)]"-->
+<!--                              [tooltip]="initialState.directory?.display"-->
+<!--                              containerClass="tooltip-sm"-->
+<!--                              [delay]="500"-->
+<!--                              ><ng-container *ngIf="initialState.directory?.is_virtual_root">{{-->
+<!--                                initialState.directory?.display-->
+<!--                              }}</ng-container-->
+<!--                              ><ng-container *ngIf="!initialState.directory?.is_virtual_root"-->
+<!--                                >-->
+<!--&lt;!&ndash;                              {{ getStorageNameForDirectory(initialState.directory_id) }} |&ndash;&gt;-->
+<!--                                {{ initialState.directory?.display }}-->
+<!--                            </ng-container-->
+<!--                              ></a-->
+<!--                            >-->
+<!--                          </ng-container>-->
+<!--                          <ng-container *ngIf="!storagePrivileges?.view">-->
+<!--                            {{ t('file.details.storage.unknown.label') }}-->
+<!--                          </ng-container>-->
+<!--                        </div>-->
+<!--                        <ng-container *ngIf="!storagePrivileges?.edit">-->
+<!--                          <button-->
+<!--                            type="button"-->
+<!--                            class="btn ewb-button-small ewb-button-primary cursor-help rounded text-monospace"-->
+<!--                            [tooltip]="t('file.details.storage.noEditPermission.tooltip')"-->
+<!--                            placement="right"-->
+<!--                          >-->
+<!--                            i-->
+<!--                          </button>-->
+<!--                        </ng-container>-->
+<!--                      </ng-container>-->
+<!--                      <div class="italic text-tum-disabled" *ngIf="!initialState?.directory_id">-->
+<!--                        {{ t('formInput.notDefined.placeholder') }}-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--                <div class="mb-4" *ngIf="initialState?.is_dss_file">-->
+<!--                  <label>{{ t('file.details.dssLocation.label') }}</label>-->
+<!--                  <div>{{ initialState?.location }}</div>-->
+<!--                </div>-->
+<!--                <div class="mb-4">-->
+<!--                  <eworkbench-form-input-->
+<!--                    for="projects"-->
+<!--                    [label]="t('file.details.projects.label')"-->
+<!--                    [loading]="loading"-->
+<!--                    [onSubmit]="refreshResetValue"-->
+<!--                  >-->
+<!--                    <ng-select-->
+<!--                      class="ewb-select"-->
+<!--                      formControlName="projects"-->
+<!--                      labelForId="projects"-->
+<!--                      name="projects"-->
+<!--                      [placeholder]="privileges?.edit ? t('file.details.projects.placeholder') : t('formInput.notDefined.placeholder')"-->
+<!--                      [multiple]="true"-->
+<!--                      [typeahead]="projectInput$"-->
+<!--                      [items]="projects"-->
+<!--                      groupBy="is_favourite"-->
+<!--                      bindLabel="name"-->
+<!--                      bindValue="pk"-->
+<!--                      slot="input"-->
+<!--                    >-->
+<!--                      <ng-template ng-label-tmp let-item="item" let-clear="clear">-->
+<!--                        {{ item.name }}-->
+<!--                        <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>-->
+<!--                      </ng-template>-->
+<!--                      <ng-template ng-option-tmp let-item="item" let-search="searchTerm">-->
+<!--                        <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>-->
+<!--                        <span [ngOptionHighlight]="search">{{ item.name }}</span>-->
+<!--                      </ng-template>-->
+<!--                      <ng-template ng-optgroup-tmp let-item="item">-->
+<!--                        <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
+<!--                        <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
+<!--                      </ng-template>-->
+<!--                      <ng-template ng-notfound-tmp>-->
+<!--                        <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
+<!--                      </ng-template>-->
+<!--                    </ng-select>-->
+<!--                  </eworkbench-form-input>-->
+<!--                </div>-->
                 <div class="mb-4">
                   <label for="created-by">{{ t('file.details.createdBy.label') }}</label>
                   <div class="flex items-center space-x-1">
@@ -334,19 +336,19 @@
               </ng-container>
             </eworkbench-details-collapse-element>
 
-            <eworkbench-details-collapse-element [labelText]="t('file.details.element.metadata')">
-              <ng-container slot="body">
-                <div class="mb-4">
-                  <eworkbench-metadata
-                    [selectedParameters]="initialState?.metadata ?? []"
-                    [editable]="privileges?.edit"
-                    [loading]="loading"
-                    [refresh]="refreshMetadata"
-                    (changed)="onUpdateMetadata($event)"
-                  ></eworkbench-metadata>
-                </div>
-              </ng-container>
-            </eworkbench-details-collapse-element>
+<!--            <eworkbench-details-collapse-element [labelText]="t('file.details.element.metadata')">-->
+<!--              <ng-container slot="body">-->
+<!--                <div class="mb-4">-->
+<!--                  <eworkbench-metadata-->
+<!--                    [selectedParameters]="initialState?.metadata ?? []"-->
+<!--                    [editable]="privileges?.edit"-->
+<!--                    [loading]="loading"-->
+<!--                    [refresh]="refreshMetadata"-->
+<!--                    (changed)="onUpdateMetadata($event)"-->
+<!--                  ></eworkbench-metadata>-->
+<!--                </div>-->
+<!--              </ng-container>-->
+<!--            </eworkbench-details-collapse-element>-->
           </div>
           <div>
             <eworkbench-details-collapse-element [labelText]="t('file.details.element.links')">

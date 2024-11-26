@@ -295,7 +295,7 @@ export class LabbooksService {
   }
 
 
-  public history(id: string): Observable<RecentChanges[]> {
+  public old_history(id: string): Observable<RecentChanges[]> {
     return this.lab_book_list$.pipe(
       map(() => {
           return mockLabBookHistory.results
@@ -304,7 +304,7 @@ export class LabbooksService {
     )
   }
 
-  public new_history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
+  public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
     return this.httpClient.get<DjangoAPI<RecentChanges[]>>(`${this.apiUrl}${id}/history/`, {params}).pipe(map(data => data.results));
   }
 

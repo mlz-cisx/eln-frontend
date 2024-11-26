@@ -84,45 +84,45 @@
                     <label for="height">{{ t('picture.details.height.label') }}</label>
                     <div id="height">{{ initialState?.height }}px</div>
                   </div>
-                  <div class="mb-4">
-                    <eworkbench-form-input
-                      for="projects"
-                      [label]="t('picture.details.projects.label')"
-                      [loading]="loading"
-                      [onSubmit]="refreshResetValue"
-                    >
-                      <ng-select
-                        class="ewb-select"
-                        formControlName="projects"
-                        labelForId="projects"
-                        name="projects"
-                        [placeholder]="privileges?.edit ? t('picture.details.projects.placeholder') : t('formInput.notDefined.placeholder')"
-                        [multiple]="true"
-                        [typeahead]="projectInput$"
-                        [items]="projects"
-                        groupBy="is_favourite"
-                        bindLabel="name"
-                        bindValue="pk"
-                        slot="input"
-                      >
-                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                          {{ item.name }}
-                          <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
-                        </ng-template>
-                        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                          <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>
-                          <span [ngOptionHighlight]="search">{{ item.name }}</span>
-                        </ng-template>
-                        <ng-template ng-optgroup-tmp let-item="item">
-                          <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>
-                          <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>
-                        </ng-template>
-                        <ng-template ng-notfound-tmp>
-                          <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>
-                        </ng-template>
-                      </ng-select>
-                    </eworkbench-form-input>
-                  </div>
+<!--                  <div class="mb-4">-->
+<!--                    <eworkbench-form-input-->
+<!--                      for="projects"-->
+<!--                      [label]="t('picture.details.projects.label')"-->
+<!--                      [loading]="loading"-->
+<!--                      [onSubmit]="refreshResetValue"-->
+<!--                    >-->
+<!--                      <ng-select-->
+<!--                        class="ewb-select"-->
+<!--                        formControlName="projects"-->
+<!--                        labelForId="projects"-->
+<!--                        name="projects"-->
+<!--                        [placeholder]="privileges?.edit ? t('picture.details.projects.placeholder') : t('formInput.notDefined.placeholder')"-->
+<!--                        [multiple]="true"-->
+<!--                        [typeahead]="projectInput$"-->
+<!--                        [items]="projects"-->
+<!--                        groupBy="is_favourite"-->
+<!--                        bindLabel="name"-->
+<!--                        bindValue="pk"-->
+<!--                        slot="input"-->
+<!--                      >-->
+<!--                        <ng-template ng-label-tmp let-item="item" let-clear="clear">-->
+<!--                          {{ item.name }}-->
+<!--                          <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>-->
+<!--                        </ng-template>-->
+<!--                        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">-->
+<!--                          <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>-->
+<!--                          <span [ngOptionHighlight]="search">{{ item.name }}</span>-->
+<!--                        </ng-template>-->
+<!--                        <ng-template ng-optgroup-tmp let-item="item">-->
+<!--                          <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
+<!--                          <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
+<!--                        </ng-template>-->
+<!--                        <ng-template ng-notfound-tmp>-->
+<!--                          <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
+<!--                        </ng-template>-->
+<!--                      </ng-select>-->
+<!--                    </eworkbench-form-input>-->
+<!--                  </div>-->
                   <div class="mb-4">
                     <label for="created-by">{{ t('picture.details.createdBy.label') }}</label>
                     <div class="flex items-center space-x-1">
@@ -147,19 +147,19 @@
                 </ng-container>
               </eworkbench-details-collapse-element>
 
-              <eworkbench-details-collapse-element [labelText]="t('picture.details.element.metadata')">
-                <ng-container slot="body">
-                  <div class="mb-4">
-                    <eworkbench-metadata
-                      [selectedParameters]="initialState?.metadata ?? []"
-                      [editable]="privileges?.edit"
-                      [loading]="loading"
-                      [refresh]="refreshMetadata"
-                      (changed)="onUpdateMetadata($event)"
-                    ></eworkbench-metadata>
-                  </div>
-                </ng-container>
-              </eworkbench-details-collapse-element>
+<!--              <eworkbench-details-collapse-element [labelText]="t('picture.details.element.metadata')">-->
+<!--                <ng-container slot="body">-->
+<!--                  <div class="mb-4">-->
+<!--                    <eworkbench-metadata-->
+<!--                      [selectedParameters]="initialState?.metadata ?? []"-->
+<!--                      [editable]="privileges?.edit"-->
+<!--                      [loading]="loading"-->
+<!--                      [refresh]="refreshMetadata"-->
+<!--                      (changed)="onUpdateMetadata($event)"-->
+<!--                    ></eworkbench-metadata>-->
+<!--                  </div>-->
+<!--                </ng-container>-->
+<!--              </eworkbench-details-collapse-element>-->
             </div>
             <div>
               <eworkbench-details-collapse-element [labelText]="t('picture.details.element.links')">
