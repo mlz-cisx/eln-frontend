@@ -60,7 +60,6 @@ export class AdminGroupsGroupadminsService implements TableViewService {
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<User>> {
     return this.httpClient.get<User_with_privileges>(`${this.apiUrlUser}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(user => {
-        console.log(user)
         let privileges = user.privileges
         const privilegesData: PrivilegesData<User> = {
           privileges,
@@ -81,7 +80,6 @@ export class AdminGroupsGroupadminsService implements TableViewService {
   }
 
   public add(user: UserPayload): Observable<User> {
-    console.log(user)
     return this.httpClient.post<User>(this.apiUrl, user).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
   }
 }

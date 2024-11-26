@@ -59,7 +59,6 @@ export class AdminUsersService implements TableViewService {
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<User>> {
     return this.httpClient.get<User_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(user => {
-        console.log(user)
         let privileges = user.privileges
         const privilegesData: PrivilegesData<User> = {
           privileges,
@@ -88,7 +87,6 @@ export class AdminUsersService implements TableViewService {
   }
 
   public patch_password(id: string, password: PasswordPatchPayload, params = new HttpParams()): Observable<User> {
-    console.log(password)
     return this.httpClient.patch<User>(`${this.apiUrl}${id}/foo/`, password, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 }

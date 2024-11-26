@@ -59,7 +59,6 @@ export class AdminAdminsService implements TableViewService {
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<User>> {
     return this.httpClient.get<User_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(user => {
-        console.log(user)
         let privileges = user.privileges
         const privilegesData: PrivilegesData<User> = {
           privileges,
