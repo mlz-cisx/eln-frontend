@@ -60,11 +60,13 @@
 </ng-container>
 
 <ng-template #dropdownUL let-t="t" let-menuClass="menuClass" let-itemClass="itemClass">
-  <li [class]="menuClass" role="menuitem" *ngIf="privilegesElement">
-    <button type="button" [class]="itemClass" (click)="onOpenPrivilegesModal()" [disabled]="loading">
-      <joeseln-icon className="wb-unlock"></joeseln-icon> {{ t('detailsDropdown.privileges') }}
-    </button>
-  </li>
+
+<!--  <li [class]="menuClass" role="menuitem" *ngIf="privilegesElement">-->
+<!--    <button type="button" [class]="itemClass" (click)="onOpenPrivilegesModal()" [disabled]="loading">-->
+<!--      <joeseln-icon className="wb-unlock"></joeseln-icon> {{ t('detailsDropdown.privileges') }}-->
+<!--    </button>-->
+<!--  </li>-->
+
   <li [class]="menuClass" role="menuitem" *ngIf="exportElement">
     <button type="button" [class]="itemClass" (click)="onExport()" [disabled]="loading">
       <joeseln-icon className="wb-pdf-file"></joeseln-icon> {{ t('detailsDropdown.export') }}
@@ -80,11 +82,11 @@
       <joeseln-icon className="wb-undo"></joeseln-icon> {{ t('detailsDropdown.restore') }}
     </button>
   </li>
-  <li [class]="menuClass" role="menuitem" *ngIf="newModalComponent && duplicateElement">
-    <button type="button" [class]="itemClass" (click)="onOpenDuplicateModal()" [disabled]="loading">
-      <joeseln-icon className="wb-copy"></joeseln-icon> {{ t('detailsDropdown.duplicate') }}
-    </button>
-  </li>
+<!--  <li [class]="menuClass" role="menuitem" *ngIf="newModalComponent && duplicateElement">-->
+<!--    <button type="button" [class]="itemClass" (click)="onOpenDuplicateModal()" [disabled]="loading">-->
+<!--      <joeseln-icon className="wb-copy"></joeseln-icon> {{ t('detailsDropdown.duplicate') }}-->
+<!--    </button>-->
+<!--  </li>-->
   <li [class]="menuClass" role="menuitem" *ngIf="shareElement">
     <button type="button" [class]="itemClass" (click)="onOpenShareModal()" [disabled]="loading">
       <joeseln-icon className="wb-share"></joeseln-icon> {{ t('detailsDropdown.share') }}
