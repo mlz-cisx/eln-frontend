@@ -73,7 +73,7 @@ export class LabBookPreviewComponent implements OnInit {
     setTimeout(() => {
       this.initDetails();
 
-    },1)
+    }, 1)
   }
 
   public initDetails(): void {
@@ -116,6 +116,10 @@ export class LabBookPreviewComponent implements OnInit {
     // });
   }
 
+  private location_reload() {
+    location.reload()
+  }
+
   public onRestoreVersion(): void {
     if (this.loading) {
       return;
@@ -134,7 +138,8 @@ export class LabBookPreviewComponent implements OnInit {
             .pipe(untilDestroyed(this))
             .subscribe(versionRestored => {
               this.toastrService.success(versionRestored);
-            });
+              setTimeout(this.location_reload, 1000)
+            })
         },
         () => {
           this.loading = false;
