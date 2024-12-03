@@ -185,8 +185,10 @@ export class LabBookDrawBoardFileComponent implements OnInit {
                 {emitEvent: false}
               );
               this.preloaded_content = privilegesData.data.description
-              // @ts-ignore
-              document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+              if (document.getElementById(this.preloaded_id)) {
+                // @ts-ignore
+                document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+              }
 
             });
         }
@@ -260,7 +262,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
             this.filesService.unlock(this.initialState!.pk);
           }
 
-          this.initialState = {...file};
+          // this.initialState = {...file};
           this.form.markAsPristine();
           this.refreshResetValue.next(true);
 
