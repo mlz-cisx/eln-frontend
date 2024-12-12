@@ -126,24 +126,24 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.websocketService.elements.pipe().subscribe((data: any) => {
       // console.log('grid pipe ', data['action'])
       if (data.model_pk === this.id) {
-        if (!this.updated_self) {
-          // Sadly, we need a timeout here because the logic for the LabBook operations is
-          // mainly in the frontend and the backend sends a socket request when the first
-          // API request (in the browser of another user) resolved. But we really should wait
-          // for all API calls which we can't, because we don't know what's going on in another
-          // browser. If the logic moves to the backend, we can remove the timeout.
-          if (this.socketRefreshTimeout) {
-            clearTimeout(this.socketRefreshTimeout);
-          }
 
-          if (data.model_name === 'labbook_patch') {
-            this.reload()
-          } else {
-            this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
-          }
-
+        // Sadly, we need a timeout here because the logic for the LabBook operations is
+        // mainly in the frontend and the backend sends a socket request when the first
+        // API request (in the browser of another user) resolved. But we really should wait
+        // for all API calls which we can't, because we don't know what's going on in another
+        // browser. If the logic moves to the backend, we can remove the timeout.
+        if (this.socketRefreshTimeout) {
+          clearTimeout(this.socketRefreshTimeout);
         }
-        this.updated_self = false
+
+        if (data.model_name === 'labbook_patch') {
+          this.reload()
+        } else {
+          this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
+        }
+
+
+        // this.updated_self = false
       } else if (data) {
         this.refreshElementRelations.next(data);
       }
@@ -319,7 +319,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       }
       this.loading = true;
 
-      this.updated_self = true;
+      // this.updated_self = true;
 
       const elementsPayload = elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
 
