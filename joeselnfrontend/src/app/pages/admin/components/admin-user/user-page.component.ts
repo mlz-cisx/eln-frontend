@@ -224,7 +224,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.websocketService.unsubscribe();
+    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {
