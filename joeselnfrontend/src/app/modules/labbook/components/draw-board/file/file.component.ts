@@ -338,7 +338,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           child_object_content_type_model: 'shared_elements.note',
           child_object_id: note.pk,
           position_x: 0,
-          position_y: this.element.position_y + this.element.height,
+          // +1 makes it working after restructure
+          position_y: this.element.position_y + 1,
           width: 13,
           height: 7,
         };

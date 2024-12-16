@@ -121,7 +121,6 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
   }
 
   public initDetails(): void {
-    console.log('init details')
     this.labBooksService
       .getElements(this.labBookId)
       .pipe(untilDestroyed(this))
