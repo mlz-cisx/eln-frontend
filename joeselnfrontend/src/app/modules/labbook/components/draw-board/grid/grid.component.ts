@@ -296,7 +296,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
           //  preloaded content has to be rendered again if position is top
           if (event.position === 'top') {
-            this.reload()
+            this.specialupdateAllElements()
           }
 
         },
@@ -331,6 +331,40 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.cdr.markForCheck();
             this.continue_search()
+          },
+          () => {
+            this.loading = false;
+            this.cdr.markForCheck();
+          }
+        );
+    }, 1);
+  }
+
+  public specialupdateAllElements(elements?: LabBookElementPayload[]): void {
+    if (!this.editable) {
+      return;
+    }
+
+    // Delay the process for a tick or else gridster won't recognize the changes
+    setTimeout(() => {
+      if (this.loading) {
+        return;
+      }
+      this.loading = true;
+
+      // this.updated_self = true;
+
+      const elementsPayload = elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
+
+      this.labBooksService
+        .updateAllElements(this.id, elementsPayload)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          () => {
+            this.loading = false;
+            this.cdr.markForCheck();
+            // we need reload, because preloaded content has to be rendered again
+            this.reload()
           },
           () => {
             this.loading = false;
