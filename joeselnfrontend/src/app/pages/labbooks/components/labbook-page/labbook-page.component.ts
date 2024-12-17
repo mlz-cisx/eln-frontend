@@ -334,7 +334,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           this.form.patchValue(
             {
               labbook_title: labBook.title,
-              isTemplate: labBook.is_template,
+              // TODO change this formControl name to strict_mode
+              isTemplate: labBook.strict_mode,
               projects: labBook.projects,
             },
             {emitEvent: false}

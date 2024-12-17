@@ -35,6 +35,7 @@ export const mockLabBook: LabBook = {
   created_by: mockUser,
   title: 'Neues LabBook',
   deleted: false,
+  strict_mode: false,
   content_type: 41,
   is_favourite: false,
 };

@@ -104,6 +104,10 @@ export class FormInputComponent implements AfterViewInit {
       return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
     }
 
+    if (this.ngControl?.name === 'isTemplate') {
+      return Boolean(this.ngControl?.dirty);
+    }
+
     return false
 
 

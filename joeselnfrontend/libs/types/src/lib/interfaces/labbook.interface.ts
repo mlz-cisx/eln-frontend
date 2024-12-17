@@ -22,6 +22,7 @@ export interface LabBookChildElement {
 export interface LabBook {
   title: string;
   deleted: boolean;
+  strict_mode: boolean;
   created_at: string;
   last_modified_by: User;
   last_modified_at: string;
