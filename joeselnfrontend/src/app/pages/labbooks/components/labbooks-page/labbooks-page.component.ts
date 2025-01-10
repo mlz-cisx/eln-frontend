@@ -153,6 +153,7 @@ export class LabBooksPageComponent implements OnInit {
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
+      console.log(this.currentUser)
       if (this.currentUser && this.currentUser.admin) {
         this.add_wb_button = true
       }
