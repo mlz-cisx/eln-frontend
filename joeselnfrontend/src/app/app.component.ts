@@ -19,7 +19,8 @@ export class AppComponent implements OnInit {
   title = 'joeseln';
 
   public ngOnInit(): void {
-    // this.websocketService.connect();
+    // we need this for page reload for a loogged-in User
+    // because createInitialState() is called initially
     this.user_service.getUserMe()
       .subscribe(user => {
           this.userStore.update(() => ({user, loggedIn: Boolean(user)}));
