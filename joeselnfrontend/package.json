@@ -41,7 +41,7 @@
     "@tinymce/tinymce-angular": "6.0.1",
     "angular-gridster2": "^15",
     "angular-resizable-element": "3.4.0",
-    "angularx-qrcode": "^13.0.15",
+    "angularx-qrcode": "^14",
     "bootstrap": "4.6.1",
     "cropperjs": "1.5.12",
     "d3": "6.7.0",
