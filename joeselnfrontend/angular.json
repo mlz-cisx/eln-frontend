@@ -87,10 +87,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "joeselnfrontend13:build:production"
+              "buildTarget": "joeselnfrontend13:build:production"
             },
             "development": {
-              "browserTarget": "joeselnfrontend13:build:development"
+              "buildTarget": "joeselnfrontend13:build:development"
             }
           },
           "defaultConfiguration": "development",
@@ -103,7 +103,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "joeselnfrontend13:build"
+            "buildTarget": "joeselnfrontend13:build"
           }
         },
         "test": {
