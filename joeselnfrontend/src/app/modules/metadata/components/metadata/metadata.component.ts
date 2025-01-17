@@ -5,7 +5,7 @@
 
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ModalState } from '@app/enums/modal-state.enum';
 import { MetadataService } from '@app/services';
 import type { DropdownElement, Metadata, MetadataField, ModalCallback } from '@joeseln/types';
@@ -49,7 +49,7 @@ export class MetadataComponent implements OnInit {
 
   public parametersData: ParametersData = {};
 
-  public parametersFormControl = new FormControl();
+  public parametersFormControl = new UntypedFormControl();
 
   public modalRef?: DialogRef;
 

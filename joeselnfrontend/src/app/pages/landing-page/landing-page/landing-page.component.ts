@@ -3,7 +3,7 @@ import {
   OnInit
 } from '@angular/core';
 import {Test} from "@joeseln/types";
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {Router} from '@angular/router'
 import {UserService, WebSocketService} from "@app/services";
 import {UserStore} from "@app/services/user/user.store";
@@ -15,7 +15,7 @@ import {UserStore} from "@app/services/user/user.store";
 })
 export class LandingPageComponent implements OnInit {
   test: Test[] = []
-  name = new FormControl('');
+  name = new UntypedFormControl('');
   intervalID: any;
 
 

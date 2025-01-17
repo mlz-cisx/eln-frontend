@@ -9,7 +9,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import {Validators, FormBuilder, FormGroup} from '@angular/forms';
+import {Validators, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router, RouterStateSnapshot} from '@angular/router';
 // import { AuthService, PageTitleService } from '@app/services';
@@ -51,14 +51,14 @@ export class LoginPageComponent implements OnInit {
   //   password: this.fb.control(null, Validators.required),
   // });
 
-  public form!: FormGroup;
+  public form!: UntypedFormGroup;
 
   private returnUrl = '/';
 
   public constructor(
     // private readonly route: ActivatedRoute,
     // private readonly router: Router,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     // private readonly authService: AuthService,
     // private readonly translocoService: TranslocoService,
     // private readonly cdr: ChangeDetectorRef,

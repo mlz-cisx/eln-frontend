@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from "@app/services";
 import {User, Test} from "@joeseln/types";
 import {UserStore} from "@app/services/user/user.store";
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ChangeDetectorRef } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -31,7 +31,7 @@ export class ProfilePageComponent implements OnInit {
 
   constructor(private user_service: UserService,
               private readonly userStore: UserStore,
-              private readonly fb: FormBuilder,
+              private readonly fb: UntypedFormBuilder,
               private readonly cdr: ChangeDetectorRef,
               private readonly translocoService: TranslocoService,
               private readonly toastrService: ToastrService,
@@ -51,12 +51,12 @@ export class ProfilePageComponent implements OnInit {
       );
   }
 
-  private get f(): FormGroup['controls'] {
+  private get f(): UntypedFormGroup['controls'] {
     return this.form.controls;
   }
 
   MustMatch(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
+    return (formGroup: UntypedFormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
 

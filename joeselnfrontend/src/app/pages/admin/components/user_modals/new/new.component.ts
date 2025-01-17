@@ -10,7 +10,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import {FormGroup, Validators, FormBuilder,} from '@angular/forms';
+import {UntypedFormGroup, Validators, UntypedFormBuilder,} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
   AdminUsersService,
@@ -69,7 +69,7 @@ export class NewUserModalComponent implements OnInit {
   public constructor(
     public readonly modalRef: DialogRef,
     public readonly notesService: NotesService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,
@@ -78,7 +78,7 @@ export class NewUserModalComponent implements OnInit {
   ) {
   }
 
-  private get f(): FormGroup['controls'] {
+  private get f(): UntypedFormGroup['controls'] {
     return this.form.controls;
   }
 
@@ -197,7 +197,7 @@ export class NewUserModalComponent implements OnInit {
   }
 
   MustMatch(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
+    return (formGroup: UntypedFormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
 
