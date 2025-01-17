@@ -14,13 +14,13 @@
   "dependencies": {
     "@angular/animations": "^15",
     "@angular/cdk": "^14.2.7",
-    "@angular/common": "^14.3.0",
-    "@angular/compiler": "^14.3.0",
-    "@angular/core": "^14.3.0",
-    "@angular/forms": "^14.3.0",
-    "@angular/platform-browser": "^14.3.0",
-    "@angular/platform-browser-dynamic": "^14.3.0",
-    "@angular/router": "^14.3.0",
+    "@angular/common": "^15.2.10",
+    "@angular/compiler": "^15.2.10",
+    "@angular/core": "^15.2.10",
+    "@angular/forms": "^15.2.10",
+    "@angular/platform-browser": "^15.2.10",
+    "@angular/platform-browser-dynamic": "^15.2.10",
+    "@angular/router": "^15.2.10",
     "@crawl/canvas-helper": "0.2.2",
     "@datorama/akita": "7.1.1",
     "@fullcalendar/angular": "^6",
@@ -68,8 +68,8 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15",
-    "@angular/cli": "^14.2.13",
-    "@angular/compiler-cli": "^14.3.0",
+    "@angular/cli": "^15.2.11",
+    "@angular/compiler-cli": "^15.2.10",
     "@ngneat/transloco-keys-manager": "3.4.1",
     "@types/jasmine": "~3.10.0",
     "@types/lodash": "^4.14.202",
@@ -82,6 +82,6 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "tailwindcss": "3.0.24",
-    "typescript": "~4.6.2"
+    "typescript": "~4.9.5"
   }
 }
