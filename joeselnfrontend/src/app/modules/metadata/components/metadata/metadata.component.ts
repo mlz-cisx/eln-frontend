@@ -9,7 +9,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { ModalState } from '@app/enums/modal-state.enum';
 import { MetadataService } from '@app/services';
 import type { DropdownElement, Metadata, MetadataField, ModalCallback } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
+import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take } from 'rxjs/operators';
 import { NewMetadataFieldComponent } from '../modals/new/new.component';
@@ -191,7 +191,7 @@ export class MetadataComponent implements OnInit {
     this.modalRef = this.modalService.open(NewMetadataFieldComponent, {
       closeButton: false,
       data: { name },
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

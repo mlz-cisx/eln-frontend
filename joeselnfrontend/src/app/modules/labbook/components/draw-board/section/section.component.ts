@@ -31,7 +31,7 @@ import type {
   ModalCallback,
   User
 } from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -284,7 +284,7 @@ export class LabBookDrawBoardSectionComponent implements OnInit, AfterViewInit {
         sectionId: this.element.pk,
         elementId: this.element.child_object_id
       },
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

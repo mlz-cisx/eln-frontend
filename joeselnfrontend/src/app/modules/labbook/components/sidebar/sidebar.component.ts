@@ -17,6 +17,7 @@ import {
 import {ModalState} from '@app/enums/modal-state.enum';
 import type {LabBookElementEvent, ModalCallback} from '@joeseln/types';
 import {
+  DialogConfig,
   DialogRef,
   DialogService
 } from '@ngneat/dialog';
@@ -162,7 +163,7 @@ export class LabBookSidebarComponent implements OnInit {
     this.modalRef = this.modalService.open(NewLabBookPictureElementModalComponent, {
       closeButton: false,
       data: {labBookId: this.id, projects: this.projects},
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
@@ -227,7 +228,7 @@ export class LabBookSidebarComponent implements OnInit {
     this.modalRef = this.modalService.open(NewQRcodeModalComponent, {
       closeButton: false,
       data: {labBookId: this.id, projects: this.projects},
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

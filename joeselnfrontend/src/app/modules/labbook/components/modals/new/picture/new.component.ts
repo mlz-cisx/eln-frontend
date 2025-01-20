@@ -23,7 +23,6 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
 import type * as pdfjs from 'pdfjs-dist';
-import type { PDFPageProxy } from 'pdfjs-dist/types/display/api';
 import { from, lastValueFrom, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, mergeMap, switchMap } from 'rxjs/operators';
 
@@ -369,7 +368,7 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
       );
   }
 
-  private async convertPDFtoCanvas(page: PDFPageProxy): Promise<any> {
+  private async convertPDFtoCanvas(page: pdfjs.PDFPageProxy): Promise<any> {
     const toBlob = (canvas: HTMLCanvasElement): Promise<unknown> => new Promise(resolve => canvas.toBlob(resolve));
 
     const viewport = page.getViewport({ scale: 1 });

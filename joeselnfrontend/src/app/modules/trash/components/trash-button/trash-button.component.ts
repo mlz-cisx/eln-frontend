@@ -13,7 +13,7 @@ import {
 import {ModalState} from '@app/enums/modal-state.enum';
 import type {TableViewComponent, TreeViewComponent} from '@joeseln/table';
 import type {ModalCallback} from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
@@ -100,7 +100,7 @@ export class TrashButtonComponent {
           service: this.service,
           userSetting: this.skipDialogKey
         },
-      });
+      } as DialogConfig);
 
       this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
     }

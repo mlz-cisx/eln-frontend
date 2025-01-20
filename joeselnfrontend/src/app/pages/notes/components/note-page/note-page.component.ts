@@ -29,7 +29,7 @@ import {
   WebSocketService
 } from '@app/services';
 import type {Lock, Metadata, ModalCallback, Note, NotePayload, Privileges, Project, User} from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -423,7 +423,7 @@ export class NotePageComponent implements OnInit, OnDestroy {
         contentType: this.initialState?.content_type,
         service: this.notesService,
       },
-    });
+    } as DialogConfig);
 
     // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
     //   if (callback.state === ModalState.Changed) {

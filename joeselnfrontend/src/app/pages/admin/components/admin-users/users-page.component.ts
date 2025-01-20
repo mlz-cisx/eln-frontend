@@ -29,7 +29,7 @@ import {
   TableViewComponent
 } from '@joeseln/table';
 import type {ModalCallback, Project, User} from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -676,7 +676,7 @@ export class UsersPageComponent implements OnInit {
     this.modalRef = this.modalService.open(NewUserModalComponent, {
       closeButton: false,
       data: {service: this.admin_users_service, initialState: initialState},
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

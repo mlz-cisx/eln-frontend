@@ -38,7 +38,7 @@ import type {
   ModalCallback,
   Privileges
 } from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
@@ -157,7 +157,7 @@ export class LabBookElementDropdownComponent implements OnInit {
       closeButton: false,
       width: '800px',
       data: {service: this.service, id: this.id, data: this.initialState},
-    });
+    } as DialogConfig);
   }
 
   public onExport(): void {
@@ -212,7 +212,7 @@ export class LabBookElementDropdownComponent implements OnInit {
       this.modalRef = this.modalService.open(DeleteModalComponent, {
         closeButton: false,
         data: {id: this.id, service: this.service, userSetting},
-      });
+      } as DialogConfig);
 
       this.modalRef.afterClosed$
         .pipe(untilDestroyed(this), take(1))
@@ -290,7 +290,7 @@ export class LabBookElementDropdownComponent implements OnInit {
           elementId: this.elementId,
           sectionId: this.section
         },
-      });
+      } as DialogConfig);
 
       this.modalRef.afterClosed$
         .pipe(untilDestroyed(this), take(1))

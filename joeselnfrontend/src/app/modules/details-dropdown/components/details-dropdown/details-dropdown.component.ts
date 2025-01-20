@@ -23,7 +23,7 @@ import type {
   Privileges,
   Project
 } from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
@@ -126,7 +126,7 @@ export class DetailsDropdownComponent implements OnInit {
       closeButton: false,
       width: '800px',
       data: {service: this.service, id: this.id, data: this.initialState},
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
@@ -178,8 +178,8 @@ export class DetailsDropdownComponent implements OnInit {
     } else {
       this.modalRef = this.modalService.open(DeleteModalComponent, {
         closeButton: false,
-        data: {id: this.id, service: this.service, userSetting},
-      });
+        data: {id: this.id, service: this.service, userSetting} ,
+      } as DialogConfig);
 
       this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
     }
@@ -257,7 +257,7 @@ export class DetailsDropdownComponent implements OnInit {
         this.modalRef = this.modalService.open(DuplicateProjectModalComponent, {
           closeButton: false,
           data: {id: this.id},
-        });
+        } as DialogConfig);
 
         this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
       }
@@ -270,7 +270,7 @@ export class DetailsDropdownComponent implements OnInit {
         this.modalRef = this.modalService.open(DuplicateDMPModalComponent, {
           closeButton: false,
           data: {id: this.id},
-        });
+        } as DialogConfig);
 
         this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
       }

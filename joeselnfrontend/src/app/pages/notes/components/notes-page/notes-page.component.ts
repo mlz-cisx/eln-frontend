@@ -28,7 +28,7 @@ import {
   TableViewComponent
 } from '@joeseln/table';
 import type {ModalCallback, Project, User} from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -648,7 +648,7 @@ export class NotesPageComponent implements OnInit {
     this.modalRef = this.modalService.open(NewNoteModalComponent, {
       closeButton: false,
       data: {service: this.notesService, initialState: initialState},
-    });
+    }  as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

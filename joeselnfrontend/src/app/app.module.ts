@@ -13,7 +13,7 @@ import {TranslocoService} from '@ngneat/transloco';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
 import {NavbarModule} from "@app/modules/navbar/navbar.module";
 import {WysiwygEditorModule} from '@joeseln/wysiwyg-editor';
-import {DialogConfig, DialogModule, GlobalDialogConfig} from '@ngneat/dialog';
+import {DialogConfig, provideDialogConfig} from '@ngneat/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   LabBookDrawBoardGridComponent
@@ -72,10 +72,6 @@ import {ColorPickerService} from "ngx-color-picker"
       controlErrorComponent: CustomControlErrorComponent,
     }),
     WysiwygEditorModule,
-    DialogModule.forRoot({
-      draggable: true,
-      resizable: true,
-    } as DialogConfig as GlobalDialogConfig),
     ToastrModule.forRoot({
       toastComponent: CustomToastComponent,
       closeButton: true,
@@ -105,7 +101,11 @@ import {ColorPickerService} from "ngx-color-picker"
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardGridComponent,
     NgSelectModule,
-    ColorPickerService
+    ColorPickerService,
+    provideDialogConfig({
+      draggable: true,
+      resizable: true,
+    }),
   ],
   bootstrap: [AppComponent]
 })

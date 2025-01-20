@@ -52,6 +52,7 @@ import type {
   LabBookElementPayload, LabBookElement
 } from '@joeseln/types';
 import {
+  DialogConfig,
   DialogRef,
   DialogService
 } from '@ngneat/dialog';
@@ -530,7 +531,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         contentType: this.initialState?.content_type,
         service: this.labBooksService,
       },
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
       if (callback.state === ModalState.Changed) {

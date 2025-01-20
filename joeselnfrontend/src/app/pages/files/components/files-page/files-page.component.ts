@@ -42,7 +42,7 @@ import type {
   Project,
   User
 } from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -845,7 +845,7 @@ export class FilesPageComponent implements OnInit {
     this.modalRef = this.modalService.open(NewFileModalComponent, {
       closeButton: false,
       data: {withSidebar: this.showSidebar, initialState: initialState},
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

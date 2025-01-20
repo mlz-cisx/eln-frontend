@@ -29,6 +29,7 @@ import {
 } from '@joeseln/table';
 import type {ModalCallback, Project, User} from '@joeseln/types';
 import {
+  DialogConfig,
   DialogRef,
   DialogService
 } from '@ngneat/dialog';
@@ -694,7 +695,7 @@ export class LabBooksPageComponent implements OnInit {
     this.modalRef = this.modalService.open(NewLabBookModalComponent, {
       closeButton: false,
       data: {withSidebar: this.showSidebar, initialState: null},
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

@@ -39,7 +39,7 @@ import type {
   User,
   LabBookElementPayload
 } from '@joeseln/types';
-import {DialogRef, DialogService} from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -303,7 +303,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         initialState: this.initialState,
         privileges: this.privileges
       },
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe(() => this.onModalClose());
   }

@@ -7,7 +7,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, Temp
 import { ModalState } from '@app/enums/modal-state.enum';
 import { TableColumn, TableViewComponent } from '@joeseln/table';
 import type { ModalCallback, Version } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
+import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { parseISO } from 'date-fns';
@@ -195,7 +195,7 @@ export class VersionsComponent implements OnInit {
         versionNumber: versionNumber,
         versionInProgress: this.versionInProgress,
       },
-    });
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
