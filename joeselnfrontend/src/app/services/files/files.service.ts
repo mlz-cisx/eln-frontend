@@ -32,7 +32,12 @@ import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
-import {mockNoteVersion, mockPrivileges} from "@joeseln/mocks";
+import {
+  mockFileHistory,
+  mockNoteVersion,
+  mockPictureHistory,
+  mockPrivileges
+} from "@joeseln/mocks";
 import {AuthGuardService, ErrorserviceService} from "@app/services";
 import {Note} from "@joeseln/types";
 
@@ -72,7 +77,7 @@ export class FilesService
     return this.httpClient.post<File>(this.apiUrl, formData, {params});
   }
 
-  public get(id: string,  params = new HttpParams()): Observable<PrivilegesData<File>> {
+  public get(id: string, params = new HttpParams()): Observable<PrivilegesData<File>> {
     return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(file => {
         let privileges = file.privileges
@@ -149,21 +154,13 @@ export class FilesService
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<DjangoAPI<RecentChanges[]>>(`${this.apiUrl}${id}/history/`, {params}).pipe(map(data => data.results));
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
   }
+
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
     return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});
   }
-
-  // public oldversions(id: string, params = new HttpParams()): Observable<Version[]> {
-  //   return this.privileges_list$.pipe(
-  //     map(() => {
-  //         return [mockNoteVersion]
-  //       }
-  //     )
-  //   )
-  // }
 
 
   public old_previewVersion(id: string, version: string): Observable<any> {

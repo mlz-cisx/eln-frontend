@@ -25,14 +25,14 @@
         [disabled]="loading"
         [style.visibility]="isTrashedOrRestored(row.changeset_type) ? 'hidden' : ''"
       >
-                <joeseln-icon className="wb-plus" *ngIf="!row.expanded"></joeseln-icon>
-                <joeseln-icon className="wb-minus" *ngIf="row.expanded"></joeseln-icon>
+        <joeseln-icon className="wb-plus" *ngIf="!row.expanded"></joeseln-icon>
+        <joeseln-icon className="wb-minus" *ngIf="row.expanded"></joeseln-icon>
       </button>
 
-      {{ row.date }}<span class="mx-1">&middot;</span>
-      <!--        {{ row.date | formatDate }}<span class="mx-1">&middot;</span>    -->
-      {{ row.object_type.app_label + '.' + row.object_type.model }}
-      <!--            {{ row.object_type.app_label + '.' + row.object_type.model | formatContentTypeModel }}-->
+
+      {{ row.date | formatDate }}<span class="mx-1">&middot;</span>
+
+      {{ row.object_type.app_label + '.' + row.object_type.model | formatContentTypeModel }}
       <span *ngIf="row.changeset_type === 'U'"
             class="ml-1 mr-2">{{ t('recentChanges.editedBy') }}</span>
       <span *ngIf="row.changeset_type === 'R'"
@@ -213,21 +213,21 @@
             {{
             t(row.changeset_type === 'I' ? 'recentChanges.createDetailsSpecialField' : 'recentChanges.changeDetailsSpecialField', {
               field: formatFieldName(change.field_name),
-              oldValue: (change.old_value ) || "'-'",
-              newValue: (change.new_value ) || "'-'"
+              oldValue: (change.old_value) || "'-'",
+              newValue: (change.new_value) || "'-'"
             })
             }}
           </ng-container>
 
-<!--          <ng-container *ngIf="isFileSizeField(change.field_name)">-->
-<!--            {{-->
-<!--            t(row.changeset_type === 'I' ? 'recentChanges.createDetailsSpecialField' : 'recentChanges.changeDetailsSpecialField', {-->
-<!--              field: formatFieldName(change.field_name),-->
-<!--              oldValue: (change.old_value | formatFileSize) || "'-'",-->
-<!--              newValue: (change.new_value | formatFileSize) || "'-'"-->
-<!--            })-->
-<!--            }}-->
-<!--          </ng-container>-->
+          <!--          <ng-container *ngIf="isFileSizeField(change.field_name)">-->
+          <!--            {{-->
+          <!--            t(row.changeset_type === 'I' ? 'recentChanges.createDetailsSpecialField' : 'recentChanges.changeDetailsSpecialField', {-->
+          <!--              field: formatFieldName(change.field_name),-->
+          <!--              oldValue: (change.old_value | formatFileSize) || "'-'",-->
+          <!--              newValue: (change.new_value | formatFileSize) || "'-'"-->
+          <!--            })-->
+          <!--            }}-->
+          <!--          </ng-container>-->
 
           <div *ngIf="isUserField(change.field_name)" class="flex">
             <span class="mr-1">{{ formatFieldName(change.field_name) }}</span>

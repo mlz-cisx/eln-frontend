@@ -46,7 +46,7 @@ import {
   mockExportLink,
   mockRelationList, mockRelation, MockService,
   mockPrivileges,
-  mockPrivilegesApi, mockNoteVersion
+  mockPrivilegesApi, mockNoteVersion, mockNoteHistory, mockPictureHistory
 } from "@joeseln/mocks";
 import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
@@ -117,8 +117,7 @@ export class PicturesService
   }
 
 
-
-    public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
+  public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
     return this.httpClient.get<Pic_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(pic => {
         let privileges = pic.privileges
@@ -178,21 +177,14 @@ export class PicturesService
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<DjangoAPI<RecentChanges[]>>(`${this.apiUrl}${id}/history/`, {params}).pipe(map(data => data.results));
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
   }
+
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
     return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});
   }
 
-  // public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-  //   return this.privileges_list$.pipe(
-  //     map(() => {
-  //         return [mockNoteVersion]
-  //       }
-  //     )
-  //   )
-  // }
 
   //   // TODO: needs proper interface for return type, maybe with a generic?
   // public previewVersion(id: string, version: string): Observable<any> {

@@ -83,16 +83,6 @@ export class LabbooksService {
     )
   }
 
-  // public add_old(labbook: LabBookPayload): Observable<LabBook> {
-  //   console.log('Labbook payload', labbook)
-  //   console.log('payload mock', mockLabBookPayload)
-  //   return this.lab_book_list$.pipe(
-  //     map((elem) => {
-  //         return mockLabBooksList.results[0]
-  //       }
-  //     )
-  //   )
-  // }
 
   public add(labbook: LabBookPayload): Observable<LabBook> {
     // @ts-ignore
@@ -175,6 +165,7 @@ export class LabbooksService {
 
 
   public patch(id: string, labbook: LabBookPayload): Observable<LabBook> {
+    console.log(labbook)
     return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/`, labbook);
   }
 
@@ -295,7 +286,7 @@ export class LabbooksService {
   }
 
 
-  public old_history(id: string): Observable<RecentChanges[]> {
+  public _history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
     return this.lab_book_list$.pipe(
       map(() => {
           return mockLabBookHistory.results
@@ -305,55 +296,19 @@ export class LabbooksService {
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<DjangoAPI<RecentChanges[]>>(`${this.apiUrl}${id}/history/`, {params}).pipe(map(data => data.results));
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
   }
 
-
-  // public versions(id: string): Observable<Version[]> {
-  //   return this.lab_book_list$.pipe(
-  //     map(() => {
-  //         return [mockLabBookVersion]
-  //       }
-  //     )
-  //   )
-  // }
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
     return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
 
-  // // TODO: needs proper interface for return type, maybe with a generic?
-  // public previewVersion(id: string, version: string): Observable<any> {
-  //   return this.lab_book_list$.pipe(
-  //     map(() => {
-  //          return mockLabBookVersion.metadata
-  //       }
-  //     )
-  //   )
-  // }
-
   // TODO: needs proper interface for return type, maybe with a generic?
   public previewVersion(id: string, version: string): Observable<any> {
     return this.httpClient.get<any>(`${this.apiUrl}${id}/versions/${version}/preview/`);
   }
-
-  // public old_addVersion(id: string, version?: FinalizeVersion): Observable<LabBook> {
-  //   console.log('Finalize Version ', version)
-  //   let _labbook = <LabBook><unknown>[]
-  //   return this.lab_book_list$.pipe(
-  //     map(() => {
-  //         mockLabBooksList.results.forEach((elem) => {
-  //           if (elem.pk === id) {
-  //             _labbook = elem;
-  //             return
-  //           }
-  //         })
-  //         return _labbook
-  //       }
-  //     )
-  //   )
-  // }
 
 
   public addVersion(id: string, version?: FinalizeVersion): Observable<LabBook> {

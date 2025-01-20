@@ -32,8 +32,9 @@ import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {BehaviorSubject} from "rxjs";
 import {
+  mockLabBookHistory,
   mockLabBooksList,
-  mockLabBookVersion, mockNotesList,
+  mockLabBookVersion, mockNoteHistory, mockNotesList,
   mockNoteVersion,
   mockPrivileges
 } from "@joeseln/mocks";
@@ -85,7 +86,7 @@ export class NotesService
   }
 
 
-  public get(id: string,  params = new HttpParams()): Observable<PrivilegesData<Note>> {
+  public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Note>> {
     return this.httpClient.get<Note_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(note => {
         let privileges = note.privileges
@@ -146,8 +147,9 @@ export class NotesService
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<DjangoAPI<RecentChanges[]>>(`${this.apiUrl}${id}/history/`, {params}).pipe(map(data => data.results));
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
   }
+
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
     return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});

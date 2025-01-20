@@ -52,7 +52,55 @@ export const mockNoteHistory: DjangoAPI<RecentChanges[]> = {
       changeset_type: 'I',
       date: '2020-07-06T14:15:48.534094+02:00',
       change_records: [
-        {field_name: 'content', old_value: null, new_value: ''},
+        {field_name: 'content', old_value: 'was geht', new_value: 'nicht noch einmal'},
+        {field_name: 'deleted', old_value: null, new_value: 'False'},
+        {field_name: 'metadata', old_value: null, new_value: '[]'},
+        {field_name: 'projects', old_value: null, new_value: ''},
+        {field_name: 'subject', old_value: null, new_value: 'test'},
+      ],
+    },
+  ],
+};
+
+
+export const mockFileHistory: DjangoAPI<RecentChanges[]> = {
+  count: 1,
+  next: null,
+  previous: null,
+  results: [
+    {
+      pk: '7a20340e-b1ac-46b5-871c-48f30e4a3ecb',
+      user: mockUser,
+      object_type: {id: 28, app_label: 'shared_elements', model: 'file'},
+      object_uuid: 'ea9636db-2020-4326-8191-47a14142ba42',
+      changeset_type: 'I',
+      date: '2020-07-06T14:15:48.534094+02:00',
+      change_records: [
+        {field_name: 'content', old_value: 'was geht', new_value: 'nicht noch einmal'},
+        {field_name: 'deleted', old_value: null, new_value: 'False'},
+        {field_name: 'metadata', old_value: null, new_value: '[]'},
+        {field_name: 'projects', old_value: null, new_value: ''},
+        {field_name: 'subject', old_value: null, new_value: 'test'},
+      ],
+    },
+  ],
+};
+
+
+export const mockPictureHistory: DjangoAPI<RecentChanges[]> = {
+  count: 1,
+  next: null,
+  previous: null,
+  results: [
+    {
+      pk: '7a20340e-b1ac-46b5-871c-48f30e4a3ecb',
+      user: mockUser,
+      object_type: {id: 28, app_label: 'pictures', model: 'picture'},
+      object_uuid: 'ea9636db-2020-4326-8191-47a14142ba42',
+      changeset_type: 'I',
+      date: '2020-07-06T14:15:48.534094+02:00',
+      change_records: [
+        {field_name: 'content', old_value: 'was geht', new_value: 'nicht noch einmal'},
         {field_name: 'deleted', old_value: null, new_value: 'False'},
         {field_name: 'metadata', old_value: null, new_value: '[]'},
         {field_name: 'projects', old_value: null, new_value: ''},

@@ -7,7 +7,7 @@ export const environment = {
   matomoId: null,
   labBookSocketRefreshInterval: 1000,
   eln_exporter: 'http://172.25.74.236:5000',
-  keycloak_url: 'http://172.25.74.236:8181/',
+  keycloak_url: 'http://daphneopc01:8181/',
   keycloak_realm: 'joe',
   keycloak_clientId: 'my_client'
 };

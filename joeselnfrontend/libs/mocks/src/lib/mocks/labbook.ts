@@ -84,7 +84,7 @@ export const mockLabBookPluginInstanceElement: LabBookElement<PluginInstance> = 
 };
 
 export const mockLabBookHistory: DjangoAPI<RecentChanges[]> = {
-  count: 1,
+  count: 2,
   next: null,
   previous: null,
   results: [
