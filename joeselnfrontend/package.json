@@ -39,7 +39,7 @@
     "@ngx-loading-bar/http-client": "^7",
     "@ngx-loading-bar/router": "^7",
     "@nrwl/angular": "^16",
-    "@tinymce/tinymce-angular": "6.0.1",
+    "@tinymce/tinymce-angular": "^8",
     "angular-gridster2": "^17",
     "angular-resizable-element": "^5",
     "angularx-qrcode": "^17",
@@ -62,7 +62,6 @@
     "pdfjs-dist": "^2.6.347",
     "rxjs": "^7.5.5",
     "skeleton-screen-css": "1.0.1",
-    "tinymce": "5.10.2",
     "tslib": "^2.4.0",
     "utility-types": "3.10.0",
     "zone.js": "0.14.10"

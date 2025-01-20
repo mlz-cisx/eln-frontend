@@ -122,7 +122,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
       this.cdr.markForCheck();
     });
 
-    setTimeout(() => this.editor?.editor.setMode(this.disabled ? 'readonly' : 'design'), 500);
+    this.editor?.editor.mode.set(this.disabled ? 'readonly' : 'design');
   }
 
   public writeValue(value: string | null): void {
