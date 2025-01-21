@@ -73,6 +73,7 @@ ngneat-dialog {
       //left: 700px;
       z-index: 10040;
       overflow: auto;
+      max-height: 95%;
 
       .ngneat-drag-marker {
         height: 40px;
