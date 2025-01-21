@@ -47,7 +47,8 @@
               "src/assets/styles/tinymce.css"
             ],
             "scripts": [
-              "node_modules/@crawl/canvas-helper/dist/canvas-helper.min.js"
+              "node_modules/@crawl/canvas-helper/dist/canvas-helper.min.js",
+              "node_modules/tinymce/tinymce.min.js"
             ]
           },
           "configurations": {

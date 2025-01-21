@@ -25,29 +25,19 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   public init = {
     base_url: '/tinymce',
     suffix: '.min',
-    menubar: false,
-    // https://www.tiny.cloud/docs/general-configuration-guide/multiple-editors/#multipleeditorinstancessharingthesameconfiguration
-    inline: false,
-    statusbar: false,
     branding: false,
+    promotion: false,
     max_height: this.maxHeight,
-    plugins: [
-      'advlist autolink autoresize lists link image charmap print preview anchor searchreplace visualblocks code fullscreen',
-      'insertdatetime textpattern media table paste code help hr quickbars image imagetools ',
-    ],
-    toolbar_location: 'top',
-    toolbar:
-      'formatselect | bold italic underline strikethrough forecolor backcolor | table | removeformat | alignleft aligncenter alignright alignjustify | charmap superscript subscript | link image | numlist bullist outdent indent hr | code ',
-    quickbars_insert_toolbar: '',
+    plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
+    menubar: 'file edit view insert format tools table help',
+    toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
     quickbars_selection_toolbar:
-      'bold italic underline strikethrough forecolor backcolor | removeformat  | alignleft aligncenter alignright alignjustify | superscript subscript |',
-    contextmenu:
-      'formats | bold italic underline forecolor removeformat | align | inserttable cell row column deletetable | charmap superscript subscript | link | hr ',
-    paste_data_images: true,
+      'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
     content_css: '/assets/styles/tinymce.css',
     content_style: 'img{max-width:90%;height:auto; margin-top: 10px}',
-    forced_root_block: false,
-    file_picker_types: 'image',
+    highlight_on_focus: false,
+    autosave_ask_before_unload: false,
+    powerpaste_allow_local_images: true,
     file_picker_callback: (cb: any) => {
       const input = document.createElement('input');
       input.setAttribute('type', 'file');
@@ -122,7 +112,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
       this.cdr.markForCheck();
     });
 
-    this.editor?.editor.mode.set(this.disabled ? 'readonly' : 'design');
+    // this.editor?.editor.mode.set(this.disabled ? 'readonly' : 'design');
   }
 
   public writeValue(value: string | null): void {
@@ -131,7 +121,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     }
   }
 
-  public mypageload(): void{
+  public mypageload(): void {
     console.log('nearly loaded')
   }
 

@@ -19,9 +19,11 @@ export class AppComponent implements OnInit {
   title = 'joeseln';
 
   public ngOnInit(): void {
-    // we need this for page reload for a loogged-in User
+    // we need this for page reload for a logged-in User
     // because createInitialState() is called initially
-    this.user_service.getUserMe()
+    // no error-service integration, because it is called always first
+    // even without a logged-in user
+    this.user_service.getUserMe_without_error_service()
       .subscribe(user => {
           this.userStore.update(() => ({user, loggedIn: Boolean(user)}));
         }
