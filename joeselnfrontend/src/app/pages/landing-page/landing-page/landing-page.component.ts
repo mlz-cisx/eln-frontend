@@ -35,7 +35,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.websockket_service.connect()
+    // this.websockket_service.connect()
     this.getUser()
     const state_url = localStorage.getItem('state_url')
     // for qr code integration
