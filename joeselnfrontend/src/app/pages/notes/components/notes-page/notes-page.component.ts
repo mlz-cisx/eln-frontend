@@ -65,11 +65,14 @@ export class NotesPageComponent implements OnInit {
   @ViewChild('createdByCellTemplate', {static: true})
   public createdByCellTemplate!: TemplateRef<any>;
 
-    @ViewChild('lastModifiedAtCellTemplate', { static: true })
+  @ViewChild('lastModifiedAtCellTemplate', {static: true})
   public lastModifiedAtCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('lastModifiedByCellTemplate', { static: true })
+  @ViewChild('lastModifiedByCellTemplate', {static: true})
   public lastModifiedByCellTemplate!: TemplateRef<any>;
+
+  @ViewChild('lb_titleCellTemplate', {static: true})
+  public lb_titleCellTemplate!: TemplateRef<any>;
 
   @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
@@ -197,6 +200,12 @@ export class NotesPageComponent implements OnInit {
             sortable: true,
           },
           {
+            cellTemplate: this.lb_titleCellTemplate,
+            name: column.lb_title,
+            key: 'lb_title',
+            sortable: false,
+          },
+          {
             cellTemplate: this.actionsCellTemplate,
             name: '',
             key: 'actions',
@@ -220,7 +229,7 @@ export class NotesPageComponent implements OnInit {
         //   );
         //   this.listColumns = values(merged);
         // } else {
-          this.listColumns = [...this.defaultColumns];
+        this.listColumns = [...this.defaultColumns];
         // }
 
         // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.notes) {
@@ -234,31 +243,31 @@ export class NotesPageComponent implements OnInit {
         //     this.savedFilters = true;
         //   }
 
-          // if (filters.users) {
-          //   this.userService
-          //     .getUserById(filters.users)
-          //     .pipe(untilDestroyed(this))
-          //     .subscribe(users => {
-          //       if (users.length) {
-          //         this.users = [...users];
-          //         this.cdr.markForCheck();
-          //       }
-          //     });
-          //   this.usersControl.setValue(filters.users);
-          //   this.params = this.params.set('created_by', filters.users);
-          // }
+        // if (filters.users) {
+        //   this.userService
+        //     .getUserById(filters.users)
+        //     .pipe(untilDestroyed(this))
+        //     .subscribe(users => {
+        //       if (users.length) {
+        //         this.users = [...users];
+        //         this.cdr.markForCheck();
+        //       }
+        //     });
+        //   this.usersControl.setValue(filters.users);
+        //   this.params = this.params.set('created_by', filters.users);
+        // }
 
-          // if (filters.projects) {
-          //   this.projectsService
-          //     .get(filters.projects)
-          //     .pipe(untilDestroyed(this))
-          //     .subscribe(project => {
-          //       this.projects = [...this.projects, project];
-          //       this.cdr.markForCheck();
-          //     });
-          //   this.projectsControl.setValue(filters.projects);
-          //   this.params = this.params.set('projects_recursive', filters.projects);
-          // }
+        // if (filters.projects) {
+        //   this.projectsService
+        //     .get(filters.projects)
+        //     .pipe(untilDestroyed(this))
+        //     .subscribe(project => {
+        //       this.projects = [...this.projects, project];
+        //       this.cdr.markForCheck();
+        //     });
+        //   this.projectsControl.setValue(filters.projects);
+        //   this.params = this.params.set('projects_recursive', filters.projects);
+        // }
 
         //   if (filters.search) {
         //     this.searchControl.setValue(filters.search);
@@ -648,7 +657,7 @@ export class NotesPageComponent implements OnInit {
     this.modalRef = this.modalService.open(NewNoteModalComponent, {
       closeButton: false,
       data: {service: this.notesService, initialState: initialState},
-    }  as DialogConfig);
+    } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }

@@ -3,14 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpParams } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { ProjectSidebarItem } from '@app/enums/project-sidebar-item.enum';
+import {HttpParams} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
 // import { LeaveProjectModalComponent } from '@app/pages/projects/components/modals/leave/leave.component';
-import { AuthService,
+import {
+  AuthService,
   // PageTitleService,
   PicturesService,
   // ProjectsService
@@ -19,15 +27,20 @@ import {
   UserService,
   // UserStore
 } from '@app/services';
-import { TableColumn, TableColumnChangedEvent, TableSortChangedEvent, TableViewComponent } from '@joeseln/table';
-import type { ModalCallback, Project, User } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { keyBy, merge, values } from 'lodash';
-import { Observable, of, Subject } from 'rxjs';
-import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';
+import {
+  TableColumn,
+  TableColumnChangedEvent,
+  TableSortChangedEvent,
+  TableViewComponent
+} from '@joeseln/table';
+import type {ModalCallback, Project, User} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {keyBy, merge, values} from 'lodash';
+import {Observable, of, Subject} from 'rxjs';
+import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
 // import { NewPictureModalComponent } from '../modals/new/new.component';
 // import { SketchPictureModalComponent } from '../modals/sketch/sketch.component';
 
@@ -48,32 +61,35 @@ export class PicturesPageComponent implements OnInit {
 
   public sidebarItem = ProjectSidebarItem.Pictures;
 
-  @ViewChild('tableView', { static: true })
+  @ViewChild('tableView', {static: true})
   public tableView!: TableViewComponent;
 
-  @ViewChild('titleCellTemplate', { static: true })
+  @ViewChild('titleCellTemplate', {static: true})
   public titleCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('createdAtCellTemplate', { static: true })
+  @ViewChild('createdAtCellTemplate', {static: true})
   public createdAtCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('createdByCellTemplate', { static: true })
+  @ViewChild('createdByCellTemplate', {static: true})
   public createdByCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('lastModifiedAtCellTemplate', { static: true })
+  @ViewChild('lastModifiedAtCellTemplate', {static: true})
   public lastModifiedAtCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('lastModifiedByCellTemplate', { static: true })
+  @ViewChild('lastModifiedByCellTemplate', {static: true})
   public lastModifiedByCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('heightCellTemplate', { static: true })
+  @ViewChild('heightCellTemplate', {static: true})
   public heightCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('widthCellTemplate', { static: true })
+  @ViewChild('widthCellTemplate', {static: true})
   public widthCellTemplate!: TemplateRef<any>;
 
-  @ViewChild('actionsCellTemplate', { static: true })
+  @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
+
+  @ViewChild('lb_titleCellTemplate', {static: true})
+  public lb_titleCellTemplate!: TemplateRef<any>;
 
   public modalRef?: DialogRef;
 
@@ -122,7 +138,8 @@ export class PicturesPageComponent implements OnInit {
     private readonly authService: AuthService,
     private user_service: UserService,
     // private readonly userStore: UserStore
-  ) {}
+  ) {
+  }
 
   public get filtersChanged(): boolean {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -201,15 +218,21 @@ export class PicturesPageComponent implements OnInit {
             cellTemplate: this.heightCellTemplate,
             name: column.height,
             key: 'height',
-            sortable: true,
+            sortable: false,
             hidden: true,
           },
           {
             cellTemplate: this.widthCellTemplate,
             name: column.width,
             key: 'width',
-            sortable: true,
+            sortable: false,
             hidden: true,
+          },
+          {
+            cellTemplate: this.lb_titleCellTemplate,
+            name: column.lb_title,
+            key: 'lb_title',
+            sortable: false,
           },
           {
             cellTemplate: this.actionsCellTemplate,
@@ -236,7 +259,7 @@ export class PicturesPageComponent implements OnInit {
         //   );
         //   this.listColumns = values(merged);
         // } else {
-         this.listColumns = [...this.defaultColumns];
+        this.listColumns = [...this.defaultColumns];
         // }
 
         // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.pictures) {
@@ -250,31 +273,31 @@ export class PicturesPageComponent implements OnInit {
         //     this.savedFilters = true;
         //   }
 
-          // if (filters.users) {
-          //   this.userService
-          //     .getUserById(filters.users)
-          //     .pipe(untilDestroyed(this))
-          //     .subscribe(users => {
-          //       if (users.length) {
-          //         this.users = [...users];
-          //         this.cdr.markForCheck();
-          //       }
-          //     });
-          //   this.usersControl.setValue(filters.users);
-          //   this.params = this.params.set('created_by', filters.users);
-          // }
-          //
-          // if (filters.projects && !project) {
-          //   this.projectsService
-          //     .get(filters.projects)
-          //     .pipe(untilDestroyed(this))
-          //     .subscribe(project => {
-          //       this.projects = [...this.projects, project];
-          //       this.cdr.markForCheck();
-          //     });
-          //   this.projectsControl.setValue(filters.projects);
-          //   this.params = this.params.set('projects_recursive', filters.projects);
-          // }
+        // if (filters.users) {
+        //   this.userService
+        //     .getUserById(filters.users)
+        //     .pipe(untilDestroyed(this))
+        //     .subscribe(users => {
+        //       if (users.length) {
+        //         this.users = [...users];
+        //         this.cdr.markForCheck();
+        //       }
+        //     });
+        //   this.usersControl.setValue(filters.users);
+        //   this.params = this.params.set('created_by', filters.users);
+        // }
+        //
+        // if (filters.projects && !project) {
+        //   this.projectsService
+        //     .get(filters.projects)
+        //     .pipe(untilDestroyed(this))
+        //     .subscribe(project => {
+        //       this.projects = [...this.projects, project];
+        //       this.cdr.markForCheck();
+        //     });
+        //   this.projectsControl.setValue(filters.projects);
+        //   this.params = this.params.set('projects_recursive', filters.projects);
+        // }
 
         //   if (filters.search) {
         //     this.searchControl.setValue(filters.search);
@@ -655,13 +678,13 @@ export class PicturesPageComponent implements OnInit {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
 
-    this.projectsControl.setValue(null, { emitEvent: false });
+    this.projectsControl.setValue(null, {emitEvent: false});
     this.projects = [];
 
-    this.usersControl.setValue(null, { emitEvent: false });
+    this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];
 
-    this.searchControl.setValue(null, { emitEvent: false });
+    this.searchControl.setValue(null, {emitEvent: false});
 
     this.favoritesControl.setValue(null);
   }
@@ -718,7 +741,7 @@ export class PicturesPageComponent implements OnInit {
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.navigate) {
-      void this.router.navigate(callback.navigate, { relativeTo: this.route });
+      void this.router.navigate(callback.navigate, {relativeTo: this.route});
     } else if (callback?.state === ModalState.Changed) {
       this.tableView.loadData();
     }

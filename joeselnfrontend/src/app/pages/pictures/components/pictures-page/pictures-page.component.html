@@ -61,88 +61,88 @@
       ></eworkbench-table-manage-columns>
     </div>
 
-    <ng-container *transloco="let t">
-      <div class="flex justify-between pb-4 mb-5">
-        <div class="space-x-2">
-          <div *ngIf="!filtersChanged" class="text-sm text-tum-info-color">
-            {{ t('filterHeader.noFilters') }}
-          </div>
+<!--    <ng-container *transloco="let t">-->
+<!--      <div class="flex justify-between pb-4 mb-5">-->
+<!--        <div class="space-x-2">-->
+<!--          <div *ngIf="!filtersChanged" class="text-sm text-tum-info-color">-->
+<!--            {{ t('filterHeader.noFilters') }}-->
+<!--          </div>-->
 
-          <div
-            *ngIf="getFilterSelectedUser"
-            class="bg-tum-primary hover:bg-tum-primary-hover text-white py-0.5 px-2.5 rounded-full inline-flex justify-between items-center"
-          >
-            <span class="text-sm mr-2"
-            >{{ t('filterHeader.createdBy') }}{{ ' '
-              }}{{ getFilterSelectedUser.pk === currentUser?.pk ? t('filterHeader.createdBy.myself') : '' }}</span
-            >
-            <eworkbench-user-details
-              *ngIf="getFilterSelectedUser.pk !== currentUser?.pk"
-              class="inline-block mr-2"
-              [user]="getFilterSelectedUser"
-              [active]="false"
-              [inverted]="true"
-              [avatarScale]="0.7"
-            ></eworkbench-user-details>
-            <button
-              type="button"
-              class="btn ewb-button-small text-white"
-              [tooltip]="t('filterHeader.chip.tooltip.remove')"
-              containerClass="tooltip-sm"
-              (click)="usersControl.setValue(null)"
-            >
-              <joeseln-icon className="wb-remove"></joeseln-icon>
-            </button>
-          </div>
+<!--          <div-->
+<!--            *ngIf="getFilterSelectedUser"-->
+<!--            class="bg-tum-primary hover:bg-tum-primary-hover text-white py-0.5 px-2.5 rounded-full inline-flex justify-between items-center"-->
+<!--          >-->
+<!--            <span class="text-sm mr-2"-->
+<!--            >{{ t('filterHeader.createdBy') }}{{ ' '-->
+<!--              }}{{ getFilterSelectedUser.pk === currentUser?.pk ? t('filterHeader.createdBy.myself') : '' }}</span-->
+<!--            >-->
+<!--            <eworkbench-user-details-->
+<!--              *ngIf="getFilterSelectedUser.pk !== currentUser?.pk"-->
+<!--              class="inline-block mr-2"-->
+<!--              [user]="getFilterSelectedUser"-->
+<!--              [active]="false"-->
+<!--              [inverted]="true"-->
+<!--              [avatarScale]="0.7"-->
+<!--            ></eworkbench-user-details>-->
+<!--            <button-->
+<!--              type="button"-->
+<!--              class="btn ewb-button-small text-white"-->
+<!--              [tooltip]="t('filterHeader.chip.tooltip.remove')"-->
+<!--              containerClass="tooltip-sm"-->
+<!--              (click)="usersControl.setValue(null)"-->
+<!--            >-->
+<!--              <joeseln-icon className="wb-remove"></joeseln-icon>-->
+<!--            </button>-->
+<!--          </div>-->
 
-          <div
-            *ngIf="getFilterSelectedProject"
-            class="bg-tum-primary hover:bg-tum-primary-hover text-white py-0.5 px-2.5 rounded-full inline-flex justify-between items-center"
-          >
-            <span
-              class="text-sm mr-2">{{ getFilterSelectedProject.display }}</span>
-            <button
-              type="button"
-              class="btn ewb-button-small text-white"
-              [tooltip]="t('filterHeader.chip.tooltip.remove')"
-              containerClass="tooltip-sm"
-              (click)="projectsControl.setValue(null)"
-            >
-              <joeseln-icon className="wb-remove"></joeseln-icon>
-            </button>
-          </div>
-        </div>
+<!--          <div-->
+<!--            *ngIf="getFilterSelectedProject"-->
+<!--            class="bg-tum-primary hover:bg-tum-primary-hover text-white py-0.5 px-2.5 rounded-full inline-flex justify-between items-center"-->
+<!--          >-->
+<!--            <span-->
+<!--              class="text-sm mr-2">{{ getFilterSelectedProject.display }}</span>-->
+<!--            <button-->
+<!--              type="button"-->
+<!--              class="btn ewb-button-small text-white"-->
+<!--              [tooltip]="t('filterHeader.chip.tooltip.remove')"-->
+<!--              containerClass="tooltip-sm"-->
+<!--              (click)="projectsControl.setValue(null)"-->
+<!--            >-->
+<!--              <joeseln-icon className="wb-remove"></joeseln-icon>-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="flex items-center space-x-6">
-          <div class="inline-block">
-            <div class="custom-control custom-checkbox">
-              <input
-                class="custom-control-input"
-                type="checkbox"
-                [formControl]="favoritesControl"
-                id="favorites-filter"
-                name="favorites-filter"
-                [checked]="favoritesControl.value"
-              />
-              <label for="favorites-filter"
-                     class="custom-control-label font-normal leading-5">
-                {{ t('filterHeader.favorites.label') }}
-              </label>
-            </div>
-          </div>
+<!--        <div class="flex items-center space-x-6">-->
+<!--          <div class="inline-block">-->
+<!--            <div class="custom-control custom-checkbox">-->
+<!--              <input-->
+<!--                class="custom-control-input"-->
+<!--                type="checkbox"-->
+<!--                [formControl]="favoritesControl"-->
+<!--                id="favorites-filter"-->
+<!--                name="favorites-filter"-->
+<!--                [checked]="favoritesControl.value"-->
+<!--              />-->
+<!--              <label for="favorites-filter"-->
+<!--                     class="custom-control-label font-normal leading-5">-->
+<!--                {{ t('filterHeader.favorites.label') }}-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <button
-            *ngIf="filtersChanged"
-            type="button"
-            class="btn ewb-button-regular ewb-button-additional inline-flex items-center"
-            [disabled]="!filtersChanged"
-            (click)="onResetFilters()"
-          >
-            {{ t('filterHeader.resetAll') }}
-          </button>
-        </div>
-      </div>
-    </ng-container>
+<!--          <button-->
+<!--            *ngIf="filtersChanged"-->
+<!--            type="button"-->
+<!--            class="btn ewb-button-regular ewb-button-additional inline-flex items-center"-->
+<!--            [disabled]="!filtersChanged"-->
+<!--            (click)="onResetFilters()"-->
+<!--          >-->
+<!--            {{ t('filterHeader.resetAll') }}-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </ng-container>-->
 
     <eworkbench-table-view
       #tableView

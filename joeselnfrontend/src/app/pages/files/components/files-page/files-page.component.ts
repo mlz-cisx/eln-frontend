@@ -97,6 +97,10 @@ export class FilesPageComponent implements OnInit {
   @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
 
+  @ViewChild('lb_titleCellTemplate', {static: true})
+  public lb_titleCellTemplate!: TemplateRef<any>;
+
+
   public modalRef?: DialogRef;
 
   public projectsControl = this.fb.control<string | null>(null);
@@ -266,8 +270,14 @@ export class FilesPageComponent implements OnInit {
             cellTemplate: this.mimeTypeCellTemplate,
             name: column.mimeType,
             key: 'mime_type',
-            sortable: true,
+            sortable: false,
             hidden: true,
+          },
+          {
+            cellTemplate: this.lb_titleCellTemplate,
+            name: column.lb_title,
+            key: 'lb_title',
+            sortable: false,
           },
           {
             cellTemplate: this.actionsCellTemplate,
@@ -294,7 +304,7 @@ export class FilesPageComponent implements OnInit {
         //   );
         //   this.listColumns = values(merged);
         // } else {
-          this.listColumns = [...this.defaultColumns];
+        this.listColumns = [...this.defaultColumns];
         // }
 
         // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.files) {
@@ -308,31 +318,31 @@ export class FilesPageComponent implements OnInit {
         //     this.savedFilters = true;
         //   }
 
-          // if (filters.users) {
-          //   this.userService
-          //     .getUserById(filters.users)
-          //     .pipe(untilDestroyed(this))
-          //     .subscribe(users => {
-          //       if (users.length) {
-          //         this.users = [...users];
-          //         this.cdr.markForCheck();
-          //       }
-          //     });
-          //   this.usersControl.setValue(filters.users);
-          //   this.params = this.params.set('created_by', filters.users);
-          // }
-          //
-          // if (filters.projects && !project) {
-          //   this.projectsService
-          //     .get(filters.projects)
-          //     .pipe(untilDestroyed(this))
-          //     .subscribe(project => {
-          //       this.projects = [...this.projects, project];
-          //       this.cdr.markForCheck();
-          //     });
-          //   this.projectsControl.setValue(filters.projects);
-          //   this.params = this.params.set('projects_recursive', filters.projects);
-          // }
+        // if (filters.users) {
+        //   this.userService
+        //     .getUserById(filters.users)
+        //     .pipe(untilDestroyed(this))
+        //     .subscribe(users => {
+        //       if (users.length) {
+        //         this.users = [...users];
+        //         this.cdr.markForCheck();
+        //       }
+        //     });
+        //   this.usersControl.setValue(filters.users);
+        //   this.params = this.params.set('created_by', filters.users);
+        // }
+        //
+        // if (filters.projects && !project) {
+        //   this.projectsService
+        //     .get(filters.projects)
+        //     .pipe(untilDestroyed(this))
+        //     .subscribe(project => {
+        //       this.projects = [...this.projects, project];
+        //       this.cdr.markForCheck();
+        //     });
+        //   this.projectsControl.setValue(filters.projects);
+        //   this.params = this.params.set('projects_recursive', filters.projects);
+        // }
 
         //   if (filters.search) {
         //     this.searchControl.setValue(filters.search);
