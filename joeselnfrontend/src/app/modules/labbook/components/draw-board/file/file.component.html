@@ -38,7 +38,7 @@
               </button>
               <eworkbench-labbook-element-dropdown
                 [service]="filesService"
-                [id]="initialState?.pk"
+                [id]="initialState.pk"
                 [labBookId]="id"
                 [elementId]="element.pk"
                 [section]="section"
@@ -62,12 +62,12 @@
               <button
                 type="button"
                 class="btn btn-lg bg-transparent"
-                [authDownload]="{ url: initialState?.download!, fileName: initialState?.original_filename! }"
+                [authDownload]="{ url: initialState.download!, fileName: initialState.original_filename! }"
               >
                 <joeseln-icon className="wb-download"
                               class="mr-1"></joeseln-icon>
-                {{ initialState?.name }}
-                ({{ initialState?.file_size}})
+                {{ initialState.name }}
+                ({{ initialState.file_size}})
               </button>
             </div>
           </alert>
@@ -106,10 +106,10 @@
         <div>
           {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}
           <eworkbench-user-details
-            [user]="element.child_object?.last_modified_by"
+            [user]="element.child_object.last_modified_by"
             class="last-modified-by"></eworkbench-user-details>
           {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
-          {{ element.child_object?.last_modified_at | formatDate}}
+          {{ element.child_object.last_modified_at | formatDate}}
         </div>
         <div class="actions">
           <!--          <a [routerLink]="['/files', element.child_object_id]" target="_blank">-->

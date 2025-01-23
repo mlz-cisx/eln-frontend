@@ -52,13 +52,13 @@
       <tr [class.row-hover]="rowHover" cdk-row *cdkRowDef="let row; columns: displayedColumns$.value"></tr>
     </table>
 
-    <div *ngIf="!loading && !data?.length" class="no-result">No results</div>
+    <div *ngIf="!loading && !data.length" class="no-result">No results</div>
 
     <div *ngIf="loadingMore" class="flex justify-center items-center">
       <div class="spinner-border mt-3" role="status"></div>
     </div>
 
-    <div [class.d-none]="!data?.length">
+    <div [class.d-none]="!data.length">
       <div
         class="text-center mt-4"
         *ngIf="pagination"

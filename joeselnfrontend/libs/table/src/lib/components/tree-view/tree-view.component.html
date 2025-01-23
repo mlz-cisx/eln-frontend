@@ -47,7 +47,7 @@
       <div class="spinner-border mt-3" role="status"></div>
     </div>
 
-    <div [class.d-none]="!data?.length">
+    <div [class.d-none]="!data.length">
       <div
         class="text-center mt-4"
         *ngIf="pagination && total > paginationSize && (data.length < total || dataSource$.value.length < total)"

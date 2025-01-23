@@ -44,7 +44,7 @@
             </div>
             <eworkbench-labbook-element-dropdown
               [service]="notesService"
-              [id]="initialState?.pk"
+              [id]="initialState.pk"
               [labBookId]="id"
               [elementId]="element.pk"
               [section]="section"
@@ -94,9 +94,9 @@
       <div class="footer">
                 <div>
                   {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}
-                  <eworkbench-user-details [user]="element.child_object?.last_modified_by" class="last-modified-by"></eworkbench-user-details>
+                  <eworkbench-user-details [user]="element.child_object.last_modified_by" class="last-modified-by"></eworkbench-user-details>
                   {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
-                  {{ element.child_object?.last_modified_at | formatDate }}
+                  {{ element.child_object.last_modified_at | formatDate }}
                 </div>
         <div class="actions">
           <!--          <a [routerLink]="['/notes', element.child_object_id]" target="_blank">-->

@@ -14,7 +14,7 @@
           id="title-modal"
           [placeholder]="t('labBook.details.title.placeholder')"
           [disabled]="true"
-          [value]="labBook?.title"
+          [value]="labBook.title"
         />
       </div>
       <div class="mb-4">
@@ -52,8 +52,8 @@
       <div class="mb-4">
         <label
           for="metadata-modal">{{ t('labBook.details.metadata.label') }}</label>
-        <ng-container *ngIf="labBook?.metadata?.length">
-          <ng-container *ngFor="let field of labBook?.metadata">
+        <ng-container *ngIf="labBook.metadata.length">
+          <ng-container *ngFor="let field of labBook.metadata">
             <div class="mb-2">
               <div class="mb-1">{{ field.field_info?.display }}</div>
               <!--              <eworkbench-metadata-field-->
@@ -69,7 +69,7 @@
           </ng-container>
         </ng-container>
         <div class="text-tum-disabled italic"
-             *ngIf="!labBook?.metadata?.length">
+             *ngIf="!labBook.metadata.length">
           {{ t('formInput.notDefined.placeholder') }}
         </div>
       </div>

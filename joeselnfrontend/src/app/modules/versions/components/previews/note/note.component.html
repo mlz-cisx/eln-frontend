@@ -14,7 +14,7 @@
           id="subject-modal"
           [placeholder]="t('note.details.subject.placeholder')"
           [readonly]="true"
-          [value]="note?.subject"
+          [value]="note.subject"
         />
       </div>
       <div class="mb-4">
@@ -38,9 +38,9 @@
           </ng-template>
         </ng-select>
       </div>
-      <div class="mb-4" *ngIf="note?.metadata?.length">
+      <div class="mb-4" *ngIf="note.metadata.length">
         <label for="metadata-modal">{{ t('note.details.metadata.label') }}</label>
-        <ng-container *ngFor="let field of note?.metadata">
+        <ng-container *ngFor="let field of note.metadata">
           <div class="mb-2">
             <div class="mb-1">{{ field.field_info?.display }}</div>
 <!--            <eworkbench-metadata-field-->

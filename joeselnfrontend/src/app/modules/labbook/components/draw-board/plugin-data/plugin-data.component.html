@@ -57,9 +57,9 @@
     <div class="footer">
       <div>
         {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}
-        <eworkbench-user-details [user]="element.child_object?.last_modified_by" class="last-modified-by"></eworkbench-user-details>
+        <eworkbench-user-details [user]="element.child_object.last_modified_by" class="last-modified-by"></eworkbench-user-details>
         {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
-        {{ element.child_object?.last_modified_at }}
+        {{ element.child_object.last_modified_at }}
       </div>
       <div class="actions">
         <a [routerLink]="['/plugin-data', element.child_object_id]" target="_blank">

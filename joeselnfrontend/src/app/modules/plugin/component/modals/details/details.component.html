@@ -20,8 +20,8 @@
       </ng-container>
 
       <eworkbench-plugin-feedback
-        [id]="showFeedbackFormForPlugin?.id"
-        [type]="showFeedbackFormForPlugin?.type"
+        [id]="showFeedbackFormForPlugin.id"
+        [type]="showFeedbackFormForPlugin.type"
         (canceled)="onHideFeedbackForm()"
         *ngIf="showFeedbackFormForPlugin"
       ></eworkbench-plugin-feedback>

@@ -14,7 +14,7 @@
           id="title-modal"
           [placeholder]="t('file.details.title.placeholder')"
           [disabled]="true"
-          [value]="file?.title"
+          [value]="file.title"
         />
       </div>
       <div class="mb-4">
@@ -25,7 +25,7 @@
           id="name-modal"
           [placeholder]="t('file.details.name.placeholder')"
           [disabled]="true"
-          [value]="file?.name"
+          [value]="file.name"
         />
       </div>
       <div class="mb-4">
@@ -90,8 +90,8 @@
       </div>
       <div class="mb-4">
         <label for="metadata-modal">{{ t('file.details.metadata.label') }}</label>
-        <ng-container *ngIf="file?.metadata?.length">
-          <ng-container *ngFor="let field of file?.metadata">
+        <ng-container *ngIf="file.metadata.length">
+          <ng-container *ngFor="let field of file.metadata">
             <div class="mb-2">
               <div class="mb-1">{{ field.field_info?.display }}</div>
 <!--              <eworkbench-metadata-field-->
@@ -106,7 +106,7 @@
             </div>
           </ng-container>
         </ng-container>
-        <div class="text-tum-disabled italic" *ngIf="!file?.metadata?.length">
+        <div class="text-tum-disabled italic" *ngIf="!file.metadata.length">
           {{ t('formInput.notDefined.placeholder') }}
         </div>
       </div>

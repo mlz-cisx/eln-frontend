@@ -46,7 +46,7 @@
         <!--        <eworkbench-project-sidebar [sidebarItem]="sidebarItem"></eworkbench-project-sidebar>-->
       </aside>
       <main>
-        <ng-container *ngIf="initialState?.deleted">
+        <ng-container *ngIf="initialState.deleted">
           <!--          <eworkbench-trash-notice></eworkbench-trash-notice>-->
         </ng-container>
 
@@ -81,12 +81,12 @@
                   <div class="mb-4">
                     <label
                       for="width">{{ t('picture.details.width.label') }}</label>
-                    <div id="width">{{ initialState?.width }}px</div>
+                    <div id="width">{{ initialState.width }}px</div>
                   </div>
                   <div class="mb-4">
                     <label
                       for="height">{{ t('picture.details.height.label') }}</label>
-                    <div id="height">{{ initialState?.height }}px</div>
+                    <div id="height">{{ initialState.height }}px</div>
                   </div>
                   <!--                  <div class="mb-4">-->
                   <!--                    <eworkbench-form-input-->
@@ -134,11 +134,11 @@
                       <eworkbench-user-details
                         id="created-by"
                         class="inline-block"
-                        [user]="initialState?.created_by"
+                        [user]="initialState.created_by"
                       ></eworkbench-user-details>
                       <span> | </span>
                       <span
-                        id="created-at">{{ initialState?.created_at | formatDate }}</span>
+                        id="created-at">{{ initialState.created_at | formatDate }}</span>
                     </div>
                   </div>
                   <div class="mb-4">
@@ -147,11 +147,11 @@
                     <div class="flex items-center space-x-1">
                       <eworkbench-user-details id="last-modified-by"
                                                class="inline-block"
-                                               [user]="initialState?.last_modified_by">
+                                               [user]="initialState.last_modified_by">
                       </eworkbench-user-details>
                       <span> | </span>
                       <span
-                        id="last-modified-at">{{ initialState?.last_modified_at | formatDate }}</span>
+                        id="last-modified-at">{{ initialState.last_modified_at | formatDate }}</span>
                     </div>
                   </div>
                 </ng-container>
@@ -211,9 +211,9 @@
                     contentType="picture"
                     [service]="picturesService"
                     [versionId]="id"
-                    [lastModifiedAt]="initialState?.last_modified_at"
+                    [lastModifiedAt]="initialState.last_modified_at"
                     [refresh]="refreshVersions"
-                    [editable]="privileges?.restore"
+                    [editable]="privileges.restore"
                     (changed)="onVersionChanged()"
                   ></eworkbench-versions>
                 </ng-container>

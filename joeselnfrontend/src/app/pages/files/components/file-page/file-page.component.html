@@ -58,7 +58,7 @@
         <!--        <eworkbench-project-sidebar [sidebarItem]="sidebarItem"></eworkbench-project-sidebar>-->
       </aside>
       <main>
-        <ng-container *ngIf="initialState?.deleted">
+        <ng-container *ngIf="initialState.deleted">
           <!--          <eworkbench-trash-notice></eworkbench-trash-notice>-->
         </ng-container>
         <!--        <eworkbench-lock [id]="id" [lock]="lock" [lockUser]="lockUser" [modified]="modified" [service]="filesService"></eworkbench-lock>-->
@@ -116,12 +116,12 @@
                     <button
                       type="button"
                       class="btn btn-sm bg-transparent px-0 text-left"
-                      [authDownload]="{ url: initialState?.download!, fileName: initialState?.name! }"
+                      [authDownload]="{ url: initialState.download!, fileName: initialState.name! }"
                     >
                       <joeseln-icon className="wb-download"
                                     class="mr-1"></joeseln-icon>
-                      <span class="btn-link">{{ initialState?.name }}</span>
-                      ({{ initialState?.file_size | formatFileSize }})
+                      <span class="btn-link">{{ initialState.name }}</span>
+                      ({{ initialState.file_size | formatFileSize }})
                     </button>
                   </div>
                 </div>
@@ -295,11 +295,11 @@
                     <eworkbench-user-details
                       id="created-by"
                       class="inline-block"
-                      [user]="initialState?.created_by"
+                      [user]="initialState.created_by"
                     ></eworkbench-user-details>
                     <span> | </span>
                     <span
-                      id="created-at">{{ initialState?.created_at | formatDate }}</span>
+                      id="created-at">{{ initialState.created_at | formatDate }}</span>
                   </div>
                 </div>
                 <div class="mb-4">
@@ -308,11 +308,11 @@
                   <div class="flex items-center space-x-1">
                     <eworkbench-user-details id="last-modified-by"
                                              class="inline-block"
-                                             [user]="initialState?.last_modified_by">
+                                             [user]="initialState.last_modified_by">
                     </eworkbench-user-details>
                     <span> | </span>
                     <span
-                      id="last-modified-at">{{ initialState?.last_modified_at | formatDate }}</span>
+                      id="last-modified-at">{{ initialState.last_modified_at | formatDate }}</span>
                   </div>
                 </div>
               </ng-container>
@@ -398,7 +398,7 @@
                   contentType="file"
                   [service]="filesService"
                   [versionId]="id"
-                  [lastModifiedAt]="initialState?.last_modified_at"
+                  [lastModifiedAt]="initialState.last_modified_at"
                   [refresh]="refreshVersions"
                   [editable]="privileges?.restore"
                   (changed)="onVersionChanged()"

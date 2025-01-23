@@ -165,8 +165,8 @@
       </ng-container>
 
       <eworkbench-plugin-feedback
-        [id]="showFeedbackFormForPlugin?.id"
-        [type]="showFeedbackFormForPlugin?.type"
+        [id]="showFeedbackFormForPlugin.id"
+        [type]="showFeedbackFormForPlugin.type"
         [responsibleUsers]="showFeedbackFormForPlugin.responsibleUsers"
         (canceled)="onHideFeedbackForm()"
         *ngIf="showFeedbackFormForPlugin"

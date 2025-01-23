@@ -35,7 +35,7 @@
               </button>
               <eworkbench-labbook-element-dropdown
                 [service]="picturesService"
-                [id]="initialState?.pk"
+                [id]="initialState.pk"
                 [labBookId]="id"
                 [elementId]="element.pk"
                 [section]="section"
@@ -56,18 +56,18 @@
         <!--                         [service]="picturesService"></eworkbench-lock>-->
         <a href (click)="onOpenPictureEditorModal($event)"
         ><img class="max-w-full h-auto"
-              [src]="initialState?.download_rendered_image"
-              [alt]="initialState?.display"
+              [src]="initialState.download_rendered_image"
+              [alt]="initialState.display"
         /></a>
       </div>
       <div class="footer">
         <div>
           {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}
           <eworkbench-user-details
-            [user]="element.child_object?.last_modified_by"
+            [user]="element.child_object.last_modified_by"
             class="last-modified-by"></eworkbench-user-details>
           {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
-          {{ element.child_object?.last_modified_at | formatDate }}
+          {{ element.child_object.last_modified_at | formatDate }}
         </div>
         <div class="actions">
           <!--          <a [routerLink]="['/pictures', element.child_object_id]" target="_blank">-->
