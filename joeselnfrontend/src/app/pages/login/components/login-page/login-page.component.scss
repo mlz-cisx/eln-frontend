@@ -8,11 +8,58 @@
 :host {
   display: block;
 
-  main {
-    max-width: 500px;
+ main {
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Form container styling */
+  form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+
+  /* Input field styling */
+  input[type='text'],
+  input[type='password'] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  /* Button styling */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
   }
 
   .control-error {

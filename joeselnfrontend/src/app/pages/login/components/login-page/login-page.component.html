@@ -13,18 +13,18 @@
         <br>
         <label>Password</label>
         <input type='password' formControlName='password'/>
-        <div>
+        <div class="button-container">
           <button type='submit' [disabled]='!this.form.valid'>
             Login
+          </button>
+          <button (click)="login_with_oidc()">
+            login with SSO
           </button>
         </div>
       </form>
     </div>
     <div style="height: 100px"></div>
     <div>
-      <button (click)="login_with_oidc()">
-        Login With SSO
-      </button>
     </div>
 
 
