@@ -64,7 +64,7 @@
     </div>
   </div>
 
-  <div class="text-tum-disabled italic" *ngIf="!selectedParameters.length && !editable">
+  <div class="text-tum-disabled italic" *ngIf="!selectedParameters?.length && !editable">
     {{ t('formInput.notDefined.placeholder') }}
   </div>
 </ng-container>
