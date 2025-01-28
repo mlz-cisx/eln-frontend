@@ -82,7 +82,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public refresh?: EventEmitter<boolean>;
 
   @Input()
-  public editable? = false;
+  public editable? = true;
 
   public closeSection = new EventEmitter<string>();
 
