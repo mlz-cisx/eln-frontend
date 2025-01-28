@@ -267,7 +267,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             y: labBookElement.position_y,
             cols: labBookElement.width,
             rows: labBookElement.height,
-            resizeEnabled: this.getItemResizeEnabled(labBookElement.child_object_content_type_model),
+            resizeEnabled: true,
             element: labBookElement,
           };
 
@@ -520,7 +520,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       y: element.position_y,
       cols: element.width,
       rows: element.height,
-      resizeEnabled: this.getItemResizeEnabled(element.child_object_content_type_model),
+      resizeEnabled: true,
       element: element,
     }));
   }
