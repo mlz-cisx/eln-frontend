@@ -17,15 +17,13 @@
           <button type='submit' [disabled]='!this.form.valid'>
             Login
           </button>
-          <button (click)="login_with_oidc()">
-            login with SSO
-          </button>
         </div>
       </form>
+      <button (click)="login_with_oidc()">
+        Login with SSO
+      </button>
     </div>
-    <div style="height: 100px"></div>
-    <div>
-    </div>
+    <div style="height: 300px"></div>
 
 
     <!--    <form [formGroup]="form" (ngSubmit)="onLogin()" errorTailor>-->
