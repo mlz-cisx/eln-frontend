@@ -43,18 +43,16 @@ export class AuthGuardService extends KeycloakAuthGuard {
       // logout for username/password
       this._authService.clearStorage()
       this.authenticated = false
-      window.location.reload()
+      this._router.navigate(['/login'])
     } else {
-      if (this.authenticated) {
-        this.authenticated = false
-        this.keycloak.logout().then(() => {
-          window.location.reload()
-        });
-      }
+      this.authenticated = false
+      this.keycloak.logout().then(() => {
+        this._router.navigate(['/login'])
+      });
     }
   }
 
-  public redirect_start_page(){
+  public redirect_start_page() {
     this._router.navigate(['/'])
   }
 
