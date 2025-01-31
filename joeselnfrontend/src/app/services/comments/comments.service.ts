@@ -23,7 +23,7 @@ import type {
 import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {Note} from "@joeseln/types";
-import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {LogoutService, ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +34,7 @@ export class CommentsService implements TableViewService, PermissionsService {
   public constructor(private readonly httpClient: HttpClient,
                      private readonly privilegesService: PrivilegesService,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: AuthGuardService) {
+                     private authguard: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Comment[] }> {

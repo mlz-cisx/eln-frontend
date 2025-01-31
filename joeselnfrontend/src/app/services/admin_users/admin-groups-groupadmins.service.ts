@@ -32,7 +32,7 @@ import {
   mockNoteVersion,
   mockPrivileges
 } from "@joeseln/mocks";
-import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {LogoutService, ErrorserviceService} from "@app/services";
 import {Lab_Book, LabBook, LabBookPayload} from "@joeseln/types";
 
 @Injectable({
@@ -45,7 +45,7 @@ export class AdminGroupsGroupadminsService implements TableViewService {
 
   constructor(private readonly httpClient: HttpClient,
               private readonly errorservice: ErrorserviceService,
-              private authguard: AuthGuardService) {
+              private authguard: LogoutService) {
   }
 
   public getList(params = new HttpParams(), customId?:  string): Observable<{ total: number; data: User[] }> {

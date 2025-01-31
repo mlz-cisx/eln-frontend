@@ -1,59 +1,62 @@
-import {Injectable} from '@angular/core';
+import {Injectable, inject} from '@angular/core';
 import {
   ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
   RouterStateSnapshot,
-  Router
+  UrlTree
 } from '@angular/router';
-import {Observable} from 'rxjs';
 import {AuthService} from '@app/services';
-import {KeycloakAuthGuard, KeycloakService} from 'keycloak-angular';
+import {KeycloakService} from "keycloak-angular";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class AuthGuardService extends KeycloakAuthGuard {
-  constructor(
-    private _authService: AuthService,
-    private _router: Router,
-    protected readonly keycloak: KeycloakService
+
+class AuthGuardService {
+
+  public authenticated = false;
+
+  constructor(private router: Router,
+              private readonly authService: AuthService,
+              protected readonly keycloak: KeycloakService
   ) {
-    super(_router, keycloak);
   }
 
-
-  public async isAccessAllowed(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ) {
-    if (this._authService.getToken()) {
+  // use this canActivate method if keycloak is integrated
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.authService.getToken()) {
+      this.authenticated = true
+    }
+    if (this.keycloak.isLoggedIn()) {
       this.authenticated = true
     }
     // Force the user to log in if currently unauthenticated
     if (!this.authenticated) {
       localStorage.setItem('state_url', state.url);
-      this._router.navigate(['/login'])
+      this.router.navigate(['/login'])
     }
     return this.authenticated;
   }
 
-  public logout() {
-    // TODO maybe another way to clear some history
-    window.history.pushState({}, "", "/")
-    if (this._authService.getToken()) {
-      // logout for username/password
-      this._authService.clearStorage()
-      this.authenticated = false
-      this._router.navigate(['/login'])
-    } else {
-      this.authenticated = false
-      this.keycloak.logout().then(() => {
-        this._router.navigate(['/login'])
-      });
+  // use this canActivate method if keycloak is not integrated
+  _canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.authService.getToken()) {
+      this.authenticated = true
     }
+    // Force the user to log in if currently unauthenticated
+    if (!this.authenticated) {
+      localStorage.setItem('state_url', state.url);
+      this.router.navigate(['/login'])
+    }
+    return this.authenticated;
   }
 
-  public redirect_start_page() {
-    this._router.navigate(['/'])
-  }
 
 }
+
+export const AuthGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean => {
+  return inject(AuthGuardService).canActivate(next, state);
+}
+
+

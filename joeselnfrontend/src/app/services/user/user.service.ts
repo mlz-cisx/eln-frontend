@@ -4,7 +4,7 @@ import {environment} from '@environments/environment';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap, switchMap} from 'rxjs/operators';
 import type {User, Test} from "@joeseln/types";
-import {AuthGuardService, AuthService} from "@app/services";
+import {LogoutService, AuthService} from "@app/services";
 import {Router} from "@angular/router";
 import {KeycloakService} from 'keycloak-angular';
 import {UserState, UserStore} from "@app/services/user/user.store";
@@ -22,7 +22,7 @@ export class UserService {
               private readonly userStore: UserStore,
               private readonly userQuery: UserQuery,
               private readonly errorservice: ErrorserviceService,
-              private authguard: AuthGuardService
+              private authguard: LogoutService
   ) {
 
   }

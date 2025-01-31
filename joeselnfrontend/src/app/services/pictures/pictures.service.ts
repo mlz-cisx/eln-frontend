@@ -52,7 +52,7 @@ import type {Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
 import {BehaviorSubject} from "rxjs";
-import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {LogoutService, ErrorserviceService} from "@app/services";
 import {Note, Note_with_privileges} from "@joeseln/types";
 
 @Injectable({
@@ -66,7 +66,7 @@ export class PicturesService
 
   public constructor(private readonly httpClient: HttpClient,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: AuthGuardService) {
+                     private authguard: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Picture[] }> {

@@ -38,7 +38,7 @@ import {
   mockPictureHistory,
   mockPrivileges
 } from "@joeseln/mocks";
-import {AuthGuardService, ErrorserviceService} from "@app/services";
+import {LogoutService, ErrorserviceService} from "@app/services";
 import {Note} from "@joeseln/types";
 
 @Injectable({
@@ -52,7 +52,7 @@ export class FilesService
 
   public constructor(private readonly httpClient: HttpClient,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: AuthGuardService) {
+                     private authguard: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: File[] }> {

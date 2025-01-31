@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
-import {AuthGuardService} from "@app/services";
+import {throwError} from 'rxjs';
+import {LogoutService} from "@app/services";
 
 
 @Injectable({
@@ -13,7 +13,7 @@ export class ErrorserviceService {
   }
 
 
-  public handleError(error: HttpErrorResponse, auth_guard: AuthGuardService) {
+  public handleError(error: HttpErrorResponse, auth_guard: LogoutService) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);

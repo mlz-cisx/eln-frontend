@@ -44,7 +44,7 @@ import {
 } from "@joeseln/mocks";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {ErrorserviceService} from "@app/services";
-import {AuthGuardService} from "@app/services";
+import {LogoutService} from "@app/services";
 import {Note} from "@joeseln/types";
 
 @Injectable({
@@ -61,7 +61,7 @@ export class LabbooksService {
               private readonly httpClient: HttpClient,
               private readonly privilegesService: PrivilegesService,
               private readonly errorservice: ErrorserviceService,
-              private authguard: AuthGuardService
+              private authguard: LogoutService
   ) {
   }
 
