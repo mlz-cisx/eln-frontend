@@ -3,15 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpParams } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CommentsState } from '@app/enums/comments-state.enum';
+import {HttpParams} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {CommentsState} from '@app/enums/comments-state.enum';
 //import { SitePreferencesService } from '@app/services';
-import { TableColumn, TableSortDirection, TableViewComponent } from '@joeseln/table';
-import type { DropdownElement, SitePreferences } from '@joeseln/types';
-import { FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import {
+  TableColumn,
+  TableSortDirection,
+  TableViewComponent
+} from '@joeseln/table';
+import type {DropdownElement, SitePreferences} from '@joeseln/types';
+import {FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
@@ -36,7 +48,7 @@ export class CommentsComponent implements OnInit {
   @ViewChild('tableView')
   public tableView!: TableViewComponent;
 
-  @ViewChild('containerCellTemplate', { static: true })
+  @ViewChild('containerCellTemplate', {static: true})
   public containerCellTemplate!: TemplateRef<any>;
 
   public params = new HttpParams();
@@ -59,7 +71,8 @@ export class CommentsComponent implements OnInit {
     ///private readonly sitePreferencesService: SitePreferencesService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService
-  ) {}
+  ) {
+  }
 
   public ngOnInit(): void {
     this.initTranslations();

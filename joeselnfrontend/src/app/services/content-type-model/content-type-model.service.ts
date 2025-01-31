@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Injectable } from '@angular/core';
-import type { ContentTypeModelItem, ContentTypeModels } from '@joeseln/types';
-import { TranslocoService } from '@ngneat/transloco';
+import {Injectable} from '@angular/core';
+import type {ContentTypeModelItem, ContentTypeModels} from '@joeseln/types';
+import {TranslocoService} from '@ngneat/transloco';
 
 @Injectable({
   providedIn: 'root',

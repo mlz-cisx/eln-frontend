@@ -3,16 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 // import { UserDetailsModalComponent } from '@app/modules/user/components/modals/user-details/user-details.component';
 //import { AuthService } from '@app/services';
-import type { Note, Relation, User } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs';
-import { DeleteCommentModalComponent } from '../modals/delete/delete.component';
+import type {Note, Relation, User} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {take} from 'rxjs';
+import {DeleteCommentModalComponent} from '../modals/delete/delete.component';
 import {UserService} from "@app/services";
 
 @UntilDestroy()
@@ -45,7 +53,8 @@ export class CommentComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,
     private user_service: UserService,
-  ) {}
+  ) {
+  }
 
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {

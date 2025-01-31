@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Injectable } from '@angular/core';
-import { Query } from '@datorama/akita';
-import { UserStore, UserState } from "@app/services/user/user.store";
+import {Injectable} from '@angular/core';
+import {Query} from '@datorama/akita';
+import {UserStore, UserState} from "@app/services/user/user.store";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class UserQuery extends Query<UserState> {
   public user$ = this.select(state => state);
 

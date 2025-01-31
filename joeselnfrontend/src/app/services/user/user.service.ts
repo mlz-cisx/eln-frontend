@@ -6,7 +6,6 @@ import {catchError, map, tap, switchMap} from 'rxjs/operators';
 import type {User, Test} from "@joeseln/types";
 import {LogoutService, AuthService} from "@app/services";
 import {Router} from "@angular/router";
-import {KeycloakService} from 'keycloak-angular';
 import {UserState, UserStore} from "@app/services/user/user.store";
 import {UserQuery} from "@app/services/user/user.query";
 import {ErrorserviceService} from "@app/services";

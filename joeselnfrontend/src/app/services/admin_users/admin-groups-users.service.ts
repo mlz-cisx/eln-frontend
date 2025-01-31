@@ -48,7 +48,7 @@ export class AdminGroupsUsersService implements TableViewService {
               private authguard: LogoutService) {
   }
 
-  public getList(params = new HttpParams(), customId?:  string): Observable<{ total: number; data: User[] }> {
+  public getList(params = new HttpParams(), customId?: string): Observable<{ total: number; data: User[] }> {
     return this.httpClient.get<User[]>(`${this.apiUrl}${customId}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
       map(data => ({
         total: data.length,
@@ -71,12 +71,11 @@ export class AdminGroupsUsersService implements TableViewService {
   }
 
 
-
-  public delete(id: string, customId?:  string, params = new HttpParams()): Observable<User> {
+  public delete(id: string, customId?: string, params = new HttpParams()): Observable<User> {
     return this.httpClient.patch<User>(`${this.apiUrl}${customId}/${id}/soft_delete/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
-  public restore(id: string, customId?:  string, params = new HttpParams()): Observable<User> {
+  public restore(id: string, customId?: string, params = new HttpParams()): Observable<User> {
     return this.httpClient.patch<User>(`${this.apiUrl}${customId}/${id}/restore/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
   }
 
