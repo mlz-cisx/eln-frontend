@@ -22,6 +22,7 @@ import {map, take} from 'rxjs/operators';
 import {UserService} from "@app/services";
 import {AuthService} from "@app/services";
 import {KeycloakService} from 'keycloak-angular';
+import {environment} from "@environments/environment";
 
 
 // interface FormLogin {
@@ -40,6 +41,8 @@ export class LoginPageComponent implements OnInit {
   public title = '';
 
   public loading = false;
+
+  public keycloak_integration = true;
 
   // public form = this.fb.group<FormLogin>({
   //   username: this.fb.control(null, [Validators.required]),
@@ -74,6 +77,7 @@ export class LoginPageComponent implements OnInit {
   // }
 
   public ngOnInit(): void {
+
     // this.authService.user$.pipe(
     //   untilDestroyed(this),
     //   take(1),
