@@ -13,12 +13,12 @@ import {LogoutService} from "@app/services";
 
 export class NavbarComponent {
   constructor(
-    private authguard: LogoutService
+    private logoutService: LogoutService
   ) {
   }
 
   public logout() {
-    this.authguard.logout()
+    this.logoutService.logout()
   }
 
 }

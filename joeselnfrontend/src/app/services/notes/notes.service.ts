@@ -53,11 +53,11 @@ export class NotesService
 
   public constructor(private readonly httpClient: HttpClient,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: LogoutService) {
+                     private logout: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Note[] }> {
-    return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(data => ({
         total: data.length,
         data: data,
@@ -70,7 +70,7 @@ export class NotesService
   }
 
   public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Note>> {
-    return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Note>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       switchMap(note =>
         this.getUserPrivileges(id, userId, note.deleted).pipe(
           map(privileges => {
@@ -87,7 +87,7 @@ export class NotesService
 
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Note>> {
-    return this.httpClient.get<Note_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Note_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(note => {
         let privileges = note.privileges
         const privilegesData: PrivilegesData<Note> = {
@@ -135,15 +135,15 @@ export class NotesService
   }
 
   public delete(id: string, labbook_pk: string, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public patch(id: string, note: NotePayload, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/`, note, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/`, note, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public restore(id: string, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {

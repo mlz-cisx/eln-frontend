@@ -42,7 +42,7 @@ export class LoginPageComponent implements OnInit {
 
   public loading = false;
 
-  public keycloak_integration = true;
+  public keycloak_integration = environment.keycloak_integration;
 
   // public form = this.fb.group<FormLogin>({
   //   username: this.fb.control(null, [Validators.required]),

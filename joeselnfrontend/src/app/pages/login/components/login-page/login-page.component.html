@@ -19,7 +19,7 @@
           </button>
         </div>
       </form>
-      <div>
+      <div *ngIf="keycloak_integration">
         <button (click)="login_with_oidc()">
           Login with SSO
         </button>

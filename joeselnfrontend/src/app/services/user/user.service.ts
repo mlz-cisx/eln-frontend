@@ -21,7 +21,7 @@ export class UserService {
               private readonly userStore: UserStore,
               private readonly userQuery: UserQuery,
               private readonly errorservice: ErrorserviceService,
-              private authguard: LogoutService
+              private logout: LogoutService
   ) {
 
   }
@@ -31,7 +31,7 @@ export class UserService {
     var data = new FormData()
     data.append('username', payload['username'])
     data.append('password', payload['password'])
-    this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(err => this.errorservice.handleError(err, this.authguard))).subscribe((res: any) => {
+    this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(err => this.errorservice.handleError(err, this.logout))).subscribe((res: any) => {
       if (res.access_token) {
         this._auth.setDataInLocalStorage('token', res.access_token)
         this.router.navigate(['/'])
@@ -40,7 +40,7 @@ export class UserService {
   }
 
   public getUserMe(): Observable<User> {
-    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)))
+    return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(err => this.errorservice.handleError(err, this.logout)))
   }
 
   public getUserMe_without_error_service(): Observable<User> {
@@ -48,7 +48,7 @@ export class UserService {
   }
 
   public changePassword(password: string): Observable<any> {
-    return this.httpClient.put<any>(`${environment.apiUrl}/change_password`, {password}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+    return this.httpClient.put<any>(`${environment.apiUrl}/change_password`, {password}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
   }
 
   public get user$(): Observable<UserState> {

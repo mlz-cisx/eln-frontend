@@ -52,11 +52,11 @@ export class FilesService
 
   public constructor(private readonly httpClient: HttpClient,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: LogoutService) {
+                     private logout: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: File[] }> {
-    return this.httpClient.get<File[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<File[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(data => ({
         total: data.length,
         data: data,
@@ -78,7 +78,7 @@ export class FilesService
   }
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<File>> {
-    return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(file => {
         let privileges = file.privileges
         const privilegesData: PrivilegesData<File> = {
@@ -91,7 +91,7 @@ export class FilesService
   }
 
   public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<File>> {
-    return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<File>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       switchMap(file =>
         this.getUserPrivileges(id, userId, file.deleted).pipe(
           map(privileges => {

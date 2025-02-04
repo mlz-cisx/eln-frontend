@@ -34,7 +34,7 @@ export class CommentsService implements TableViewService, PermissionsService {
   public constructor(private readonly httpClient: HttpClient,
                      private readonly privilegesService: PrivilegesService,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: LogoutService) {
+                     private logout: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Comment[] }> {
@@ -58,7 +58,7 @@ export class CommentsService implements TableViewService, PermissionsService {
 
 
   public add(comment: CommentPayload, params = new HttpParams()): Observable<Comment> {
-    return this.httpClient.post<Comment>(this.apiUrl, comment, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.post<Comment>(this.apiUrl, comment, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Comment>> {

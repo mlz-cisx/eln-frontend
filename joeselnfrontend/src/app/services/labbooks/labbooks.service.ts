@@ -61,12 +61,12 @@ export class LabbooksService {
               private readonly httpClient: HttpClient,
               private readonly privilegesService: PrivilegesService,
               private readonly errorservice: ErrorserviceService,
-              private authguard: LogoutService
+              private logout: LogoutService
   ) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: LabBook[] }> {
-    return this.httpClient.get<LabBook[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<LabBook[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(data => ({
         total: data.length,
         data: data,
@@ -90,7 +90,7 @@ export class LabbooksService {
     // @ts-ignore
     delete (labbook.is_template)
     delete (labbook.metadata)
-    return this.httpClient.post<LabBook>(this.apiUrl, labbook).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+    return this.httpClient.post<LabBook>(this.apiUrl, labbook).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
   }
 
 
@@ -126,7 +126,7 @@ export class LabbooksService {
 
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<LabBook>> {
-    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Lab_Book>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(labBook => {
         let privileges = labBook.privileges
         const privilegesData: PrivilegesData<LabBook> = {
@@ -171,11 +171,11 @@ export class LabbooksService {
 
 
   public restore(id: string): Observable<LabBook> {
-    return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/restore/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/restore/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public delete(id: string): Observable<LabBook> {
-    return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/soft_delete/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/soft_delete/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public getElements_old(id: string, section?: string): Observable<LabBookElement<any>[]> {
@@ -189,15 +189,15 @@ export class LabbooksService {
 
   public getElements(id: string, section?: string): Observable<LabBookElement<any>[]> {
     if (section) {
-      return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/?section=${section}`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+      return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/?section=${section}`).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
     }
-    return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/`).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)))
+    return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/`).pipe(catchError(err => this.errorservice.handleError(err, this.logout)))
   }
 
 
   public getElement(labBookId: string, id: string): Observable<LabBookElement<any>> {
     let _lb_elem = <LabBookElement<any>><unknown>[]
-    return this.lab_book_list$.pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.lab_book_list$.pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(() => {
           [mockLabBookNoteElement].forEach((elem) => {
             if (elem.labbook_id === labBookId && elem.child_object_id === id) {
@@ -231,7 +231,7 @@ export class LabbooksService {
 
 
   public addElement(id: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {
-    return this.httpClient.post<LabBookElement<any>>(`${this.apiUrl}${id}/elements/`, element).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+    return this.httpClient.post<LabBookElement<any>>(`${this.apiUrl}${id}/elements/`, element).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
   }
 
 
@@ -282,7 +282,7 @@ export class LabbooksService {
   }
 
   public updateAllElements(id: string, elements: LabBookElementPayload[]): Observable<string[]> {
-    return this.httpClient.put<string[]>(`${this.apiUrl}${id}/elements/update_all/`, elements).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)));
+    return this.httpClient.put<string[]>(`${this.apiUrl}${id}/elements/update_all/`, elements).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
   }
 
 
@@ -301,7 +301,7 @@ export class LabbooksService {
 
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
 

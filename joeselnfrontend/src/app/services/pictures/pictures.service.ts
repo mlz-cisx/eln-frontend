@@ -66,11 +66,11 @@ export class PicturesService
 
   public constructor(private readonly httpClient: HttpClient,
                      private readonly errorservice: ErrorserviceService,
-                     private authguard: LogoutService) {
+                     private logout: LogoutService) {
   }
 
   public getList(params = new HttpParams()): Observable<{ total: number; data: Picture[] }> {
-    return this.httpClient.get<Picture[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Picture[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(data => ({
         total: data.length,
         data: data,
@@ -101,7 +101,7 @@ export class PicturesService
   }
 
   public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
-    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       switchMap(picture =>
         this.getUserPrivileges(id, userId, picture.deleted).pipe(
           map(privileges => {
@@ -118,7 +118,7 @@ export class PicturesService
 
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
-    return this.httpClient.get<Pic_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)),
+    return this.httpClient.get<Pic_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(pic => {
         let privileges = pic.privileges
         const privilegesData: PrivilegesData<Picture> = {
@@ -169,7 +169,7 @@ export class PicturesService
   }
 
   public patch(id: string, task: Optional<PicturePayload>, params = new HttpParams()): Observable<Picture> {
-    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/task/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.authguard)), map(data => data));
+    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/task/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public restore(id: string, params = new HttpParams()): Observable<Picture> {

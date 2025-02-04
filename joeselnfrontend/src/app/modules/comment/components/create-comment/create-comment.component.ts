@@ -68,7 +68,7 @@ export class CreateCommentComponent implements OnInit {
   public constructor(
     private readonly commentsService: CommentsService,
     private readonly fb: FormBuilder,
-    private readonly authService: LogoutService,
+    private readonly logoutService: LogoutService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,

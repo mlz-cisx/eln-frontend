@@ -39,7 +39,7 @@ class AuthGuardService {
     return this.authenticated;
   }
 
-  // use this canActivate method if keycloak is not integrated
+  // use this canActivate method if keycloak is never integrated
   _canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.getToken()) {
       this.authenticated = true

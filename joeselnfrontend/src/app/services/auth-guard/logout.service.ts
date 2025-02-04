@@ -18,9 +18,8 @@ export class LogoutService {
   ) {
   }
 
-  // use this logout method if keycloak is not integrated
+  // use this logout method if keycloak is never integrated
   public _logout() {
-    window.history.pushState({}, "", "/")
     if (this.authService.getToken()) {
       // logout for username/password
       this.authService.clearStorage()
@@ -32,7 +31,6 @@ export class LogoutService {
 
   // use this logout method if keycloak is integrated
   public logout() {
-    window.history.pushState({}, "", "/")
     if (this.authService.getToken()) {
       // logout for username/password
       this.authService.clearStorage()
