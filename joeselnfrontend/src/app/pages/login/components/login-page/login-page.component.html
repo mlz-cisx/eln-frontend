@@ -5,71 +5,74 @@
 
 
 <ng-container *transloco="let t">
-  <main>
+  <main id="lg-bg-img">
+    <div style="height: 150px"></div>
     <div>
-      <form [formGroup]='form' (ngSubmit)='login()'>
-        <label>Username</label>
-        <input type='text' formControlName='username'/>
-        <br>
-        <label>Password</label>
-        <input type='password' formControlName='password'/>
-        <div class="button-container">
-          <button type='submit' [disabled]='!this.form.valid'>
-            Login
+      <div>
+        <form [formGroup]='form' (ngSubmit)='login()'>
+          <label>Username</label>
+          <input type='text' formControlName='username'/>
+          <br>
+          <label>Password</label>
+          <input type='password' formControlName='password'/>
+          <div class="button-container">
+            <button type='submit' [disabled]='!this.form.valid'>
+              Login
+            </button>
+          </div>
+        </form>
+        <div *ngIf="keycloak_integration" id="oidc-button-container">
+          <button (click)="login_with_oidc()">
+            Login with SSO
           </button>
         </div>
-      </form>
-      <div *ngIf="keycloak_integration">
-        <button (click)="login_with_oidc()">
-          Login with SSO
-        </button>
+
       </div>
+      <div style="height: 300px"></div>
 
+
+      <!--    <form [formGroup]="form" (ngSubmit)="onLogin()" errorTailor>-->
+      <!--      <div class="mb-4">-->
+      <!--        <label for="username">-->
+      <!--          Username-->
+      <!--          <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>-->
+      <!--&lt;!&ndash;          {{ t('login.username2.label') }}&ndash;&gt;-->
+      <!--        </label>-->
+      <!--        <input-->
+      <!--          type="text"-->
+      <!--          class="form-control ewb-input"-->
+      <!--          id="username"-->
+      <!--          formControlName="username"-->
+      <!--          name="username"-->
+      <!--          [placeholder]="t('login.username.placeholder')"-->
+      <!--        />-->
+      <!--&lt;!&ndash;        <div *ngIf="f.username.errors?.emaildetected" class="control-error">&ndash;&gt;-->
+      <!--&lt;!&ndash;          <a [routerLink]="['/faq', 'how-can-i-log-in']" target="_blank">{{ t('login.username.cantRemember') }}</a>&ndash;&gt;-->
+      <!--&lt;!&ndash;        </div>&ndash;&gt;-->
+      <!--      </div>-->
+      <!--      <div class="mb-4">-->
+      <!--        <label for="password">-->
+      <!--          {{ t('login.password.label') }}-->
+      <!--          <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>-->
+      <!--        </label>-->
+      <!--        <input-->
+      <!--          type="password"-->
+      <!--          class="form-control ewb-input"-->
+      <!--          id="password"-->
+      <!--          formControlName="password"-->
+      <!--          name="password"-->
+      <!--          [placeholder]="t('login.password.placeholder')"-->
+      <!--        />-->
+      <!--      </div>-->
+      <!--      <div class="float-right">-->
+      <!--        <a class="mr-2" [routerLink]="['/forgot-password']">-->
+      <!--          <button type="button" class="btn ewb-button-big ewb-button-none">{{ t('login.forgotPassword') }}</button>-->
+      <!--        </a>-->
+      <!--        <button type="submit" class="btn ewb-button-big ewb-button-primary" [disabled]="loading || form.invalid">-->
+      <!--          {{ t('login.confirm') }}-->
+      <!--        </button>-->
+      <!--      </div>-->
+      <!--    </form>-->
     </div>
-    <div style="height: 300px"></div>
-
-
-    <!--    <form [formGroup]="form" (ngSubmit)="onLogin()" errorTailor>-->
-    <!--      <div class="mb-4">-->
-    <!--        <label for="username">-->
-    <!--          Username-->
-    <!--          <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>-->
-    <!--&lt;!&ndash;          {{ t('login.username2.label') }}&ndash;&gt;-->
-    <!--        </label>-->
-    <!--        <input-->
-    <!--          type="text"-->
-    <!--          class="form-control ewb-input"-->
-    <!--          id="username"-->
-    <!--          formControlName="username"-->
-    <!--          name="username"-->
-    <!--          [placeholder]="t('login.username.placeholder')"-->
-    <!--        />-->
-    <!--&lt;!&ndash;        <div *ngIf="f.username.errors?.emaildetected" class="control-error">&ndash;&gt;-->
-    <!--&lt;!&ndash;          <a [routerLink]="['/faq', 'how-can-i-log-in']" target="_blank">{{ t('login.username.cantRemember') }}</a>&ndash;&gt;-->
-    <!--&lt;!&ndash;        </div>&ndash;&gt;-->
-    <!--      </div>-->
-    <!--      <div class="mb-4">-->
-    <!--        <label for="password">-->
-    <!--          {{ t('login.password.label') }}-->
-    <!--          <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>-->
-    <!--        </label>-->
-    <!--        <input-->
-    <!--          type="password"-->
-    <!--          class="form-control ewb-input"-->
-    <!--          id="password"-->
-    <!--          formControlName="password"-->
-    <!--          name="password"-->
-    <!--          [placeholder]="t('login.password.placeholder')"-->
-    <!--        />-->
-    <!--      </div>-->
-    <!--      <div class="float-right">-->
-    <!--        <a class="mr-2" [routerLink]="['/forgot-password']">-->
-    <!--          <button type="button" class="btn ewb-button-big ewb-button-none">{{ t('login.forgotPassword') }}</button>-->
-    <!--        </a>-->
-    <!--        <button type="submit" class="btn ewb-button-big ewb-button-primary" [disabled]="loading || form.invalid">-->
-    <!--          {{ t('login.confirm') }}-->
-    <!--        </button>-->
-    <!--      </div>-->
-    <!--    </form>-->
   </main>
 </ng-container>
