@@ -34,7 +34,6 @@ export class WebSocketService {
   }
 
   public connect(): void {
-    console.log('ws connect')
     this.elementsConnection.subscribe({next: msg => this.elements.next(msg)});
     this.elementsConnection.next({
       action: 'connect',

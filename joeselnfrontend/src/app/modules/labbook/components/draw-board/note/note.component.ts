@@ -196,8 +196,12 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
                 {emitEvent: false}
               );
               this.preloaded_content = privilegesData.data.content
-              // @ts-ignore
-              document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+
+              if (document.getElementById(this.preloaded_id)) {
+                // @ts-ignore
+                document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+              }
+
             });
         }
         this.submitted = false
