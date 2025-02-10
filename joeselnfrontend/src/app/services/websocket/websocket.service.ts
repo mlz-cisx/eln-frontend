@@ -11,6 +11,7 @@ import {Subject} from 'rxjs';
 import {webSocket} from 'rxjs/webSocket';
 import {AuthService} from "@app/services";
 import {KeycloakService} from "keycloak-angular";
+import {Centrifuge} from 'centrifuge';
 
 
 @Injectable({
@@ -21,9 +22,7 @@ export class WebSocketService {
 
   public elements = new Subject();
 
-  public notificationsConnection = webSocket(`${environment.wsUrl}/notifications/`);
-
-  public elementsConnection = webSocket(`${environment.wsUrl}/elements/`);
+  public elementsConnection = webSocket(`${environment.wsUrl}/`);
 
   public subscribedElements: WebSocketElementPayload[] = [];
 
