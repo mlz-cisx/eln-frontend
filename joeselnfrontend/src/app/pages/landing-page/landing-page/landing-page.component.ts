@@ -46,7 +46,6 @@ export class LandingPageComponent implements OnInit {
   }
 
   public ngOnDestroy(): void {
-    // clearInterval(this.intervalID)
   }
 
 }
