@@ -24,6 +24,7 @@ export class WebSocketService {
 
   public elementsConnection = webSocket(`${environment.wsUrl}/pathvalue`);
 
+  private keycloak_integration = environment.keycloak_integration
 
   public subscribedElements: WebSocketElementPayload[] = [];
 
@@ -35,8 +36,8 @@ export class WebSocketService {
 
 
   public connect(): void {
-    var token
-    if (Object(this.keycloak.getToken())['__zone_symbol__value']) {
+    let token
+    if (this.keycloak_integration && Object(this.keycloak.getToken())['__zone_symbol__value']) {
       token = 'oidc_' + Object(this.keycloak.getToken())['__zone_symbol__value']
     } else if (this._auth.getToken()) {
       token = 'jwt_' + this._auth.getToken()
@@ -64,7 +65,7 @@ export class WebSocketService {
     }
   }
 
-    // we will not use it anymore, because of ws unidirectional approach
+  // we will not use it anymore, because of ws unidirectional approach
   public unsubscribe(): void {
     for (const element of this.subscribedElements) {
       this.elementsConnection.next({
