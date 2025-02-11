@@ -145,7 +145,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
         // this.updated_self = false
       } else if (data) {
-        this.refreshElementRelations.next(data);
+        // this.refreshElementRelations.next(data);
       }
     });
 
