@@ -42,26 +42,6 @@ export class LandingPageComponent implements OnInit {
     localStorage.removeItem('state_url')
     if (state_url && state_url.startsWith('/labbooks/')) {
       this.router.navigate([state_url])
-    } else {
-      // const imgOne = '../../../../assets/images/giphy.gif';
-      // const imgTwo = '../../../../assets/images/lb.png';
-      // const imgThree = '../../../../assets/images/pumuckl.gif';
-      // const imgArray = [imgOne, imgTwo, imgThree];
-      // // @ts-ignore
-      // document.getElementById('bg-img').style.backgroundImage = 'url(' + imgArray[0] + ')';
-      // let interval = 0;
-      // this.intervalID = setInterval(function () {
-      //
-      //   if (interval < (imgArray.length - 1)) {
-      //     interval++;
-      //   } else {
-      //     interval = 0;
-      //   }
-      //   // @ts-ignore
-      //   document.getElementById('bg-img').style.backgroundImage = 'url(' + imgArray[interval] + ')';
-      // }, 1450);
-      // @ts-ignore
-      document.getElementById('bg-img').style.backgroundImage = 'url(' + '../../../../assets/images/lb.png' + ')';
     }
   }
 

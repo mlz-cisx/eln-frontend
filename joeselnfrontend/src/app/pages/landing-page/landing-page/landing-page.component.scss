@@ -13,6 +13,18 @@
     gap: 35px;
   }
 
+  #bg-img {
+    width: auto;
+    height: 950px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0;
+    background-image: url("../../../../assets/images/lb.png");
+  }
+
   ::ng-deep.description-container {
     overflow-wrap: break-word;
     max-height: 300px;
@@ -30,4 +42,5 @@
     color: $primary-color;
     text-shadow: #FC0 1px 0 20px;
   }
+
 }
