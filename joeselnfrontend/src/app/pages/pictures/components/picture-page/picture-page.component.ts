@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -14,13 +14,17 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { ProjectSidebarItem } from '@app/enums/project-sidebar-item.enum';
-import { CommentsComponent } from '@app/modules/comment/components/comments/comments.component';
-import { NewCommentModalComponent } from '@app/modules/comment/components/modals/new/new.component';
+import {Validators} from '@angular/forms';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
+import {
+  CommentsComponent
+} from '@app/modules/comment/components/comments/comments.component';
+import {
+  NewCommentModalComponent
+} from '@app/modules/comment/components/modals/new/new.component';
 // import { PendingChangesModalComponent } from '@app/modules/shared/modals/pending-changes/pending-changes.component';
 // import { LeaveProjectModalComponent } from '@app/pages/projects/components/modals/leave/leave.component';
 import {
@@ -28,19 +32,36 @@ import {
   // PageTitleService,
   PicturesService,
   // ProjectsService,
-  WebSocketService } from '@app/services';
+  WebSocketService
+} from '@app/services';
 import {
   UserService,
   // UserStore
 } from '@app/services';
-import type { Lock, Metadata, ModalCallback, Picture, Privileges, Project, User } from '@joeseln/types';
-import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { from, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, map, mergeMap, skip, switchMap, take } from 'rxjs/operators';
+import type {
+  Lock,
+  Metadata,
+  ModalCallback,
+  Picture,
+  Privileges,
+  Project,
+  User
+} from '@joeseln/types';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {from, Observable, of, Subject} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  skip,
+  switchMap,
+  take
+} from 'rxjs/operators';
 // import { NewPictureModalComponent } from '../modals/new/new.component';
 import {mockUser} from "@joeseln/mocks";
 
@@ -146,7 +167,8 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     private readonly modalService: DialogService,
     private user_service: UserService,
     // private readonly userStore: UserStore
-  ) {}
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -155,13 +177,13 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
     if (this.lock) {
       if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return { ownUser: true, user: this.lock.lock_details?.locked_by };
+        return {ownUser: true, user: this.lock.lock_details?.locked_by};
       }
 
-      return { ownUser: false, user: this.lock.lock_details?.locked_by };
+      return {ownUser: false, user: this.lock.lock_details?.locked_by};
     }
 
-    return { ownUser: false, user: null };
+    return {ownUser: false, user: null};
   }
 
   private get file(): any {
@@ -183,7 +205,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
       // console.log(this.currentUser)
     });
 
-    this.websocketService.subscribe([{ model: 'picture', pk: this.id }]);
+    // this.websocketService.subscribe([{ model: 'picture', pk: this.id }]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.element_lock_changed?.model_pk === this.id) {
         this.lock = data.element_lock_changed;
@@ -207,7 +229,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.websocketService.unsubscribe();
+    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {
@@ -319,11 +341,11 @@ export class PicturePageComponent implements OnInit, OnDestroy {
               aspectRatio: picture.width / picture.height,
               projects: picture.projects,
             },
-            { emitEvent: false }
+            {emitEvent: false}
           );
 
           if (!privileges.edit) {
-            this.form.disable({ emitEvent: false });
+            this.form.disable({emitEvent: false});
           }
 
           return privilegesData;
@@ -365,8 +387,8 @@ export class PicturePageComponent implements OnInit, OnDestroy {
           this.detailsTitle = picture.title;
           // void this.pageTitleService.set(picture.display);
 
-          this.initialState = { ...picture };
-          this.privileges = { ...privileges };
+          this.initialState = {...picture};
+          this.privileges = {...privileges};
 
           this.loading = false;
 
@@ -405,7 +427,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
           this.detailsTitle = picture.title;
           // void this.pageTitleService.set(picture.display);
 
-          this.initialState = { ...picture };
+          this.initialState = {...picture};
           this.form.markAsPristine();
           this.refreshChanges.next(true);
           this.refreshVersions.next(true);

@@ -3,10 +3,10 @@ import {UserService} from "@app/services";
 import {User, Test} from "@joeseln/types";
 import {UserStore} from "@app/services/user/user.store";
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ChangeDetectorRef } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
-import { ToastrService } from 'ngx-toastr';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ChangeDetectorRef} from '@angular/core';
+import {TranslocoService} from '@ngneat/transloco';
+import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
@@ -74,7 +74,7 @@ export class ProfilePageComponent implements OnInit {
     };
   }
 
-    public onSubmit(): void {
+  public onSubmit(): void {
     if (this.loading || this.form.invalid) {
       return;
     }

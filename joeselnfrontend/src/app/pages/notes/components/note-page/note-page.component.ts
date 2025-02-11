@@ -17,8 +17,12 @@ import {Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {CommentsComponent} from '@app/modules/comment/components/comments/comments.component';
-import {NewCommentModalComponent} from '@app/modules/comment/components/modals/new/new.component';
+import {
+  CommentsComponent
+} from '@app/modules/comment/components/comments/comments.component';
+import {
+  NewCommentModalComponent
+} from '@app/modules/comment/components/modals/new/new.component';
 // import {PendingChangesModalComponent} from '@app/modules/shared/modals/pending-changes/pending-changes.component';
 import {
   AuthService,
@@ -28,14 +32,31 @@ import {
   // ProjectsService,
   WebSocketService
 } from '@app/services';
-import type {Lock, Metadata, ModalCallback, Note, NotePayload, Privileges, Project, User} from '@joeseln/types';
+import type {
+  Lock,
+  Metadata,
+  ModalCallback,
+  Note,
+  NotePayload,
+  Privileges,
+  Project,
+  User
+} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {from, Observable, of, Subject} from 'rxjs';
-import {catchError, debounceTime, map, mergeMap, skip, switchMap, take} from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  skip,
+  switchMap,
+  take
+} from 'rxjs/operators';
 import {NewNoteModalComponent} from '../modals/new/new.component';
 import {mockUser} from "@joeseln/mocks";
 
@@ -155,7 +176,7 @@ export class NotePageComponent implements OnInit, OnDestroy {
       // console.log(this.currentUser)
     });
 
-    this.websocketService.subscribe([{model: 'note', pk: this.id}]);
+    // this.websocketService.subscribe([{model: 'note', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.element_lock_changed?.model_pk === this.id) {
         this.lock = data.element_lock_changed;
@@ -179,7 +200,7 @@ export class NotePageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.websocketService.unsubscribe();
+    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {

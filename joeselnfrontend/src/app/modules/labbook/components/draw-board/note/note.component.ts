@@ -175,10 +175,10 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     }
 
 
-    this.websocketService.subscribe([{
-      model: 'note',
-      pk: this.initialState!.pk
-    }]);
+    // this.websocketService.subscribe([{
+    //   model: 'note',
+    //   pk: this.initialState!.pk
+    // }]);
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       // console.log('note pipe ', data)

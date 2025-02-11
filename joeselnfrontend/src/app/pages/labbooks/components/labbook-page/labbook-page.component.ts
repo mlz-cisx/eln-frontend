@@ -210,7 +210,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     });
 
 
-    this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
+    // this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       this.cdr.detectChanges();
       if (data.model_pk === this.id && !this.submitted) {
@@ -242,7 +242,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
 
   public ngOnDestroy(): void {
-    this.websocketService.unsubscribe();
+    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {

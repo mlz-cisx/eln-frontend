@@ -122,7 +122,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
+    // this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
     this.websocketService.elements.pipe().subscribe((data: any) => {
       // console.log('grid pipe ', data['action'])
       if (data.model_pk === this.id) {
@@ -163,7 +163,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.websocketService.unsubscribe();
+    // this.websocketService.unsubscribe();
   }
 
 

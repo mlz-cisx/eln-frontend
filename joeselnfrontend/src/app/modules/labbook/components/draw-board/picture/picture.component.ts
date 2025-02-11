@@ -169,10 +169,10 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
       this.background_color = 'background-color: #fff4c2';
     }
 
-    this.websocketService.subscribe([{
-      model: 'picture',
-      pk: this.initialState!.pk
-    }]);
+    // this.websocketService.subscribe([{
+    //   model: 'picture',
+    //   pk: this.initialState!.pk
+    // }]);
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {

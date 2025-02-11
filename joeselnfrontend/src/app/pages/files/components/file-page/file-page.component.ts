@@ -213,7 +213,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
       console.log(this.currentUser)
     });
 
-    this.websocketService.subscribe([{model: 'file', pk: this.id}]);
+    // this.websocketService.subscribe([{model: 'file', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.element_lock_changed?.model_pk === this.id) {
         this.lock = data.element_lock_changed;
@@ -237,7 +237,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.websocketService.unsubscribe();
+    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {

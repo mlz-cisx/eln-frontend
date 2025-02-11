@@ -22,7 +22,8 @@ export class WebSocketService {
 
   public elements = new Subject();
 
-  public elementsConnection = webSocket(`${environment.wsUrl}/`);
+  public elementsConnection = webSocket(`${environment.wsUrl}/pathvalue`);
+
 
   public subscribedElements: WebSocketElementPayload[] = [];
 
@@ -32,14 +33,24 @@ export class WebSocketService {
   ) {
   }
 
+
   public connect(): void {
-    this.elementsConnection.subscribe({next: msg => this.elements.next(msg)});
-    this.elementsConnection.next({
+    var token
+    if (Object(this.keycloak.getToken())['__zone_symbol__value']) {
+      token = 'oidc_' + Object(this.keycloak.getToken())['__zone_symbol__value']
+    } else if (this._auth.getToken()) {
+      token = 'jwt_' + this._auth.getToken()
+    } else token = ''
+
+    const ws_with_path = webSocket((`${environment.wsUrl}/${token}`))
+    ws_with_path.subscribe({next: msg => this.elements.next(msg)});
+    ws_with_path.next({
       action: 'connect',
-      auth: this._auth.getToken() || this.keycloak.getToken()
+      auth: ''
     });
   }
 
+  // we will not use it anymore, because of ws unidirectional approach
   public subscribe(elements: WebSocketElementPayload[]): void {
     for (const element of elements) {
       this.subscribedElements = [...this.subscribedElements, element];
@@ -53,6 +64,7 @@ export class WebSocketService {
     }
   }
 
+    // we will not use it anymore, because of ws unidirectional approach
   public unsubscribe(): void {
     for (const element of this.subscribedElements) {
       this.elementsConnection.next({
