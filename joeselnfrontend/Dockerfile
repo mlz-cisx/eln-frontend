@@ -15,6 +15,7 @@ ARG WS_URL
 ARG ELN_EXPORTER
 ARG KEYCLOAK_URL
 ARG KEYCLOAK_REALM
+ARG KEYCLOAK_INTEGRATION
 ARG KEYCLOAK_CLIENT_ID
 
 RUN rm -f src/environments/environment.prod.ts && \
@@ -28,8 +29,9 @@ RUN rm -f src/environments/environment.prod.ts && \
     echo "  labBookSocketRefreshInterval: 1000," >> src/environments/environment.prod.ts && \
     echo "  eln_exporter: '${ELN_EXPORTER}'," >> src/environments/environment.prod.ts && \
     echo "  keycloak_url: '${KEYCLOAK_URL}'," >> src/environments/environment.prod.ts && \
+    echo "  keycloak_clientId: '${KEYCLOAK_CLIENT_ID}'," >> src/environments/environment.prod.ts && \
+    echo "  keycloak_integration: ${KEYCLOAK_INTEGRATION}," >> src/environments/environment.prod.ts && \
     echo "  keycloak_realm: '${KEYCLOAK_REALM}'," >> src/environments/environment.prod.ts && \
-    echo "  keycloak_clientId: '${KEYCLOAK_CLIENT_ID}'" >> src/environments/environment.prod.ts && \
     echo "};" >> src/environments/environment.prod.ts
 
 # build angular app
