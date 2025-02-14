@@ -117,9 +117,15 @@ export class LabBookSidebarComponent implements OnInit {
         this.isMobileMode = false;
       });
 
-    // const parentElement = document.getElementById('site-header')!.offsetParent as HTMLElement;
-    // this.offsetHeader = parentElement.offsetTop + parentElement.offsetHeight;
-    this.offsetHeader = 10
+    // place sidebar exact below navbar
+    const navBarElement = document.getElementsByClassName('header')[0];
+    if (navBarElement) {
+      const navBarStyles = window.getComputedStyle(navBarElement);
+      const navBarHeight = parseInt(navBarStyles.height, 10);
+      this.offsetHeader = navBarHeight - this.offsetMargin;
+    } else {
+      this.offsetHeader = 40; // Fallback
+    }
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -129,7 +135,7 @@ export class LabBookSidebarComponent implements OnInit {
 
   public setSidebarPosition(scrollTop: number): void {
     const drawBoardElement = document.getElementById('labbook-draw-board');
-    const offsetTop = drawBoardElement!.offsetTop - this.offsetHeader;
+    const offsetTop = this.offsetHeader;
 
     if (this.isMobileMode) {
       this.sidebarPosition = 'block';

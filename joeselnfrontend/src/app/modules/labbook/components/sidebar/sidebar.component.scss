@@ -13,34 +13,23 @@
     background-color: $primary-color;
     text-align: center;
     padding: 0;
+    margin-bottom: 16px;
   }
 
   h1 {
     font-size: 12px;
     font-weight: bold;
     color: #fff;
+    display: inline;
   }
 
   ul li {
     margin-top: 0;
     font-size: 1.25rem;
+    display: inline;
   }
 
-  @media (max-width: 991px) {
-    .sidebar {
-      margin-bottom: 16px;
-    }
-
-    h1,
-    ul,
-    ul li {
-      display: inline;
-    }
-  }
-
-  @media (min-width: 992px) {
-    .sidebar {
-      width: 50px;
-    }
+  ul {
+    display: inline;
   }
 }
