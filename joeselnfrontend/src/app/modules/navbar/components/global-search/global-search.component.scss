@@ -24,7 +24,7 @@
   }
 
   .results-container {
-    height: 390px;
+    max-height: 300px;
     overflow-y: auto;
     border-left: 1px solid $border-color;
 
