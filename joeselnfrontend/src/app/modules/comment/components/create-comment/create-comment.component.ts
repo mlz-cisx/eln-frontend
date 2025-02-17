@@ -114,6 +114,8 @@ export class CreateCommentComponent implements OnInit {
           this.loading = false;
           this.refresh.next(true);
 
+          localStorage.setItem('comment_change', String(window.scrollY))
+
           this.translocoService
             .selectTranslate('comments.newCommentModal.toastr.success')
             .pipe(untilDestroyed(this))

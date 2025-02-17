@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
+  Input, OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild
@@ -32,7 +32,7 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
   styleUrls: ['./comments.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnInit, OnDestroy {
   @Input()
   public service!: any;
 
@@ -77,6 +77,16 @@ export class CommentsComponent implements OnInit {
   public ngOnInit(): void {
     this.initTranslations();
     this.initSitePreferences();
+  }
+
+  public ngOnDestroy(): void {
+    this.scroll_to_position()
+  }
+
+  public scroll_to_position() {
+    const pos = Number(localStorage.getItem('comment_change')) || 0;
+    localStorage.removeItem('comment_change');
+    window.scrollTo({top: pos, behavior: 'smooth'});
   }
 
   public initTranslations(): void {

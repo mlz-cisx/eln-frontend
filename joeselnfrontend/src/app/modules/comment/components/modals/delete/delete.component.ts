@@ -3,12 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { DialogRef } from '@ngneat/dialog';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component
+} from '@angular/core';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {DialogRef} from '@ngneat/dialog';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
@@ -33,7 +37,8 @@ export class DeleteCommentModalComponent {
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService
-  ) {}
+  ) {
+  }
 
   public onDelete(): void {
     if (this.loading) {
@@ -47,7 +52,10 @@ export class DeleteCommentModalComponent {
       .subscribe(
         () => {
           this.state = ModalState.Changed;
-          this.modalRef.close({ state: this.state });
+          this.modalRef.close({state: this.state});
+
+          localStorage.setItem('comment_change', String(window.scrollY))
+
           this.translocoService
             .selectTranslate('comments.deleteModal.toastr.success')
             .pipe(untilDestroyed(this))
