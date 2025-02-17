@@ -6,7 +6,7 @@ export interface LabBookPayload {
   title: string;
   projects: string[];
   description?: string;
-  is_template: boolean;
+  strict_mode: boolean;
   metadata?: Metadata[];
 }
 

@@ -16,7 +16,7 @@ export const mockLabBookPayload: LabBookPayload = {
   title: 'Test',
   projects: [],
   description: 'Description',
-  is_template: false,
+  strict_mode: false,
 };
 
 export const mockLabBook: LabBook = {

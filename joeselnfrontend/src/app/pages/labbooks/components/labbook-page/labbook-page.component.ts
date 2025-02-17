@@ -77,7 +77,7 @@ import {
 
 interface FormLabBook {
   labbook_title: FormControl<string | null>;
-  isTemplate: boolean;
+  strict_mode: boolean;
   projects: FormControl<string[]>;
 }
 
@@ -145,7 +145,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public form = this.fb.group<FormLabBook>({
     labbook_title: this.fb.control(null, Validators.required),
-    isTemplate: false,
+    strict_mode: false,
     projects: this.fb.control([]),
   });
 
@@ -193,7 +193,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
   private get labBook(): LabBookPayload {
     return {
       title: this.f.labbook_title.value!,
-      is_template: this.f.isTemplate.value,
+      strict_mode: this.f.strict_mode.value,
       projects: this.f.projects.value,
       metadata: this.metadata!,
     };
@@ -335,8 +335,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           this.form.patchValue(
             {
               labbook_title: labBook.title,
-              // TODO change this formControl name to strict_mode
-              isTemplate: labBook.strict_mode,
+              strict_mode: labBook.strict_mode,
               projects: labBook.projects,
             },
             {emitEvent: false}

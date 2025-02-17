@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://172.25.74.236:8010/api',
-  wsUrl: 'ws://172.25.74.236:4501',
+  wsUrl: 'ws://172.25.74.236:4501/ws',
   tracking: false,
   matomoUrl: null,
   matomoId: null,
