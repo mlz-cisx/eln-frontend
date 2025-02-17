@@ -102,7 +102,6 @@ export class CreateCommentComponent implements OnInit {
       return;
     }
     this.loading = true;
-
     this.commentsService
       .add(this.comment)
       .pipe(untilDestroyed(this))
@@ -114,7 +113,10 @@ export class CreateCommentComponent implements OnInit {
           this.loading = false;
           this.refresh.next(true);
 
-          localStorage.setItem('comment_change', String(window.scrollY))
+          // for multiple creations
+          if (!localStorage.getItem('comment_change')) {
+            localStorage.setItem('comment_change', String(window.scrollY))
+          }
 
           this.translocoService
             .selectTranslate('comments.newCommentModal.toastr.success')

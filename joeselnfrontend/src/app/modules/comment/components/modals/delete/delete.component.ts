@@ -45,7 +45,6 @@ export class DeleteCommentModalComponent {
       return;
     }
     this.loading = true;
-
     this.service
       .deleteRelation(this.baseModelId, this.relationId)
       .pipe(untilDestroyed(this))
@@ -53,8 +52,10 @@ export class DeleteCommentModalComponent {
         () => {
           this.state = ModalState.Changed;
           this.modalRef.close({state: this.state});
-
-          localStorage.setItem('comment_change', String(window.scrollY))
+          // for multiple deletions
+          if (!localStorage.getItem('comment_change')) {
+            localStorage.setItem('comment_change', String(window.scrollY))
+          }
 
           this.translocoService
             .selectTranslate('comments.deleteModal.toastr.success')
