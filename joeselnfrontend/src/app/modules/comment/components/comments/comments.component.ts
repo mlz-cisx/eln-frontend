@@ -80,14 +80,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.scroll_to_position()
+    location.reload()
   }
 
-  public scroll_to_position() {
-    const pos = Number(localStorage.getItem('comment_change')) || 0;
-    localStorage.removeItem('comment_change');
-    window.scrollTo({top: pos, behavior: 'smooth'});
-  }
 
   public initTranslations(): void {
     this.translocoService

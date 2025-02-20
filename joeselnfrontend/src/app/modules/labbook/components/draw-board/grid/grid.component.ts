@@ -616,6 +616,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     let elem_deleted = localStorage.getItem('elem_deleted') || 0
     localStorage.removeItem('elem_deleted');
 
+    const comment_changed_pos = Number(localStorage.getItem('comment_change')) || 0;
+    localStorage.removeItem('comment_change');
+
+
     // get all possibilities for header and title also for file
     if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file' ||
       content_type == 'labbooks.labbook')) {
@@ -673,6 +677,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
     if (elem_deleted !== 0) {
       window.scrollTo({top: pos, behavior: 'smooth'});
+    }
+
+    if (comment_changed_pos !== 0) {
+      window.scrollTo({top: comment_changed_pos, behavior: 'smooth'});
     }
 
 
