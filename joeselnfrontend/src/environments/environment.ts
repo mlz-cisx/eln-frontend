@@ -11,4 +11,5 @@ export const environment = {
   keycloak_realm: 'joe',
   keycloak_clientId: 'client_frontend',
   keycloak_integration: true,
+  noteMaximumSize: 5000 // in kilobytes
 };
