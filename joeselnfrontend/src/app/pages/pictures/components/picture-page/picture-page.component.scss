@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+@import 'src/styles/_colors.scss';
+
 :host {
   display: flex;
   flex-direction: column;
@@ -12,5 +14,25 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 35px;
+
+    eworkbench-details-collapse-element {
+      padding: 15px;
+      margin: 20px;
+      border: 1px solid $border-color;;
+      border-radius: 5px;
+
+      h3 {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: center; /* Center the text horizontally */
+        &:last-child {
+          grid-column: -1 / 1;
+        }
+      }
+
+      .mb-4 {
+        margin-bottom: 20px;
+      }
+    }
   }
 }
