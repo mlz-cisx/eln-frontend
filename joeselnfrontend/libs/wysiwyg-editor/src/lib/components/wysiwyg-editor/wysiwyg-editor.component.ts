@@ -21,6 +21,8 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
 
   @Input()
   public maxHeight: number | undefined = 500;
+  @Input()
+  public actual_height:  number | undefined = 500;
 
   public init = {
     base_url: '/tinymce',
@@ -28,6 +30,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     branding: false,
     promotion: false,
     max_height: this.maxHeight,
+    height: this.actual_height,
     plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
     menubar: 'file edit view insert format tools table help',
     toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
@@ -104,6 +107,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
 
   public ngOnInit(): void {
     this.init.max_height = this.maxHeight;
+    this.init.height = this.actual_height;
     // this.init.inline = true;
   }
 
