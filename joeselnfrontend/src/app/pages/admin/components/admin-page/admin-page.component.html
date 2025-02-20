@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
   <main>
     <div style="height: 100px"></div>
-    <div *ngIf="currentUser && currentUser.admin">
+    <div *ngIf="currentUser && currentUser.admin" class="button-container">
       <div>
         <button (click)="go_to_osers()">
           USERS

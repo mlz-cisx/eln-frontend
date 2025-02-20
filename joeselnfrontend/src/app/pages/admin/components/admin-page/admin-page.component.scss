@@ -5,9 +5,36 @@
 
   main {
     max-width: 500px;
+  }
+
+  .button-container {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
+    align-items: center;
+    padding: 20px;
+    background-color: $alert-info-background-color;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  button {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $primary-color-hover;
+    }
+  }
+
+  h3 {
+    color: $danger-color;
+    text-align: center;
   }
 
   .control-error {
