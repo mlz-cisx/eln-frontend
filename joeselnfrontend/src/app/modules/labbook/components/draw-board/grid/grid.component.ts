@@ -135,14 +135,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         if (this.socketRefreshTimeout) {
           clearTimeout(this.socketRefreshTimeout);
         }
-
-        if (data.model_name === 'labbook_patch') {
-          this.reload()
-        } else {
-          this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
-        }
-
-
+        this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
         // this.updated_self = false
       } else if (data) {
         // this.refreshElementRelations.next(data);
