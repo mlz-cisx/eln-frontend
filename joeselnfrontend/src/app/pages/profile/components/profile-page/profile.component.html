@@ -10,7 +10,7 @@
         Admin: &nbsp; {{ user.admin}}
       </div>
       <div style="margin-top: 1%" *ngIf="!user.admin">
-        Your groups:
+        <h6>Your groups:</h6>
         <ul *ngIf="user.groups">
           <li *ngFor="let group of user.groups">
             {{group}}
@@ -18,7 +18,7 @@
         </ul>
       </div>
       <div style="margin-top: 1%" *ngIf="!user.admin">
-        Your groups as groupadmin:
+        <h6>Your groups as groupadmin:</h6>
         <ul *ngIf="user.admin_groups">
           <li *ngFor="let group of user.admin_groups">
             {{group}}
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div *ngIf="user && !user.oidc_user">
-      <h4>Password Reset</h4>
+      <h5>Password Reset</h5>
       <div *ngIf="user">
         <div>Password must contain at least one lowercase letter, one uppercase
           letter, one digit, one special character, and must be between eight

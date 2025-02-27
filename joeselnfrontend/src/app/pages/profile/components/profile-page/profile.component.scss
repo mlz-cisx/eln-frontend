@@ -1,7 +1,96 @@
+@import '../../../../../styles/colors';
+
 :host {
   display: block;
+  padding: 20px;
 
   main {
-    max-width: 500px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  h4 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: $primary-color;
+    font-weight: bold;
+    text-align: center;
+    background-color: $highlight-color;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  h5 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: $text-color;
+  }
+
+  h6 {
+    padding: 10px;
+  }
+
+  div {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+
+  ul {
+    padding-left: 20px;
+    list-style-type: disc;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  form {
+    margin-top: 20px;
+  }
+
+  .mb-4 {
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 1em;
+  }
+
+  button {
+    padding: 18px 24px;
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 4px;
+    background-color: $primary-color;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:disabled {
+    background-color: $border-color;
+    cursor: not-allowed;
+  }
+
+  button:hover:not(:disabled) {
+    background-color: $primary-color-hover;
   }
 }
