@@ -332,6 +332,7 @@
     <eworkbench-trash-button
       *ngIf="!row.deleted"
       class="inline-block"
+      [hoverText]="'user.bottom.deactivate'"
       [service]="admin_users_service"
       [id]="row.id"
       [tableView]="tableView"
@@ -339,6 +340,7 @@
     <eworkbench-restore-button
       *ngIf="row.deleted"
       class="inline-block"
+      [hoverText]="'user.bottom.activate'"
       [service]="admin_users_service"
       [id]="row.id"
       [tableView]="tableView"

@@ -19,6 +19,9 @@ import { ToastrService } from 'ngx-toastr';
 export class RestoreButtonComponent {
 
   @Input()
+  public hoverText: string = '';
+
+  @Input()
   public customId?: string;
 
   @Input()

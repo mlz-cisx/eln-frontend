@@ -30,6 +30,9 @@ import {DeleteModalComponent} from '../modals/delete/delete.component';
 export class TrashButtonComponent {
 
   @Input()
+  public hoverText: string = '';
+
+  @Input()
   public customId?: string;
 
   @Input()

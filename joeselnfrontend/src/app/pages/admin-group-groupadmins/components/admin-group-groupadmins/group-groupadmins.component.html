@@ -332,6 +332,7 @@
     <eworkbench-trash-button
       *ngIf="row.in_group"
       class="inline-block"
+      [hoverText]="'user.bottom.demotion'"
       [service]="admin_groupadmins_service"
       [id]="row.id"
       [customId]="id"
@@ -340,6 +341,7 @@
     <eworkbench-restore-button
       *ngIf="!row.in_group"
       class="inline-block"
+      [hoverText]="'user.bottom.premotion'"
       [service]="admin_groupadmins_service"
       [id]="row.id"
       [customId]="id"

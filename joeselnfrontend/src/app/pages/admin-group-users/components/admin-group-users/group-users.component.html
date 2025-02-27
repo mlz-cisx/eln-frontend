@@ -333,6 +333,7 @@
     <eworkbench-trash-button
       *ngIf="row.in_group"
       class="inline-block"
+      [hoverText]="'user.bottom.removeFromGroup'"
       [service]="admin_group_users_service"
       [id]="row.id"
       [customId]="id"
@@ -341,6 +342,7 @@
     <eworkbench-restore-button
       *ngIf="!row.in_group"
       class="inline-block"
+      [hoverText]="'user.bottom.addToGroup'"
       [service]="admin_group_users_service"
       [id]="row.id"
       [customId]="id"
