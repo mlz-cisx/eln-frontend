@@ -52,6 +52,8 @@
     <div
       class="flex justify-between pb-4 mb-5 border-0 border-b-[3px] border-solid border-tum-border-gray">
       <eworkbench-trashed-items-filter
+        [filterTextLeft]="'users.filter.admins'"
+        [filterTextRight]="'users.filter.nonadmins'"
         (stateChanged)="onFilterItems($event)"></eworkbench-trashed-items-filter>
       <eworkbench-table-manage-columns
         class="flex justify-end"
@@ -326,8 +328,9 @@
     <!--      [contentType]="row.content_type"-->
     <!--      [favorited]="row.is_favourite"-->
     <!--    ></eworkbench-favorite-button>-->
+    <!-- defalut root users cannot be demoted from admins -->
     <eworkbench-trash-button
-      *ngIf="row.admin"
+      *ngIf="row.admin && !(row.id == 1 || row.id == 2)"
       class="inline-block"
       [service]="admin_admins_service"
       [id]="row.id"
