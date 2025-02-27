@@ -5,9 +5,9 @@
 
 <ng-container *transloco="let t">
   <button type="button" [class.active]="!showTrashedItems" class="btn ewb-button-big ewb-button-secondary" (click)="onChangeState()">
-    {{ t('shared.trashedItems.buttons.regularItems') }}
+    {{ t(filterTextLeft) || t('shared.trashedItems.buttons.regularItems') }}
   </button>
   <button type="button" [class.active]="showTrashedItems" class="btn ewb-button-big ewb-button-secondary" (click)="onChangeState()">
-    {{ t('shared.trashedItems.buttons.trashedItems') }}
+    {{ t(filterTextRight) || t('shared.trashedItems.buttons.trashedItems') }}
   </button>
 </ng-container>

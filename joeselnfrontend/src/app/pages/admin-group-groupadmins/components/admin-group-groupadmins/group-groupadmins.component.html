@@ -50,6 +50,8 @@
     <div
       class="flex justify-between pb-4 mb-5 border-0 border-b-[3px] border-solid border-tum-border-gray">
       <eworkbench-trashed-items-filter
+        [filterTextLeft]="'users.filter.admins'"
+        [filterTextRight]="'users.filter.nonadmins'"
         (stateChanged)="onFilterItems($event)"></eworkbench-trashed-items-filter>
       <eworkbench-table-manage-columns
         class="flex justify-end"
