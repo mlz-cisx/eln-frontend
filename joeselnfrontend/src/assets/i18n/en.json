@@ -2064,6 +2064,7 @@
   "users.columns.email": "Email",
   "users.columns.createdAt": "Created at",
   "users.columns.lastModifiedAt": "Last modified at",
+  "users.columns.isOidcUser": "External User",
   "users.new": "User",
   "user.newModal.header": "New user",
   "user.newModal.username.label": "Username",
