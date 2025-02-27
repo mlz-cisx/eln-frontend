@@ -529,3 +529,8 @@ eworkbench-dashboard-page {
 .custom-control-input:disabled ~ .custom-control-label {
   color: rgb(77 77 77 / 80%);
 }
+
+.changes img {
+  max-width: 200px;
+  height: auto;
+}
