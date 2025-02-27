@@ -2099,6 +2099,8 @@
   "user.details.projects.label": "Projects",
   "user.details.projects.placeholder": "Search & select projects",
   "user.details.metadata.label": "Metadata",
+  "user.groupAdmins": "GroupAdmins",
+  "user.groupUsers": "Users",
   "groups.new": "Group",
   "group.newModal.cancel": "Cancel",
   "group.newModal.create": "Create Group",
