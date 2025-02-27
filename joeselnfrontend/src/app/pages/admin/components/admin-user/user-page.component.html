@@ -15,15 +15,15 @@
   <!--        btnClass="btn bg-transparent ewb-button-big square-md text-white"-->
   <!--      ></eworkbench-favorite-button>-->
   <div style="text-align: center"><strong>{{detailsTitle}}</strong>
-<!--    <eworkbench-details-dropdown-->
-<!--      [service]="admin_users_service"-->
-<!--      [id]="id"-->
-<!--      [redirectDestination]="[showSidebar ? '.' : '' + '/admin/users', id]"-->
-<!--      [newModalComponent]="newModalComponent"-->
-<!--      [initialState]="initialState"-->
-<!--      [privileges]="privileges"-->
-<!--      *ngIf="privileges"-->
-<!--    ></eworkbench-details-dropdown>-->
+    <!--    <eworkbench-details-dropdown-->
+    <!--      [service]="admin_users_service"-->
+    <!--      [id]="id"-->
+    <!--      [redirectDestination]="[showSidebar ? '.' : '' + '/admin/users', id]"-->
+    <!--      [newModalComponent]="newModalComponent"-->
+    <!--      [initialState]="initialState"-->
+    <!--      [privileges]="privileges"-->
+    <!--      *ngIf="privileges"-->
+    <!--    ></eworkbench-details-dropdown>-->
   </div>
   <!--    </ng-container>-->
   <!--  </eworkbench-header>-->
@@ -256,68 +256,85 @@
           <!--   <eworkbench-details-collapse-element -->
           <!--     [labelText]="t('note.details.element.links')"> -->
           <!--     <ng-container slot="actions"> -->
-          <!--       <!--                <eworkbench-link-->
-          <!--       <!--                  [baseModel]="initialState"-->
-          <!--       <!--                  [service]="notesService"-->
-          <!--       <!--                  (refreshLinkList)="onRefreshLinkList()"-->
-          <!--       <!--                ></eworkbench-link>-->
+          <!--                 <eworkbench-link-->
+          <!--                        [baseModel]="initialState"-->
+          <!--                      [service]="notesService"-->
+          <!--                       (refreshLinkList)="onRefreshLinkList()"-->
+          <!--                    ></eworkbench-link>-->
           <!--     </ng-container> -->
           <!--     <ng-container slot="body"> -->
-          <!--       <!--                <eworkbench-link-list [id]="initialState.pk" [service]="notesService" [refresh]="refreshLinkList"></eworkbench-link-list>-->
+          <!--                     <eworkbench-link-list [id]="initialState.pk" [service]="notesService" [refresh]="refreshLinkList"></eworkbench-link-list>-->
           <!--     </ng-container> -->
           <!--   </eworkbench-details-collapse-element> -->
           <!-- </div> -->
-          <div>
-<!--            <eworkbench-details-collapse-element-->
-<!--              [labelText]="t('note.details.element.recentChanges')">-->
-<!--              <ng-container slot="body">-->
-<!--                &lt;!&ndash;                <eworkbench-recent-changes&ndash;&gt;-->
-<!--                &lt;!&ndash;                  id="recent-changes"&ndash;&gt;-->
-<!--                &lt;!&ndash;                  [service]="admin_users_service"&ndash;&gt;-->
-<!--                &lt;!&ndash;                  [changesId]="id"&ndash;&gt;-->
-<!--                &lt;!&ndash;                  [refresh]="refreshChanges"&ndash;&gt;-->
-<!--                &lt;!&ndash;                ></eworkbench-recent-changes>&ndash;&gt;-->
-<!--              </ng-container>-->
-<!--            </eworkbench-details-collapse-element>-->
+          <!--          <div>-->
+          <!--            &lt;!&ndash;            <eworkbench-details-collapse-element&ndash;&gt;-->
+          <!--            &lt;!&ndash;              [labelText]="t('note.details.element.recentChanges')">&ndash;&gt;-->
+          <!--            &lt;!&ndash;              <ng-container slot="body">&ndash;&gt;-->
+          <!--            &lt;!&ndash;                &lt;!&ndash;                <eworkbench-recent-changes&ndash;&gt;&ndash;&gt;-->
+          <!--            &lt;!&ndash;                &lt;!&ndash;                  id="recent-changes"&ndash;&gt;&ndash;&gt;-->
+          <!--            &lt;!&ndash;                &lt;!&ndash;                  [service]="admin_users_service"&ndash;&gt;&ndash;&gt;-->
+          <!--            &lt;!&ndash;                &lt;!&ndash;                  [changesId]="id"&ndash;&gt;&ndash;&gt;-->
+          <!--            &lt;!&ndash;                &lt;!&ndash;                  [refresh]="refreshChanges"&ndash;&gt;&ndash;&gt;-->
+          <!--            &lt;!&ndash;                &lt;!&ndash;                ></eworkbench-recent-changes>&ndash;&gt;&ndash;&gt;-->
+          <!--            &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+          <!--            &lt;!&ndash;            </eworkbench-details-collapse-element>&ndash;&gt;-->
 
-            <eworkbench-details-collapse-element
-              [labelText]="t('note.details.element.versions')">
-              <ng-container slot="body">
-                <!--                <eworkbench-versions-->
-                <!--                  id="versions"-->
-                <!--                  contentType="note"-->
-                <!--                  [service]="admin_users_service"-->
-                <!--                  [versionId]="id"-->
-                <!--                  [lastModifiedAt]="initialState?.last_modified_at"-->
-                <!--                  [refresh]="refreshVersions"-->
-                <!--                  [editable]="privileges?.restore"-->
-                <!--                  (changed)="onVersionChanged()"-->
-                <!--                ></eworkbench-versions>-->
-              </ng-container>
-            </eworkbench-details-collapse-element>
+          <!--&lt;!&ndash;            <eworkbench-details-collapse-element&ndash;&gt;-->
+          <!--&lt;!&ndash;              [labelText]="t('note.details.element.versions')">&ndash;&gt;-->
+          <!--&lt;!&ndash;              <ng-container slot="body">&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                <eworkbench-versions&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  id="versions"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  contentType="note"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [service]="admin_users_service"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [versionId]="id"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [lastModifiedAt]="initialState?.last_modified_at"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [refresh]="refreshVersions"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [editable]="privileges?.restore"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  (changed)="onVersionChanged()"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                ></eworkbench-versions>&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;              </ng-container>&ndash;&gt;-->
+          <!--&lt;!&ndash;            </eworkbench-details-collapse-element>&ndash;&gt;-->
 
-            <eworkbench-details-collapse-element
-              [labelText]="t('note.details.element.comments')">
-              <ng-container slot="actions">
-                <button
-                  type="button"
-                  class="btn ewb-button-regular ewb-button-outline"
-                  (click)="onOpenNewCommentModal()"
-                  [disabled]="loading"
-                >
-                  {{ t('note.details.comments.newComment') }}
-                </button>
-              </ng-container>
-              <ng-container slot="body">
-                <!--                <eworkbench-comments-->
-                <!--                  #comments-->
-                <!--                  [service]="notesService"-->
-                <!--                  [id]="id"-->
-                <!--                  [contentType]="initialState.content_type"-->
-                <!--                ></eworkbench-comments>-->
-              </ng-container>
-            </eworkbench-details-collapse-element>
+          <!--&lt;!&ndash;            <eworkbench-details-collapse-element&ndash;&gt;-->
+          <!--&lt;!&ndash;              [labelText]="t('note.details.element.comments')">&ndash;&gt;-->
+          <!--&lt;!&ndash;              <ng-container slot="actions">&ndash;&gt;-->
+          <!--&lt;!&ndash;                <button&ndash;&gt;-->
+          <!--&lt;!&ndash;                  type="button"&ndash;&gt;-->
+          <!--&lt;!&ndash;                  class="btn ewb-button-regular ewb-button-outline"&ndash;&gt;-->
+          <!--&lt;!&ndash;                  (click)="onOpenNewCommentModal()"&ndash;&gt;-->
+          <!--&lt;!&ndash;                  [disabled]="loading"&ndash;&gt;-->
+          <!--&lt;!&ndash;                >&ndash;&gt;-->
+          <!--&lt;!&ndash;                  {{ t('note.details.comments.newComment') }}&ndash;&gt;-->
+          <!--&lt;!&ndash;                </button>&ndash;&gt;-->
+          <!--&lt;!&ndash;              </ng-container>&ndash;&gt;-->
+          <!--&lt;!&ndash;              <ng-container slot="body">&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                <eworkbench-comments&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  #comments&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [service]="notesService"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [id]="id"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                  [contentType]="initialState.content_type"&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;                &lt;!&ndash;                ></eworkbench-comments>&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;              </ng-container>&ndash;&gt;-->
+          <!--&lt;!&ndash;            </eworkbench-details-collapse-element>&ndash;&gt;-->
+          <!--          </div>-->
+          <div class="user_info">
+            <h6>User Groups:</h6>
+            <ul *ngIf="user_groups">
+              <li *ngFor="let group of user_groups">
+                {{group}}
+              </li>
+            </ul>
+            <h6>Groupadmin Groups:</h6>
+            <ul *ngIf="admin_groups">
+              <li *ngFor="let group of admin_groups">
+                {{group}}
+              </li>
+            </ul>
           </div>
+          <!--          dummy div-->
+          <div></div>
+
         </form>
 
 

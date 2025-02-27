@@ -124,6 +124,9 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public projectInput$ = new Subject<string>();
 
+  public user_groups = []
+  public admin_groups = []
+
   public form = this.fb.group<FormUser>({
     username: this.fb.control(null, Validators.required),
     first_name: this.fb.control(null, Validators.required),
@@ -182,7 +185,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
       first_name: this.f.first_name.value!,
       last_name: this.f.last_name.value!,
       user_email: this.f.user_email.value!
-
     };
   }
 
@@ -317,6 +319,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
           console.log(user)
           console.log(privileges)
+
+          this.user_groups = user.groups
+          this.admin_groups = user.admin_groups
+
 
           this.form.patchValue(
             {
