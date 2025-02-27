@@ -81,6 +81,9 @@ export class UsersPageComponent implements OnInit {
   @ViewChild('lastModifiedByCellTemplate', {static: true})
   public lastModifiedByCellTemplate!: TemplateRef<any>;
 
+  @ViewChild('oidcUserTemplate', {static: true})
+  public oidcUserTemplate!: TemplateRef<any>;
+
   @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
 
@@ -224,6 +227,12 @@ export class UsersPageComponent implements OnInit {
           //   key: 'last_modified_by',
           //   sortable: true,
           // },
+          {
+            cellTemplate: this.oidcUserTemplate,
+            name: column.isOidcUser,
+            key: 'oidc_user',
+            sortable: true,
+          },
           {
             cellTemplate: this.actionsCellTemplate,
             name: '',
