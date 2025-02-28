@@ -2041,6 +2041,7 @@
   "files.columns.lastModifiedAt": "Last modified at",
   "files.columns.lastModifiedBy": "Last modified by",
   "files.columns.lb_title": "Labbook Title",
+  "file.gotoBottom": "Jump to this file",
   "pictures.columns.title": "Title",
   "pictures.columns.createdAt": "Created at",
   "pictures.columns.createdBy": "Created by",

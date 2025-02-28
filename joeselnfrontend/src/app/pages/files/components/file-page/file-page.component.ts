@@ -636,4 +636,16 @@ export class FilePageComponent implements OnInit, OnDestroy {
   public getStorageIdForDirectory(directoryId: string | null): string {
     return this.getStorageForDirectory(directoryId)[0]?.pk || '';
   }
+
+  public go_to_file(): void {
+      this.filesService
+        .get(this.id)
+        .pipe(untilDestroyed(this))
+        .subscribe(d => {
+          localStorage.setItem('pageVerticalposition', String((d.data.position_y)*36));
+          localStorage.setItem('note_inserted', String(1)); // indicating jump action
+          void this.router.navigate([`/labbooks/${d.data.labbook_id}`]);
+        })
+    }
+
 }

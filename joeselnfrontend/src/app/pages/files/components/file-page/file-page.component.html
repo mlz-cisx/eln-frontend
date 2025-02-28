@@ -318,35 +318,17 @@
               </ng-container>
             </eworkbench-details-collapse-element>
 
-            <eworkbench-details-collapse-element
-              [labelText]="t('file.details.element.description')">
-              <ng-container slot="actions">
+              <ng-container slot="actions" *transloco="let t">
                 <button
                   *ngIf="!form.disabled"
                   type="button"
                   class="btn ewb-button-regular ewb-button-outline"
-                  (click)="onOpenDescriptionModal()"
+                  (click)="go_to_file()"
                   [disabled]="loading"
                 >
-                  {{ t(descriptionTranslationKey) }}
+                  {{ t('file.gotoBottom') }}
                 </button>
               </ng-container>
-              <ng-container slot="body">
-                <div class="mb-4">
-                  <div
-                    class="description-container"
-                    *ngIf="initialState.description; else noDescription"
-                    [innerHTML]="initialState.description | safeHTML"
-                  ></div>
-                  <ng-template #noDescription>
-                    <span
-                      [ngClass]="!privileges?.edit ? 'italic text-tum-disabled' : ''">
-                      {{ t('file.details.description.noDescription') }}
-                    </span>
-                  </ng-template>
-                </div>
-              </ng-container>
-            </eworkbench-details-collapse-element>
 
             <!--            <eworkbench-details-collapse-element [labelText]="t('file.details.element.metadata')">-->
             <!--              <ng-container slot="body">-->

@@ -29,4 +29,6 @@ export const mockFile: File = {
   pk: 'fff1d25f-f41c-42e0-93fb-bfb83c3411a5',
   last_modified_by: mockUser,
   is_favourite: false,
+  position_y: 0,
+  labbook_id: '0'
 };
