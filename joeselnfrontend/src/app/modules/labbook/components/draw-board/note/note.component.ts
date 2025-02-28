@@ -226,7 +226,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.height = Math.max((this.element.height - 4) * 36, 100)
+    this.height = Math.max((this.element.height - 2) * 36, 100)
     this.form.patchValue(
       {
         note_subject: this.element.child_object.subject,

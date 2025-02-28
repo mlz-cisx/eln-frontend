@@ -23,11 +23,38 @@
                   name="title"
                   [placeholder]="t('labBook.drawBoardPicture.details.title.placeholder')"
                   slot="input"
-                  [readOnly]= !this.title_editable
+                  [readOnly]=!this.title_editable
                 />
               </eworkbench-form-input>
             </div>
             <div class="ml-2 self-center">
+              <button type="button"
+                      class="btn ewb-button-big ewb-button-background"
+                      (click)="create_new_note_below()">
+                NoteBelow
+              </button>
+              <button type="button"
+                      class="btn ewb-button-big ewb-button-background"
+                      (click)="create_new_note_aside()">
+                NoteAside
+              </button>
+              <button type="button"
+                      class="btn ewb-button-big ewb-button-background"
+                      (click)="onOpenCommentsModal()">
+                <joeseln-icon className="wb-comment"
+                              class="mr-1"></joeseln-icon>
+                <ng-container *ngIf="!element.num_related_comments">
+                  {{ t('labBook.drawBoard.element.footer.createComment') }}
+                </ng-container>
+                <ng-container
+                  *ngIf="element.num_related_comments && element.num_related_comments === 1">
+                  {{ t('labBook.drawBoard.element.footer.comment', {count: element.num_related_comments}) }}
+                </ng-container>
+                <ng-container
+                  *ngIf="element.num_related_comments && element.num_related_comments > 1">
+                  {{ t('labBook.drawBoard.element.footer.comments', {count: element.num_related_comments}) }}
+                </ng-container>
+              </button>
               <button type="button"
                       class="btn ewb-button-big square-md ewb-button-none cursor-move drag-handle mr-2"
                       *ngIf="editable">
@@ -60,56 +87,56 @@
               [alt]="initialState.display"
         /></a>
       </div>
-      <div class="footer">
-        <div>
-          {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}
-          <eworkbench-user-details
-            [user]="element.child_object.last_modified_by"
-            class="last-modified-by"></eworkbench-user-details>
-          {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}
-          {{ element.child_object.last_modified_at | formatDate }}
-        </div>
-        <div class="actions">
-          <!--          <a [routerLink]="['/pictures', element.child_object_id]" target="_blank">-->
-          <!--            <button type="button" class="btn ewb-button-big ewb-button-background mr-2">-->
-          <!--              <joeseln-icon className="wb-link" class="mr-1"></joeseln-icon>-->
-          <!--              <ng-container *ngIf="!element.num_relations">-->
-          <!--                {{ t('labBook.drawBoard.element.footer.linkWith') }}-->
-          <!--              </ng-container>-->
-          <!--              <ng-container *ngIf="element.num_relations && element.num_relations === 1">-->
-          <!--                {{ t('labBook.drawBoard.element.footer.link', {count: element.num_relations}) }}-->
-          <!--              </ng-container>-->
-          <!--              <ng-container *ngIf="element.num_relations && element.num_relations > 1">-->
-          <!--                {{ t('labBook.drawBoard.element.footer.links', {count: element.num_relations}) }}-->
-          <!--              </ng-container>-->
-          <!--            </button>-->
-          <!--          </a>-->
-          <button type="button" class="btn ewb-button-big ewb-button-background"
-                  (click)="create_new_note_below()">
-            NoteBelow
-          </button>
-          <button type="button" class="btn ewb-button-big ewb-button-background"
-                  (click)="create_new_note_aside()">
-            NoteAside
-          </button>
-          <button type="button" class="btn ewb-button-big ewb-button-background"
-                  (click)="onOpenCommentsModal()">
-            <joeseln-icon className="wb-comment"
-                          class="mr-1"></joeseln-icon>
-            <ng-container *ngIf="!element.num_related_comments">
-              {{ t('labBook.drawBoard.element.footer.createComment') }}
-            </ng-container>
-            <ng-container
-              *ngIf="element.num_related_comments && element.num_related_comments === 1">
-              {{ t('labBook.drawBoard.element.footer.comment', {count: element.num_related_comments}) }}
-            </ng-container>
-            <ng-container
-              *ngIf="element.num_related_comments && element.num_related_comments > 1">
-              {{ t('labBook.drawBoard.element.footer.comments', {count: element.num_related_comments}) }}
-            </ng-container>
-          </button>
-        </div>
-      </div>
+<!--      <div class="footer">-->
+<!--        <div>-->
+<!--          {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}-->
+<!--          <eworkbench-user-details-->
+<!--            [user]="element.child_object.last_modified_by"-->
+<!--            class="last-modified-by"></eworkbench-user-details>-->
+<!--          {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}-->
+<!--          {{ element.child_object.last_modified_at | formatDate }}-->
+<!--        </div>-->
+<!--        <div class="actions">-->
+<!--          &lt;!&ndash;          <a [routerLink]="['/pictures', element.child_object_id]" target="_blank">&ndash;&gt;-->
+<!--          &lt;!&ndash;            <button type="button" class="btn ewb-button-big ewb-button-background mr-2">&ndash;&gt;-->
+<!--          &lt;!&ndash;              <joeseln-icon className="wb-link" class="mr-1"></joeseln-icon>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <ng-container *ngIf="!element.num_relations">&ndash;&gt;-->
+<!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.linkWith') }}&ndash;&gt;-->
+<!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <ng-container *ngIf="element.num_relations && element.num_relations === 1">&ndash;&gt;-->
+<!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.link', {count: element.num_relations}) }}&ndash;&gt;-->
+<!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <ng-container *ngIf="element.num_relations && element.num_relations > 1">&ndash;&gt;-->
+<!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.links', {count: element.num_relations}) }}&ndash;&gt;-->
+<!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+<!--          &lt;!&ndash;            </button>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </a>&ndash;&gt;-->
+<!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+<!--                  (click)="create_new_note_below()">-->
+<!--            NoteBelow-->
+<!--          </button>-->
+<!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+<!--                  (click)="create_new_note_aside()">-->
+<!--            NoteAside-->
+<!--          </button>-->
+<!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+<!--                  (click)="onOpenCommentsModal()">-->
+<!--            <joeseln-icon className="wb-comment"-->
+<!--                          class="mr-1"></joeseln-icon>-->
+<!--            <ng-container *ngIf="!element.num_related_comments">-->
+<!--              {{ t('labBook.drawBoard.element.footer.createComment') }}-->
+<!--            </ng-container>-->
+<!--            <ng-container-->
+<!--              *ngIf="element.num_related_comments && element.num_related_comments === 1">-->
+<!--              {{ t('labBook.drawBoard.element.footer.comment', {count: element.num_related_comments}) }}-->
+<!--            </ng-container>-->
+<!--            <ng-container-->
+<!--              *ngIf="element.num_related_comments && element.num_related_comments > 1">-->
+<!--              {{ t('labBook.drawBoard.element.footer.comments', {count: element.num_related_comments}) }}-->
+<!--            </ng-container>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
     </form>
   </ng-container>
 </ng-container>
