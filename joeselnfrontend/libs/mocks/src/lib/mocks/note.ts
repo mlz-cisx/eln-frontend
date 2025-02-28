@@ -30,6 +30,8 @@ export const mockNote: Note = {
   metadata: [],
   content_type: 28,
   is_favourite: false,
+  position_y: 0,
+  labbook_id: '0',
 };
 
 export const mockNotesList: DjangoAPI<Note[]> = {

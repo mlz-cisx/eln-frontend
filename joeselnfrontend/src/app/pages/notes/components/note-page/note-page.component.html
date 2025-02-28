@@ -164,19 +164,15 @@
                   </div>
                 </div>
                 <div class="mb-4">
-                  <eworkbench-form-input
-                    for="content"
-                    [label]="t('note.details.content.label')"
-                    [loading]="loading"
-                    [onSubmit]="refreshResetValue"
-                  >
-                    <eworkbench-wysiwyg-editor [id]="'content'"
-                                               formControlName="content"
-                                               slot="input"
-                                               [disabled]="loading || !privileges?.fullAccess"
-                                               toolbar="---">
-                    </eworkbench-wysiwyg-editor>
-                  </eworkbench-form-input>
+                <button
+                  *ngIf="!form.disabled"
+                  type="button"
+                  class="btn ewb-button-regular ewb-button-outline"
+                  (click)="go_to_note()"
+                  [disabled]="loading"
+                >
+                  {{ t('note.details.gotoBottom') }}
+                </button>
                 </div>
               </ng-container>
             </eworkbench-details-collapse-element>

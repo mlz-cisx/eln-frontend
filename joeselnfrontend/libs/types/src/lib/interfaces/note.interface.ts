@@ -27,6 +27,8 @@ export interface Note {
   created_by: User;
   pk: string;
   is_favourite: boolean;
+  position_y: number;
+  labbook_id: string;
 }
 
 export interface Note_with_privileges {

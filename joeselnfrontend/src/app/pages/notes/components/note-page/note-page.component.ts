@@ -458,32 +458,14 @@ export class NotePageComponent implements OnInit, OnDestroy {
   }
 
   public go_to_note(): void {
-    this.labbooksService
-      .getList()
-      .pipe(
-        untilDestroyed(this),
-      ).subscribe(
-      labbooks => {
-        labbooks.data.forEach(
-          lb => {
-            this.labbooksService
-              .getElements(lb.pk)
-              .pipe(untilDestroyed(this))
-              .subscribe(labBookElements => {
-                labBookElements.map(element => {
-                  if (element.child_object.pk === this.id) {
-                    localStorage.setItem('pageVerticalposition', String((element.position_y) * 36))
-                    void this.router.navigate([`/labbooks/${lb.pk}`])
-                    //
-                  }
-                })
-              });
-          }
-        )
-      }
-    )
-
-
+      this.notesService
+        .get(this.id)
+        .pipe(untilDestroyed(this))
+        .subscribe(d => {
+          localStorage.setItem('pageVerticalposition', String((d.data.position_y)*36));
+          localStorage.setItem('note_inserted', String(1)); // indicating jump action
+          void this.router.navigate([`/labbooks/${d.data.labbook_id}`]);
+        })
   }
 
 

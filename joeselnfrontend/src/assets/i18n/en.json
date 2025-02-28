@@ -1725,6 +1725,7 @@
   "note.details.lastModifiedAt.label": "Last modified at",
   "note.details.recentChanges.label": "Recent changes",
   "note.details.versions.label": "Versions",
+  "note.details.gotoBottom": "Jump to this note",
   "labBook.details.createdAt.label": "Created at",
   "labBook.details.lastModifiedAt.label": "Last modified at",
   "labBook.details.recentChanges.label": "Recent changes",
