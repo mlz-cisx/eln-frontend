@@ -318,30 +318,55 @@
           <!--&lt;!&ndash;              </ng-container>&ndash;&gt;-->
           <!--&lt;!&ndash;            </eworkbench-details-collapse-element>&ndash;&gt;-->
           <!--          </div>-->
-          <div class="user_info">
-            <h6>User Groups:</h6>
-            <ul *ngIf="user_groups">
-              <li *ngFor="let group of user_groups">
-                {{group}}
-              </li>
-            </ul>
-            <h6>Groupadmin Groups:</h6>
-            <ul *ngIf="admin_groups">
-              <li *ngFor="let group of admin_groups">
-                {{group}}
-              </li>
-            </ul>
-          </div>
-          <!--          dummy div-->
-          <div></div>
 
-        </form>
+    <eworkbench-details-collapse-element
+      [labelText]="t('user.details.groupInfo')">
+          <ng-container slot="body">
+              <div class="mb-4">
+                  <eworkbench-form-input
+                    for="user_groups"
+                    [label]="t('user.details.group')"
+                    [loading]="loading"
+                    [onSubmit]="refreshResetValue"
+                  >
+                    <textarea
+                      class="form-control ewb-input"
+                      id="user_groups"
+                      name="user_groups"
+                      [value]="user_groups ? user_groups.join('\n') : ''"
+                      readonly
+                      slot="input"
+                      rows="5"
+                    ></textarea>
+                  </eworkbench-form-input>
+              </div>
+              <div class="mb-4">
+                  <eworkbench-form-input
+                    for="user_group_admins"
+                    [label]="t('user.details.groupadmin')"
+                    [loading]="loading"
+                    [onSubmit]="refreshResetValue"
+                  >
+                    <textarea
+                      class="form-control ewb-input"
+                      id="user_group_admins"
+                      name="user_groups"
+                      [value]="admin_groups ? admin_groups.join('\n') : ''"
+                      readonly
+                      slot="input"
+                      rows="5"
+                    ></textarea>
+                  </eworkbench-form-input>
+              </div>
+          </ng-container>
+    </eworkbench-details-collapse-element>
+    </form>
 
-
+    <eworkbench-details-collapse-element
+      [labelText]="t('user.details.password_reset.label')">
+          <ng-container slot="body">
         <form [formGroup]="passwword_form" (ngSubmit)="password_reset()"
               errorTailor>
-          <div class="mb-4">
-            <ng-container slot="body">
               <div class="mb-4">
                 <eworkbench-form-input
                   for="password_patch"
@@ -363,15 +388,14 @@
                   />
                 </eworkbench-form-input>
               </div>
-            </ng-container>
-          </div>
-        </form>
-
-        <div style="width: 30%">Password must contain at least one lowercase
-          letter, one uppercase letter, one digit, one special character, and
-          must be between eight
-          and sixteen characters in length.
-        </div>
+            </form>
+            <div style="width: 30%">Password must contain at least one lowercase
+              letter, one uppercase letter, one digit, one special character, and
+              must be between eight
+              and sixteen characters in length.
+            </div>
+          </ng-container>
+      </eworkbench-details-collapse-element>
 
       </main>
     </div>
