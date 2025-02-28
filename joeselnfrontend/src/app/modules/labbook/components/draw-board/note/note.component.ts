@@ -223,6 +223,15 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       // @ts-ignore
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
     }
+
+    var obj = document.getElementById('content-' + this.uniqueHash) as HTMLDivElement
+    const observer = new ResizeObserver(
+      entries => {
+        for (const entry of entries) {
+          console.log(entry.contentRect.height)
+        }
+      })
+    observer.observe(obj)
   }
 
   public initDetails(): void {
