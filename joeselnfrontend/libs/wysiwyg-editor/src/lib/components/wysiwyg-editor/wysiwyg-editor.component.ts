@@ -7,6 +7,7 @@ import {
   Self,
   ViewChild
 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
 
@@ -78,8 +79,12 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   @Input()
   public inline?: boolean = false;
 
+  private disabledSubject = new BehaviorSubject<boolean>(false);
+  public disabled$ = this.disabledSubject.asObservable();
   @Input()
-  public disabled?: boolean = false;
+  set disabled(value: boolean) {
+    this.disabledSubject.next(value);
+  }
 
   @Input()
   public tagName?: string = 'div';
@@ -116,7 +121,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
       this.cdr.markForCheck();
     });
 
-    // this.editor?.editor.mode.set(this.disabled ? 'readonly' : 'design');
+    this.editor?.editor.mode.set(this.disabledSubject.value ? 'readonly' : 'design');
   }
 
   public writeValue(value: string | null): void {
@@ -137,8 +142,5 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     this.onTouched = fn;
   }
 
-  public setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
 }
 

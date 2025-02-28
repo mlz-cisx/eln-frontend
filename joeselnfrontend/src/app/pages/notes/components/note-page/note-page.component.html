@@ -174,21 +174,13 @@
                   {{ t('note.details.gotoBottom') }}
                 </button>
                 </div>
-              </ng-container>
-            </eworkbench-details-collapse-element>
-
-            <eworkbench-details-collapse-element
-              [labelText]="t('note.details.element.metadata')">
-              <ng-container slot="body">
-                <div class="mb-4">
-                  <eworkbench-metadata
-                    [selectedParameters]="initialState.metadata"
-                    [editable]="privileges?.edit"
-                    [loading]="loading"
-                    [refresh]="refreshMetadata"
-                    (changed)="onUpdateMetadata($event)"
-                  ></eworkbench-metadata>
-                </div>
+                    <eworkbench-wysiwyg-editor
+                                               [id]="'content'"
+                                               [disabled]=true
+                                               formControlName="content"
+                                               slot="input"
+                                               toolbar="---">
+                    </eworkbench-wysiwyg-editor>
               </ng-container>
             </eworkbench-details-collapse-element>
           </div>
