@@ -165,7 +165,7 @@
                 </div>
                 <div class="mb-4">
                 <button
-                  *ngIf="!form.disabled"
+                  *ngIf="!form.disabled && !initialState.deleted"
                   type="button"
                   class="btn ewb-button-regular ewb-button-outline"
                   (click)="go_to_note()"

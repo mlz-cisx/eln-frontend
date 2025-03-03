@@ -320,7 +320,7 @@
 
               <ng-container slot="actions" *transloco="let t">
                 <button
-                  *ngIf="!form.disabled"
+                  *ngIf="!form.disabled && !initialState.deleted"
                   type="button"
                   class="btn ewb-button-regular ewb-button-outline"
                   (click)="go_to_file()"
