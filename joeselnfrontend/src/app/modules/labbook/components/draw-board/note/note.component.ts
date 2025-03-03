@@ -228,7 +228,15 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     const observer = new ResizeObserver(
       entries => {
         for (const entry of entries) {
-          console.log(entry.contentRect.height)
+          const container = document.getElementById('content-' + this.uniqueHash);
+          if (container) {
+            const elements = container.getElementsByClassName('tox-tinymce');
+            // Check if the nth element exists
+            if (elements[0]) {
+              const elem = elements[0] as HTMLElement
+              elem.setAttribute("style", "height:" + entry.contentRect.height + "px !important")
+            }
+          }
         }
       })
     observer.observe(obj)
