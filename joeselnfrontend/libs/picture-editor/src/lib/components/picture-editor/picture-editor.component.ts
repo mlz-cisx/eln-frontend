@@ -95,13 +95,13 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
   public initialize(): void {
     let stroke_width = 2;
     // @ts-ignore
-    if (document.getElementById('line_width').value) {
-      // @ts-ignore
-      stroke_width = Number(document.getElementById('line_width').value)
-      if (stroke_width > 10 || stroke_width < 1) {
-        stroke_width = 2;
-      }
-    }
+    // if (document.getElementById('line_width').value) {
+    //   // @ts-ignore
+    //   stroke_width = Number(document.getElementById('line_width').value)
+    //   if (stroke_width > 10 || stroke_width < 1) {
+    //     stroke_width = 2;
+    //   }
+    // }
     if (!this.sketch && this.picture.download_background_image) {
       this.backgroundImage.crossOrigin = 'anonymous';
       this.backgroundImage.src = this.picture.download_background_image;
