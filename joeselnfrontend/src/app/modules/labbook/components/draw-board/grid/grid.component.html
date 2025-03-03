@@ -28,6 +28,8 @@
                      *ngFor="let item of drawBoardElements"
       >
 
+        <div class="element-container">
+
         <eworkbench-labbook-draw-board-element
           #elementComponent
           [id]="id"
@@ -40,6 +42,8 @@
           (moved)="onRemove($event)"
           (expand)="onExpandSection($event)"
         ></eworkbench-labbook-draw-board-element>
+
+        </div>
 
       </gridster-item>
     </gridster>
