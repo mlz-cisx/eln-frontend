@@ -51,13 +51,13 @@ export const gridsterConfig: GridsterConfig = {
   resizable: {
     enabled: true,
     handles: {
-      s: true,
+      s: false,
       e: false,
-      n: true,
+      n: false,
       w: false,
       se: true,
       ne: false,
-      sw: true,
+      sw: false,
       nw: false,
     }
   },
