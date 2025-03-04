@@ -3,11 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { cloneDeep } from 'lodash';
-import { PictureEditorTool } from '../../enums/picture-editor-tool.enum';
-import type { SaveSketchEvent } from '../../interfaces/save-sketch-event.interface';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {cloneDeep} from 'lodash';
+import {PictureEditorTool} from '../../enums/picture-editor-tool.enum';
+import type {
+  SaveSketchEvent
+} from '../../interfaces/save-sketch-event.interface';
 
 declare global {
   interface Window {
@@ -70,7 +80,8 @@ export class PictureEditorToolbarComponent implements OnInit {
     return false;
   }
 
-  public constructor(public readonly cdr: ChangeDetectorRef) {}
+  public constructor(public readonly cdr: ChangeDetectorRef) {
+  }
 
   public ngOnInit(): void {
     this.loading = false;
@@ -239,19 +250,22 @@ export class PictureEditorToolbarComponent implements OnInit {
   }
 
   public async save(): Promise<void> {
+    const elem = document.getElementById('text-button') as HTMLElement
+    elem.click()
+
     const toBlob = (canvas: HTMLCanvasElement): Promise<unknown> => new Promise(resolve => canvas.toBlob(resolve));
 
     this.resetSelection();
     this.loading = true;
 
     const renderedImage: any = await toBlob(this.canvas.getImage());
-    const shapes: any = new Blob([JSON.stringify(this.canvas.getSnapshot().shapes)], { type: 'application/json' });
+    const shapes: any = new Blob([JSON.stringify(this.canvas.getSnapshot().shapes)], {type: 'application/json'});
 
     if (this.sketch) {
       renderedImage.name = 'rendered.png';
       shapes.name = 'shapes.json';
 
-      this.saveSketch.emit({ file: renderedImage, shapes });
+      this.saveSketch.emit({file: renderedImage, shapes});
       this.loading = false;
       this.cdr.markForCheck();
     } else {
