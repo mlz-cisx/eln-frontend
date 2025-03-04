@@ -1,21 +1,58 @@
 <ng-container *transloco="let t">
   <main>
     <div style="height: 100px"></div>
-    <div *ngIf="currentUser && currentUser.admin" class="button-container">
-      <div>
-        <button (click)="go_to_osers()">
-          USERS
-        </button>
+    <div *ngIf="currentUser && currentUser.admin" class="container-wrapper">
+
+      <div class="stat-container">
+        <div class="stat-item">
+          <span class="stat-label">Total Labbooks:</span>
+          <span class="stat-value">{{ stat?.total_labbook }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Notes:</span>
+          <span class="stat-value">{{ formatNumber(stat?.total_notes) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Pictures:</span>
+          <span class="stat-value">{{ formatNumber(stat?.total_pics) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Files:</span>
+          <span class="stat-value">{{ formatNumber(stat?.total_files) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Files Folder Size:</span>
+          <span class="stat-value">{{ stat?.files_folder_size | formatFileSize }} </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Image Folder Size:</span>
+          <span class="stat-value">{{ stat?.image_folder_size | formatFileSize }} </span>
+        </div>
       </div>
-      <div style="margin-top: 20px">
-        <button (click)="go_to_admins()">
-          ADMINS
-        </button>
-      </div>
-      <div style="margin-top: 20px">
-        <button (click)="go_to_groups()">
-          GROUPS
-        </button>
+
+      <div class="right-container">
+        <div class="stat-container">
+          <span class="stat-user-label">Active Instances / Total Users:</span>
+          <span class="stat-user-value">{{ stat?.active_users }} / {{ stat?.total_users }}</span>
+        </div>
+
+        <div class="button-container">
+          <div>
+            <button (click)="go_to_osers()">
+              USERS
+            </button>
+          </div>
+          <div style="margin-top: 20px">
+            <button (click)="go_to_admins()">
+              ADMINS
+            </button>
+          </div>
+          <div style="margin-top: 20px">
+            <button (click)="go_to_groups()">
+              GROUPS
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div *ngIf="currentUser && !currentUser.admin">

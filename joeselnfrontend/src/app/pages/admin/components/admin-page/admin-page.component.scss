@@ -4,7 +4,84 @@
   display: block;
 
   main {
-    max-width: 500px;
+    max-width: 1000px;
+  }
+
+  .container-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .container-wrapper {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .stat-container:first-child {
+      width: 48%;
+    }
+
+    .right-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 48%;
+      gap: 20px;
+    }
+
+    .right-container .stat-container,
+    .right-container .button-container {
+      width: 100%;
+    }
+  }
+
+  .stat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $alert-info-background-color;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .stat-user-label {
+    font-size: 1rem;
+    color: #757575;
+  }
+
+  .stat-user-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid $border-color;
+    width: 100%;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .stat-label {
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  .stat-value {
+    color: $primary-color;
   }
 
   .button-container {
