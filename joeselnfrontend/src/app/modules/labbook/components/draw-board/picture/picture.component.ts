@@ -199,7 +199,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.initialState = {...this.element.child_object};
     this.title_id = `${this.initialState!.pk}_title_id`;
-    console.log(this.element.child_object.created_by.admin)
+    // console.log(this.element.child_object.created_by.admin)
   }
 
   public initPrivileges(): void {

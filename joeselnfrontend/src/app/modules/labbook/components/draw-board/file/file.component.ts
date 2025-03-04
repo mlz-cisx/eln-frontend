@@ -102,6 +102,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public preloaded_id = '';
 
+  public height: any;
+
   public uniqueHash = uuidv4();
 
   public background_color = '';
@@ -209,9 +211,28 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       // @ts-ignore
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
     }
+
+    var obj = document.getElementById('description-' + this.uniqueHash) as HTMLDivElement
+    const observer = new ResizeObserver(
+      entries => {
+        for (const entry of entries) {
+          const container = document.getElementById('description-' + this.uniqueHash);
+          if (container) {
+            const elements = container.getElementsByClassName('tox-tinymce');
+            // Check if the nth element exists
+            if (elements[0]) {
+              const elem = elements[0] as HTMLElement
+              elem.setAttribute("style", "height:" + (entry.contentRect.height - 100) + "px !important")
+            }
+          }
+        }
+      })
+    observer.observe(obj)
   }
 
   public initDetails(): void {
+    this.height = Math.max((this.element.height - 5) * 36, 100)
+    console.log(this.height)
     this.form.patchValue(
       {
         file_title: this.element.child_object.title,
