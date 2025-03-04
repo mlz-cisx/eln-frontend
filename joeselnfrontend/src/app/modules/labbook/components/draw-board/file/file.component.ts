@@ -232,7 +232,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public initDetails(): void {
     this.height = Math.max((this.element.height - 5) * 36, 100)
-    console.log(this.height)
     this.form.patchValue(
       {
         file_title: this.element.child_object.title,
