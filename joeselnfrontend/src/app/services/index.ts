@@ -15,4 +15,4 @@ export * from './content-type-model/content-type-model.service'
 export * from './search/search.service'
 export * from './comments/comments.service'
 export * from './admin_users/admin-users.service'
-
+export * from './admin_users/admin-stat.service'
