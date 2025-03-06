@@ -34,7 +34,8 @@ export class LogoutService {
     if (this.authService.getToken()) {
       // logout for username/password
       this.authService.clearStorage()
-      this.router.navigate(['/login'])
+      // for a consistent ws handling
+      location.reload()
     } else {
       this.keycloak.logout().then(() => {
         this.router.navigate(['/login'])
