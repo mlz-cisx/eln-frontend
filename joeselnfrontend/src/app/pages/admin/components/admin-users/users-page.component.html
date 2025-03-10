@@ -321,6 +321,9 @@
 <ng-template #oidcUserTemplate let-row>
   {{ row.oidc_user ? '☑' : '' }}
 </ng-template>
+<ng-template #connectedTemplate let-row>
+  {{ row.connected ? '✅'  : '❌' }}
+</ng-template>
 <ng-template #actionsCellTemplate let-row>
   <div class="whitespace-nowrap text-right">
     <!--    <eworkbench-favorite-button-->

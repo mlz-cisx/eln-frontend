@@ -84,6 +84,9 @@ export class UsersPageComponent implements OnInit {
   @ViewChild('oidcUserTemplate', {static: true})
   public oidcUserTemplate!: TemplateRef<any>;
 
+  @ViewChild('connectedTemplate', {static: true})
+  public connectedTemplate!: TemplateRef<any>;
+
   @ViewChild('actionsCellTemplate', {static: true})
   public actionsCellTemplate!: TemplateRef<any>;
 
@@ -231,6 +234,12 @@ export class UsersPageComponent implements OnInit {
             cellTemplate: this.oidcUserTemplate,
             name: column.isOidcUser,
             key: 'oidc_user',
+            sortable: true,
+          },
+          {
+            cellTemplate: this.connectedTemplate,
+            name: column.connected,
+            key: 'connected',
             sortable: true,
           },
           {

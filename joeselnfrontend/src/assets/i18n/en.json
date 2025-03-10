@@ -2067,6 +2067,7 @@
   "users.columns.createdAt": "Created at",
   "users.columns.lastModifiedAt": "Last modified at",
   "users.columns.isOidcUser": "External User",
+  "users.columns.connected": "Connected",
   "users.new": "User",
   "user.newModal.header": "New user",
   "user.newModal.username.label": "Username",
