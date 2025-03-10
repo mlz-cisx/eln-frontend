@@ -117,8 +117,6 @@ export class LabBooksPageComponent implements OnInit {
 
   public savedFilters = false;
 
-  public readonly elnUrl = `${environment.eln_exporter}`;
-
   public constructor(
     private readonly router: Router,
     public readonly labbooksService: LabbooksService,
@@ -708,7 +706,4 @@ export class LabBooksPageComponent implements OnInit {
     }
   }
 
-  public go_to_eln() {
-    window.open(this.elnUrl, '_blank');
-  }
 }
