@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Load env variables
+envsubst < /usr/share/nginx/html/assets/config/env.template.js > /usr/share/nginx/html/assets/config/env.js
+
 # Check if SSL certificates exist
 if [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ]; then
     echo "SSL certificates found, starting Nginx with HTTPS"
