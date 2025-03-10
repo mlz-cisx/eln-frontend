@@ -61,3 +61,4 @@ export * from './lib/interfaces/websocket-element.interface';
 export * from './lib/interfaces/testservice.interface';
 export * from './lib/interfaces/group.interface';
 export * from './lib/interfaces/stat.interface';
+export * from './lib/interfaces/env-config.interface';
