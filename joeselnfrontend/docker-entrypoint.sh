@@ -3,6 +3,13 @@
 # Load env variables
 envsubst < /usr/share/nginx/html/assets/config/env.template.js > /usr/share/nginx/html/assets/config/env.js
 
+# Set server_name if given
+if [ -z "$SERVER_NAME" ]; then
+    sed -i '/server_name/d' /etc/nginx/conf.d/default.conf
+else
+    envsubst '$SERVER_NAME' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf.tmp && mv /etc/nginx/conf.d/default.conf.tmp /etc/nginx/conf.d/default.conf
+fi
+
 # Check if SSL certificates exist
 if [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ]; then
     echo "SSL certificates found, starting Nginx with HTTPS"
