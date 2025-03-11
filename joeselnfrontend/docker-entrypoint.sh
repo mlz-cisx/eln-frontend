@@ -13,6 +13,8 @@ fi
 # Check if SSL certificates exist
 if [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ]; then
     echo "SSL certificates found, starting Nginx with HTTPS"
+    # inject https-upgrade tag into index.html
+    sed -i '/<head>/a<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">' /usr/share/nginx/html/index.html
     nginx -g 'daemon off;'
 else
     echo "SSL certificates not found, starting Nginx with HTTP only"
