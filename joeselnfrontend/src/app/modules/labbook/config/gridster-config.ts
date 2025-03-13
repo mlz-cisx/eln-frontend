@@ -16,7 +16,7 @@ export const gridsterConfig: GridsterConfig = {
   outerMarginBottom: 6,
   outerMarginLeft: 6,
   useTransformPositioning: true,
-  mobileBreakpoint: 640,
+  mobileBreakpoint: 300,
   minCols: 20,
   maxCols: 20,
   minRows: 50,
@@ -51,13 +51,13 @@ export const gridsterConfig: GridsterConfig = {
   resizable: {
     enabled: true,
     handles: {
-      s: false,
+      s: true,
       e: false,
-      n: false,
+      n: true,
       w: false,
       se: true,
       ne: false,
-      sw: false,
+      sw: true,
       nw: false,
     }
   },
