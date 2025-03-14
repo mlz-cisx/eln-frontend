@@ -181,7 +181,6 @@ export class NotesService
   public lock(id: string, params = new HttpParams()): Observable<void> {
     return this.privileges_list$.pipe(
       map(() => {
-          console.log('locked ', id)
         }
       )
     )

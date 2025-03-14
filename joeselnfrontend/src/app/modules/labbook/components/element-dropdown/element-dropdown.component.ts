@@ -188,7 +188,6 @@ export class LabBookElementDropdownComponent implements OnInit {
       responseType: 'blob',
       observe: 'response'
     }));
-    console.log(response)
     const url = URL.createObjectURL(response.body!);
     const anchor = document.createElement('a');
 

@@ -180,7 +180,6 @@ export class FilesService
 
 
   public addVersion(id: string, version?: FinalizeVersion): Observable<File> {
-    console.log(version)
     return this.httpClient.post<File>(`${this.apiUrl}${id}/versions/`, version);
   }
 

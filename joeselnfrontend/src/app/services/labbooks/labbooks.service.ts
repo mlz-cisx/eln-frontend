@@ -112,7 +112,6 @@ export class LabbooksService {
       switchMap(labBook =>
         of(mockPrivileges).pipe(
           map(privileges => {
-            console.log(labBook)
             const privilegesData: PrivilegesData<LabBook> = {
               privileges,
               data: labBook.labbook,
@@ -147,8 +146,6 @@ export class LabbooksService {
 
   public patch_old(id: string, labbook: LabBookPayload): Observable<LabBook> {
     let _labbook = <LabBook><unknown>[]
-    console.log('Labbook payload ', labbook)
-    console.log('payload mock', mockLabBookPayload)
     return this.lab_book_list$.pipe(
       map(() => {
           mockLabBooksList.results.forEach((elem) => {
@@ -165,7 +162,6 @@ export class LabbooksService {
 
 
   public patch(id: string, labbook: LabBookPayload): Observable<LabBook> {
-    console.log(labbook)
     return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/`, labbook);
   }
 
@@ -213,8 +209,6 @@ export class LabbooksService {
 
   public addElement_old(labBookId: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {
     let _lb_elem = <LabBookElement<any>><unknown>[]
-    console.log('Labbook payload as note', element)
-    console.log('payload mock', mockNotePayload)
     return this.lab_book_list$.pipe(
       map(() => {
           [mockLabBookNoteElement].forEach((elem) => {
@@ -242,7 +236,6 @@ export class LabbooksService {
 
   public patchElement_old(labBookId: string, elementId: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {
     let _lb_elem = <LabBookElement<any>><unknown>[]
-    console.log('Labbook payload as note', element)
     return this.lab_book_list$.pipe(
       map(() => {
           [mockLabBookNoteElement].forEach((elem) => {
@@ -258,8 +251,6 @@ export class LabbooksService {
   }
 
   public deleteElement_old(id: string, elementId: string): Observable<void> {
-    console.log('labook Id ', id)
-    console.log('note Id ', elementId)
     return this.lab_book_list$.pipe(
       map(() => {
         }
@@ -272,7 +263,6 @@ export class LabbooksService {
   }
 
   public updateAllElements_old(id: string, elements: LabBookElementPayload[]): Observable<string[]> {
-    console.log(elements)
     return this.lab_book_list$.pipe(
       map(() => {
           return ['updated']
@@ -317,7 +307,6 @@ export class LabbooksService {
 
 
   public oldrestoreVersion(id: string, version: string, versionInProgress: boolean): Observable<LabBook> {
-    console.log()
     return this.lab_book_list$.pipe(
       map(() => {
           return mockLabBook
@@ -383,8 +372,6 @@ export class LabbooksService {
   }
 
   public addRelation(id: string, payload: RelationPayload): Observable<Relation> {
-    console.log('labbook id ', id)
-    console.log('relation payload ', payload)
     return this.lab_book_list$.pipe(
       map(() => {
           return mockRelation
@@ -394,9 +381,6 @@ export class LabbooksService {
   }
 
   public putRelation(id: string, relationId: string, payload: RelationPutPayload): Observable<Relation> {
-    console.log('labbook id ', id)
-    console.log('relation payload ', payload)
-    console.log('relation id ', relationId)
     return this.lab_book_list$.pipe(
       map(() => {
           return mockRelation
@@ -406,8 +390,6 @@ export class LabbooksService {
   }
 
   public deleteRelation(id: string, relationId: string): Observable<void> {
-    console.log('labbook id deleted', id)
-    console.log('relation id deleted', relationId)
     return this.lab_book_list$.pipe(
       map(() => {
         }

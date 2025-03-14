@@ -166,7 +166,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         labBookElements => {
-          console.log(labBookElements)
           labBookElements.forEach(element => this.drawBoardElements.push(...this.convertToGridItems([element])));
           this.loading = false;
           this.cdr.markForCheck();

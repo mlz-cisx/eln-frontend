@@ -51,7 +51,6 @@ export class DuplicateDMPModalComponent {
   }
 
   public onSubmit(): void {
-    console.log('submitted')
   }
 
   public saveUserDialogSettings(): void {

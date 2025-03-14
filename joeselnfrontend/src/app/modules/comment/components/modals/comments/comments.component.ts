@@ -30,7 +30,6 @@ export class CommentsModalComponent {
 
   public on_click() {
     this.modalRef.close()
-    console.log(this.element)
     // var bodyRect = 0
     // if (document.body.getBoundingClientRect()) {
     //   bodyRect = -document.body.getBoundingClientRect().y

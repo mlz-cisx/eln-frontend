@@ -186,7 +186,6 @@ export class VersionsComponent implements OnInit {
   }
 
   public onPreviewModal(version: Version, versionNumber?: number): void {
-    console.log(version)
     this.modalRef = this.modalService.open(VersionPreviewModalComponent, {
       closeButton: false,
       data: {

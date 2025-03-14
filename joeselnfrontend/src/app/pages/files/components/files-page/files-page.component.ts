@@ -196,7 +196,6 @@ export class FilesPageComponent implements OnInit {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      console.log(this.currentUser)
     });
 
     this.initTranslations(this.showSidebar);

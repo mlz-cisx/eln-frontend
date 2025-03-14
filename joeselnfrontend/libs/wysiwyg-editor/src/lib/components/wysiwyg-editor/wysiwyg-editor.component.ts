@@ -131,7 +131,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   }
 
   public mypageload(): void {
-    console.log('nearly loaded')
+
   }
 
   public registerOnChange(fn: any): void {

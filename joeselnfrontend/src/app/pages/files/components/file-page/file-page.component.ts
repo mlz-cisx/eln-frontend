@@ -210,7 +210,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      console.log(this.currentUser)
     });
 
     // this.websocketService.subscribe([{model: 'file', pk: this.id}]);
@@ -409,7 +408,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
           this.privileges = {...privileges};
           // this.initDirectoryDetails();
 
-          console.log(this.privileges)
 
           this.loading = false;
 

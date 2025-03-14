@@ -144,7 +144,6 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   public go_to_labbook(result_pk: any): void {
-    console.log(result_pk)
     this.labbooksService
       .getList()
       .pipe(
@@ -153,13 +152,11 @@ export class GlobalSearchComponent implements OnInit {
       labbooks => {
         labbooks.data.forEach(
           lb => {
-            console.log(lb)
             this.labbooksService
               .getElements(lb.pk)
               .pipe(untilDestroyed(this))
               .subscribe(labBookElements => {
                 labBookElements.map(element => {
-                  console.log(element)
                   // if (element.child_object.pk === result_pk) {
                   //   localStorage.setItem('pageVerticalposition', String((element.position_y) * 36))
                   //   // void this.router.navigate([`/labbooks/${lb.pk}`])

@@ -158,7 +158,6 @@ export class PrivilegesModalComponent implements OnInit {
   }
 
   public initSearchInput(): void {
-       console.log('initSearchInput')
   }
 
   public addUser(userId: string): void {

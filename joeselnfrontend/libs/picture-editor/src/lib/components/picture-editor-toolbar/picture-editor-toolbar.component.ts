@@ -288,7 +288,6 @@ export class PictureEditorToolbarComponent implements OnInit {
         })
         .pipe(untilDestroyed(this))
         .subscribe(() => {
-          console.log('patched in picture editor tool bar component')
           this.canvas.undoStack = [];
           this.loading = false;
           this.cdr.markForCheck();

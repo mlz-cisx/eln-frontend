@@ -345,7 +345,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
       .subscribe(
         picture => {
           this.state = ModalState.Changed;
-          console.log(picture)
           const event: LabBookElementEvent = {
             childObjectId: picture.pk,
             childObjectContentType: picture.content_type,

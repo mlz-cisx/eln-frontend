@@ -107,7 +107,6 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
       .selectTranslateObject('labBook.newNoteElementModal')
       .pipe(untilDestroyed(this))
       .subscribe(newNoteElementModal => {
-        console.log(newNoteElementModal)
         this.parentElement = [{
           value: 'labBook',
           label: newNoteElementModal.currentLabBook

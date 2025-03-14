@@ -71,14 +71,12 @@ export class PicturePreviewComponent implements OnInit {
   }
 
   public initDetails(): void {
-    console.log(this.version)
     this.picturesService
       .previewVersion(this.id!, this.version!)
       .pipe(untilDestroyed(this))
       .subscribe(
         (picture: Picture) => {
           this.picture = {...picture};
-          console.log(picture)
           this.loadProjects(picture.projects);
           this.projectsFormControl.patchValue(picture.projects, {emitEvent: false});
           this.projectsFormControl.disable({emitEvent: false});

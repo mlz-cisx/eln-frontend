@@ -40,13 +40,11 @@ export class AdminPageComponent implements OnInit {
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      console.log(this.currentUser)
     });
 
     this.stat_service.get().pipe(untilDestroyed(this)).subscribe(data => {
       this.stat = data;
       this.cdr.detectChanges();
-      console.log(this.stat);
     });
   }
 

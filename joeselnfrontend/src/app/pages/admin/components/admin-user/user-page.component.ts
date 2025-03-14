@@ -317,8 +317,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
           const user = privilegesData.data;
           const privileges = privilegesData.privileges;
 
-          console.log(user)
-          console.log(privileges)
 
           this.user_groups = user.groups
           this.admin_groups = user.admin_groups

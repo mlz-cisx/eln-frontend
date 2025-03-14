@@ -202,7 +202,6 @@ export class PicturesService
   }
 
   public addVersion(id: string, version?: FinalizeVersion): Observable<Picture> {
-    console.log(version)
     return this.httpClient.post<Picture>(`${this.apiUrl}${id}/versions/`, version);
   }
 
