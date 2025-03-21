@@ -10,6 +10,20 @@ else
     envsubst '$SERVER_NAME' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf.tmp && mv /etc/nginx/conf.d/default.conf.tmp /etc/nginx/conf.d/default.conf
 fi
 
+# forward keycloak
+if [ "$KEYCLOAK_BEHIND_NGINX" = "true" ]; then
+    echo "Configuring Nginx for Keycloak"
+    sed -i '/location \/ {/i \
+    location /auth/ {\
+        proxy_pass http://keycloak:8080;\
+        proxy_http_version 1.1;\
+        proxy_set_header host \$host;\
+        proxy_set_header x-real-ip \$remote_addr;\
+        proxy_set_header x-forwarded-for \$proxy_add_x_forwarded_for;\
+        proxy_set_header x-forwarded-proto \$scheme;\
+    }' /etc/nginx/conf.d/default.conf
+fi
+
 # Check if SSL certificates exist
 if [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ]; then
     echo "SSL certificates found, starting Nginx with HTTPS"
