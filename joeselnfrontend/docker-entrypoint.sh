@@ -14,7 +14,7 @@ fi
 if [ "$KEYCLOAK_BEHIND_NGINX" = "true" ]; then
     echo "Configuring Nginx for Keycloak"
     sed -i '/location \/ {/i \
-    location /auth/ {\
+    location /keycloak/ {\
         proxy_pass http://keycloak:8080;\
         proxy_http_version 1.1;\
         proxy_set_header host \$host;\
