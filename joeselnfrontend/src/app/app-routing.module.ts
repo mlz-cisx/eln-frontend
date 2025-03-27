@@ -49,6 +49,10 @@ const routes: Routes = [
     path: 'admin/group/groupusers',
     loadChildren: () => import('@app/pages/admin-group-users/admin-group-users.module').then(m => m.AdminGroupUsersModule),
   },
+  {
+    path: 'admin/group/groupguests',
+    loadChildren: () => import('@app/pages/admin-group-guests/admin-group-guests.module').then(m => m.AdminGroupGuestsModule),
+  },
 
   {path: '401', redirectTo: '/'},
   {path: '404', redirectTo: '/'},
