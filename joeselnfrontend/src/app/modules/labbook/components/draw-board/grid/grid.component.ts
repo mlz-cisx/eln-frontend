@@ -300,9 +300,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public updateAllElements(elements?: LabBookElementPayload[]): void {
-    if (!this.editable) {
-      return;
-    }
+    // if (!this.editable) {
+    //   return;
+    // }
 
     // Delay the process for a tick or else gridster won't recognize the changes
     setTimeout(() => {

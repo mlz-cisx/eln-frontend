@@ -318,17 +318,17 @@
               </ng-container>
             </eworkbench-details-collapse-element>
 
-              <ng-container slot="actions" *transloco="let t">
-                <button
-                  *ngIf="!form.disabled && !initialState.deleted"
-                  type="button"
-                  class="btn ewb-button-regular ewb-button-outline"
-                  (click)="go_to_file()"
-                  [disabled]="loading"
-                >
-                  {{ t('file.gotoBottom') }}
-                </button>
-              </ng-container>
+            <ng-container slot="actions" *transloco="let t">
+              <button
+                *ngIf="!initialState.deleted"
+                type="button"
+                class="btn ewb-button-regular ewb-button-outline"
+                (click)="go_to_file()"
+                [disabled]="loading"
+              >
+                {{ t('file.gotoBottom') }}
+              </button>
+            </ng-container>
 
             <!--            <eworkbench-details-collapse-element [labelText]="t('file.details.element.metadata')">-->
             <!--              <ng-container slot="body">-->

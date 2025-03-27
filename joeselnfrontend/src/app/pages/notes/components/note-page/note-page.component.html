@@ -164,23 +164,23 @@
                   </div>
                 </div>
                 <div class="mb-4">
-                <button
-                  *ngIf="!form.disabled && !initialState.deleted"
-                  type="button"
-                  class="btn ewb-button-regular ewb-button-outline"
-                  (click)="go_to_note()"
-                  [disabled]="loading"
-                >
-                  {{ t('note.details.gotoBottom') }}
-                </button>
+                  <button
+                    *ngIf="!initialState.deleted"
+                    type="button"
+                    class="btn ewb-button-regular ewb-button-outline"
+                    (click)="go_to_note()"
+                    [disabled]="loading"
+                  >
+                    {{ t('note.details.gotoBottom') }}
+                  </button>
                 </div>
-                    <eworkbench-wysiwyg-editor
-                                               [id]="'content'"
-                                               [disabled]=true
-                                               formControlName="content"
-                                               slot="input"
-                                               toolbar="---">
-                    </eworkbench-wysiwyg-editor>
+                <eworkbench-wysiwyg-editor
+                  [id]="'content'"
+                  [disabled]=true
+                  formControlName="content"
+                  slot="input"
+                  toolbar="---">
+                </eworkbench-wysiwyg-editor>
               </ng-container>
             </eworkbench-details-collapse-element>
           </div>
