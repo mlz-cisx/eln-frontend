@@ -6,7 +6,7 @@
 <ng-container *transloco="let t">
   <div id="labbook-draw-board" class="">
     <aside>
-      <eworkbench-labbook-sidebar
+      <eworkbench-labbook-sidebar *ngIf="editable"
         [id]="id"
         [projects]="projects"
         [editable]="editable"

@@ -82,7 +82,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public refresh?: EventEmitter<boolean>;
 
   @Input()
-  public editable? = true;
+  public editable? = false;
 
   public closeSection = new EventEmitter<string>();
 
@@ -259,7 +259,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             y: labBookElement.position_y,
             cols: labBookElement.width,
             rows: labBookElement.height,
-            resizeEnabled: true,
+            resizeEnabled: this.editable,
             element: labBookElement,
           };
 
@@ -512,7 +512,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       y: element.position_y,
       cols: element.width,
       rows: element.height,
-      resizeEnabled: true,
+      resizeEnabled: this.editable,
       element: element,
     }));
   }

@@ -22,6 +22,7 @@
                        name="subject"
                        [placeholder]="t('labBook.drawBoardNote.details.subject.placeholder')"
                        slot="input"
+                       [readOnly]="!editable"
                 />
               </eworkbench-form-input>
             </div>
@@ -33,17 +34,20 @@
               <!--              </button>-->
               <button type="button"
                       class="btn ewb-button-big ewb-button-background"
-                      (click)="create_new_note_below()">
+                      (click)="create_new_note_below()"
+                      *ngIf="editable">
                 NoteBelow
               </button>
               <button type="button"
                       class="btn ewb-button-big ewb-button-background"
-                      (click)="create_new_note_aside()">
+                      (click)="create_new_note_aside()"
+                      *ngIf="editable">
                 NoteAside
               </button>
               <button type="button"
                       class="btn ewb-button-big ewb-button-background"
-                      (click)="onOpenCommentsModal()">
+                      (click)="onOpenCommentsModal()"
+                      *ngIf="editable">
                 <joeseln-icon className="wb-comment"
                               class="mr-1"></joeseln-icon>
                 <ng-container *ngIf="!element.num_related_comments">
@@ -64,12 +68,14 @@
                 Open Editor
               </button>
               <button type="button"
+
                       class="btn ewb-button-big square-md ewb-button-none cursor-move drag-handle mr-2"
                       *ngIf="editable">
                 <joeseln-icon className="wb-arrow-cross"></joeseln-icon>
               </button>
             </div>
             <eworkbench-labbook-element-dropdown
+              *ngIf="editable"
               [service]="notesService"
               [id]="initialState.pk"
               [labBookId]="id"
