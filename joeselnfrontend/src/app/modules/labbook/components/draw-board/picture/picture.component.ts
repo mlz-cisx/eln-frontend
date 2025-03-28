@@ -46,6 +46,10 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
+import {
+  admin_element_background_color
+} from "@app/modules/labbook/config/admin-element-background-color";
+
 
 interface ElementRemoval {
   id: string;
@@ -166,7 +170,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     this.initPrivileges();
 
     if (this.element.child_object.created_by.admin) {
-      this.background_color = 'background-color: #fff4c2';
+      this.background_color = 'background-color: ' + admin_element_background_color;
     }
 
     // this.websocketService.subscribe([{

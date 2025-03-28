@@ -44,6 +44,9 @@ import {ToastrService} from 'ngx-toastr';
 import {v4 as uuidv4} from 'uuid';
 import {debounceTime, skip} from "rxjs/operators";
 import {environment} from '@environments/environment';
+import {
+  admin_element_background_color
+} from "@app/modules/labbook/config/admin-element-background-color";
 
 interface ElementRemoval {
   id: string;
@@ -173,7 +176,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     this.initDetails();
     this.initPrivileges();
     if (this.element.child_object.created_by.admin) {
-      this.background_color = 'background-color: #fff4c2';
+      this.background_color = 'background-color: ' + admin_element_background_color;
     }
 
 
