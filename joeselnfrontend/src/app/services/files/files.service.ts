@@ -74,7 +74,7 @@ export class FilesService
       }
       formData.append(key, val);
     }
-    return this.httpClient.post<File>(this.apiUrl, formData, {params});
+    return this.httpClient.post<File>(this.apiUrl, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<File>> {
@@ -146,7 +146,7 @@ export class FilesService
   }
 
   public patch(id: string, task: Optional<FilePayload>, params = new HttpParams()): Observable<File> {
-    return this.httpClient.patch<File>(`${this.apiUrl}${id}/`, {pk: id, ...task}, {params});
+    return this.httpClient.patch<File>(`${this.apiUrl}${id}/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public restore(id: string, params = new HttpParams()): Observable<File> {
