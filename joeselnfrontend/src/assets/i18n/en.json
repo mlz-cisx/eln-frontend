@@ -2111,7 +2111,7 @@
   "user.groupUsers": "Users",
   "user.groupGuests": "Guests",
   "user.bottom.demotion": "Demote",
-  "user.bottom.premotion": "Premote",
+  "user.bottom.promotion": "Promote",
   "user.bottom.deactivate": "Deactivate",
   "user.bottom.activate": "Reactivate",
   "user.bottom.removeFromGroup": "Kick",
