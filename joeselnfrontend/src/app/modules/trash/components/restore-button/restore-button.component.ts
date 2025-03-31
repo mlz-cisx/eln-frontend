@@ -3,11 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Component, Input, ChangeDetectorRef, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
-import type { TableViewComponent, TreeViewComponent } from '@joeseln/table';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
+import {
+  Component,
+  Input,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  Output,
+  EventEmitter
+} from '@angular/core';
+import type {TableViewComponent, TreeViewComponent} from '@joeseln/table';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
@@ -42,7 +49,8 @@ export class RestoreButtonComponent {
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService,
     private readonly cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   public onRestore(id: string): void {
     if (this.loading) {
@@ -53,17 +61,21 @@ export class RestoreButtonComponent {
       .restore(id, this.customId)
       .pipe(untilDestroyed(this))
       .subscribe(
-        () => {
-          this.tableView?.loadData();
-          this.restored.emit(true);
-          this.loading = false;
-          this.cdr.markForCheck();
-          this.translocoService
-            .selectTranslate('trash.trashModal.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
+        (data: any) => {
+          if (!data) {
+            this.toastrService.error('You are not allowed to perform this action.');
+          } else {
+            this.tableView?.loadData();
+            this.restored.emit(true);
+            this.loading = false;
+            this.cdr.markForCheck();
+            this.translocoService
+              .selectTranslate('trash.trashModal.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          }
         },
         () => {
           this.restored.emit(false);
