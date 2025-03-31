@@ -97,7 +97,7 @@ export class PicturesService
         formData.append(key, val);
       }
     }
-    return this.httpClient.post<Picture>(this.apiUrl, formData, {params});
+    return this.httpClient.post<Picture>(this.apiUrl, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
