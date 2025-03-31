@@ -71,16 +71,20 @@ export class TrashButtonComponent {
       .delete(id, this.customId)
       .pipe(untilDestroyed(this))
       .subscribe(
-        () => {
-          this.tableView?.loadData();
-          this.loading = false;
-          this.deleted.emit();
-          this.translocoService
-            .selectTranslate('trashElement.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
+        (data: any) => {
+          if (!data) {
+            this.toastrService.error('You are not allowed to perform this action.');
+          } else {
+            this.tableView?.loadData();
+            this.loading = false;
+            this.deleted.emit();
+            this.translocoService
+              .selectTranslate('trashElement.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          }
         },
         () => {
           this.loading = false;
