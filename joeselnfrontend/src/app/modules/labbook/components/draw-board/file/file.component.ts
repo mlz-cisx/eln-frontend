@@ -43,6 +43,7 @@ import {v4 as uuidv4} from 'uuid';
 import {
   admin_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
+import {environment} from "@environments/environment";
 
 
 interface ElementRemoval {
@@ -149,6 +150,17 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     }
 
     return {ownUser: false, user: null};
+  }
+
+  private checkContentSize(): boolean {
+    let content = this.f.file_description.value ?? '';
+    content = content + this.f.file_title.value ?? '';
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (content.length > (maxSize << 10)) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return false;
+    }
+    return true;
   }
 
   private get file(): Omit<FilePayload, 'name' | 'path'> {
@@ -271,6 +283,10 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    if (!this.checkContentSize()) {
+      return;
+    }
+
     if (this.loading) {
       return;
     }
@@ -283,22 +299,23 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         file => {
-          if (this.lock?.locked && this.lockUser.ownUser) {
-            this.filesService.unlock(this.initialState!.pk);
+          if (file) {
+            // this.initialState = {...file};
+            this.form.markAsPristine();
+            this.refreshResetValue.next(true);
+
+            this.loading = false;
+            this.cdr.markForCheck();
+            this.translocoService
+              .selectTranslate('file.details.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          } else {
+            this.toastrService.error('Description size exceeded.');
+            setTimeout(() => location.reload(), 2000);
           }
-
-          // this.initialState = {...file};
-          this.form.markAsPristine();
-          this.refreshResetValue.next(true);
-
-          this.loading = false;
-          this.cdr.markForCheck();
-          this.translocoService
-            .selectTranslate('file.details.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
         },
         () => {
           this.loading = false;

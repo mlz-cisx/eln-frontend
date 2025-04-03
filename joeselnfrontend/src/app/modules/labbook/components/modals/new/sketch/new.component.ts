@@ -248,21 +248,26 @@ export class NewLabBookSketchModalComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         picture => {
-          this.state = ModalState.Changed;
-          const event: LabBookElementEvent = {
-            childObjectId: picture.pk,
-            childObjectContentType: picture.content_type,
-            childObjectContentTypeModel: picture.content_type_model,
-            parentElement: this.element.parentElement,
-            position: this.element.position,
-          };
-          this.modalRef.close({state: this.state, data: event});
-          this.translocoService
-            .selectTranslate('labBook.newSketchModal.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
+          if (picture) {
+            this.state = ModalState.Changed;
+            const event: LabBookElementEvent = {
+              childObjectId: picture.pk,
+              childObjectContentType: picture.content_type,
+              childObjectContentTypeModel: picture.content_type_model,
+              parentElement: this.element.parentElement,
+              position: this.element.position,
+            };
+            this.modalRef.close({state: this.state, data: event});
+            this.translocoService
+              .selectTranslate('labBook.newSketchModal.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          }
+          else {
+            this.toastrService.error('File Size exceeded.');
+          }
         },
         () => {
           this.loading = false;

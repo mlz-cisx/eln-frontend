@@ -7,5 +7,5 @@
   window['env'].keycloak_realm = 'joe';
   window['env'].keycloak_clientId = 'my_client';
   window['env'].keycloak_integration = true;
-  window['env'].noteMaximumSize = 50000; // in kilobytes
+  window['env'].noteMaximumSize = 5000; // in kilobytes
 })(this);

@@ -261,7 +261,7 @@ export class PicturesService
         formData.append(key, val);
       }
     }
-    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/`, formData, {params});
+    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/`, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public downloadShapes(url: string, params = new HttpParams()): Observable<any> {

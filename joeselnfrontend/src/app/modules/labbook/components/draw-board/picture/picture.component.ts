@@ -246,11 +246,9 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
           if (this.lock?.locked && this.lockUser.ownUser) {
             this.picturesService.unlock(this.initialState!.pk);
           }
-
           this.initialState = {...picture};
           this.form.markAsPristine();
           this.refreshResetValue.next(true);
-
           this.loading = false;
           this.cdr.markForCheck();
           this.translocoService

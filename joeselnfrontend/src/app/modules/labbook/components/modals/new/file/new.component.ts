@@ -276,6 +276,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         file => {
+          if (file) {
           this.state = ModalState.Changed;
           const event: LabBookElementEvent = {
             childObjectId: file.pk,
@@ -284,13 +285,17 @@ export class NewLabBookFileElementModalComponent implements OnInit {
             parentElement: this.element.parentElement,
             position: this.element.position,
           };
-          this.modalRef.close({ state: this.state, data: event });
+          this.modalRef.close({state: this.state, data: event});
           this.translocoService
             .selectTranslate('labBook.newFileElementModal.toastr.success')
             .pipe(untilDestroyed(this))
             .subscribe(success => {
               this.toastrService.success(success);
             });
+        }
+          else {
+            this.toastrService.error('File Size exceeded.');
+          }
         },
         () => {
           this.loading = false;

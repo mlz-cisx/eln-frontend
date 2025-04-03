@@ -157,21 +157,26 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         note => {
-          this.state = ModalState.Changed;
-          const event: LabBookElementEvent = {
-            childObjectId: note.pk,
-            childObjectContentType: note.content_type,
-            childObjectContentTypeModel: note.content_type_model,
-            parentElement: this.element.parentElement,
-            position: this.element.position,
-          };
-          this.modalRef.close({state: this.state, data: event});
-          this.translocoService
-            .selectTranslate('labBook.newNoteElementModal.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
+          if (note) {
+            this.state = ModalState.Changed;
+            const event: LabBookElementEvent = {
+              childObjectId: note.pk,
+              childObjectContentType: note.content_type,
+              childObjectContentTypeModel: note.content_type_model,
+              parentElement: this.element.parentElement,
+              position: this.element.position,
+            };
+            this.modalRef.close({state: this.state, data: event});
+            this.translocoService
+              .selectTranslate('labBook.newNoteElementModal.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          }
+          else {
+            this.toastrService.error('Note Size exceeded.');
+          }
         },
         () => {
           this.loading = false;

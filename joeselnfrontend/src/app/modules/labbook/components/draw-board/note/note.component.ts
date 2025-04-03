@@ -313,20 +313,23 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       .pipe()
       .subscribe(
         note => {
-          // if (this.lock?.locked && this.lockUser.ownUser) {
-          //   this.notesService.unlock(this.initialState!.pk);
-          // }
-          this.initialState = {...note};
-          this.form.markAsPristine();
-          this.refreshResetValue.next(true);
-          this.loading = false;
-          this.cdr.markForCheck();
-          this.translocoService
-            .selectTranslate('note.details.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              // this.toastrService.success(success);
-            });
+          if (note) {
+
+            this.initialState = {...note};
+            this.form.markAsPristine();
+            this.refreshResetValue.next(true);
+            this.loading = false;
+            this.cdr.markForCheck();
+            this.translocoService
+              .selectTranslate('note.details.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                // this.toastrService.success(success);
+              });
+          } else {
+            this.toastrService.error('Note size exceeded.');
+            setTimeout(() => location.reload(), 2000);
+          }
         },
         () => {
           this.loading = false;
