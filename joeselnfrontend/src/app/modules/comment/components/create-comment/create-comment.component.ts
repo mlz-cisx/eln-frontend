@@ -23,6 +23,7 @@ import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {v4 as uuidv4} from 'uuid';
+import {environment} from "@environments/environment";
 
 
 interface FormComment {
@@ -97,7 +98,21 @@ export class CreateCommentComponent implements OnInit {
     });
   }
 
+  private checkContentSize(): boolean {
+    const content = this.comment.content ?? '';
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (content.length > (maxSize << 10)) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return false;
+    }
+    return true;
+  }
+
+
   public onSubmit(): void {
+    if (!this.checkContentSize()) {
+      return;
+    }
     if (this.loading) {
       return;
     }
