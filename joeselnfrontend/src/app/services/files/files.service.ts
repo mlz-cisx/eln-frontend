@@ -78,7 +78,7 @@ export class FilesService
   }
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<File>> {
-    return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+    return this.httpClient.get<File_with_privileges>(`${this.apiUrl}${id}`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(file => {
         let privileges = file.privileges
         const privilegesData: PrivilegesData<File> = {
