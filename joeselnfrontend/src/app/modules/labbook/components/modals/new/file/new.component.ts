@@ -3,24 +3,45 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpParams } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { ModalState } from '@app/enums/modal-state.enum';
+import {HttpParams} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output
+} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {ModalState} from '@app/enums/modal-state.enum';
 import {
   // DrivesService,
   FilesService,
   LabbooksService,
   //ProjectsService
 } from '@app/services';
-import type { Directory, DropdownElement, FilePayload, LabBookElementEvent, ModalCallback, Project } from '@joeseln/types';
-import { DialogRef } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { from, of, Subject } from 'rxjs';
-import { catchError, debounceTime, map, mergeMap, switchMap } from 'rxjs/operators';
+import type {
+  Directory,
+  DropdownElement,
+  FilePayload,
+  LabBookElementEvent,
+  ModalCallback,
+  Project
+} from '@joeseln/types';
+import {DialogRef} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {from, of, Subject} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  switchMap
+} from 'rxjs/operators';
+import {environment} from "@environments/environment";
 
 interface FormElement {
   parentElement: FormControl<string | null>;
@@ -89,7 +110,8 @@ export class NewLabBookFileElementModalComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService
-  ) {}
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -130,11 +152,14 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       .selectTranslateObject('labBook.newFileElementModal')
       .pipe(untilDestroyed(this))
       .subscribe(newFileElementModal => {
-        this.parentElement = [{ value: 'labBook', label: newFileElementModal.currentLabBook }];
+        this.parentElement = [{
+          value: 'labBook',
+          label: newFileElementModal.currentLabBook
+        }];
 
         this.position = [
-          { value: 'top', label: newFileElementModal.position.top },
-          { value: 'bottom', label: newFileElementModal.position.bottom },
+          {value: 'top', label: newFileElementModal.position.top},
+          {value: 'bottom', label: newFileElementModal.position.bottom},
         ];
       });
   }
@@ -256,7 +281,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.filePlaceholder = files[0].name;
-        this.form.patchValue({ name: files[0].name, file: files[0] });
+        this.form.patchValue({name: files[0].name, file: files[0]});
         this.f.file.markAsDirty();
         this.cdr.markForCheck();
       };
@@ -264,8 +289,20 @@ export class NewLabBookFileElementModalComponent implements OnInit {
     }
   }
 
-  public onSubmit(): void {
+  private checkContentSize(): boolean {
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (Object(this.file.path).size > (maxSize << 10) ||
+      Object(this.file.description).length > (maxSize << 10)) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return false;
+    }
+    return true;
+  }
 
+  public onSubmit(): void {
+    if (!this.checkContentSize()) {
+      return;
+    }
     if (this.loading) {
       return;
     }
@@ -277,23 +314,22 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       .subscribe(
         file => {
           if (file) {
-          this.state = ModalState.Changed;
-          const event: LabBookElementEvent = {
-            childObjectId: file.pk,
-            childObjectContentType: file.content_type,
-            childObjectContentTypeModel: file.content_type_model,
-            parentElement: this.element.parentElement,
-            position: this.element.position,
-          };
-          this.modalRef.close({state: this.state, data: event});
-          this.translocoService
-            .selectTranslate('labBook.newFileElementModal.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
-        }
-          else {
+            this.state = ModalState.Changed;
+            const event: LabBookElementEvent = {
+              childObjectId: file.pk,
+              childObjectContentType: file.content_type,
+              childObjectContentTypeModel: file.content_type_model,
+              parentElement: this.element.parentElement,
+              position: this.element.position,
+            };
+            this.modalRef.close({state: this.state, data: event});
+            this.translocoService
+              .selectTranslate('labBook.newFileElementModal.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          } else {
             this.toastrService.error('File Size exceeded.');
           }
         },
@@ -306,7 +342,11 @@ export class NewLabBookFileElementModalComponent implements OnInit {
   }
 
   public createTree(items: any[], id = null, level = 0): any[] {
-    return items.filter(dir => dir.directory === id).map(d => ({ ...d, level, children: this.createTree(items, d.pk, level + 1) }));
+    return items.filter(dir => dir.directory === id).map(d => ({
+      ...d,
+      level,
+      children: this.createTree(items, d.pk, level + 1)
+    }));
   }
 
   public flattenTree(items: any[], res: any[] = []): any[] {

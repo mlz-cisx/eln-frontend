@@ -18,6 +18,8 @@ import {PictureEditorTool} from '../../enums/picture-editor-tool.enum';
 import type {
   SaveSketchEvent
 } from '../../interfaces/save-sketch-event.interface';
+import {environment} from "@environments/environment";
+import {ToastrService} from "ngx-toastr";
 
 declare global {
   interface Window {
@@ -80,7 +82,9 @@ export class PictureEditorToolbarComponent implements OnInit {
     return false;
   }
 
-  public constructor(public readonly cdr: ChangeDetectorRef) {
+  public constructor(public readonly cdr: ChangeDetectorRef,
+                     private readonly toastrService: ToastrService
+  ) {
   }
 
   public ngOnInit(): void {
@@ -260,6 +264,13 @@ export class PictureEditorToolbarComponent implements OnInit {
 
     const renderedImage: any = await toBlob(this.canvas.getImage());
     const shapes: any = new Blob([JSON.stringify(this.canvas.getSnapshot().shapes)], {type: 'application/json'});
+
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (shapes.size > (maxSize << 10)) {
+      this.toastrService.error('Shapes exceed the maximum allowed size.');
+      return
+    }
+
 
     if (this.sketch) {
       renderedImage.name = 'rendered.png';

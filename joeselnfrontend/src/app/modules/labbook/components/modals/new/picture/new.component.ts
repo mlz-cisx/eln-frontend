@@ -3,28 +3,50 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DOCUMENT } from '@angular/common';
-import { HttpParams } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { scriptLoader } from '@app/modules/picture/util/script-loader';
+import {DOCUMENT} from '@angular/common';
+import {HttpParams} from '@angular/common/http';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  OnInit,
+  Output
+} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {scriptLoader} from '@app/modules/picture/util/script-loader';
 //import { ConvertTiffModalComponent } from '@app/pages/pictures/components/modals/convert-tiff/convert-tiff.component';
-import { LabbooksService, PicturesService,
+import {
+  LabbooksService, PicturesService,
   //ProjectsService
 } from '@app/services';
 //import { UserStore } from '@app/stores/user';
-import { environment } from '@environments/environment';
-import type { DropdownElement, LabBookElementEvent, ModalCallback, PicturePayload, Project } from '@joeseln/types';
-import { DialogRef, DialogService } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
+import {environment} from '@environments/environment';
+import type {
+  DropdownElement,
+  LabBookElementEvent,
+  ModalCallback,
+  PicturePayload,
+  Project
+} from '@joeseln/types';
+import {DialogRef, DialogService} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
 import type * as pdfjs from 'pdfjs-dist';
-import { from, lastValueFrom, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, mergeMap, switchMap } from 'rxjs/operators';
+import {from, lastValueFrom, of, Subject} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  mergeMap,
+  switchMap
+} from 'rxjs/operators';
 
 declare global {
   interface Window {
@@ -108,7 +130,8 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
     private readonly modalService: DialogService,
     //private readonly userStore: UserStore,
     @Inject(DOCUMENT) private readonly document: Document
-  ) {}
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -145,20 +168,21 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
     this.f.width.valueChanges.pipe(untilDestroyed(this), distinctUntilChanged()).subscribe(value => {
       if (value && this.f.aspectRatio.value && this.f.keepAspectRatio.value) {
-        this.f.height.setValue(Math.round(value / this.f.aspectRatio.value), { emitEvent: false });
+        this.f.height.setValue(Math.round(value / this.f.aspectRatio.value), {emitEvent: false});
       }
     });
 
     this.f.height.valueChanges.pipe(untilDestroyed(this), distinctUntilChanged()).subscribe(value => {
       if (value && this.f.aspectRatio.value && this.f.keepAspectRatio.value) {
-        this.f.width.setValue(Math.round(value * this.f.aspectRatio.value), { emitEvent: false });
+        this.f.width.setValue(Math.round(value * this.f.aspectRatio.value), {emitEvent: false});
       }
     });
   }
 
   public ngAfterViewInit(): void {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    scriptLoader(this.document, 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.min.js', () => {});
+    scriptLoader(this.document, 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.min.js', () => {
+    });
   }
 
   public initTranslations(): void {
@@ -166,11 +190,14 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
       .selectTranslateObject('labBook.newPictureElementModal')
       .pipe(untilDestroyed(this))
       .subscribe(newPictureElementModal => {
-        this.parentElement = [{ value: 'labBook', label: newPictureElementModal.currentLabBook }];
+        this.parentElement = [{
+          value: 'labBook',
+          label: newPictureElementModal.currentLabBook
+        }];
 
         this.position = [
-          { value: 'top', label: newPictureElementModal.position.top },
-          { value: 'bottom', label: newPictureElementModal.position.bottom },
+          {value: 'top', label: newPictureElementModal.position.top},
+          {value: 'bottom', label: newPictureElementModal.position.bottom},
         ];
       });
   }
@@ -264,7 +291,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
   }
 
   public onUpload(event: Event): void {
-
     let files = (event.target as HTMLInputElement).files as any;
 
     if (files.length) {
@@ -325,7 +351,19 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
   }
 
+  private checkContentSize(): boolean {
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (Object(this.picture.background_image).size > (maxSize << 10)) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return false;
+    }
+    return true;
+  }
+
   public async onSubmit(): Promise<void> {
+    if (!this.checkContentSize()) {
+      return;
+    }
     if (this.loading) {
       return;
     }
@@ -360,8 +398,7 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
               .subscribe(success => {
                 this.toastrService.success(success);
               });
-          }
-          else {
+          } else {
             this.toastrService.error('Image size exceeded.');
           }
         },
@@ -375,7 +412,7 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
   private async convertPDFtoCanvas(page: pdfjs.PDFPageProxy): Promise<any> {
     const toBlob = (canvas: HTMLCanvasElement): Promise<unknown> => new Promise(resolve => canvas.toBlob(resolve));
 
-    const viewport = page.getViewport({ scale: 1 });
+    const viewport = page.getViewport({scale: 1});
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
