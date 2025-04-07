@@ -48,6 +48,9 @@ import type {
 import {
   LabBookPendingChangesModalComponent
 } from '../modals/pending-changes/pending-changes.component';
+import {
+  highlight_element_background_color
+} from "@app/modules/labbook/config/admin-element-background-color";
 
 
 interface ElementRemoval {
@@ -646,6 +649,15 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
       // @ts-ignore
       elem.innerHTML = highlightedContent
+
+      if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
+        && !title_content.includes(search_text) && !content.includes(search_text)) {
+        // @ts-ignore
+        title.style.backgroundColor = highlight_element_background_color;
+        // @ts-ignore
+        elem.style.backgroundColor = highlight_element_background_color;
+      }
+
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 
