@@ -13,11 +13,13 @@ COPY . .
 RUN  npx ng build
 
 # Step 2: Serve the application using Nginx
-FROM nginx:alpine
-COPY --from=build /app/dist/joeselnfrontend13 /usr/share/nginx/html
+FROM nginxinc/nginx-unprivileged
+USER root
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-EXPOSE 80 443
+COPY --from=build --chown=101:101 /app/dist/joeselnfrontend13/browser /usr/share/nginx/html
+USER 101
+EXPOSE 8080 4430
 CMD ["/docker-entrypoint.sh"]
 
