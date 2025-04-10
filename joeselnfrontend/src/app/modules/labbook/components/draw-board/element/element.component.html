@@ -4,6 +4,7 @@
 -->
 
 <ng-container *transloco="let t">
+  @defer (on viewport) {
   <eworkbench-labbook-draw-board-note
     #elementComponent
     [id]="id"
@@ -15,6 +16,12 @@
     (moved)="onMove($event)"
     *ngIf="element.child_object_content_type_model === 'shared_elements.note'"
   ></eworkbench-labbook-draw-board-note>
+  }
+  @placeholder {
+    <p></p>
+  }
+
+  @defer (on viewport) {
   <eworkbench-labbook-draw-board-file
     #elementComponent
     [id]="id"
@@ -26,6 +33,12 @@
     (moved)="onMove($event)"
     *ngIf="element.child_object_content_type_model === 'shared_elements.file'"
   ></eworkbench-labbook-draw-board-file>
+  }
+  @placeholder {
+    <p></p>
+  }
+
+  @defer (on viewport) {
   <eworkbench-labbook-draw-board-picture
     #elementComponent
     [id]="id"
@@ -37,6 +50,11 @@
     (moved)="onMove($event)"
     *ngIf="element.child_object_content_type_model === 'pictures.picture'"
   ></eworkbench-labbook-draw-board-picture>
+  }
+  @placeholder {
+    <p></p>
+  }
+
   <eworkbench-labbook-draw-board-plugin-data
     #elementComponent
     [id]="id"
