@@ -699,4 +699,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
     return false;
   }
+
+  trackByElementId(index: number, item: any): string {
+    return item['element']['child_object_id'];
+  }
 }

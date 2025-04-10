@@ -25,7 +25,7 @@
                      [item]="item"
                      [style.z-index]="getItemZIndex(item)"
                      [style.overflow]="getItemOverflow(item)"
-                     *ngFor="let item of drawBoardElements"
+                     *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
       >
 
         <div class="element-container">
