@@ -621,7 +621,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       window.scrollTo({top: pos, behavior: 'smooth'});
     } else if (comment_changed_pos !== 0) {
       window.scrollTo({top: comment_changed_pos, behavior: 'smooth'});
-    } else {
+    } else if (content_type !== 0) {
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 
