@@ -3,8 +3,6 @@
   SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<ng-container *transloco="let t">
-  <div id="labbook-draw-board" class="">
     <aside>
       <eworkbench-labbook-sidebar *ngIf="editable"
         [id]="id"
@@ -14,7 +12,6 @@
         (refresh)="onRefreshGrid($event)"
       ></eworkbench-labbook-sidebar>
     </aside>
-    <div class="draw-board">
       <eworkbench-labbook-search-bar
         class="mb-4"
         [id]="id"
@@ -30,6 +27,3 @@
         [refresh]="refresh"
         [editable]="editable"
       ></eworkbench-labbook-draw-board-grid>
-    </div>
-  </div>
-</ng-container>

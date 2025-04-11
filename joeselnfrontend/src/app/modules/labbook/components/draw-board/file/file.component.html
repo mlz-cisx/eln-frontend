@@ -7,9 +7,7 @@
   <ng-container *transloco="let t">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="element"
           errorTailor>
-      <div class="header" [id]="title_id">
-        <div class="flex justify-between">
-          <div class="header_container">
+      <div class="header flex justify-between header_container" [id]="title_id">
             <div class="flex-fill">
               <eworkbench-form-input [for]="'title-' + uniqueHash"
                                      [loading]="loading" [margin]="false"
@@ -78,8 +76,6 @@
               ></eworkbench-labbook-element-dropdown>
             </div>
           </div>
-        </div>
-      </div>
       <div class="body" [id]="'description-' + uniqueHash">
         <!--        <eworkbench-lock [id]="element.child_object_id" [lock]="lock" [lockUser]="lockUser"-->
         <!--                         [service]="filesService"></eworkbench-lock>-->

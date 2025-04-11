@@ -3,7 +3,6 @@
   SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<ng-container *transloco="let t">
   @defer (on viewport) {
   <eworkbench-labbook-draw-board-note
     #elementComponent
@@ -82,4 +81,3 @@
     (removed)="onRemove($event)"
     *ngIf="!element.child_object"
   ></eworkbench-labbook-draw-board-permission-denied>
-</ng-container>

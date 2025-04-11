@@ -3,7 +3,6 @@
   SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<ng-container *transloco="let t">
   <!--  <button style="background-color: #003161; align-content: end"-->
   <!--          type="button"-->
   <!--          class="btn ewb-button-big text-white"-->
@@ -28,8 +27,6 @@
                      *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
       >
 
-        <div class="element-container">
-
         <eworkbench-labbook-draw-board-element
           #elementComponent
           [id]="id"
@@ -43,9 +40,6 @@
           (expand)="onExpandSection($event)"
         ></eworkbench-labbook-draw-board-element>
 
-        </div>
-
       </gridster-item>
     </gridster>
   </eworkbench-loading>
-</ng-container>
