@@ -615,77 +615,66 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     localStorage.removeItem('comment_change');
 
 
-    // get all possibilities for header and title also for file
-    if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file' ||
-      content_type == 'labbooks.labbook')) {
-      // @ts-ignore
-      const elem = document.getElementById(element_pk + '_preloaded_id')
-      const title = document.getElementById(element_pk + '_title_id')
-
-      // @ts-ignore
-      const content = elem.innerHTML
-      // @ts-ignore
-      if (content.includes(search_text)) {
-        // @ts-ignore
-        elem.style.border = 'thick solid red'
-      }
-
-
-      // @ts-ignore
-      const title_content = title.querySelector('input').value
-      // @ts-ignore
-      if (title_content.includes(search_text)) {
-        // @ts-ignore
-        title.style.border = 'thick solid red'
-      }
-
-      search_text = '' + search_text
-
-      const highlightedContent = content.replace(
-        new RegExp('' + search_text, 'gi'),
-        '<span style="background-color: yellow; font-weight: bold">$&</span>'
-      );
-
-
-      // @ts-ignore
-      elem.innerHTML = highlightedContent
-
-      if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
-        && !title_content.includes(search_text) && !content.includes(search_text)) {
-        // @ts-ignore
-        title.style.backgroundColor = highlight_element_background_color;
-        // @ts-ignore
-        elem.style.backgroundColor = highlight_element_background_color;
-      }
-
-      window.scrollTo({top: pos, behavior: 'smooth'});
-    }
-
-
-    if (content_type == 'pictures.picture') {
-      // @ts-ignore
-      const title = document.getElementById(element_pk + '_title_id')
-      // @ts-ignore
-      const title_content = title.querySelector('input').value
-      // @ts-ignore
-      if (title_content.includes(search_text)) {
-        // @ts-ignore
-        title.style.border = 'thick solid red'
-      }
-      window.scrollTo({top: pos, behavior: 'smooth'});
-    }
-
     if (note_inserted !== 0) {
       window.scrollTo({top: pos, behavior: 'smooth'});
-    }
-
-    if (elem_deleted !== 0) {
+    } else if (elem_deleted !== 0) {
+      window.scrollTo({top: pos, behavior: 'smooth'});
+    } else if (comment_changed_pos !== 0) {
+      window.scrollTo({top: comment_changed_pos, behavior: 'smooth'});
+    } else {
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 
-    if (comment_changed_pos !== 0) {
-      window.scrollTo({top: comment_changed_pos, behavior: 'smooth'});
-    }
+
+    setTimeout(() => {
+
+      // get all possibilities for header and title also for file
+      if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file' ||
+        content_type == 'labbooks.labbook')) {
+        // @ts-ignore
+        const elem = document.getElementById(element_pk + '_preloaded_id')
+        const title = document.getElementById(element_pk + '_title_id')
+        // @ts-ignore
+        const content = elem.innerHTML
+        // @ts-ignore
+        if (content.includes(search_text)) {
+          // @ts-ignore
+          elem.style.border = 'thick solid red'
+        }
+        // @ts-ignore
+        const title_content = title.querySelector('input').value
+        // @ts-ignore
+        if (title_content.includes(search_text)) {
+          // @ts-ignore
+          title.style.border = 'thick solid red'
+        }
+        search_text = '' + search_text
+        const highlightedContent = content.replace(
+          new RegExp('' + search_text, 'gi'),
+          '<span style="background-color: yellow; font-weight: bold">$&</span>'
+        );
+        // @ts-ignore
+        elem.innerHTML = highlightedContent
+        if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
+          && !title_content.includes(search_text) && !content.includes(search_text)) {
+          // @ts-ignore
+          title.style.backgroundColor = highlight_element_background_color;
+          // @ts-ignore
+          elem.style.backgroundColor = highlight_element_background_color;
+        }
+      }
+      if (content_type == 'pictures.picture') {
+        // @ts-ignore
+        const title = document.getElementById(element_pk + '_title_id')
+        // @ts-ignore
+        const title_content = title.querySelector('input').value
+        // @ts-ignore
+        if (title_content.includes(search_text)) {
+          // @ts-ignore
+          title.style.border = 'thick solid red'
+        }
+      }
+    }, 1000);  // end set timeout
 
 
   }
