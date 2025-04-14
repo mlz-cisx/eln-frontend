@@ -674,6 +674,19 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           title.style.border = 'thick solid red'
         }
       }
+
+      if (note_inserted !== 0) {
+      }
+      const elem = document.getElementById(element_pk + '_preloaded_id')
+      const title = document.getElementById(element_pk + '_title_id')
+      // @ts-ignore
+      if (elem) {
+        // @ts-ignore
+        title.style.backgroundColor = highlight_element_background_color;
+        // @ts-ignore
+        elem.style.backgroundColor = highlight_element_background_color;
+      }
+
     }, 1000);  // end set timeout
 
 
