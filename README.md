@@ -7,15 +7,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - nodejs version >= v22.5.1
 
 
-## Installation 
+## Installation
 
-- cd joeselnfrontend
 - npm install
 
 ## Development server
 
 Run `npx ng serve` for a dev server. Navigate to `http://localhost:4500/`. The application will automatically reload if you change any of the source files.
- 
+
 Options in angular.json:  "port": 4500, "host": "0.0.0.0"
 
 When the file watcher reaches its limits, then: `sudo sysctl fs.inotify.max_user_watches=524288`
