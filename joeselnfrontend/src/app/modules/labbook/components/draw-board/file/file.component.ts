@@ -306,12 +306,12 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
             this.loading = false;
             this.cdr.markForCheck();
-            this.translocoService
-              .selectTranslate('file.details.toastr.success')
-              .pipe(untilDestroyed(this))
-              .subscribe(success => {
-                this.toastrService.success(success);
-              });
+            // this.translocoService
+            //   .selectTranslate('file.details.toastr.success')
+            //   .pipe(untilDestroyed(this))
+            //   .subscribe(success => {
+            //     this.toastrService.success(success);
+            //   });
           } else {
             this.toastrService.error('Description size exceeded.');
             setTimeout(() => location.reload(), 2000);
