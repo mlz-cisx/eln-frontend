@@ -236,18 +236,24 @@
               <eworkbench-details-collapse-element
                 [labelText]="t('labBook.details.element.recentChanges')">
                 <ng-container slot="body">
+                  @defer(on viewport) {
                   <eworkbench-recent-changes
                     id="recent-changes"
                     [service]="labBooksService"
                     [changesId]="id"
                     [refresh]="refreshChanges"
                   ></eworkbench-recent-changes>
+                  }
+                  @placeholder {
+                  <p></p>
+                  }
                 </ng-container>
               </eworkbench-details-collapse-element>
 
               <eworkbench-details-collapse-element
                 [labelText]="t('labBook.details.element.versions')">
                 <ng-container slot="body">
+                  @defer(on viewport) {
                   <eworkbench-versions
                     id="versions"
                     contentType="labBook"
@@ -259,6 +265,10 @@
                     [finalizeVersionAlwaysVisible]="true"
                     (changed)="onVersionChanged()"
                   ></eworkbench-versions>
+                  }
+                  @placeholder {
+                  <p></p>
+                  }
                 </ng-container>
               </eworkbench-details-collapse-element>
 
