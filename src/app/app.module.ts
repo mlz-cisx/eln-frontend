@@ -1,7 +1,7 @@
 import {
   HttpClientModule, HTTP_INTERCEPTORS, HttpRequest, HttpHandler
 } from '@angular/common/http';
-import {APP_INITIALIZER, NgModule, provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -106,7 +106,6 @@ import {ColorPickerService} from "ngx-color-picker"
       draggable: true,
       resizable: true,
     }),
-    provideExperimentalZonelessChangeDetection(),
   ],
   bootstrap: [AppComponent]
 })

@@ -13,6 +13,7 @@ import {
   Inject,
   InjectionToken,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
   Optional,
@@ -71,6 +72,7 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public constructor(
     private readonly cdr: ChangeDetectorRef,
+    private readonly ngZone: NgZone,
     @Inject(DOCUMENT) private readonly document: Document,
     @Optional() @Inject(PICTURE_EDITOR_SCRIPT_SRC) private readonly pictureEditorScriptSrc?: string
   ) {
@@ -105,24 +107,26 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
       this.backgroundImage.src = this.picture.download_background_image;
     }
 
-    this.canvas = new window.CH.CanvasHelper(this.core.nativeElement, {
-      ...window.CH.defaultOptions,
-      imageSize: {
-        width: this.picture.width ?? 600,
-        height: this.picture.height ?? 600,
-      },
-      toolbarPosition: 'hidden',
-      strokeWidths: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30],
-      defaultStrokeWidth: stroke_width,
-      tools: [window.CH.SelectShape],
-      backgroundShapes:
-        !this.sketch && this.picture.download_background_image
-          ? [window.CH.shapes.createShape('Image', {x: 0, y: 0, image: this.backgroundImage, scale: 1})]
-          : [],
+    this.ngZone.runOutsideAngular(() => {
+      this.canvas = new window.CH.CanvasHelper(this.core.nativeElement, {
+        ...window.CH.defaultOptions,
+        imageSize: {
+          width: this.picture.width ?? 600,
+          height: this.picture.height ?? 600,
+        },
+        toolbarPosition: 'hidden',
+        strokeWidths: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30],
+        defaultStrokeWidth: stroke_width,
+        tools: [window.CH.SelectShape],
+        backgroundShapes:
+          !this.sketch && this.picture.download_background_image
+            ? [window.CH.shapes.createShape('Image', {x: 0, y: 0, image: this.backgroundImage, scale: 1})]
+            : [],
+      });
+      this.canvas.setColor('primary', '#000000');
+      this.canvas.setColor('secondary', '#00000000');
+      this.canvas.undoStack = [];
     });
-    this.canvas.setColor('primary', '#000000');
-    this.canvas.setColor('secondary', '#00000000');
-    this.canvas.undoStack = [];
 
     if (!this.sketch && this.picture.download_shapes) {
       this.service
