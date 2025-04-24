@@ -104,6 +104,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public options: GridsterConfig = {
     ...gridsterConfig,
     itemChangeCallback: () => this.updateAllElements(),
+    itemResizeCallback: () => this.updateAllElements(),
   };
 
   public socketLoading = false;
