@@ -53,8 +53,8 @@ export const gridsterConfig: GridsterConfig = {
     handles: {
       s: true,
       e: true,
-      n: true,
-      w: true,
+      n: false,
+      w: false,
       se: true,
       ne: true,
       sw: true,
