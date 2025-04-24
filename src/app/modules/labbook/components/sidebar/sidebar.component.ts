@@ -13,6 +13,8 @@ import {
   Input,
   OnInit,
   Output,
+  Renderer2,
+  ElementRef,
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import type {LabBookElementEvent, ModalCallback} from '@joeseln/types';
@@ -99,7 +101,9 @@ export class LabBookSidebarComponent implements OnInit {
     private readonly labbook_page: LabBookPageComponent,
     private readonly note_component: LabBookDrawBoardNoteComponent,
     public readonly labBooksService: LabbooksService,
-    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent
+    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
+    private readonly renderer: Renderer2,
+    private readonly el: ElementRef
   ) {
   }
 
@@ -118,10 +122,9 @@ export class LabBookSidebarComponent implements OnInit {
       });
 
     // place sidebar exact below navbar
-    const navBarElement = document.getElementsByClassName('header')[0];
+    const navBarElement = this.el.nativeElement.closest('.header');
     if (navBarElement) {
-      const navBarStyles = window.getComputedStyle(navBarElement);
-      const navBarHeight = parseInt(navBarStyles.height, 10);
+      const navBarHeight = parseInt(window.getComputedStyle(navBarElement).height, 10);
       this.offsetHeader = navBarHeight - this.offsetMargin;
     } else {
       this.offsetHeader = 40; // Fallback
@@ -331,8 +334,7 @@ export class LabBookSidebarComponent implements OnInit {
       const content = elem.innerHTML
       // @ts-ignore
       if (content.includes(search_text)) {
-        // @ts-ignore
-        elem.style.border = 'thick solid red'
+        this.renderer.setStyle(elem, 'border', 'thick solid red');
       }
 
 
@@ -340,8 +342,7 @@ export class LabBookSidebarComponent implements OnInit {
       const title_content = title.querySelector('input').value
       // @ts-ignore
       if (title_content.includes(search_text)) {
-        // @ts-ignore
-        title.style.border = 'thick solid red'
+        this.renderer.setStyle(title, 'border', 'thick solid red');
       }
 
       search_text = '' + search_text
@@ -352,8 +353,7 @@ export class LabBookSidebarComponent implements OnInit {
       );
 
 
-      // @ts-ignore
-      elem.innerHTML = highlightedContent
+      this.renderer.setProperty(elem, 'innerHTML', highlightedContent);
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 

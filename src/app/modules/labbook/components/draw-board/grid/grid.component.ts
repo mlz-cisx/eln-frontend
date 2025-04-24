@@ -15,6 +15,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  Renderer2,
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
@@ -121,6 +122,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     // private readonly modalService: DialogService,
     private readonly cdr: ChangeDetectorRef,
     private readonly websocketService: WebSocketService,
+    private readonly renderer: Renderer2,
   ) {
   }
 
@@ -639,14 +641,14 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         // @ts-ignore
         if (content.includes(search_text)) {
           // @ts-ignore
-          elem.style.border = 'thick solid red'
+          this.renderer.setStyle(elem, 'border', 'thick solid red');
         }
         // @ts-ignore
         const title_content = title.querySelector('input').value
         // @ts-ignore
         if (title_content.includes(search_text)) {
           // @ts-ignore
-          title.style.border = 'thick solid red'
+          this.renderer.setStyle(title, 'border', 'thick solid red');
         }
         search_text = '' + search_text
         const highlightedContent = content.replace(
@@ -654,13 +656,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           '<span style="background-color: yellow; font-weight: bold">$&</span>'
         );
         // @ts-ignore
-        elem.innerHTML = highlightedContent
+        this.renderer.setProperty(elem, 'innerHTML', highlightedContent);
         if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
           && !title_content.includes(search_text) && !content.includes(search_text)) {
-          // @ts-ignore
-          title.style.backgroundColor = highlight_element_background_color;
-          // @ts-ignore
-          elem.style.backgroundColor = highlight_element_background_color;
+          this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
+          this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
         }
       }
       if (content_type == 'pictures.picture') {
@@ -671,7 +671,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         // @ts-ignore
         if (title_content.includes(search_text)) {
           // @ts-ignore
-          title.style.border = 'thick solid red'
+          this.renderer.setStyle(title, 'border', 'thick solid red');
         }
       }
 
@@ -681,10 +681,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       const title = document.getElementById(element_pk + '_title_id')
       // @ts-ignore
       if (elem) {
-        // @ts-ignore
-        title.style.backgroundColor = highlight_element_background_color;
-        // @ts-ignore
-        elem.style.backgroundColor = highlight_element_background_color;
+        this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
+        this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
       }
 
     }, 1000);  // end set timeout

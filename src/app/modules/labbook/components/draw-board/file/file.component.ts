@@ -10,7 +10,10 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
+  Renderer2,
+  RendererStyleFlags2,
+  ElementRef
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {
@@ -132,7 +135,9 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
     private user_service: UserService,
-    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent
+    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
+    private readonly renderer: Renderer2,
+    private readonly elementRef: ElementRef
   ) {
   }
 
@@ -204,9 +209,9 @@ export class LabBookDrawBoardFileComponent implements OnInit {
                 {emitEvent: false}
               );
               this.preloaded_content = privilegesData.data.description
-              if (document.getElementById(this.preloaded_id)) {
-                // @ts-ignore
-                document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+              const preloadedElement = this.elementRef.nativeElement.querySelector(`#${this.preloaded_id}`);
+              if (preloadedElement) {
+                  this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
               }
 
             });
@@ -228,22 +233,23 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
     }
 
-    var obj = document.getElementById('description-' + this.uniqueHash) as HTMLDivElement
-    const observer = new ResizeObserver(
-      entries => {
-        for (const entry of entries) {
-          const container = document.getElementById('description-' + this.uniqueHash);
-          if (container) {
-            const elements = container.getElementsByClassName('tox-tinymce');
-            // Check if the nth element exists
-            if (elements[0]) {
-              const elem = elements[0] as HTMLElement
-              elem.setAttribute("style", "height:" + (entry.contentRect.height - 100) + "px !important")
+    const descriptionElement = this.elementRef.nativeElement.querySelector(`#description-${this.uniqueHash}`);
+    if (descriptionElement) {
+      const observer = new ResizeObserver(
+        entries => {
+          for (const entry of entries) {
+            const container = this.elementRef.nativeElement.querySelector(`#description-${this.uniqueHash}`);
+            if (container) {
+              const elements = container.getElementsByClassName('tox-tinymce');
+              if (elements[0]) {
+                this.renderer.setStyle(elements[0], 'height', `${entry.contentRect.height - 100}px`, RendererStyleFlags2.Important);
+              }
             }
           }
         }
-      })
-    observer.observe(obj)
+      );
+      observer.observe(descriptionElement);
+    }
   }
 
   public initDetails(): void {
@@ -411,10 +417,9 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public load_editor(): void {
-    const title = document.getElementById(this.title_id)
-    // @ts-ignore
+    const title = this.elementRef.nativeElement.querySelector(`#${this.title_id}`);
     if (title) {
-      title.style.border = ''
+      this.renderer.setStyle(title, 'border', '');
     }
     this.editor_loaded = true;
     this.cdr.detectChanges()

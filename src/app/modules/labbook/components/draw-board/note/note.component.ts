@@ -11,7 +11,9 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
+  Renderer2,
+  RendererStyleFlags2
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {
@@ -137,7 +139,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
     private user_service: UserService,
-    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent
+    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
+    private readonly renderer: Renderer2
   ) {
   }
 
@@ -202,9 +205,9 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
               );
               this.preloaded_content = privilegesData.data.content
 
-              if (document.getElementById(this.preloaded_id)) {
-                // @ts-ignore
-                document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+              const preloadedElement = document.getElementById(this.preloaded_id);
+              if (preloadedElement) {
+                this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
               }
 
             });
@@ -227,7 +230,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
     }
 
-    var obj = document.getElementById('content-' + this.uniqueHash) as HTMLDivElement
+    const obj = document.getElementById('content-' + this.uniqueHash) as HTMLDivElement
     const observer = new ResizeObserver(
       entries => {
         for (const entry of entries) {
@@ -236,8 +239,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
             const elements = container.getElementsByClassName('tox-tinymce');
             // Check if the nth element exists
             if (elements[0]) {
-              const elem = elements[0] as HTMLElement
-              elem.setAttribute("style", "height:" + entry.contentRect.height + "px !important")
+              this.renderer.setStyle(elements[0], 'height', `${entry.contentRect.height}px`, RendererStyleFlags2.Important);
             }
           }
         }
@@ -569,10 +571,9 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public load_editor(): void {
     if (this.privileges?.edit) {
-      const title = document.getElementById(this.title_id)
-      // @ts-ignore
+      const title = document.getElementById(this.title_id);
       if (title) {
-        title.style.border = ''
+        this.renderer.setStyle(title, 'border', '');
       }
       this.editor_loaded = true;
       this.cdr.detectChanges()
