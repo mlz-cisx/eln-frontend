@@ -46,6 +46,7 @@ import {NewQRcodeModalComponent} from "@app/pages/labbooks/components/modals/qrc
 import {LabBooksPageRoutingModule} from './labbooks-page-routing.module';
 import { QRCodeModule } from 'angularx-qrcode';
 import {NavbarModule} from "@app/modules/navbar/navbar.module";
+import { ExportModule } from '@app/modules/export/export.module';
 
 
 @NgModule({
@@ -89,7 +90,8 @@ import {NavbarModule} from "@app/modules/navbar/navbar.module";
     CommentModule,
     TooltipModule.forRoot(),
     QRCodeModule,
-    NavbarModule
+    NavbarModule,
+    ExportModule,
   ],
 })
 export class LabBooksPageModule {

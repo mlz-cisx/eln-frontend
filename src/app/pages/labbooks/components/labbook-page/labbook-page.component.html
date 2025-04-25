@@ -272,6 +272,14 @@
                 </ng-container>
               </eworkbench-details-collapse-element>
 
+              <eworkbench-details-collapse-element
+                [labelText]="t('detailsDropdown.export')">
+                <ng-container slot="body">
+                  <eworkbench-export [id]="id"></eworkbench-export>
+                </ng-container>
+              </eworkbench-details-collapse-element>
+
+
               <!--              <eworkbench-details-collapse-element-->
               <!--                [labelText]="t('labBook.details.element.comments')">-->
               <!--                <ng-container slot="actions">-->
