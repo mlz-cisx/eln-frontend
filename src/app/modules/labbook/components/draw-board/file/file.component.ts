@@ -158,10 +158,10 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   private checkContentSize(): boolean {
-    let content = this.f.file_description.value ?? '';
-    content = content + this.f.file_title.value ?? '';
+    let description_val = this.f.file_description.value ?? '';
+    let title_val = this.f.file_title.value ?? '';
     const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
-    if (content.length > (maxSize << 10)) {
+    if ((description_val + title_val).length > (maxSize << 10)) {
       this.toastrService.error('Content exceeds the maximum allowed size.');
       return false;
     }
@@ -417,7 +417,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public load_editor(): void {
-    const title = this.elementRef.nativeElement.querySelector(`#${this.title_id}`);
+    const title = document.getElementById(this.title_id)
     if (title) {
       this.renderer.setStyle(title, 'border', '');
     }
