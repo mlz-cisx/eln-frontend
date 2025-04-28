@@ -40,6 +40,7 @@ import {
 import {ShareModalComponent} from '../modals/share/share.component';
 import {lastValueFrom} from "rxjs";
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {environment} from "@environments/environment";
 
 @UntilDestroy()
 @Component({
@@ -51,6 +52,9 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 export class DetailsDropdownComponent implements OnInit {
   @Input()
   public service!: any;
+
+  @Input()
+  public is_labbook!: any;
 
   @Input()
   public id?: string;
@@ -154,6 +158,22 @@ export class DetailsDropdownComponent implements OnInit {
       );
   }
 
+  public async onExportZip(): Promise<void> {
+    const apiUrl = `${environment.apiUrl}/labbooks/`;
+    const url = (`${apiUrl}${this.id}/export_as_zip/`)
+    const response = await lastValueFrom(this.httpClient.get(url, {
+      responseType: 'blob',
+      observe: 'response'
+    }));
+    const a = document.createElement("a");
+    const file = new Blob([response.body!], {type: 'application/zip'});
+    a.href = URL.createObjectURL(file);
+    a.setAttribute('download', this.initialState.title)
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+
   public async onClick(export_link: string, filename: string): Promise<void> {
     const response = await lastValueFrom(this.httpClient.get(export_link, {
       responseType: 'blob',
@@ -178,7 +198,7 @@ export class DetailsDropdownComponent implements OnInit {
     } else {
       this.modalRef = this.modalService.open(DeleteModalComponent, {
         closeButton: false,
-        data: {id: this.id, service: this.service, userSetting} ,
+        data: {id: this.id, service: this.service, userSetting},
       } as DialogConfig);
 
       this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));

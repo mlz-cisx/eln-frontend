@@ -50,14 +50,15 @@
         <!--        <ng-container>-->
         <div style="text-align: center"><strong>{{detailsTitle}}</strong>
           <eworkbench-details-dropdown
-            [service]="labBooksService"
-            [id]="id"
-            [redirectDestination]="[showSidebar ? '.' : '' + '/labbooks', id]"
-            [newModalComponent]="newModalComponent"
-            [initialState]="initialState"
-            [duplicateElement]="false"
-            [privileges]="privileges"
-            *ngIf="privileges"
+                  [is_labbook]='true'
+                  [service]="labBooksService"
+                  [id]="id"
+                  [redirectDestination]="[showSidebar ? '.' : '' + '/labbooks', id]"
+                  [newModalComponent]="newModalComponent"
+                  [initialState]="initialState"
+                  [duplicateElement]="false"
+                  [privileges]="privileges"
+                  *ngIf="privileges"
           ></eworkbench-details-dropdown>
         </div>
         <!--        </ng-container>-->
