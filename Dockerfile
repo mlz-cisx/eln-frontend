@@ -13,7 +13,7 @@ COPY . .
 RUN  npx ng build
 
 # Step 2: Serve the application using Nginx
-FROM nginxinc/nginx-unprivileged
+FROM docker.io/nginxinc/nginx-unprivileged:1.26.3
 USER root
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
