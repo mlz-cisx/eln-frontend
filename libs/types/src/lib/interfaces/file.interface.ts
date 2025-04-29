@@ -14,6 +14,11 @@ export interface FilePayload {
   metadata?: Metadata[];
 }
 
+export interface FileClonePayload {
+  path: globalThis.File |Blob| string | null;
+  info: string | null;
+}
+
 export interface File {
   container_id: string | null;
   content_type: number;

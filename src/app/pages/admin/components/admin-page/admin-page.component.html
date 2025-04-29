@@ -54,6 +54,13 @@
           </div>
         </div>
       </div>
+      <div class="right-container" style="margin-top: 25px">
+        <div class="button-container">
+          <button (click)="upload_labbook()">
+            UPLOAD LABBOOK
+          </button>
+        </div>
+      </div>
     </div>
     <div *ngIf="currentUser && !currentUser.admin">
       <h3>Admin Rights Required</h3>

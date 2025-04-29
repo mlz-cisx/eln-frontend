@@ -7,12 +7,22 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit,
+  OnInit, ViewChild,
 } from '@angular/core';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {UserService, StatService} from "@app/services";
-import {User, Stat} from "@joeseln/types";
-import {Router} from "@angular/router";
+import {User, Stat, ModalCallback} from "@joeseln/types";
+import {ActivatedRoute, Router} from "@angular/router";
+import {
+  NewLabBookModalComponent
+} from "@app/pages/labbooks/components/modals/new/new.component";
+import {DialogConfig, DialogRef, DialogService} from "@ngneat/dialog";
+import {take} from "rxjs/operators";
+import {ModalState} from "@app/enums/modal-state.enum";
+import {TableViewComponent} from "@joeseln/table";
+import {
+  UploadLabBookModalComponent
+} from "@app/pages/labbooks/components/modals/upload/new.component";
 
 
 @UntilDestroy()
@@ -28,11 +38,20 @@ export class AdminPageComponent implements OnInit {
   public currentUser: User | null = null;
   public stat: Stat | null = null;
 
+  public modalRef?: DialogRef;
+
+  public showSidebar = false;
+
+  @ViewChild('tableView', {static: true})
+  public tableView!: TableViewComponent;
+
   public constructor(
     private user_service: UserService,
     private readonly stat_service: StatService,
     private cdr: ChangeDetectorRef,
     private _router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly modalService: DialogService,
   ) {
   }
 
@@ -61,6 +80,25 @@ export class AdminPageComponent implements OnInit {
   public go_to_admins() {
     console.log('admins')
     this._router.navigate(['/admin/admins'])
+  }
+
+  public upload_labbook() {
+
+    this.modalRef = this.modalService.open(UploadLabBookModalComponent, {
+      closeButton: false,
+      data: {withSidebar: this.showSidebar, initialState: null},
+    } as DialogConfig);
+
+    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
+  }
+
+
+  public onModalClose(callback?: ModalCallback): void {
+    if (callback?.navigate) {
+      void this._router.navigate(callback.navigate, {relativeTo: this.route});
+    } else if (callback?.state === ModalState.Changed) {
+      this.tableView.loadData();
+    }
   }
 
   public formatNumber(value: number | null | undefined): string {

@@ -16,7 +16,7 @@ import type {
   FinalizeVersion,
   LockService,
   PermissionsService, Pic_with_privileges,
-  Picture,
+  Picture, PictureClonePayload,
   PictureEditorPayload,
   PicturePayload,
   Privileges,
@@ -98,6 +98,14 @@ export class PicturesService
       }
     }
     return this.httpClient.post<Picture>(this.apiUrl, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+  }
+
+  public clone(picture: PictureClonePayload, params = new HttpParams()): Observable<Picture> {
+    const formData = new FormData();
+    for (const [key, val] of Object.entries(picture)) {
+      formData.append(key, val);
+    }
+    return this.httpClient.post<Picture>(`${this.apiUrl}clone/`, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {

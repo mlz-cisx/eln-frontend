@@ -34,6 +34,13 @@ export interface PictureEditorPayload {
   rendered_image: Blob;
 }
 
+export interface PictureClonePayload {
+  background_image: Blob;
+  shapes_image: Blob;
+  rendered_image: Blob;
+  info: string | null;
+}
+
 export interface Picture {
   container_id: string | null;
   content_type: number;

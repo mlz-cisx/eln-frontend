@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { HttpParams } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { ModalState } from '@app/enums/modal-state.enum';
+import {HttpParams} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {ModalState} from '@app/enums/modal-state.enum';
 // import { LabBooksService, ProjectsService } from '@app/services';
-import { LabbooksService } from '@joeseln/services';
-import type { LabBook, Project } from '@joeseln/types';
-import { DialogRef } from '@ngneat/dialog';
-import { FormBuilder, FormControl } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ToastrService } from 'ngx-toastr';
-import { from, of, Subject } from 'rxjs';
-import { catchError, debounceTime, mergeMap, switchMap } from 'rxjs/operators';
+import {LabbooksService} from '@joeseln/services';
+import type {LabBook, Project} from '@joeseln/types';
+import {DialogRef} from '@ngneat/dialog';
+import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
+import {TranslocoService} from '@ngneat/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {ToastrService} from 'ngx-toastr';
+import {from, of, Subject} from 'rxjs';
+import {catchError, debounceTime, mergeMap, switchMap} from 'rxjs/operators';
 
 interface FormLabBook {
   title: FormControl<string | null>;
@@ -64,7 +69,8 @@ export class NewLabBookModalComponent implements OnInit {
     // private readonly projectsService: ProjectsService,
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService
-  ) {}
+  ) {
+  }
 
   public get f() {
     return this.form.controls;
@@ -120,7 +126,7 @@ export class NewLabBookModalComponent implements OnInit {
           description: this.initialState.description,
           projects: this.initialState.projects,
         },
-        { emitEvent: false }
+        {emitEvent: false}
       );
 
       // if (this.initialState.projects.length) {
@@ -158,17 +164,22 @@ export class NewLabBookModalComponent implements OnInit {
       .subscribe(
         labBook => {
           this.state = ModalState.Changed;
-          this.modalRef.close({
-            state: this.state,
-            data: { newContent: labBook },
-            navigate: [`${this.withSidebar ? '..' : ''}/labbooks`, labBook.pk],
-          });
-          this.translocoService
-            .selectTranslate('labBook.newModal.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
+          if (labBook) {
+            this.modalRef.close({
+              state: this.state,
+              data: {newContent: labBook},
+              navigate: [`${this.withSidebar ? '..' : ''}/labbooks`, labBook.pk],
             });
+            this.translocoService
+              .selectTranslate('labBook.newModal.toastr.success')
+              .pipe(untilDestroyed(this))
+              .subscribe(success => {
+                this.toastrService.success(success);
+              });
+          } else {
+            this.toastrService.error('Labbook could not be created');
+            this.modalRef.close();
+          }
         },
         () => {
           this.loading = false;

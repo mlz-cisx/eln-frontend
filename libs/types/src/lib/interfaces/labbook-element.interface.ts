@@ -35,3 +35,15 @@ export interface LabBookElementPayload {
   width?: number;
   height?: number;
 }
+
+export interface LabBookElementClonePayload {
+  pk?: string;
+  child_object_content_type?: number;
+  child_object_content_type_model?: string;
+  child_object_id?: string;
+  position_x?: number;
+  position_y?: number;
+  width?: number;
+  height?: number;
+  comments?: string[];
+}
