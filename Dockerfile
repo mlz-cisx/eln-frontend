@@ -17,9 +17,7 @@ FROM docker.io/nginxinc/nginx-unprivileged:1.26.3
 USER root
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-COPY --from=build --chown=101:101 /app/dist/joeselnfrontend13/browser /usr/share/nginx/html
+COPY --from=build --chown=101:0 /app/dist/joeselnfrontend13/browser /usr/share/nginx/html
 USER 101
 EXPOSE 8080 4430
-CMD ["/docker-entrypoint.sh"]
-
+ENTRYPOINT ["/docker-entrypoint.sh"]

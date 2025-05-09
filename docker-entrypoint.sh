@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -eu
+
+SSL_TERMINATION=${SSL_TERMINATION:="false"}
+
 # Load env variables
 envsubst < /usr/share/nginx/html/assets/config/env.template.js > /usr/share/nginx/html/assets/config/env.js
 
@@ -25,7 +29,8 @@ if [ "$KEYCLOAK_BEHIND_NGINX" = "true" ]; then
 fi
 
 # Check if SSL certificates exist
-if [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ]; then
+if [ "$SSL_TERMINATION" == "true" ] \
+  || { [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ] } ; then
     echo "SSL certificates found, starting Nginx with HTTPS"
     # inject https-upgrade tag into index.html
     sed -i '/<head>/a<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">' /usr/share/nginx/html/index.html
