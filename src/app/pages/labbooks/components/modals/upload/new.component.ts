@@ -185,6 +185,11 @@ export class UploadLabBookModalComponent implements OnInit {
 
             // handle outer layer json
             if (path[0].endsWith('.json')) {
+
+              if (this.elements.length) {
+                throw new Error(`Multiple elememnt json`);
+              }
+
               zipEntry.async('string').then(data => {
                 const zip_structure: any[] = JSON.parse(data);
 
@@ -270,7 +275,12 @@ export class UploadLabBookModalComponent implements OnInit {
 
   public onZipProceed(): void {
 
-    // this tick of time delay finishes first JSZip.loadAsync
+    if (!this.elements.length) {
+      this.toastrService.error('Failed to upload Labbook');
+      this.loading = false;
+      this.cdr.markForCheck();
+      return;
+    }
 
     this.picture_map.forEach((pic, key) => {
       this.clone_picture({
@@ -298,7 +308,7 @@ export class UploadLabBookModalComponent implements OnInit {
 
 
     // upload note, file, picture, then create LabBookElement
-    Promise.all(this.first_run_promises).then((values) => {
+    Promise.all(this.first_run_promises).then(() => {
 
       this.elements.forEach(elem => {
 
@@ -307,7 +317,9 @@ export class UploadLabBookModalComponent implements OnInit {
       });
 
       // upload LabBookElement, then create comment
-      Promise.all(this.second_run_promises).then(() => {
+      return Promise.all(this.second_run_promises);
+    })
+    .then(() => {
 
         this.elements.forEach(elem => {
 
@@ -323,11 +335,16 @@ export class UploadLabBookModalComponent implements OnInit {
           }
         })
 
-        Promise.all(this.third_run_promises).then(() => {
+        return Promise.all(this.third_run_promises);
+    })
+    .then(() => {
           this.toastrService.success('Labbook uploaded');
           this.modalRef.close();
-        });
-      })
+    })
+    .catch((error) => {
+      this.toastrService.error('Failed to upload Labbook');
+      this.loading = false;
+      this.cdr.markForCheck();
     });
   }
 
