@@ -51,7 +51,6 @@ import {
 import {LabBooksPageRoutingModule} from './labbooks-page-routing.module';
 import { QRCodeModule } from 'angularx-qrcode';
 import {NavbarModule} from "@app/modules/navbar/navbar.module";
-import { ExportModule } from '@app/modules/export/export.module';
 
 
 @NgModule({
@@ -96,8 +95,7 @@ import { ExportModule } from '@app/modules/export/export.module';
     CommentModule,
     TooltipModule.forRoot(),
     QRCodeModule,
-    NavbarModule,
-    ExportModule,
+    NavbarModule
   ],
 })
 export class LabBooksPageModule {
