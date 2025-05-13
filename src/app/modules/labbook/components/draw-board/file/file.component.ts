@@ -318,12 +318,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
             //   .subscribe(success => {
             //     this.toastrService.success(success);
             //   });
-            this.preloaded_content = file.description
-            const preloadedElement = document.getElementById(this.preloaded_id);
-            if (preloadedElement) {
-              this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
-            }
-
           } else {
             this.toastrService.error('Description size exceeded.');
             setTimeout(() => location.reload(), 2000);
@@ -422,13 +416,13 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     }
   }
 
-  public toggle_editor(): void {
-    const title = document.getElementById(this.title_id);
-    if (title && !this.editor_loaded) {
-        this.renderer.setStyle(title, 'border', '');
+  public load_editor(): void {
+    const title = document.getElementById(this.title_id)
+    if (title) {
+      this.renderer.setStyle(title, 'border', '');
     }
-    this.editor_loaded = !this.editor_loaded; // Toggle state
-    this.cdr.detectChanges();
+    this.editor_loaded = true;
+    this.cdr.detectChanges()
   }
 
 }

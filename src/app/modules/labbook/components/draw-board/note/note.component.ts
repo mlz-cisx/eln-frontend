@@ -327,11 +327,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
               .pipe(untilDestroyed(this))
               .subscribe(success => {
                 // this.toastrService.success(success);
-                this.preloaded_content = note.content;
-                const preloadedElement = document.getElementById(this.preloaded_id);
-                if (preloadedElement) {
-                  this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
-                }
               });
           } else {
             this.toastrService.error('Note size exceeded.');
@@ -574,14 +569,14 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     }
   }
 
-  public toggle_editor(): void {
+  public load_editor(): void {
     if (this.privileges?.edit) {
       const title = document.getElementById(this.title_id);
-      if (title && !this.editor_loaded) {
+      if (title) {
         this.renderer.setStyle(title, 'border', '');
       }
-      this.editor_loaded = !this.editor_loaded; // Toggle state
-      this.cdr.detectChanges();
+      this.editor_loaded = true;
+      this.cdr.detectChanges()
     }
   }
 
