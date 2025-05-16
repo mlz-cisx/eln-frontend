@@ -54,9 +54,9 @@
                 </ng-container>
               </button>
               <button type="button" class="btn ewb-button-big"
-                      (click)="load_editor()"
+                      (click)="toggle_editor()"
                       *ngIf="editable">
-                Load Editor
+                {{ !editor_loaded ? 'Open Editor' : 'Close Editor' }}
               </button>
               <button type="button"
                       class="btn ewb-button-big square-md ewb-button-none cursor-move drag-handle mr-2"
@@ -125,8 +125,8 @@
             <!--            ></eworkbench-wysiwyg-editor>-->
           </eworkbench-form-input>
         </ng-container>
-        <ng-container *ngIf="editor_loaded===false">
-          <div [id]="preloaded_id">
+        <ng-container>
+          <div [id]="preloaded_id" [hidden]=editor_loaded>
           </div>
         </ng-container>
       </div>
