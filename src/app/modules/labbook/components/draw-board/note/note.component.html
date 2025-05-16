@@ -65,7 +65,8 @@
               </button>
               <button type="button" class="btn ewb-button-big"
                       (click)="toggle_editor()"
-                      *ngIf="editable">
+                      *ngIf="editable"
+                      [disabled]="privileges ? !privileges!.edit : true">
                 {{ !editor_loaded ? 'Open Editor' : 'Close Editor' }}
               </button>
               <button type="button"

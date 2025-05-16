@@ -293,7 +293,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
           this.form.disable({emitEvent: false});
 
         }
-        // this.cdr.markForCheck();
+        this.cdr.markForCheck();
         // restore old note content
         // this.toggle_toolbar();
         // this.toggle_toolbar();
