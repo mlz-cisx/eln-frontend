@@ -105,6 +105,7 @@ import {ColorPickerService} from "ngx-color-picker"
     provideDialogConfig({
       draggable: true,
       resizable: true,
+      enableClose: false
     }),
   ],
   bootstrap: [AppComponent]
