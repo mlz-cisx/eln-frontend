@@ -109,6 +109,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public title_id = '';
 
+  public span_id = '';
+
   public height: any;
 
 
@@ -196,6 +198,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
           return
         }
         if (!this.submitted) {
+          this.blink()
           this.notesService
             .get(this.initialState!.pk)
             .pipe(untilDestroyed(this))
@@ -273,6 +276,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     this.enlarge_rows_id = `${this.initialState!.pk}_rows_id`;
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
     this.title_id = `${this.initialState!.pk}_title_id`;
+    this.span_id = `${this.initialState!.pk}_span_id`;
 
 
     this.notesService
@@ -548,6 +552,27 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   }
 
+  public blink() {
+    const obj = document.getElementById(this.span_id) as HTMLElement
+    obj.style.visibility = 'visible'
+    let counter = 0
+    let timerId = setInterval(function () {
+      if (counter % 2 == 0) {
+        obj.style.visibility = 'hidden'
+        counter++
+      } else {
+        obj.style.visibility = 'visible'
+        counter++
+      }
+    }, 500)
+
+    setTimeout(() => {
+      {
+        obj.style.visibility = 'hidden'
+        clearInterval(timerId);
+      }
+    }, 5000);
+  }
 
   public scroll_to_position(pos: number) {
     window.scrollTo({top: pos, behavior: 'smooth'});
