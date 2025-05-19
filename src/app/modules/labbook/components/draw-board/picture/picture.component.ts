@@ -418,11 +418,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   public create_new_note_aside(): void {
     const element: LabBookElementAddEvent = {
-      labbook_id: this.element.labbook_id,
-      position_x: this.element.width,
-      position_y: this.element.position_y,
-      width: 20 - this.element.width,
-      height: this.element.height,
+      pk: this.element.pk,
     };
 
     this.noteToCreate.emit(element);

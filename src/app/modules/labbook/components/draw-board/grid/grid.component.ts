@@ -729,22 +729,37 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  private searchItembyID(id: string): GridsterItem | null {
+    for (const item of this.drawBoardElements) {
+      if (item['element']['pk'] == id) {
+        return item
+      }
+    }
+    return null;
+  }
+
+  private calculateItemAside(item: GridsterItem): GridsterItem {
+    return {
+        x: item.cols,
+        y: item.y,
+        rows: item.rows,
+        cols: 20 - item.cols,
+    };
+  }
+
   public handleNoteAddingWithCheck(event: LabBookElementAddEvent): void {
     if (this.loading) {
       return;
     }
 
-    const newGridItem: GridsterItem = {
-      x: event.position_x ? event.position_x : 0,
-      y: event.position_y ? event.position_y : 0,
-      rows: event.height  ? event.height : 7,
-      cols: event.width   ? event.width : 13,
-    };
+    const item = this.searchItembyID(event.pk);
 
+    if (!item) {
+      return;
+    }
+
+    const newGridItem = this.calculateItemAside(item);
     const conflict: boolean = !this.checkPostionPossible(newGridItem);
-
-    console.log(newGridItem);
-    console.log(conflict);
 
     if (!conflict) {
 
@@ -770,7 +785,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             width: newGridItem.cols,
             height: newGridItem.rows,
           };
-          this.labBooksService.addElement(event.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
+          this.labBooksService.addElement(this.id, element).pipe(untilDestroyed(this)).subscribe(
             () => {
               localStorage.setItem('pageVerticalposition', String(bodyRect))
               localStorage.setItem('note_inserted', String(1))

@@ -37,11 +37,7 @@ export interface LabBookElementPayload {
 }
 
 export interface LabBookElementAddEvent {
-  labbook_id: string;
-  position_x: number;
-  position_y: number;
-  width: number;
-  height: number;
+  pk: string;
 }
 
 export interface LabBookElementClonePayload {
