@@ -196,6 +196,11 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       // console.log('file pipe ', data)
       if (data.model_pk === this.initialState!.pk) {
+        if (data.model_name === 'comments') {
+          this.element.num_related_comments = data['comments_count']
+          this.cdr.markForCheck();
+          return
+        }
         if (!this.submitted) {
           this.filesService
             .get(this.initialState!.pk)

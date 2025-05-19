@@ -127,12 +127,6 @@ export class CreateCommentComponent implements OnInit {
           this.form.markAsPristine();
           this.loading = false;
           this.refresh.next(true);
-
-          // for multiple creations
-          if (!localStorage.getItem('comment_change')) {
-            localStorage.setItem('comment_change', String(window.scrollY))
-          }
-
           this.translocoService
             .selectTranslate('comments.newCommentModal.toastr.success')
             .pipe(untilDestroyed(this))

@@ -189,8 +189,12 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     // }]);
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      // console.log('note pipe ', data)
       if (data.model_pk === this.initialState!.pk) {
+        if (data.model_name === 'comments') {
+          this.element.num_related_comments = data['comments_count']
+          this.cdr.markForCheck();
+          return
+        }
         if (!this.submitted) {
           this.notesService
             .get(this.initialState!.pk)
@@ -360,7 +364,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       data: {
         service: this.notesService,
         element: this.initialState,
-        create: true
+        create: true,
+        labbook_pk: this.element.labbook_id
       },
     });
   }

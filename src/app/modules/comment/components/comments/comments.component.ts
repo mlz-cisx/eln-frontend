@@ -80,7 +80,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    location.reload()
+
   }
 
 

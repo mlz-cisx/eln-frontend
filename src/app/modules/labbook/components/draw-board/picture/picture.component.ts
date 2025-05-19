@@ -180,6 +180,11 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
+        if (data.model_name === 'comments') {
+          this.element.num_related_comments = data['comments_count']
+          this.cdr.markForCheck();
+          return
+        }
         this.picturesService
           .get(this.initialState!.pk)
           .pipe(untilDestroyed(this))
