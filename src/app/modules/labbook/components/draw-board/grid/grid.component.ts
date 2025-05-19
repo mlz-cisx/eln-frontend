@@ -21,12 +21,16 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import {
   // LabBookSectionsService,
   LabbooksService,
-  WebSocketService
+  WebSocketService,
+  NotesService,
 } from '@app/services';
+import {TranslocoService} from '@ngneat/transloco';
+import {ToastrService} from 'ngx-toastr';
 import {environment} from '@environments/environment';
 import type {
   LabBookElement,
   LabBookElementEvent,
+  LabBookElementAddEvent,
   LabBookElementPayload,
   ModalCallback
 } from '@joeseln/types';
@@ -118,6 +122,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public constructor(
     public readonly labBooksService: LabbooksService,
+    public readonly notesService: NotesService,
+    private readonly toastrService: ToastrService,
+    private readonly translocoService: TranslocoService,
     // public readonly labBookSectionsService: LabBookSectionsService,
     // private readonly modalService: DialogService,
     private readonly cdr: ChangeDetectorRef,
@@ -702,5 +709,78 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   trackByElementId(index: number, item: any): string {
     return item['element']['child_object_id'];
+  }
+
+  private checkItemsOverlap(item1: GridsterItem, item2: GridsterItem): boolean {
+    return (
+      item1.x < item2.x + item2.cols &&
+      item1.x + item1.cols > item2.x &&
+      item1.y < item2.y + item2.rows &&
+      item1.y + item1.rows > item2.y
+    );
+  }
+
+  private checkPostionPossible(item: GridsterItem): boolean {
+    for (const existingItem of this.drawBoardElements) {
+      if (this.checkItemsOverlap(item, existingItem)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public handleNoteAddingWithCheck(event: LabBookElementAddEvent): void {
+    if (this.loading) {
+      return;
+    }
+
+    const newGridItem: GridsterItem = {
+      x: event.position_x ? event.position_x : 0,
+      y: event.position_y ? event.position_y : 0,
+      rows: event.height  ? event.height : 7,
+      cols: event.width   ? event.width : 13,
+    };
+
+    const conflict: boolean = !this.checkPostionPossible(newGridItem);
+
+    console.log(newGridItem);
+    console.log(conflict);
+
+    if (!conflict) {
+
+      var bodyRect = 0
+      if (document.body.getBoundingClientRect()) {
+        bodyRect = -document.body.getBoundingClientRect().y
+      } else {
+        bodyRect = newGridItem.y * 36
+      }
+
+      const new_note = {
+        subject: this.translocoService.translate('labBook.newNoteElementModal.subject.placeholder'),
+        content: '<p></p>',
+      };
+      this.notesService.add(new_note).pipe(untilDestroyed(this)).subscribe(
+        note => {
+          const element: LabBookElementPayload = {
+            child_object_content_type: 30,
+            child_object_content_type_model: 'shared_elements.note',
+            child_object_id: note.pk,
+            position_x: newGridItem.x,
+            position_y: newGridItem.y,
+            width: newGridItem.cols,
+            height: newGridItem.rows,
+          };
+          this.labBooksService.addElement(event.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
+            () => {
+              localStorage.setItem('pageVerticalposition', String(bodyRect))
+              localStorage.setItem('note_inserted', String(1))
+              location.reload()
+            }
+          );
+        }
+      )
+    } else {
+      this.toastrService.warning("No enough place to add note")
+    }
   }
 }

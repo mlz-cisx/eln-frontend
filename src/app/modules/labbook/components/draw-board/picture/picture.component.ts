@@ -37,7 +37,8 @@ import type {
   PicturePayload,
   Privileges,
   User,
-  LabBookElementPayload
+  LabBookElementPayload,
+  LabBookElementAddEvent,
 } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -88,6 +89,9 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   @Output()
   public moved = new EventEmitter<ElementRemoval>();
+
+  @Output()
+  public noteToCreate = new EventEmitter<LabBookElementAddEvent>();
 
   public currentUser: User | null = null;
 
@@ -413,37 +417,15 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
   public create_new_note_aside(): void {
-    var bodyRect = 0
-    if (document.body.getBoundingClientRect()) {
-      bodyRect = -document.body.getBoundingClientRect().y
-    } else {
-      bodyRect = this.element.position_y * 36
-    }
-    const new_note = {
-      subject: this.translocoService.translate('labBook.newNoteElementModal.subject.placeholder'),
-      content: '<p></p>',
+    const element: LabBookElementAddEvent = {
+      labbook_id: this.element.labbook_id,
+      position_x: this.element.width,
+      position_y: this.element.position_y,
+      width: 20 - this.element.width,
+      height: this.element.height,
     };
-    this.notesService.add(new_note).pipe(untilDestroyed(this)).subscribe(
-      note => {
 
-        const element: LabBookElementPayload = {
-          child_object_content_type: 30,
-          child_object_content_type_model: 'shared_elements.note',
-          child_object_id: note.pk,
-          position_x: this.element.width,
-          position_y: this.element.position_y,
-          width: 20 - this.element.width,
-          height: this.element.height,
-        };
-        this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
-          () => {
-            localStorage.setItem('pageVerticalposition', String(bodyRect))
-            localStorage.setItem('note_inserted', String(1))
-            location.reload()
-          }
-        );
-      }
-    )
+    this.noteToCreate.emit(element);
   }
 
 

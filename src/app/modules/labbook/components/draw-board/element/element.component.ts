@@ -4,7 +4,7 @@
  */
 
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChildren } from '@angular/core';
-import type { LabBookElement } from '@joeseln/types';
+import type { LabBookElement, LabBookElementAddEvent } from '@joeseln/types';
 
 interface ElementRemoval {
   id: string;
@@ -48,6 +48,9 @@ export class LabBookDrawBoardElementComponent {
   @Output()
   public expand = new EventEmitter<string>();
 
+  @Output()
+  public noteToCreate = new EventEmitter<LabBookElementAddEvent>();
+
   public onRemove(event: ElementRemoval): void {
     this.removed.emit(event);
   }
@@ -68,5 +71,9 @@ export class LabBookDrawBoardElementComponent {
     }
 
     return false;
+  }
+
+  public emitNoteToCreate(event: LabBookElementAddEvent): void {
+    this.noteToCreate.emit(event);
   }
 }

@@ -13,6 +13,7 @@
     [refreshElementRelations]="refreshElementRelations"
     (removed)="onRemove($event)"
     (moved)="onMove($event)"
+    (noteToCreate)="emitNoteToCreate($event)"
     *ngIf="element.child_object_content_type_model === 'shared_elements.note'"
   ></eworkbench-labbook-draw-board-note>
   }
@@ -48,6 +49,7 @@
     (removed)="onRemove($event)"
     (moved)="onMove($event)"
     *ngIf="element.child_object_content_type_model === 'pictures.picture'"
+    (noteToCreate)="emitNoteToCreate($event)"
   ></eworkbench-labbook-draw-board-picture>
   }
   @placeholder {
