@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -e
 
 SSL_TERMINATION=${SSL_TERMINATION:="false"}
 
