@@ -29,7 +29,7 @@ if [ "$KEYCLOAK_BEHIND_NGINX" = "true" ]; then
 fi
 
 # Check if SSL certificates exist
-if [ "$SSL_TERMINATION" == "true" ] \
+if [ "$SSL_TERMINATION" = "true" ] \
   || { [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ] ;} ; then
     echo "SSL certificates found, starting Nginx with HTTPS"
     # inject https-upgrade tag into index.html
