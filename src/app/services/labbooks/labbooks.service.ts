@@ -289,6 +289,10 @@ export class LabbooksService {
     return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
   }
 
+  public check_for_note_aside(elem_id: string, params = new HttpParams()): Observable<any> {
+    return this.httpClient.get<any>(`${this.apiUrl}note_aside/${elem_id}/`, {params});
+  }
+
 
   public versions(id: string, params = new HttpParams()): Observable<Version[]> {
     return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));

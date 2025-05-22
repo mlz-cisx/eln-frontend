@@ -457,11 +457,17 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public create_new_note_aside(): void {
 
-    const element: LabBookElementAddEvent = {
-      pk: this.element.pk,
-    };
+    this.labBooksService.check_for_note_aside(this.element.pk).pipe(untilDestroyed(this)).subscribe((result) => {
+      if (result) {
+        const element: LabBookElementAddEvent = {
+          pk: this.element.pk,
+        };
+        this.noteToCreate.emit(element);
+      } else {
+        this.toastrService.warning("No enough place to add note")
+      }
+    })
 
-    this.noteToCreate.emit(element);
   }
 
   public enlarge_note(): void {
