@@ -29,12 +29,9 @@ if [ "$KEYCLOAK_BEHIND_NGINX" = "true" ]; then
 fi
 
 # Check if SSL certificates exist
-if [ "$SSL_TERMINATION" = "true" ] \
-  || { [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ] ;} ; then
+if [ -f /etc/nginx/certs/server.crt ] && [ -f /etc/nginx/certs/server.key ] ; then
     echo "SSL certificates found, starting Nginx with HTTPS"
-    # inject https-upgrade tag into index.html
-    sed -i '/<head>/a<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">' /usr/share/nginx/html/index.html
-    nginx -g 'daemon off;'
+    SSL_TERMINATION="true"
 else
     echo "SSL certificates not found, starting Nginx with HTTP only"
     sed -i '/listen 4430 ssl default_server;/d' /etc/nginx/conf.d/default.conf
@@ -43,5 +40,10 @@ else
     sed -i '/ssl_protocols/d' /etc/nginx/conf.d/default.conf
     sed -i '/ssl_ciphers/d' /etc/nginx/conf.d/default.conf
     sed -i '/ssl_prefer_server_ciphers/d' /etc/nginx/conf.d/default.conf
-    nginx -g 'daemon off;'
 fi
+
+if [ "$SSL_TERMINATION" = "true" ] ; then
+    # inject https-upgrade tag into index.html
+    sed -i '/<head>/a<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">' /usr/share/nginx/html/index.html
+fi
+nginx -g 'daemon off;'
