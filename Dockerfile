@@ -18,7 +18,7 @@ USER root
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=build --chown=101:0 /app/dist/joeselnfrontend13/browser /usr/share/nginx/html
-RUN chmod 775 /usr/share/nginx/html/assets/config && chmod 664 /usr/share/nginx/html/index.html /etc/nginx/conf.d/default.conf
+RUN chmod 664 /usr/share/nginx/html/index.html /etc/nginx/conf.d/default.conf /usr/share/nginx/html/assets/config/env.js
 USER 101
 EXPOSE 8080 4430
 ENTRYPOINT ["/docker-entrypoint.sh"]
