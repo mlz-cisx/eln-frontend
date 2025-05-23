@@ -456,13 +456,18 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public create_new_note_aside(): void {
+    let bodyRect = 0
+    if (document.body.getBoundingClientRect()) {
+      bodyRect = -document.body.getBoundingClientRect().y
+    } else {
+      bodyRect = (this.element.position_y + this.element.height) * 36
+    }
 
-    this.labBooksService.check_for_note_aside(this.element.pk).pipe(untilDestroyed(this)).subscribe((result) => {
+    this.labBooksService.create_note_aside(this.element.pk).pipe(untilDestroyed(this)).subscribe((result) => {
       if (result) {
-        const element: LabBookElementAddEvent = {
-          pk: this.element.pk,
-        };
-        this.noteToCreate.emit(element);
+        localStorage.setItem('pageVerticalposition', String(bodyRect))
+        localStorage.setItem('note_inserted', String(1))
+        location.reload()
       } else {
         this.toastrService.warning("No enough place to add note")
       }

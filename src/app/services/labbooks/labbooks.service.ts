@@ -289,7 +289,7 @@ export class LabbooksService {
     return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
   }
 
-  public check_for_note_aside(elem_id: string, params = new HttpParams()): Observable<any> {
+  public create_note_aside(elem_id: string, params = new HttpParams()): Observable<Boolean> {
     return this.httpClient.get<any>(`${this.apiUrl}note_aside/${elem_id}/`, {params});
   }
 
