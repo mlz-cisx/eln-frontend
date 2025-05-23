@@ -378,39 +378,21 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
 
   public create_new_note_below(): void {
-    var bodyRect = 0
-    if (document.body.getBoundingClientRect()) {
-      bodyRect = -document.body.getBoundingClientRect().y
-    } else {
-      bodyRect = (this.element.position_y + this.element.height) * 36
-    }
-
-    const new_note = {
-      subject: this.translocoService.translate('labBook.newNoteElementModal.subject.placeholder'),
-      content: '<p></p>',
-    };
-    this.notesService.add(new_note).pipe(untilDestroyed(this)).subscribe(
-      note => {
-
-        const element: LabBookElementPayload = {
-          child_object_content_type: 30,
-          child_object_content_type_model: 'shared_elements.note',
-          child_object_id: note.pk,
-          position_x: 0,
-          // +1 makes it working after restructure
-          position_y: this.element.position_y + 1,
-          width: 13,
-          height: 7,
-        };
-        this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
-          () => {
-            localStorage.setItem('pageVerticalposition', String(bodyRect))
-            localStorage.setItem('note_inserted', String(1))
-            location.reload()
-          }
-        );
+    this.labBooksService.create_note_below(this.element.pk).pipe(untilDestroyed(this)).subscribe((result) => {
+      if (result) {
+      } else {
+        this.toastrService.warning("Note below could not be created")
       }
-    )
+    })
+  }
+
+  public create_new_note_aside(): void {
+    this.labBooksService.create_note_aside(this.element.pk).pipe(untilDestroyed(this)).subscribe((result) => {
+      if (result) {
+      } else {
+        this.toastrService.warning("No enough place to add note")
+      }
+    })
   }
 
   public blink() {

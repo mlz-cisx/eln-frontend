@@ -32,13 +32,19 @@
               <button type="button"
                       class="btn ewb-button-big ewb-button-background"
                       (click)="create_new_note_below()"
-              *ngIf="editable">
+                      *ngIf="editable">
                 NoteBelow
               </button>
               <button type="button"
                       class="btn ewb-button-big ewb-button-background"
+                      (click)="create_new_note_aside()"
+                      *ngIf="editable">
+                NoteAside
+              </button>
+              <button type="button"
+                      class="btn ewb-button-big ewb-button-background"
                       (click)="onOpenCommentsModal()"
-              *ngIf="editable">
+                      *ngIf="editable">
                 <joeseln-icon className="wb-comment"
                               class="mr-1"></joeseln-icon>
                 <ng-container *ngIf="!element.num_related_comments">
