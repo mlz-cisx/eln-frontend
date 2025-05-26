@@ -56,6 +56,10 @@ export class PictureEditorToolbarComponent implements OnInit {
   @Output()
   public saveSketch = new EventEmitter<SaveSketchEvent>();
 
+  public strokeWidth: number = 2;
+
+  public strokeWidthOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30];
+
   public loading = true;
 
   public tools = PictureEditorTool;
@@ -357,5 +361,10 @@ export class PictureEditorToolbarComponent implements OnInit {
     this.selectedShapeClone = null;
     this.canvas.setShapesInProgress([]);
     this.canvas.repaintLayer('main');
+  }
+
+  onStrokeWidthChange(width: string): void {
+    this.canvas.trigger('setStrokeWidth', parseInt(width));
+    this.canvas.opts.defaultStrokeWidth = parseInt(width);
   }
 }

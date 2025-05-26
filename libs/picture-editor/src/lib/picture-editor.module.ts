@@ -14,6 +14,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { PictureEditorDetailsDropdownComponent } from './components/picture-editor-details-dropdown/picture-editor-details-dropdown.component';
 import { PictureEditorToolbarComponent } from './components/picture-editor-toolbar/picture-editor-toolbar.component';
 import { PictureEditorComponent } from './components/picture-editor/picture-editor.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [PictureEditorComponent, PictureEditorToolbarComponent, PictureEditorDetailsDropdownComponent],
@@ -25,6 +26,7 @@ import { PictureEditorComponent } from './components/picture-editor/picture-edit
     BsDropdownModule.forRoot(),
     CollapseModule,
     ColorPickerModule,
+    FormsModule,
   ],
   exports: [PictureEditorComponent],
 })

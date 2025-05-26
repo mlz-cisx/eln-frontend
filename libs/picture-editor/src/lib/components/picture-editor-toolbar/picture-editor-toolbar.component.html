@@ -137,6 +137,14 @@
     >
       <joeseln-icon class="icon-size-md" className="wb-color-bucket"></joeseln-icon>
     </button>
+    <select
+      class="ewb-select"
+      [disabled]="loading || !editable"
+      [(ngModel)]="strokeWidth"
+      (ngModelChange)="onStrokeWidthChange($event)"
+    >
+      <option *ngFor="let width of strokeWidthOptions" [value]="width">{{ width }}</option>
+    </select>
   </div>
 
   <div>
