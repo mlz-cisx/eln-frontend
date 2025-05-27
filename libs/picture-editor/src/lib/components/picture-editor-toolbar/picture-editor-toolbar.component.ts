@@ -60,6 +60,8 @@ export class PictureEditorToolbarComponent implements OnInit {
 
   public strokeWidthOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30];
 
+  public lastUsedStroke: number = 0;
+
   public loading = true;
 
   public tools = PictureEditorTool;
@@ -109,6 +111,15 @@ export class PictureEditorToolbarComponent implements OnInit {
   }
 
   public selectTool(tool: PictureEditorTool): void {
+
+    // Give it a larger stroke when switching to eraser
+    // and switch back when using other tools
+    if (this.lastUsedStroke) {
+      this.strokeWidth = this.lastUsedStroke;
+      this.onStrokeWidthChange(this.lastUsedStroke.toString());
+      this.lastUsedStroke = 0;
+    }
+
     switch (tool) {
       case PictureEditorTool.Select:
         this.resetSelection();
@@ -129,6 +140,9 @@ export class PictureEditorToolbarComponent implements OnInit {
         break;
 
       case PictureEditorTool.Eraser:
+        this.lastUsedStroke = this.strokeWidth;
+        this.strokeWidth = 20;
+        this.onStrokeWidthChange(this.strokeWidth.toString());
         this.resetSelection();
         this.canvas.setTool(new window.CH.Eraser(this.canvas));
         this.selectedTool = PictureEditorTool.Eraser;
