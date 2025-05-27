@@ -32,6 +32,7 @@ export interface PictureEditorPayload {
   width: number;
   height: number;
   rendered_image: Blob;
+  scale: number
 }
 
 export interface PictureClonePayload {
@@ -55,6 +56,7 @@ export interface Picture {
   download_shapes: string;
   height: number;
   width: number;
+  scale: number;
   last_modified_at: string;
   last_modified_by: User;
   metadata: Metadata[];

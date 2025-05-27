@@ -58,6 +58,8 @@ export class PictureEditorToolbarComponent implements OnInit {
 
   public strokeWidth: number = 2;
 
+  public scale: number = 1
+
   public strokeWidthOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30];
 
   public loading = true;
@@ -300,6 +302,7 @@ export class PictureEditorToolbarComponent implements OnInit {
           width: this.picture.width,
           height: this.picture.height,
           rendered_image: renderedImage,
+          scale: this.scale
         })
         .pipe(untilDestroyed(this))
         .subscribe(() => {

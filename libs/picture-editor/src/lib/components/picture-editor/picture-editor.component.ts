@@ -85,7 +85,11 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public ngAfterViewInit(): void {
-    scriptLoader(this.document, this.pictureEditorScriptSrc ?? '/canvas/canvas-helper.min.js', () => this.initialize());
+    this.service.get(this.picture.pk).pipe(untilDestroyed(this))
+      .subscribe((pic: any) => {
+        this.picture.scale = pic.data.scale
+        scriptLoader(this.document, this.pictureEditorScriptSrc ?? '/canvas/canvas-helper.min.js', () => this.initialize());
+      });
   }
 
   public ngOnDestroy(): void {
@@ -93,6 +97,7 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public initialize(): void {
+    console.log(this.picture.scale)
     let stroke_width = 2;
     // @ts-ignore
     // if (document.getElementById('line_width').value) {
