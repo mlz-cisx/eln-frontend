@@ -58,8 +58,6 @@ export class PictureEditorToolbarComponent implements OnInit {
 
   public strokeWidth: number = 2;
 
-  public scale: number = 1
-
   public strokeWidthOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30];
 
   public loading = true;
@@ -277,40 +275,30 @@ export class PictureEditorToolbarComponent implements OnInit {
       return
     }
 
+    renderedImage.name = `${this.picture.pk as string}_rendered.png`;
+    shapes.name = `${this.picture.pk as string}_shapes.json`;
 
-    if (this.sketch) {
-      renderedImage.name = 'rendered.png';
-      shapes.name = 'shapes.json';
-
-      this.saveSketch.emit({file: renderedImage, shapes});
-      this.loading = false;
-      this.cdr.markForCheck();
-    } else {
-      renderedImage.name = `${this.picture.pk as string}_rendered.png`;
-      shapes.name = `${this.picture.pk as string}_shapes.json`;
-
-      let backgroundImage: any;
-      if (this.backgroundImage?.src) {
-        backgroundImage = await fetch(this.backgroundImage.src).then(res => res.blob());
-        backgroundImage.name = `${this.picture.pk as string}_background.png`;
-      }
-
-      this.service
-        .uploadImage(this.picture.pk, {
-          background_image: backgroundImage,
-          shapes_image: shapes,
-          width: this.picture.width,
-          height: this.picture.height,
-          rendered_image: renderedImage,
-          scale: this.scale
-        })
-        .pipe(untilDestroyed(this))
-        .subscribe(() => {
-          this.canvas.undoStack = [];
-          this.loading = false;
-          this.cdr.markForCheck();
-        });
+    let backgroundImage: any;
+    if (this.backgroundImage?.src) {
+      backgroundImage = await fetch(this.backgroundImage.src).then(res => res.blob());
+      backgroundImage.name = `${this.picture.pk as string}_background.png`;
     }
+
+    this.service
+      .uploadImage(this.picture.pk, {
+        background_image: backgroundImage,
+        shapes_image: shapes,
+        width: this.picture.width,
+        height: this.picture.height,
+        rendered_image: renderedImage,
+        scale: this.getCurrentSclae(),
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.canvas.undoStack = [];
+        this.loading = false;
+        this.cdr.markForCheck();
+      });
   }
 
   public deleteShape(shape = this.selectedShape): void {
@@ -369,5 +357,38 @@ export class PictureEditorToolbarComponent implements OnInit {
   onStrokeWidthChange(width: string): void {
     this.canvas.trigger('setStrokeWidth', parseInt(width));
     this.canvas.opts.defaultStrokeWidth = parseInt(width);
+  }
+
+  calculateBackgroundPosition(sclae: number): [number, number] {
+
+    const actualWidth = (this.backgroundImage?.width ?? 600) * sclae;
+    const actualHeight = (this.backgroundImage?.height ?? 600) * sclae;
+
+    const x = ((this.backgroundImage?.width ?? 600) - actualWidth) / 2;
+    const y = ((this.backgroundImage?.height ?? 600) - actualHeight) / 2;
+
+    return [x,y];
+  }
+
+  getCurrentSclae(): number {
+    return this.sketch ? 1 : this.canvas.backgroundShapes[0].scale
+  }
+
+  onScaleChange(sclae: number): void {
+    const [x,y] = this.calculateBackgroundPosition(sclae);
+    this.canvas.backgroundShapes = [window.CH.shapes.createShape('Image', {x: x, y: y, image: this.backgroundImage, scale: sclae})];
+    this.canvas.repaintLayer('background');
+  }
+
+  onSclaeUp(): void {
+    const currentScale = this.getCurrentSclae();
+    const newSclae = (currentScale * 1.25 >= 1) ? 1 : currentScale * 1.25;
+    this.onScaleChange(newSclae);
+  }
+
+  onSclaeDown(): void {
+    const currentScale = this.getCurrentSclae();
+    const newSclae = currentScale * 0.8;
+    this.onScaleChange(newSclae);
   }
 }

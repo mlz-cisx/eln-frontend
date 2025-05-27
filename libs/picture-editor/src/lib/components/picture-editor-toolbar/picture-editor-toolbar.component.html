@@ -145,6 +145,29 @@
     >
       <option *ngFor="let width of strokeWidthOptions" [value]="width">{{ width }}</option>
     </select>
+    <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="onSclaeUp()"
+      *ngIf="!sketch"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-plus"></joeseln-icon>
+    </button>
+        <button
+      type="button"
+      class="btn ewb-button-big ewb-canvas-toolbar-button-tool square-md"
+      containerClass="tooltip-sm"
+      placement="bottom"
+      [disabled]="loading || !editable"
+      (click)="onSclaeDown()"
+      *ngIf="!sketch"
+    >
+      <joeseln-icon class="icon-size-md" className="wb-minus"></joeseln-icon>
+    </button>
+
   </div>
 
   <div>

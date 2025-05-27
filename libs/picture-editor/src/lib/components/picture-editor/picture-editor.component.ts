@@ -97,20 +97,27 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public initialize(): void {
-    console.log(this.picture.scale)
-    let stroke_width = 2;
-    // @ts-ignore
-    // if (document.getElementById('line_width').value) {
-    //   // @ts-ignore
-    //   stroke_width = Number(document.getElementById('line_width').value)
-    //   if (stroke_width > 10 || stroke_width < 1) {
-    //     stroke_width = 2;
-    //   }
-    // }
-    if (!this.sketch && this.picture.download_background_image) {
-      this.backgroundImage.crossOrigin = 'anonymous';
-      this.backgroundImage.src = this.picture.download_background_image;
+
+    this.backgroundImage.crossOrigin = 'anonymous';
+    this.backgroundImage.src = this.picture.download_background_image;
+
+    this.backgroundImage.onload = () => {
+      [this.picture.x,this.picture.y] = this.calculateBackgroundPosition(this.picture.scale);
+      this.initCanvas();
+    };
+
+    // if background image can not be loaded,
+    // this is a sketch
+    this.backgroundImage.onerror = () => {
+      [this.picture.x,this.picture.y] = [0,0];
+      this.sketch = true;
+      this.initCanvas();
     }
+  }
+
+  private initCanvas (): void {
+
+    let stroke_width = 2;
 
     this.ngZone.runOutsideAngular(() => {
       this.canvas = new window.CH.CanvasHelper(this.core.nativeElement, {
@@ -125,7 +132,7 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
         tools: [window.CH.SelectShape],
         backgroundShapes:
           !this.sketch && this.picture.download_background_image
-            ? [window.CH.shapes.createShape('Image', {x: 0, y: 0, image: this.backgroundImage, scale: 1})]
+            ? [window.CH.shapes.createShape('Image', {x: this.picture.x, y: this.picture.y, image: this.backgroundImage, scale: this.picture.scale})]
             : [],
       });
       this.canvas.setColor('primary', '#000000');
@@ -133,7 +140,7 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
       this.canvas.undoStack = [];
     });
 
-    if (!this.sketch && this.picture.download_shapes) {
+    if (this.picture.download_shapes) {
       this.service
         .downloadShapes(this.picture.download_shapes)
         .pipe(untilDestroyed(this))
@@ -171,5 +178,16 @@ export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy 
       this.canvas.setImageSize(this.picture.width, this.picture.height);
       window.dispatchEvent(new Event('resize'));
     }
+  }
+
+  calculateBackgroundPosition(sclae: number): [number, number] {
+
+    const actualWidth = (this.backgroundImage.width ?? 600) * sclae;
+    const actualHeight = (this.backgroundImage.height ?? 600) * sclae;
+
+    const x = ((this.backgroundImage.width ?? 600) - actualWidth) / 2;
+    const y = ((this.backgroundImage.height ?? 600) - actualHeight) / 2;
+
+    return [x,y];
   }
 }
