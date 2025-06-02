@@ -240,13 +240,14 @@ export class LabBookElementDropdownComponent implements OnInit {
             .selectTranslate('labBook.elementDropdown.trashElement.toastr.success')
             .pipe(untilDestroyed(this))
             .subscribe(success => {
-              this.drawboardGridComponent.reload()
+              this.drawboardGridComponent.softReload()
+              this.drawboardGridComponent.updateAllElements()
               //  preloaded content has to be established
               // ok this works
               this.cdr.markForCheck()
               this.cdr.detectChanges()
-              localStorage.setItem('pageVerticalposition', String(bodyRect))
-              localStorage.setItem('elem_deleted', String(1))
+              // localStorage.setItem('pageVerticalposition', String(bodyRect))
+              // localStorage.setItem('elem_deleted', String(1))
               // this.labBooksService.getElements(this.labBookId).pipe(untilDestroyed(this))
               //   .subscribe((elems) => {
               //     this.removed.emit({id: this.elementId, gridReload: false});
