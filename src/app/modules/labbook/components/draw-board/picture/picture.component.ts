@@ -148,6 +148,12 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
           .pipe(untilDestroyed(this))
           .subscribe(privilegesData => {
             this.initialState = {...privilegesData.data};
+            this.form.patchValue(
+              {
+                pic_title: privilegesData.data.title,
+              },
+              {emitEvent: false}
+            );
             this.cdr.markForCheck();
 
           });
