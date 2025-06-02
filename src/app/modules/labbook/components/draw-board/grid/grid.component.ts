@@ -7,7 +7,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter, HostListener,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
@@ -17,26 +17,19 @@ import {
   ViewChildren,
   Renderer2,
 } from '@angular/core';
-import {ModalState} from '@app/enums/modal-state.enum';
 import {
-  // LabBookSectionsService,
   LabbooksService,
   WebSocketService,
   NotesService,
 } from '@app/services';
-import {TranslocoService} from '@ngneat/transloco';
-import {ToastrService} from 'ngx-toastr';
 import {environment} from '@environments/environment';
 import type {
   LabBookElement,
   LabBookElementEvent,
-  LabBookElementAddEvent,
   LabBookElementPayload,
-  ModalCallback
 } from '@joeseln/types';
 import {
   DialogRef,
-  //DialogService
 } from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type {
@@ -45,23 +38,16 @@ import type {
   GridsterItem
 } from 'angular-gridster2';
 import {of} from 'rxjs';
-import {map, switchMap, take} from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import {gridsterConfig} from '../../../config/gridster-config';
 import type {
   LabBookDrawBoardElementComponent
 } from '../element/element.component';
 import {
-  LabBookPendingChangesModalComponent
-} from '../modals/pending-changes/pending-changes.component';
-import {
   highlight_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
 
 
-interface ElementRemoval {
-  id: string;
-  gridReload: boolean;
-}
 
 @UntilDestroy()
 @Component({
@@ -81,30 +67,19 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public id!: string;
 
   @Input()
-  public section?: string;
-
-  @Input()
   public created?: EventEmitter<LabBookElementEvent>;
 
-  @Input()
-  public refresh?: EventEmitter<boolean>;
+  // @Input()
+  // public refresh?: EventEmitter<boolean>;
 
   @Input()
   public editable? = false;
 
-  public closeSection = new EventEmitter<string>();
-
-  public refreshElementRelations = new EventEmitter<{ model_name: string; model_pk: string }>();
-
   public loading = true;
-
-  public updated_self = false;
 
   public drawBoardElements: Array<GridsterItem> = [];
 
   public labbookElements: Array<any> = []
-
-  public expandedSection?: string;
 
   public options: GridsterConfig = {
     ...gridsterConfig,
@@ -123,10 +98,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public constructor(
     public readonly labBooksService: LabbooksService,
     public readonly notesService: NotesService,
-    private readonly toastrService: ToastrService,
-    private readonly translocoService: TranslocoService,
-    // public readonly labBookSectionsService: LabBookSectionsService,
-    // private readonly modalService: DialogService,
     private readonly cdr: ChangeDetectorRef,
     private readonly websocketService: WebSocketService,
     private readonly renderer: Renderer2,
@@ -148,9 +119,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           clearTimeout(this.socketRefreshTimeout);
         }
         this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
-        // this.updated_self = false
-      } else if (data) {
-        // this.refreshElementRelations.next(data);
       }
     });
 
@@ -160,11 +128,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       this.addElement(event);
     });
 
-    this.refresh?.subscribe((reload: boolean) => {
-      if (reload) {
-        this.reload();
-      }
-    });
+    // this.refresh?.subscribe((reload: boolean) => {
+    //   if (reload) {
+    //     this.reload();
+    //   }
+    // });
   }
 
   public ngOnDestroy(): void {
@@ -174,7 +142,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public initDetails(): void {
     this.labBooksService
-      .getElements(this.id, this.section)
+      .getElements(this.id)
       .pipe(untilDestroyed(this))
       .subscribe(
         labBookElements => {
@@ -237,9 +205,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             child_object_content_type: event.childObjectContentType,
             child_object_id: event.childObjectId,
             position_x: 0,
-            position_y: event.position === 'top' ? 0 : this.getMaxYPosition(sectionElements, addToSection),
+            position_y: event.position === 'top' ? 0 : this.getMaxYPosition(sectionElements),
             width: 13,
-            height: event.height ?? this.getNewElementHeight(event.childObjectContentTypeModel),
+            height: event.height ?? 7,
           };
 
           return this.labBooksService.addElement(this.id, element).pipe(untilDestroyed(this));
@@ -378,7 +346,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     }, 1);
   }
 
-  public getMaxYPosition(elements?: LabBookElement<any>[], addToSection = false): number {
+  public getMaxYPosition(elements?: LabBookElement<any>[]): number {
     let elementsToConsider: { y: number; rows: number }[] = [];
 
     if (elements?.length) {
@@ -386,8 +354,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         y: element.position_y,
         rows: element.height
       }));
-    } else if (addToSection) {
-      return 0;
     } else {
       elementsToConsider = this.drawBoardElements.map(element => ({
         y: element.y,
@@ -402,33 +368,13 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     return Math.max(...elementsToConsider.map(element => element.y + element.rows));
   }
 
-  public onRemove(event: ElementRemoval): void {
-    if (event.gridReload) {
-      this.reload();
-    } else {
-      let index = 0;
-      this.drawBoardElements.forEach(drawBoardElement => {
-        if (drawBoardElement['element'].pk === event.id) {
-          this.drawBoardElements.splice(index, 1);
-          this.moveElementsVertically(drawBoardElement.rows, 'up', drawBoardElement.y);
-          return;
-        }
-
-        index++;
-      });
-    }
-  }
 
   public reload(): void {
     this.drawBoardElements = [];
     this.initDetails();
   }
 
-  public reload_given_drawboard(): void {
-    this.softReload()
-  }
-
-
+  
   public softReload(): void {
     if (this.socketLoading) {
       this.queuedSocketRefreshes = true;
@@ -437,7 +383,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.socketLoading = true;
 
     this.labBooksService
-      .getElements(this.id, this.section)
+      .getElements(this.id)
       .pipe(untilDestroyed(this))
       .subscribe(labBookElements => {
         const oldDrawBoardElements = [...this.drawBoardElements];
@@ -494,28 +440,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onExpandSection(id: string): void {
-    if (!this.expandedSection || !this.pendingChanges()) {
-      this.switchSectionStates(id);
-      return;
-    }
-
-    // this.modalRef = this.modalService.open(LabBookPendingChangesModalComponent, {
-    //   closeButton: false,
-    //   data: {id},
-    // });
-
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback?: ModalCallback) => {
-    //   if (callback?.state === ModalState.Changed) {
-    //     this.switchSectionStates(id);
-    //   }
-    // });
-  }
-
-  public switchSectionStates(id: string): void {
-    this.expandedSection = id;
-    this.closeSection.next(id);
-  }
 
   public convertToGridItems(elements: LabBookElement<any>[]): GridsterItem[] {
     return elements.map(element => ({
@@ -582,29 +506,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     return movedElements;
   }
 
-  public getItemZIndex(item: GridsterItem): number {
-    if (item['element'].child_object_content_type_model === 'labbooks.labbooksection') {
-      if (this.expandedSection === item['element'].child_object_id) {
-        return 3;
-      }
-
-      return 2;
-    }
-
-    return 1;
-  }
-
-  public getItemOverflow(item: GridsterItem): string {
-    return item['element'].child_object_content_type_model === 'labbooks.labbooksection' ? 'initial' : 'hidden';
-  }
-
-  public getItemResizeEnabled(contentType: string): boolean {
-    return contentType !== 'labbooks.labbooksection' && Boolean(this.editable);
-  }
-
-  public getNewElementHeight(contentType: string): number {
-    return contentType === 'labbooks.labbooksection' ? 1 : 8;
-  }
 
   public continue_search(): void {
     const pos = Number(localStorage.getItem('pageVerticalposition')) || 0;
@@ -697,105 +598,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   }
 
-  public pendingChanges(): boolean {
-    for (const element of this.elements ?? []) {
-      if (element.pendingChanges()) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   trackByElementId(index: number, item: any): string {
     return item['element']['child_object_id'];
-  }
-
-  private checkItemsOverlap(item1: GridsterItem, item2: GridsterItem): boolean {
-    return (
-      item1.x < item2.x + item2.cols &&
-      item1.x + item1.cols > item2.x &&
-      item1.y < item2.y + item2.rows &&
-      item1.y + item1.rows > item2.y
-    );
-  }
-
-  private checkPostionPossible(item: GridsterItem): boolean {
-    for (const existingItem of this.drawBoardElements) {
-      if (this.checkItemsOverlap(item, existingItem)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private searchItembyID(id: string): GridsterItem | null {
-    for (const item of this.drawBoardElements) {
-      if (item['element']['pk'] == id) {
-        return item
-      }
-    }
-    return null;
-  }
-
-  private calculateItemAside(item: GridsterItem): GridsterItem {
-    return {
-        x: item.cols,
-        y: item.y,
-        rows: item.rows,
-        cols: 20 - item.cols,
-    };
-  }
-
-  public handleNoteAddingWithCheck(event: LabBookElementAddEvent): void {
-    if (this.loading) {
-      return;
-    }
-
-    const item = this.searchItembyID(event.pk);
-
-    if (!item) {
-      return;
-    }
-
-    const newGridItem = this.calculateItemAside(item);
-    const conflict: boolean = !this.checkPostionPossible(newGridItem);
-
-    if (!conflict) {
-
-      var bodyRect = 0
-      if (document.body.getBoundingClientRect()) {
-        bodyRect = -document.body.getBoundingClientRect().y
-      } else {
-        bodyRect = newGridItem.y * 36
-      }
-
-      const new_note = {
-        subject: this.translocoService.translate('labBook.newNoteElementModal.subject.placeholder'),
-        content: '<p></p>',
-      };
-      this.notesService.add(new_note).pipe(untilDestroyed(this)).subscribe(
-        note => {
-          const element: LabBookElementPayload = {
-            child_object_content_type: 30,
-            child_object_content_type_model: 'shared_elements.note',
-            child_object_id: note.pk,
-            position_x: newGridItem.x,
-            position_y: newGridItem.y,
-            width: newGridItem.cols,
-            height: newGridItem.rows,
-          };
-          this.labBooksService.addElement(this.id, element).pipe(untilDestroyed(this)).subscribe(
-            () => {
-              localStorage.setItem('pageVerticalposition', String(bodyRect))
-              localStorage.setItem('note_inserted', String(1))
-              location.reload()
-            }
-          );
-        }
-      )
-    } else {
-      this.toastrService.warning("No enough place to add note")
-    }
   }
 }

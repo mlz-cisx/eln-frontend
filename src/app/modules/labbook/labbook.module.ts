@@ -25,13 +25,8 @@ import { LabBookDrawBoardComponent } from './components/draw-board/draw-board/dr
 import { LabBookDrawBoardElementComponent } from './components/draw-board/element/element.component';
 import { LabBookDrawBoardFileComponent } from './components/draw-board/file/file.component';
 import { LabBookDrawBoardGridComponent } from './components/draw-board/grid/grid.component';
-import { LabBookPendingChangesModalComponent } from './components/draw-board/modals/pending-changes/pending-changes.component';
 import { LabBookDrawBoardNoteComponent } from './components/draw-board/note/note.component';
-import { LabBookDrawBoardPermissionDeniedComponent } from './components/draw-board/permission-denied/permission-denied.component';
 import { LabBookDrawBoardPictureComponent } from './components/draw-board/picture/picture.component';
-import { LabBookDrawBoardPluginDataComponent } from './components/draw-board/plugin-data/plugin-data.component';
-import { LabBookSearchBarComponent } from './components/draw-board/search-bar/search-bar.component';
-import { LabBookDrawBoardSectionComponent } from './components/draw-board/section/section.component';
 import { LabBookElementDropdownComponent } from './components/element-dropdown/element-dropdown.component';
 import { DeleteLabBookSectionElementModalComponent } from './components/modals/delete-section/delete-section.component';
 import { ImportLabBookElementsModalComponent } from './components/modals/import-elements/import-elements.component';
@@ -66,7 +61,6 @@ import {
     LabBookDrawBoardComponent,
     LabBookSidebarComponent,
     LabBookDrawBoardElementComponent,
-    LabBookDrawBoardSectionComponent,
     LabBookDrawBoardNoteComponent,
     LabBookElementDropdownComponent,
     LabBookElementRemoveModalComponent,
@@ -76,15 +70,11 @@ import {
     MoveLabBookElementToSectionModalComponent,
     MoveLabBookElementToLabBookModalComponent,
     NewLabBookPluginElementModalComponent,
-    LabBookDrawBoardPluginDataComponent,
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardPictureComponent,
     NewLabBookFileElementModalComponent,
     NewLabBookPictureElementModalComponent,
-    LabBookSearchBarComponent,
     NewLabBookSketchModalComponent,
-    LabBookDrawBoardPermissionDeniedComponent,
-    LabBookPendingChangesModalComponent,
     RecentChangesModalComponent
   ],
   imports: [
@@ -130,7 +120,6 @@ import {
     LabBookDrawBoardComponent,
     LabBookSidebarComponent,
     LabBookDrawBoardElementComponent,
-    LabBookDrawBoardSectionComponent,
     LabBookDrawBoardNoteComponent,
     LabBookElementDropdownComponent,
     LabBookElementRemoveModalComponent,
@@ -140,15 +129,11 @@ import {
     MoveLabBookElementToSectionModalComponent,
     MoveLabBookElementToLabBookModalComponent,
     NewLabBookPluginElementModalComponent,
-    LabBookDrawBoardPluginDataComponent,
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardPictureComponent,
     NewLabBookFileElementModalComponent,
     NewLabBookPictureElementModalComponent,
-    LabBookSearchBarComponent,
     NewLabBookSketchModalComponent,
-    LabBookDrawBoardPermissionDeniedComponent,
-    LabBookPendingChangesModalComponent,
     RecentChangesModalComponent
   ],
 })

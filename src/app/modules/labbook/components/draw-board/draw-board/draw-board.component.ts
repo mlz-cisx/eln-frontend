@@ -39,14 +39,4 @@ export class LabBookDrawBoardComponent {
   public onRefreshGrid(event: boolean): void {
     this.refresh.next(event);
   }
-
-  public pendingChanges(): boolean {
-    for (const element of this.drawBoardGrids ?? []) {
-      if (element.pendingChanges()) {
-        return true;
-      }
-    }
-
-    return false;
-  }
 }

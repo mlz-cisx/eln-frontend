@@ -10,8 +10,7 @@
       <div class="header flex justify-between header_container" [id]="title_id">
             <div class="flex-fill">
               <eworkbench-form-input [for]="'subject-' + uniqueHash"
-                                     [loading]="loading" [margin]="false"
-                                     [onSubmit]="refreshResetValue">
+                                     [loading]="loading" [margin]="false">
                 <input [style]=this.background_color
                        type="text"
                        class="form-control ewb-input"
@@ -82,13 +81,10 @@
               [id]="initialState.pk"
               [labBookId]="id"
               [elementId]="element.pk"
-              [section]="section"
               [initialState]="initialState"
               routerBaseLink="/notes"
               [privileges]="privileges"
               [labBookEditable]="editable"
-              (removed)="onRemove($event)"
-              (moved)="onMove($event)"
             ></eworkbench-labbook-element-dropdown>
           </div>
       <div class="body" [id]="'content-' + uniqueHash">
@@ -101,7 +97,6 @@
             [loading]="loading"
             [margin]="false"
             [buttonPosition]="'align-self-top'"
-            [onSubmit]="refreshResetValue"
           >
             <eworkbench-wysiwyg-editor
               [id]="'content-' + uniqueHash"

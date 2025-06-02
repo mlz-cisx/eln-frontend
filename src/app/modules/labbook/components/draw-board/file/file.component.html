@@ -10,8 +10,7 @@
       <div class="header flex justify-between header_container" [id]="title_id">
             <div class="flex-fill">
               <eworkbench-form-input [for]="'title-' + uniqueHash"
-                                     [loading]="loading" [margin]="false"
-                                     [onSubmit]="refreshResetValue">
+                                     [loading]="loading" [margin]="false">
                 <input [style]=this.background_color
                        type="text"
                        class="form-control ewb-input"
@@ -81,8 +80,6 @@
                 routerBaseLink="/files"
                 [privileges]="privileges"
                 [labBookEditable]="editable"
-                (removed)="onRemove($event)"
-                (moved)="onMove($event)"
               ></eworkbench-labbook-element-dropdown>
             </div>
           </div>
@@ -108,7 +105,6 @@
         <ng-container *ngIf="editor_loaded">
           <eworkbench-form-input [for]="'description-' + uniqueHash"
                                  [loading]="loading" [margin]="false"
-                                 [onSubmit]="refreshResetValue"
           *ngIf="editable">
             <!--          <eworkbench-wysiwyg-editor-->
             <!--            [id]="'description-' + uniqueHash"-->

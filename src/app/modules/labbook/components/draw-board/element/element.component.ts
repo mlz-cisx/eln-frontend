@@ -28,52 +28,5 @@ export class LabBookDrawBoardElementComponent {
   public element!: LabBookElement<any>;
 
   @Input()
-  public section?: string;
-
-  @Input()
   public editable? = false;
-
-  @Input()
-  public closeSection?: EventEmitter<string>;
-
-  @Input()
-  public refreshElementRelations?: EventEmitter<{ model_name: string; model_pk: string }>;
-
-  @Output()
-  public removed = new EventEmitter<ElementRemoval>();
-
-  @Output()
-  public moved = new EventEmitter<ElementRemoval>();
-
-  @Output()
-  public expand = new EventEmitter<string>();
-
-  @Output()
-  public noteToCreate = new EventEmitter<LabBookElementAddEvent>();
-
-  public onRemove(event: ElementRemoval): void {
-    this.removed.emit(event);
-  }
-
-  public onMove(event: ElementRemoval): void {
-    this.moved.emit(event);
-  }
-
-  public onExpandSection(id: string): void {
-    this.expand.emit(id);
-  }
-
-  public pendingChanges(): boolean {
-    for (const element of this.elements ?? []) {
-      if (element.pendingChanges()) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public emitNoteToCreate(event: LabBookElementAddEvent): void {
-    this.noteToCreate.emit(event);
-  }
 }

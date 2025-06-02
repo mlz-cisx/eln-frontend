@@ -7,10 +7,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   Renderer2,
   RendererStyleFlags2,
   ElementRef
@@ -19,9 +17,6 @@ import {Validators} from '@angular/forms';
 import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
-import {
-  LabBookDrawBoardGridComponent
-} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 import {
   //AuthService,
   FilesService,
@@ -32,14 +27,11 @@ import type {
   File,
   FilePayload,
   LabBookElement,
-  Lock,
   Privileges,
   User,
-  LabBookElementPayload
 } from '@joeseln/types';
 import {DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {v4 as uuidv4} from 'uuid';
@@ -48,11 +40,6 @@ import {
 } from "@app/modules/labbook/config/admin-element-background-color";
 import {environment} from "@environments/environment";
 
-
-interface ElementRemoval {
-  id: string;
-  gridReload: boolean;
-}
 
 interface FormFile {
   file_title: FormControl<string | null>;
@@ -79,22 +66,11 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   @Input()
   public editable? = false;
 
-  @Input()
-  public refreshElementRelations?: EventEmitter<{ model_name: string; model_pk: string }>;
-
-  @Output()
-  public removed = new EventEmitter<ElementRemoval>();
-
-  @Output()
-  public moved = new EventEmitter<ElementRemoval>();
-
   public currentUser: User | null = null;
 
   public initialState?: File;
 
   public privileges?: Privileges;
-
-  public lock: Lock | null = null;
 
   public loading = false;
 
@@ -118,8 +94,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public background_color = '';
 
-  public refreshResetValue = new EventEmitter<boolean>();
-
   public form = this.fb.group<FormFile>({
     file_title: this.fb.control(null, Validators.required),
     file_description: null,
@@ -131,13 +105,10 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly toastrService: ToastrService,
-    // private readonly authService: AuthService,
     private readonly websocketService: WebSocketService,
-    private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
     private user_service: UserService,
-    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
     private readonly renderer: Renderer2,
     private readonly elementRef: ElementRef
   ) {
@@ -147,17 +118,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     return this.form.controls;
   }
 
-  public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
-    if (this.lock) {
-      if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return {ownUser: true, user: this.lock.lock_details?.locked_by};
-      }
-
-      return {ownUser: false, user: this.lock.lock_details?.locked_by};
-    }
-
-    return {ownUser: false, user: null};
-  }
 
   private checkContentSize(): boolean {
     let description_val = this.f.file_description.value ?? '';
@@ -225,12 +185,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
             });
         }
         this.submitted = false
-      }
-    });
-
-    this.refreshElementRelations?.subscribe((event: { model_name: string; model_pk: string }) => {
-      if (event.model_name === 'file' && event.model_pk === this.initialState!.pk) {
-        this.refreshElementRelationsCounter();
       }
     });
   }
@@ -313,7 +267,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           if (file) {
             // this.initialState = {...file};
             this.form.markAsPristine();
-            this.refreshResetValue.next(true);
 
             this.loading = false;
             this.cdr.markForCheck();
@@ -341,17 +294,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       );
   }
 
-  public pendingChanges(): boolean {
-    return this.form.dirty;
-  }
-
-  public onRemove(event: ElementRemoval): void {
-    this.removed.emit(event);
-  }
-
-  public onMove(event: ElementRemoval): void {
-    this.moved.emit(event);
-  }
 
   public onOpenCommentsModal(): void {
     this.modalService.open(CommentsModalComponent, {

@@ -18,12 +18,9 @@
     <!--      {{ section ? t('labBook.drawBoardNote.noChildElementsInSection') : t('labBook.drawBoardNote.noChildElements') }}-->
     <!--    </div>-->
 
-    <gridster #drawBoard [options]="options"
-              *ngIf="!section || (section && drawBoardElements.length)">
+    <gridster #drawBoard [options]="options">
       <gridster-item [id]="'elem_' + item['element']['child_object_id'] "
                      [item]="item"
-                     [style.z-index]="getItemZIndex(item)"
-                     [style.overflow]="getItemOverflow(item)"
                      *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
       >
 
@@ -31,14 +28,7 @@
           #elementComponent
           [id]="id"
           [element]="item['element']"
-          [section]="section"
           [editable]="editable"
-          [closeSection]="closeSection"
-          [refreshElementRelations]="refreshElementRelations"
-          (removed)="onRemove($event)"
-          (moved)="onRemove($event)"
-          (expand)="onExpandSection($event)"
-          (noteToCreate)="handleNoteAddingWithCheck($event)"
         ></eworkbench-labbook-draw-board-element>
 
       </gridster-item>

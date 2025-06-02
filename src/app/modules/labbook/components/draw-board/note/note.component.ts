@@ -8,10 +8,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   Renderer2,
   RendererStyleFlags2
 } from '@angular/core';
@@ -20,24 +18,18 @@ import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
 import {
-  LabBookDrawBoardGridComponent
-} from "@app/modules/labbook/components/draw-board/grid/grid.component";
-import {
-//  AuthService,
   LabbooksService,
   NotesService,
-  PicturesService, UserService,
+  UserService,
   WebSocketService
 } from '@app/services';
 import type {
   LabBookElement,
-  Lock,
   Note,
   NotePayload,
   Privileges,
   User,
   LabBookElementPayload,
-  LabBookElementAddEvent,
 } from '@joeseln/types';
 import {DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -45,16 +37,11 @@ import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {v4 as uuidv4} from 'uuid';
-import {debounceTime, skip} from "rxjs/operators";
 import {environment} from '@environments/environment';
 import {
   admin_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
 
-interface ElementRemoval {
-  id: string;
-  gridReload: boolean;
-}
 
 interface FormNote {
   note_subject: FormControl<string | null>;
@@ -76,30 +63,13 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   public element!: LabBookElement<Note>;
 
   @Input()
-  public section?: string;
-
-  @Input()
   public editable? = false;
-
-  @Input()
-  public refreshElementRelations?: EventEmitter<{ model_name: string; model_pk: string }>;
-
-  @Output()
-  public removed = new EventEmitter<ElementRemoval>();
-
-  @Output()
-  public moved = new EventEmitter<ElementRemoval>();
-
-  @Output()
-  public noteToCreate = new EventEmitter<LabBookElementAddEvent>();
 
   public currentUser: User | null = null;
 
   public initialState?: Note;
 
   public privileges?: Privileges;
-
-  public lock: Lock | null = null;
 
   public loading = false;
 
@@ -124,8 +94,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public uniqueHash = uuidv4();
 
-  public refreshResetValue = new EventEmitter<boolean>();
-
   public submitted = false;
 
   public form = this.fb.group<FormNote>({
@@ -136,7 +104,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   public constructor(
     public readonly notesService: NotesService,
     private readonly labBooksService: LabbooksService,
-    private readonly picturesService: PicturesService,
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly toastrService: ToastrService,
@@ -145,7 +112,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
     private user_service: UserService,
-    private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
     private readonly renderer: Renderer2
   ) {
   }
@@ -154,18 +120,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     return this.form.controls;
   }
 
-  public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
-
-    if (this.lock) {
-      if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return {ownUser: true, user: this.lock.lock_details?.locked_by};
-      }
-
-      return {ownUser: false, user: this.lock.lock_details?.locked_by};
-    }
-
-    return {ownUser: false, user: null};
-  }
 
   private get note(): NotePayload {
     return {
@@ -226,12 +180,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         this.submitted = false
       }
 
-    });
-
-    this.refreshElementRelations?.subscribe((event: { model_name: string; model_pk: string }) => {
-      if (event.model_name === 'note' && event.model_pk === this.initialState!.pk) {
-        this.refreshElementRelationsCounter();
-      }
     });
   }
 
@@ -331,7 +279,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
             this.initialState = {...note};
             this.form.markAsPristine();
-            this.refreshResetValue.next(true);
             this.loading = false;
             this.cdr.markForCheck();
             this.translocoService
@@ -357,17 +304,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       );
   }
 
-  public pendingChanges(): boolean {
-    return this.form.dirty;
-  }
-
-  public onRemove(event: ElementRemoval): void {
-    this.removed.emit(event);
-  }
-
-  public onMove(event: ElementRemoval): void {
-    this.moved.emit(event);
-  }
 
   public onOpenCommentsModal(): void {
 
@@ -427,52 +363,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     );
   }
 
-  public create_new_sketch_below(): void {
-
-    const canvas = document.createElement('canvas');
-
-    canvas.toBlob((blob) => {
-      // blob ready, download it
-      const link = document.createElement('a');
-      link.download = 'example.png';
-
-      // @ts-ignore
-      link.href = URL.createObjectURL(blob);
-      // should not appear as download
-      // link.click();
-
-      const new_sketch = {
-        title: 'SketchToEdit',
-        height: 600,
-        width: 600,
-        rendered_image: new Blob(['example.png'], {type: "text/html"}),
-        shapes_image: null,
-      };
-
-      this.picturesService.add(new_sketch).pipe(untilDestroyed(this)).subscribe(
-        pic => {
-          const element: LabBookElementPayload = {
-            child_object_content_type: 40,
-            child_object_content_type_model: 'pictures.picture',
-            child_object_id: pic.pk,
-            position_x: 0,
-            position_y: this.element.position_y + this.element.height,
-            width: 13,
-            height: 7,
-          };
-          this.labBooksService.addElement(this.element.labbook_id, element).pipe(untilDestroyed(this)).subscribe(
-            () => {
-              setTimeout(() => this.scroll_to_position((this.element.position_y + this.element.height) * 36), 3000);
-            }
-          );
-        }
-      )
-      // delete the internal blob reference, to let the browser clear memory from it
-      URL.revokeObjectURL(link.href);
-    }, 'image/png');
-
-
-  }
 
   public blink() {
     const obj = document.getElementById(this.span_id) as HTMLElement
