@@ -3,13 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChildren } from '@angular/core';
-import type { LabBookElement, LabBookElementAddEvent } from '@joeseln/types';
-
-interface ElementRemoval {
-  id: string;
-  gridReload: boolean;
-}
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import type { LabBookElement } from '@joeseln/types';
 
 @Component({
   selector: 'eworkbench-labbook-draw-board-element',
@@ -18,9 +13,6 @@ interface ElementRemoval {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabBookDrawBoardElementComponent {
-  @ViewChildren('elementComponent')
-  public elements?: any;
-
   @Input()
   public id!: string;
 

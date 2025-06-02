@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import type { LabBookElementEvent } from '@joeseln/types';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import type { LabBookDrawBoardGridComponent } from '../grid/grid.component';
 
 @UntilDestroy()
 @Component({
@@ -16,9 +15,6 @@ import type { LabBookDrawBoardGridComponent } from '../grid/grid.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabBookDrawBoardComponent {
-  @ViewChildren('drawBoardGrid')
-  public drawBoardGrids?: QueryList<LabBookDrawBoardGridComponent>;
-
   @Input()
   public id!: string;
 

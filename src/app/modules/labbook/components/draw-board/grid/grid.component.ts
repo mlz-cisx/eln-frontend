@@ -11,10 +11,6 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  QueryList,
-  TemplateRef,
-  ViewChild,
-  ViewChildren,
   Renderer2,
 } from '@angular/core';
 import {
@@ -33,16 +29,12 @@ import {
 } from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type {
-  GridsterComponent,
   GridsterConfig,
   GridsterItem
 } from 'angular-gridster2';
 import {of} from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {gridsterConfig} from '../../../config/gridster-config';
-import type {
-  LabBookDrawBoardElementComponent
-} from '../element/element.component';
 import {
   highlight_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
@@ -57,12 +49,6 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
-  @ViewChild('drawBoard', {static: true})
-  public drawBoard!: TemplateRef<GridsterComponent>;
-
-  @ViewChildren('elementComponent')
-  public elements?: QueryList<LabBookDrawBoardElementComponent>;
-
   @Input()
   public id!: string;
 
@@ -105,6 +91,21 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+
+    this.initDetails();
+
+    this.created?.subscribe((event: LabBookElementEvent) => {
+      this.addElement(event);
+    });
+
+    // this.refresh?.subscribe((reload: boolean) => {
+    //   if (reload) {
+    //     this.reload();
+    //   }
+    // });
+  }
+  
+  ngAfterViewInit() {
     // this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
     this.websocketService.elements.pipe().subscribe((data: any) => {
       // console.log('grid pipe ', data['action'])
@@ -121,18 +122,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
       }
     });
-
-    this.initDetails();
-
-    this.created?.subscribe((event: LabBookElementEvent) => {
-      this.addElement(event);
-    });
-
-    // this.refresh?.subscribe((reload: boolean) => {
-    //   if (reload) {
-    //     this.reload();
-    //   }
-    // });
   }
 
   public ngOnDestroy(): void {

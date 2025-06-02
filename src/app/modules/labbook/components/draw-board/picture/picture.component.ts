@@ -70,8 +70,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   @Input()
   public editable? = false;
 
-  public currentUser: User | null = null;
-
   public initialState?: Picture;
 
   public title_editable: Boolean = false
@@ -95,8 +93,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   public modalRef?: DialogRef;
 
-  public refreshResetValue = new EventEmitter<boolean>();
-
   public form = this.fb.group<FormPicture>({
     pic_title: this.fb.control(null, Validators.required),
   });
@@ -111,7 +107,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
-    private user_service: UserService,
   ) {
   }
 
@@ -126,10 +121,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
-      this.currentUser = state.user;
-      // console.log(this.currentUser)
-    });
 
     this.initDetails();
     this.initPrivileges();
@@ -142,7 +133,9 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     //   model: 'picture',
     //   pk: this.initialState!.pk
     // }]);
-
+  }
+  
+  ngAfterViewInit() {
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
         if (data.model_name === 'comments') {
@@ -155,7 +148,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
           .pipe(untilDestroyed(this))
           .subscribe(privilegesData => {
             this.initialState = {...privilegesData.data};
-            this.refreshResetValue.next(true);
             this.cdr.markForCheck();
 
           });
@@ -215,7 +207,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         picture => {
           this.initialState = {...picture};
           this.form.markAsPristine();
-          this.refreshResetValue.next(true);
           this.loading = false;
           this.cdr.markForCheck();
           this.translocoService

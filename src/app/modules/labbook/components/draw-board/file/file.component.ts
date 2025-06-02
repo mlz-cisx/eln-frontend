@@ -28,7 +28,6 @@ import type {
   FilePayload,
   LabBookElement,
   Privileges,
-  User,
 } from '@joeseln/types';
 import {DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -65,8 +64,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   @Input()
   public editable? = false;
-
-  public currentUser: User | null = null;
 
   public initialState?: File;
 
@@ -108,7 +105,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly websocketService: WebSocketService,
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
-    private user_service: UserService,
     private readonly renderer: Renderer2,
     private readonly elementRef: ElementRef
   ) {
@@ -138,10 +134,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
-      this.currentUser = state.user;
-      // console.log(this.currentUser)
-    });
 
     this.initDetails();
     this.initPrivileges();
@@ -154,7 +146,10 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     //   model: 'file',
     //   pk: this.initialState!.pk
     // }]);
+  }
 
+  ngAfterViewInit() {
+    
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       // console.log('file pipe ', data)
       if (data.model_pk === this.initialState!.pk) {
@@ -186,10 +181,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
         }
         this.submitted = false
       }
-    });
-  }
-
-  ngAfterViewInit() {
+    }); 
+    
     if (document.getElementById(this.preloaded_id)) {
       // @ts-ignore
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content

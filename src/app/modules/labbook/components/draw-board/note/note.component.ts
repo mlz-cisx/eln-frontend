@@ -28,7 +28,6 @@ import type {
   Note,
   NotePayload,
   Privileges,
-  User,
   LabBookElementPayload,
 } from '@joeseln/types';
 import {DialogService} from '@ngneat/dialog';
@@ -64,8 +63,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   @Input()
   public editable? = false;
-
-  public currentUser: User | null = null;
 
   public initialState?: Note;
 
@@ -111,7 +108,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
-    private user_service: UserService,
     private readonly renderer: Renderer2
   ) {
   }
@@ -130,12 +126,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
-      this.currentUser = state.user;
-      // console.log(this.currentUser)
-    });
-
-
     this.initDetails();
     this.initPrivileges();
     if (this.element.child_object.created_by.admin) {
@@ -148,6 +138,11 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     //   pk: this.initialState!.pk
     // }]);
 
+
+  }
+
+  ngAfterViewInit() {
+    
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
         if (data.model_name === 'comments') {
@@ -179,11 +174,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         }
         this.submitted = false
       }
-
     });
-  }
-
-  ngAfterViewInit() {
+    
     if (document.getElementById(this.preloaded_id)) {
       // @ts-ignore
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
@@ -221,9 +213,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
 
   public initPrivileges(): void {
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
 
     this.enlarge_rows_id = `${this.initialState!.pk}_rows_id`;
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
