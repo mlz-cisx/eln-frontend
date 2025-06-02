@@ -410,45 +410,46 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-
-    this.picturesService
-      .patch(this.id, this.file)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        picture => {
-          if (this.lock?.locked && this.lockUser.ownUser) {
-            this.picturesService.unlock(this.id);
-          }
-
-          this.detailsTitle = picture.title;
-          // void this.pageTitleService.set(picture.display);
-
-          this.initialState = {...picture};
-          this.form.markAsPristine();
-          this.refreshChanges.next(true);
-          this.refreshVersions.next(true);
-          this.refreshMetadata.next(true);
-          this.refreshLinkList.next(true);
-          this.refreshResetValue.next(true);
-
-          this.loading = false;
-          this.cdr.markForCheck();
-          this.translocoService
-            .selectTranslate('picture.details.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
+    // input elements are in readonly mode
+    // if (this.loading) {
+    //   return;
+    // }
+    // this.loading = true;
+    //
+    // this.picturesService
+    //   .patch(this.id, this.file)
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(
+    //     picture => {
+    //       if (this.lock?.locked && this.lockUser.ownUser) {
+    //         this.picturesService.unlock(this.id);
+    //       }
+    //
+    //       this.detailsTitle = picture.title;
+    //       // void this.pageTitleService.set(picture.display);
+    //
+    //       this.initialState = {...picture};
+    //       this.form.markAsPristine();
+    //       this.refreshChanges.next(true);
+    //       this.refreshVersions.next(true);
+    //       this.refreshMetadata.next(true);
+    //       this.refreshLinkList.next(true);
+    //       this.refreshResetValue.next(true);
+    //
+    //       this.loading = false;
+    //       this.cdr.markForCheck();
+    //       this.translocoService
+    //         .selectTranslate('picture.details.toastr.success')
+    //         .pipe(untilDestroyed(this))
+    //         .subscribe(success => {
+    //           this.toastrService.success(success);
+    //         });
+    //     },
+    //     () => {
+    //       this.loading = false;
+    //       this.cdr.markForCheck();
+    //     }
+    //   );
   }
 
   public canDeactivate(): Observable<boolean> {
