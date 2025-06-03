@@ -79,6 +79,12 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public span_id = '';
 
+  public graph_data: any
+
+  public graph_exists = false
+
+  public config = {displaylogo: false}
+
   public editor_loaded = false;
 
   public preloaded_content: any
@@ -218,6 +224,25 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     );
     this.preloaded_content = this.element.child_object.description
     this.initialState = {...this.element.child_object};
+
+    try {
+      if (Object.keys(JSON.parse(this.element.child_object.plot_data)).length > 1) {
+        var new_data = []
+        for (const [key, value] of Object.entries(JSON.parse(this.element.child_object.plot_data))) {
+          new_data.push(
+            {
+              y: Object.values(value as JSON),
+              mode: 'lines+markers',
+              name: key
+            }
+          )
+        }
+        this.graph_data = new_data
+        this.graph_exists = true
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   public initPrivileges(): void {

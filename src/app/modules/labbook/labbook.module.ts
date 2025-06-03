@@ -52,6 +52,9 @@ import { RecentChangesModalComponent } from './components/modals/recent-changes/
 import {
   RecentChangesModule
 } from "@app/modules/recent-changes/recent-changes.module";
+import {
+  PlotlyEditorModule
+} from "../../../../libs/plotly-editor/lib/plotly-editor.module";
 
 @NgModule({
   declarations: [
@@ -112,6 +115,7 @@ import {
     CommentModule,
     PictureEditorModule,
     RecentChangesModule,
+    PlotlyEditorModule,
   ],
   exports: [
     LabBookSidebarComponent,

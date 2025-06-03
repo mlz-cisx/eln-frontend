@@ -30,5 +30,6 @@ export const mockFile: File = {
   last_modified_by: mockUser,
   is_favourite: false,
   position_y: 0,
-  labbook_id: '0'
+  labbook_id: '0',
+  plot_data: '{}'
 };

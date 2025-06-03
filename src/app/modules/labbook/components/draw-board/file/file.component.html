@@ -128,6 +128,9 @@
             <!--            ></eworkbench-wysiwyg-editor>-->
           </eworkbench-form-input>
         </ng-container>
+        <ng-container *ngIf="graph_exists">
+          <app-plotly-editor [data]="graph_data" [config]="config"></app-plotly-editor>
+        </ng-container>
         <ng-container>
           <div [id]="preloaded_id" [hidden]=editor_loaded>
           </div>

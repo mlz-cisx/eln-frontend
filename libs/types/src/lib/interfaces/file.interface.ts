@@ -51,6 +51,7 @@ export interface File {
   is_favourite: boolean;
   position_y: number;
   labbook_id: string;
+  plot_data: string;
 }
 
 export interface File_with_privileges {
