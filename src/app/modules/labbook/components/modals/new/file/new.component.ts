@@ -134,6 +134,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       directory_id: this.f.storage.value ?? undefined!,
       description: this.f.description.value ?? '',
       projects: this.f.projects.value,
+      labbook_pk: this.labBookId
     };
   }
 

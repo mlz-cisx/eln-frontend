@@ -12,6 +12,7 @@ export interface FilePayload {
   description?: string;
   projects?: string[];
   metadata?: Metadata[];
+  labbook_pk?: string
 }
 
 export interface FileClonePayload {

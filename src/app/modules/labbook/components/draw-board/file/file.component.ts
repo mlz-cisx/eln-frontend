@@ -83,6 +83,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public graph_exists = false
 
+  public _graph_exists = false
+
   public config = {displaylogo: false}
 
   public editor_loaded = false;
@@ -226,19 +228,27 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     this.initialState = {...this.element.child_object};
 
     try {
-      if (Object.keys(JSON.parse(this.element.child_object.plot_data)).length > 1) {
-        var new_data = []
-        for (const [key, value] of Object.entries(JSON.parse(this.element.child_object.plot_data))) {
-          new_data.push(
-            {
-              y: Object.values(value as JSON),
-              mode: 'lines+markers',
-              name: key
-            }
-          )
-        }
-        this.graph_data = new_data
-        this.graph_exists = true
+      if (JSON.parse(this.element.child_object.plot_data).length > 0) {
+        let loc_graph_data: any = []
+        JSON.parse(this.element.child_object.plot_data).forEach((plot: any) => {
+          const new_data = [];
+          for (const [key, value] of Object.entries(plot[1])) {
+            new_data.push(
+              {
+                y: Object.values(value as JSON),
+                mode: 'lines+markers',
+                name: key
+              }
+            )
+          }
+          // title: plot[0] graph: plot [1]
+          let layout = {
+            title: {text: plot[0]}
+          }
+          loc_graph_data.push([layout, new_data])
+        })
+        this.graph_data = loc_graph_data
+        this._graph_exists = true
       }
     } catch (e) {
       console.log(e)
@@ -261,6 +271,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           this.form.disable({emitEvent: false});
         }
         // TODO think about this
+        this.graph_exists = this._graph_exists
         this.cdr.markForCheck();
       });
   }
