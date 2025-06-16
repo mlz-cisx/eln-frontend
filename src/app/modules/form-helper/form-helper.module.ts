@@ -14,10 +14,13 @@ import { FormDateGroupComponent } from './components/form-date-group/form-date-g
 import { FormDateInputComponent } from './components/form-date-input/form-date-input.component';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormTimeGroupComponent } from './components/form-time-group/form-time-group.component';
+import {
+  FormInputComponentPic
+} from "@app/modules/form-helper/components/form-input-pic/form-input.component";
 
 @NgModule({
-  declarations: [FormInputComponent, FormAsteriskComponent, FormDateGroupComponent, FormDateInputComponent, FormTimeGroupComponent],
+  declarations: [FormInputComponent, FormAsteriskComponent, FormDateGroupComponent, FormDateInputComponent, FormTimeGroupComponent, FormInputComponentPic],
   imports: [CommonModule, FormsModule, IconsModule, TooltipModule.forRoot(), TranslocoRootModule],
-  exports: [FormInputComponent, FormAsteriskComponent, FormDateGroupComponent, FormDateInputComponent, FormTimeGroupComponent],
+  exports: [FormInputComponent, FormAsteriskComponent, FormDateGroupComponent, FormDateInputComponent, FormTimeGroupComponent, FormInputComponentPic],
 })
 export class FormHelperModule {}

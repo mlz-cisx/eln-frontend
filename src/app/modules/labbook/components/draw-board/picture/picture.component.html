@@ -9,7 +9,7 @@
           errorTailor>
       <div class="header flex justify-between header_container" [id]="title_id">
             <div class="flex-fill">
-              <eworkbench-form-input [for]="'title-' + uniqueHash"
+              <eworkbench-form-input-pic [for]="'title-' + uniqueHash"
                                      [loading]="loading" [margin]="false">
                 <input
                   [style]=this.background_color
@@ -22,7 +22,7 @@
                   slot="input"
                   [readOnly]=!this.title_editable
                 />
-              </eworkbench-form-input>
+              </eworkbench-form-input-pic>
             </div>
             <div class="ml-2 self-center">
               <button type="button"
