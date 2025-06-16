@@ -11,7 +11,10 @@ import {
   Input,
   OnInit,
   Renderer2,
-  RendererStyleFlags2
+  RendererStyleFlags2,
+  afterRender,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {
@@ -93,6 +96,9 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public submitted = false;
 
+  @ViewChild('content', { static: false })
+  contentContainer?: ElementRef;
+
   public form = this.fb.group<FormNote>({
     note_subject: this.fb.control(null, Validators.required),
     note_content: null,
@@ -108,8 +114,19 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
-    private readonly renderer: Renderer2
+    private readonly renderer: Renderer2,
   ) {
+    afterRender(() => {
+      if (this.contentContainer) {
+        const elements = this.contentContainer.nativeElement.getElementsByClassName('tox-tinymce');
+        if (elements[0]) {
+          this.renderer.setStyle(
+            elements[0],
+            'height',
+            `${this.contentContainer.nativeElement.clientHeight - 20}px`, RendererStyleFlags2.Important);
+        }
+      };
+    });
   }
 
   public get f() {
@@ -142,7 +159,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    
+
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
         if (data.model_name === 'comments') {
@@ -175,27 +192,11 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
         this.submitted = false
       }
     });
-    
+
     if (document.getElementById(this.preloaded_id)) {
       // @ts-ignore
       document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
     }
-
-    const obj = document.getElementById('content-' + this.uniqueHash) as HTMLDivElement
-    const observer = new ResizeObserver(
-      entries => {
-        for (const entry of entries) {
-          const container = document.getElementById('content-' + this.uniqueHash);
-          if (container) {
-            const elements = container.getElementsByClassName('tox-tinymce');
-            // Check if the nth element exists
-            if (elements[0]) {
-              this.renderer.setStyle(elements[0], 'height', `${entry.contentRect.height}px`, RendererStyleFlags2.Important);
-            }
-          }
-        }
-      })
-    observer.observe(obj)
   }
 
   public initDetails(): void {
