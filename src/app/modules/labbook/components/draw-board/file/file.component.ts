@@ -234,11 +234,35 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     );
     this.preloaded_content = this.element.child_object.description
     this.initialState = {...this.element.child_object};
+  }
 
-    try {
-      if (JSON.parse(this.element.child_object.plot_data).length > 0) {
+  public initPrivileges(): void {
+    this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
+    this.title_id = `${this.initialState!.pk}_title_id`;
+    this.span_id = `${this.initialState!.pk}_span_id`;
+
+
+    this.filesService
+      .get(this.initialState!.pk)
+      .pipe(untilDestroyed(this))
+      .subscribe(privilegesData => {
+        const privileges = privilegesData.privileges;
+        this.privileges = {...privileges};
+        if (!this.privileges.edit) {
+          this.form.disable({emitEvent: false});
+        }
+        this.convertPlotData(privilegesData.data);
+        // TODO think about this
+        this.graph_exists = this._graph_exists
+        this.cdr.markForCheck();
+      });
+  }
+
+  public convertPlotData(data: File): void {
+     try {
+      if (JSON.parse(data.plot_data).length > 0) {
         let loc_graph_data: any = []
-        JSON.parse(this.element.child_object.plot_data).forEach((plot: any) => {
+        JSON.parse(data.plot_data).forEach((plot: any) => {
           const new_data = [];
           for (const [key, value] of Object.entries(plot[1])) {
             new_data.push(
@@ -263,26 +287,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     }
   }
 
-  public initPrivileges(): void {
-    this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
-    this.title_id = `${this.initialState!.pk}_title_id`;
-    this.span_id = `${this.initialState!.pk}_span_id`;
-
-
-    this.filesService
-      .get(this.initialState!.pk)
-      .pipe(untilDestroyed(this))
-      .subscribe(privilegesData => {
-        const privileges = privilegesData.privileges;
-        this.privileges = {...privileges};
-        if (!this.privileges.edit) {
-          this.form.disable({emitEvent: false});
-        }
-        // TODO think about this
-        this.graph_exists = this._graph_exists
-        this.cdr.markForCheck();
-      });
-  }
 
   public onSubmit(): void {
     if (!this.checkContentSize()) {
