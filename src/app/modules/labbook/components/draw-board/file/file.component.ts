@@ -82,6 +82,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public _graph_exists = false
 
+  public graph_loaded = false;
+
   public config = {displaylogo: false}
 
   public editor_loaded = false;

@@ -65,6 +65,11 @@
                       [disabled]="privileges ? !privileges!.edit : true">
                 {{ !editor_loaded ? 'Open Editor' : 'Close Editor' }}
               </button>
+              <button type="button" class="btn ewb-button-big"
+                      (click)="graph_loaded = !graph_loaded;"
+                      [disabled]="!graph_exists">
+                Load Plot
+              </button>
               <button type="button"
                       class="btn ewb-button-big square-md ewb-button-none cursor-move drag-handle mr-2"
                       *ngIf="editable">
@@ -133,7 +138,7 @@
           <div [id]="preloaded_id" #preload [hidden]=editor_loaded>
           </div>
         </ng-container>
-        <ng-container *ngIf="graph_exists">
+        <ng-container *ngIf="graph_exists && graph_loaded">
           <ng-template ngFor let-i="index" [ngForOf]="graph_data">
             <app-plotly-editor [data]="graph_data[i][1]"
                                [layout]="graph_data[i][0]"
