@@ -11,7 +11,8 @@ import {
   OnInit,
   Renderer2,
   RendererStyleFlags2,
-  ElementRef
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {
@@ -75,10 +76,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public toolbar_shown = false;
 
-  public title_id = '';
-
-  public span_id = '';
-
   public graph_data: any
 
   public graph_exists = false
@@ -90,6 +87,19 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   public editor_loaded = false;
 
   public preloaded_content: any
+
+  @ViewChild('title')
+  private title?: ElementRef;
+
+  @ViewChild('span')
+  private span?: ElementRef;
+
+  @ViewChild('preload')
+  private preload?: ElementRef;
+
+  public title_id = '';
+
+  public span_id = '';
 
   public preloaded_id = '';
 
@@ -157,7 +167,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    
+
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       // console.log('file pipe ', data)
       if (data.model_pk === this.initialState!.pk) {
@@ -180,20 +190,18 @@ export class LabBookDrawBoardFileComponent implements OnInit {
                 {emitEvent: false}
               );
               this.preloaded_content = privilegesData.data.description
-              const preloadedElement = this.elementRef.nativeElement.querySelector(`#${this.preloaded_id}`);
-              if (preloadedElement) {
-                  this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
+              if (this.preload) {
+                  this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
               }
 
             });
         }
         this.submitted = false
       }
-    }); 
-    
-    if (document.getElementById(this.preloaded_id)) {
-      // @ts-ignore
-      document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+    });
+
+    if (this.preload) {
+      this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
     }
 
     const descriptionElement = this.elementRef.nativeElement.querySelector(`#description-${this.uniqueHash}`);
@@ -306,9 +314,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
             //     this.toastrService.success(success);
             //   });
             this.preloaded_content = file.description
-            const preloadedElement = document.getElementById(this.preloaded_id);
-            if (preloadedElement) {
-              this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
+            if (this.preload) {
+              this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
             }
 
           } else {
@@ -367,25 +374,32 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public blink() {
-    const obj = document.getElementById(this.span_id) as HTMLElement
-    obj.style.visibility = 'visible'
-    let counter = 0
-    let timerId = setInterval(function () {
-      if (counter % 2 == 0) {
-        obj.style.visibility = 'hidden'
-        counter++
-      } else {
-        obj.style.visibility = 'visible'
-        counter++
-      }
-    }, 500)
 
-    setTimeout(() => {
-      {
-        obj.style.visibility = 'hidden'
-        clearInterval(timerId);
+    const blinkInterval = 500;
+    const blinkDuration = 5000;
+    const blinkCount = blinkDuration / blinkInterval;
+
+    let counter = 0;
+    const blink = setInterval(() => {
+
+      if (!this.span) {
+        clearInterval(blink);
+        return;
       }
-    }, 5000);
+
+      this.renderer.setStyle(
+        this.span.nativeElement,
+        'visibility',
+        counter % 2 === 0 ? 'hidden' : 'visible'
+      );
+      counter++;
+
+    // Stop after totalDuration
+    if (counter >= blinkCount) {
+      this.renderer.setStyle(this.span.nativeElement, 'visibility', 'hidden');
+      clearInterval(blink);
+    }
+    }, blinkInterval);
   }
 
   public scroll_to_position(pos: number) {
@@ -404,9 +418,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public toggle_editor(): void {
     if (this.privileges?.edit) {
-      const title = document.getElementById(this.title_id);
-      if (title && !this.editor_loaded) {
-          this.renderer.setStyle(title, 'border', '');
+      if (this.title && !this.editor_loaded) {
+          this.renderer.setStyle(this.title.nativeElement, 'border', '');
       }
       this.editor_loaded = !this.editor_loaded; // Toggle state
       this.cdr.detectChanges();

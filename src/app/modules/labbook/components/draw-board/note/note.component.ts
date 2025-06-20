@@ -87,10 +87,16 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public height: any;
 
-
   public background_color = '';
 
-  public enlarge_rows_id = '';
+  @ViewChild('title')
+  private title?: ElementRef;
+
+  @ViewChild('span')
+  private span?: ElementRef;
+
+  @ViewChild('preload')
+  private preload?: ElementRef;
 
   public uniqueHash = uuidv4();
 
@@ -182,9 +188,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
               );
               this.preloaded_content = privilegesData.data.content
 
-              const preloadedElement = document.getElementById(this.preloaded_id);
-              if (preloadedElement) {
-                this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
+              if (this.preload) {
+                this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
               }
 
             });
@@ -193,9 +198,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       }
     });
 
-    if (document.getElementById(this.preloaded_id)) {
-      // @ts-ignore
-      document.getElementById(this.preloaded_id).innerHTML = this.preloaded_content
+    if (this.preload) {
+      this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
     }
   }
 
@@ -215,7 +219,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public initPrivileges(): void {
 
-    this.enlarge_rows_id = `${this.initialState!.pk}_rows_id`;
     this.preloaded_id = `${this.initialState!.pk}_preloaded_id`;
     this.title_id = `${this.initialState!.pk}_title_id`;
     this.span_id = `${this.initialState!.pk}_span_id`;
@@ -277,9 +280,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
               .subscribe(success => {
                 // this.toastrService.success(success);
                 this.preloaded_content = note.content;
-                const preloadedElement = document.getElementById(this.preloaded_id);
-                if (preloadedElement) {
-                  this.renderer.setProperty(preloadedElement, 'innerHTML', this.preloaded_content);
+                if (this.preload) {
+                  this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
                 }
               });
           } else {
@@ -328,52 +330,33 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     })
   }
 
-  public enlarge_note(): void {
-    let rows = 10
-    // @ts-ignore
-    if (document.getElementById(this.enlarge_rows_id).value) {
-      // @ts-ignore
-      rows = Number(document.getElementById(this.enlarge_rows_id).value)
-      if (rows > 100 || rows < 1) {
-        rows = 10;
-      }
-    }
-    const element: LabBookElementPayload = {
-      position_x: this.element.position_x,
-      position_y: this.element.position_y,
-      width: this.element.width,
-      child_object_id: this.element.child_object_id,
-      child_object_content_type: this.element.child_object_content_type,
-      height: this.element.height + rows,
-    };
-    this.labBooksService.patchElement(this.element.labbook_id, this.element.pk, element).pipe(untilDestroyed(this)).subscribe(
-      () => {
-        setTimeout(() => this.scroll_to_position((this.element.position_y + this.element.height) * 36), 3000);
-      }
-    );
-  }
-
-
   public blink() {
-    const obj = document.getElementById(this.span_id) as HTMLElement
-    obj.style.visibility = 'visible'
-    let counter = 0
-    let timerId = setInterval(function () {
-      if (counter % 2 == 0) {
-        obj.style.visibility = 'hidden'
-        counter++
-      } else {
-        obj.style.visibility = 'visible'
-        counter++
-      }
-    }, 500)
 
-    setTimeout(() => {
-      {
-        obj.style.visibility = 'hidden'
-        clearInterval(timerId);
+    const blinkInterval = 500;
+    const blinkDuration = 5000;
+    const blinkCount = blinkDuration / blinkInterval;
+
+    let counter = 0;
+    const blink = setInterval(() => {
+
+      if (!this.span) {
+        clearInterval(blink);
+        return;
       }
-    }, 5000);
+
+      this.renderer.setStyle(
+        this.span.nativeElement,
+        'visibility',
+        counter % 2 === 0 ? 'hidden' : 'visible'
+      );
+      counter++;
+
+    // Stop after totalDuration
+    if (counter >= blinkCount) {
+      this.renderer.setStyle(this.span.nativeElement, 'visibility', 'hidden');
+      clearInterval(blink);
+    }
+    }, blinkInterval);
   }
 
   public scroll_to_position(pos: number) {
@@ -403,9 +386,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public toggle_editor(): void {
     if (this.privileges?.edit) {
-      const title = document.getElementById(this.title_id);
-      if (title && !this.editor_loaded) {
-        this.renderer.setStyle(title, 'border', '');
+      if (this.title && !this.editor_loaded) {
+        this.renderer.setStyle(this.title.nativeElement, 'border', '');
       }
       this.editor_loaded = !this.editor_loaded; // Toggle state
       this.cdr.detectChanges();
