@@ -73,6 +73,8 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
   public step = 1;
 
+  public lb_elements_count = 0
+
   public state = ModalState.Unchanged;
 
   public parentElement: DropdownElement[] = [];
@@ -141,7 +143,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
   public ngOnInit(): void {
     this.initTranslations();
     this.initSearchInput();
-    // this.initDetails();
+    this.initDetails();
     this.parentElement = [...this.parentElement];
     this.loading = false;
     this.cdr.markForCheck();
@@ -219,18 +221,20 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         labBookElements => {
-          const sections: DropdownElement[] = [];
+          // const sections: DropdownElement[] = [];
 
-          labBookElements.map(element => {
-            if (element.child_object_content_type_model === 'labbooks.labbooksection') {
-              sections.push({
-                value: element.child_object.pk,
-                label: `${element.child_object.date as string}: ${element.child_object.title as string}`,
-              });
-            }
-          });
+          this.lb_elements_count = labBookElements.length
 
-          this.parentElement = [...this.parentElement, ...sections];
+          // labBookElements.map(element => {
+          //   if (element.child_object_content_type_model === 'labbooks.labbooksection') {
+          //     sections.push({
+          //       value: element.child_object.pk,
+          //       label: `${element.child_object.date as string}: ${element.child_object.title as string}`,
+          //     });
+          //   }
+          // });
+
+          // this.parentElement = [...this.parentElement, ...sections];
           this.loading = false;
           this.cdr.markForCheck();
         },
@@ -330,6 +334,9 @@ export class NewLabBookFileElementModalComponent implements OnInit {
               .subscribe(success => {
                 this.toastrService.success(success);
               });
+            if (this.file.name.endsWith('spc') &&  this.lb_elements_count > 0) {
+              this.toastrService.warning('Plots from a .spc cannot be created on non-empty labbooks')
+            }
           } else {
             this.toastrService.error('File Size exceeded.');
           }
