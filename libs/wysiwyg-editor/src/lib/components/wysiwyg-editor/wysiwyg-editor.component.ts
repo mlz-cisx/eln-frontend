@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
 
+
 @Component({
   selector: 'eworkbench-wysiwyg-editor',
   templateUrl: './wysiwyg-editor.component.html',
@@ -124,9 +125,13 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     this.editor?.editor.mode.set(this.disabledSubject.value ? 'readonly' : 'design');
   }
 
-  public writeValue(value: string | null): void {
-    if (this.ngControl.value !== value) {
-      this.onChanged(value);
+  public writeValue(value: string): void {
+    if (this.editor && this.editor.editor.initialized) {
+      const cursor = this.editor.editor.selection.getBookmark(3);
+      this.editor.editor.setContent(value);
+      this.editor.editor.selection.moveToBookmark(cursor);
+    } else {
+      this.initialValue = value === null ? undefined : value;
     }
   }
 
