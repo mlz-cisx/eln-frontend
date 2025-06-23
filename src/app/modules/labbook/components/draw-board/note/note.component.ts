@@ -174,11 +174,13 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
           return
         }
         if (!this.submitted) {
-          this.blink()
           this.notesService
             .get(this.initialState!.pk)
             .pipe(untilDestroyed(this))
             .subscribe(privilegesData => {
+              if (this.f.note_content.value != privilegesData.data.content) {
+                this.blink();
+              }
               this.form.patchValue(
                 {
                   note_subject: privilegesData.data.subject,

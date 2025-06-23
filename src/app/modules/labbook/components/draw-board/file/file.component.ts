@@ -179,11 +179,13 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           return
         }
         if (!this.submitted) {
-          this.blink()
           this.filesService
             .get(this.initialState!.pk)
             .pipe(untilDestroyed(this))
             .subscribe(privilegesData => {
+              if (this.f.file_description.value != privilegesData.data.description) {
+                this.blink();
+              }
               this.form.patchValue(
                 {
                   file_title: privilegesData.data.title,
