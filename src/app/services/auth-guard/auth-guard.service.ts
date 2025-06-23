@@ -7,7 +7,6 @@ import {
   UrlTree
 } from '@angular/router';
 import {AuthService} from '@app/services';
-import {KeycloakService} from "keycloak-angular";
 
 @Injectable({
   providedIn: 'root',
@@ -19,16 +18,12 @@ class AuthGuardService {
 
   constructor(private router: Router,
               private readonly authService: AuthService,
-              protected readonly keycloak: KeycloakService
   ) {
   }
 
   // use this canActivate method if keycloak is integrated
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.getToken()) {
-      this.authenticated = true
-    }
-    if (this.keycloak.isLoggedIn()) {
       this.authenticated = true
     }
     // Force the user to log in if currently unauthenticated

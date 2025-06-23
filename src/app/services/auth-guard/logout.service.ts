@@ -3,7 +3,8 @@ import {
   Router
 } from '@angular/router';
 import {AuthService} from '@app/services';
-import {KeycloakService} from 'keycloak-angular';
+import {environment} from "@environments/environment";
+import {UserStore} from "@app/services/user/user.store";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class LogoutService {
   constructor(
     private authService: AuthService,
     private router: Router,
-    protected readonly keycloak: KeycloakService
+    private readonly userStore: UserStore,
   ) {
   }
 
@@ -34,12 +35,14 @@ export class LogoutService {
     if (this.authService.getToken()) {
       // logout for username/password
       this.authService.clearStorage()
-      // for a consistent ws handling
-      location.reload()
-    } else {
-      this.keycloak.logout().then(() => {
-        this.router.navigate(['/login'])
-      });
+      // logout keycloak
+      if (environment.keycloak_integration && this.userStore.getValue()['user']?.oidc_user) {
+        window.location.href = `${environment.apiUrl}/logout-keycloak`;
+      }
+      else {
+        // for a consistent ws handling
+        location.reload()
+      }
     }
   }
 

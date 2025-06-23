@@ -34,11 +34,7 @@ import {
 
 import {NgSelectModule} from "@ng-select/ng-select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {
-  KeycloakAngularModule,  KeycloakService,
-} from 'keycloak-angular';
 
-import {keycloak_initializer} from "@app/app-init";
 import {InterceptorService} from "@app/services";
 import {ColorPickerService} from "ngx-color-picker"
 
@@ -50,7 +46,6 @@ import {ColorPickerService} from "ngx-color-picker"
     AppComponent,
   ],
   imports: [
-    KeycloakAngularModule,
     NgSelectModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -82,12 +77,6 @@ import {ColorPickerService} from "ngx-color-picker"
     FormsModule,
   ],
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: keycloak_initializer,
-      multi: true,
-      deps: [KeycloakService],
-    },
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: KeycloakBearerInterceptor,

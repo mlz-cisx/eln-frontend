@@ -5,9 +5,9 @@ import {
 } from '@angular/core';
 import {Validators, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {UserService} from "@app/services";
-import {KeycloakService} from 'keycloak-angular';
+import {UserService, AuthService} from "@app/services";
 import {environment} from "@environments/environment";
 
 
@@ -25,20 +25,26 @@ export class LoginPageComponent implements OnInit {
 
   public keycloak_integration = environment.keycloak_integration;
 
-
   public form!: UntypedFormGroup;
 
 
   public constructor(
     private readonly fb: UntypedFormBuilder,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly auth: AuthService,
     private readonly titleService: Title,
     private user_service: UserService,
-    public keycloak: KeycloakService,
   ) {
   }
 
 
   public ngOnInit(): void {
+
+    if (this.keycloak_integration && this.route.snapshot.queryParams['token']) {
+      this.auth.setDataInLocalStorage('token', this.route.snapshot.queryParams['token'])
+      this.router.navigate(['/'])
+    }
 
 
     this.form = this.fb.group({
@@ -64,9 +70,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   public login_with_oidc() {
-    this.keycloak.login({
-      redirectUri: window.location.origin,
-    });
+    window.location.href = `${environment.apiUrl}/login-keycloak`;
   }
 
 }
