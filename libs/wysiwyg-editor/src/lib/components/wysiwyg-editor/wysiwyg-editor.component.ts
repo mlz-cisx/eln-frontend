@@ -12,6 +12,7 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
 
 
+
 @Component({
   selector: 'eworkbench-wysiwyg-editor',
   templateUrl: './wysiwyg-editor.component.html',
@@ -119,9 +120,8 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
 
   public ngAfterViewInit(): void {
     this.ngControl.valueChanges?.subscribe(() => {
-      this.cdr.markForCheck();
+      this.writeValue(this.ngControl.value)
     });
-
     this.editor?.editor.mode.set(this.disabledSubject.value ? 'readonly' : 'design');
   }
 
