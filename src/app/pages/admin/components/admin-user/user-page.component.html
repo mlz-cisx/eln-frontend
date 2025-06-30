@@ -363,7 +363,7 @@
     </form>
 
     <eworkbench-details-collapse-element
-      [labelText]="t('user.details.password_reset.label')">
+      [labelText]="t('user.details.password_reset.label')" *ngIf=!initialState.oidc_user>
           <ng-container slot="body">
         <form [formGroup]="passwword_form" (ngSubmit)="password_reset()"
               errorTailor>
