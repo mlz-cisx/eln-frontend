@@ -7,7 +7,7 @@ import {
   Self,
   ViewChild
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
 
@@ -108,6 +108,8 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   public onTouched: any = () => {
   };
 
+  private destroy$ = new Subject<void>();
+
   public constructor(@Self() public readonly ngControl: NgControl, private readonly cdr: ChangeDetectorRef) {
     ngControl.valueAccessor = this;
   }
@@ -119,10 +121,15 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   }
 
   public ngAfterViewInit(): void {
-    this.ngControl.valueChanges?.subscribe(() => {
+    this.ngControl.valueChanges?.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.writeValue(this.ngControl.value)
     });
     this.editor?.editor.mode.set(this.disabledSubject.value ? 'readonly' : 'design');
+  }
+
+  ngOnDestroy() {
+     this.destroy$.next();
+     this.destroy$.complete();
   }
 
   public writeValue(value: string): void {
