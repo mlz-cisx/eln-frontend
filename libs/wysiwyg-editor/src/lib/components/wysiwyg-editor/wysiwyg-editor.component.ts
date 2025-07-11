@@ -32,6 +32,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     suffix: '.min',
     branding: false,
     promotion: false,
+    license_key: 'gpl',
     max_height: this.maxHeight,
     height: this.actual_height,
     plugins: 'preview importcss searchreplace autolink autosave  directionality code visualblocks visualchars image link  codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap emoticons accordion',
