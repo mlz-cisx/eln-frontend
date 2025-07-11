@@ -55,4 +55,16 @@ export class UserService {
     return this.userQuery.user$ as any;
   }
 
+  public refreshToken() {
+    return this.httpClient.post<any>(`${environment.apiUrl}/refresh-token`, {
+      access_token: this._auth.getToken()
+    }).pipe(
+      map((res) => {
+        if (res.access_token) {
+          this._auth.setDataInLocalStorage('token', res.access_token)
+          return res.access_token;
+        }
+      })
+    );
+  }
 }
