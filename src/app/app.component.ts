@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {setTheme} from 'ngx-bootstrap/utils';
-import {WebSocketService, UserService,} from './services';
-import {UserStore} from "@app/services/user/user.store";
+import {WebSocketService} from './services';
 
 @Component({
   selector: 'joeseln-root',
@@ -10,9 +9,7 @@ import {UserStore} from "@app/services/user/user.store";
 })
 export class AppComponent implements OnInit {
 
-  public constructor(private readonly websocketService: WebSocketService,
-                     private user_service: UserService,
-                     private readonly userStore: UserStore,) {
+  public constructor(private readonly websocketService: WebSocketService) {
     setTheme('bs4');
   }
 
@@ -20,14 +17,5 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.websocketService.connect()
-    // we need this for page reload for a logged-in User
-    // because createInitialState() is called initially
-    // no error-service integration, because it is called always first
-    // even without a logged-in user
-    this.user_service.getUserMe_without_error_service()
-      .subscribe(user => {
-          this.userStore.update(() => ({user, loggedIn: Boolean(user)}));
-        }
-      );
   }
 }
