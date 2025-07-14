@@ -135,9 +135,13 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
 
   public writeValue(value: string): void {
     if (this.editor && this.editor.editor.initialized) {
-      const cursor = this.editor.editor.selection.getBookmark(3);
-      this.editor.editor.setContent(value);
-      this.editor.editor.selection.moveToBookmark(cursor);
+      const cursor = this.editor.editor.selection.getBookmark(3) as any
+      if (cursor['start'] && cursor['start'].includes('text')) {
+        // do nothing
+      } else {
+        this.editor.editor.setContent(value);
+        this.editor.editor.selection.moveToBookmark(cursor);
+      }
     } else {
       this.initialValue = value === null ? undefined : value;
     }
