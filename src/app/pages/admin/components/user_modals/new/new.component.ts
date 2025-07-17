@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {HttpParams} from '@angular/common/http';
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -15,11 +15,8 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import {
   AdminUsersService,
   NotesService,
-  // ProjectsService
 } from '@app/services';
 import type {
-  Note,
-  NotePayload,
   Project,
   UserPayload,
   User
@@ -29,9 +26,7 @@ import {FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, of, Subject} from 'rxjs';
-import {catchError, debounceTime, mergeMap, switchMap} from 'rxjs/operators';
-
+import {Subject} from 'rxjs';
 
 
 @UntilDestroy()
@@ -74,7 +69,6 @@ export class NewUserModalComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,
     public readonly admin_users_service: AdminUsersService
-    //private readonly projectsService: ProjectsService
   ) {
   }
 
@@ -100,29 +94,6 @@ export class NewUserModalComponent implements OnInit {
 
   public initSearchInput(): void {
 
-    // this.projectInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //     this.cdr.markForCheck();
-    //   });
-    //
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
 
   }
 
@@ -140,27 +111,7 @@ export class NewUserModalComponent implements OnInit {
         {emitEvent: false}
       );
 
-      // if (this.initialState.projects.length) {
 
-      // from(this.initialState.projects)
-      //   .pipe(
-      //     untilDestroyed(this),
-      //     mergeMap(id =>
-      //       this.projectsService.get(id).pipe(
-      //         untilDestroyed(this),
-      //         catchError(() =>
-      //           of({ pk: id, name: this.translocoService.translate('formInput.unknownProject'), is_favourite: false } as Project)
-      //         )
-      //       )
-      //     )
-      //   )
-      //   .subscribe(project => {
-      //     this.projects = [...this.projects, project]
-      //       .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-      //       .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-      //     this.cdr.markForCheck();
-      //   });
-      // }
     }
   }
 
@@ -179,15 +130,8 @@ export class NewUserModalComponent implements OnInit {
           this.modalRef.close({
             state: this.state,
             data: {newContent: user},
-            navigate: ['/admin/users',]
           });
-          this.translocoService
-            .selectTranslate('note.newModal.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
-          location.reload()
+          this.toastrService.success('User successfully created!')
         },
         () => {
           this.loading = false;
