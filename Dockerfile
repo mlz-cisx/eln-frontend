@@ -17,6 +17,8 @@ FROM docker.io/nginxinc/nginx-unprivileged:1.26.3
 USER root
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+# uncomment next line for development purposes and set user:root in docker-compose.yml
+# RUN chmod +x /docker-entrypoint.sh
 COPY --from=build --chown=101:0 /app/dist/joeselnfrontend13/browser /usr/share/nginx/html
 RUN chmod 664 /usr/share/nginx/html/index.html /etc/nginx/conf.d/default.conf /usr/share/nginx/html/assets/config/env.js && chmod 775 /usr/share/nginx/html
 USER 101
