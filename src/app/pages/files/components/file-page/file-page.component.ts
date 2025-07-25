@@ -1,9 +1,4 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-import {HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -17,7 +12,6 @@ import {
 import {Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ModalState} from '@app/enums/modal-state.enum';
 import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
 import {
   CommentsComponent
@@ -25,26 +19,17 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-// import { DescriptionModalComponent } from '@app/modules/shared/modals/description/description.component';
-// import { PendingChangesModalComponent } from '@app/modules/shared/modals/pending-changes/pending-changes.component';
-// import { LeaveProjectModalComponent } from '@app/pages/projects/components/modals/leave/leave.component';
 import {
   AuthService,
-  // DrivesService,
-  FilesService, UserService,
-  // PageTitleService,
-  // ProjectsService,
+  FilesService,
+  UserService,
   WebSocketService
 } from '@app/services';
-// import { UserService, UserStore } from '@app/stores/user';
 import type {
   Directory,
   Drive,
   File,
   FilePayload,
-  Lock,
-  Metadata,
-  ModalCallback,
   Privileges,
   Project,
   User
@@ -54,18 +39,8 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, Observable, of, Subject} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  map,
-  mergeMap,
-  skip,
-  switchMap,
-  take
-} from 'rxjs/operators';
-import {NewFileModalComponent} from '../modals/new.component';
-import {mockUser} from "@joeseln/mocks";
+import {Observable, of, Subject} from 'rxjs';
+import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 
 
 interface FormFile {
@@ -95,11 +70,8 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public initialState?: File;
 
-  public metadata?: Metadata[];
 
   public privileges?: Privileges;
-
-  public lock: Lock | null = null;
 
   public modified = false;
 
@@ -111,7 +83,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public readonly dateFormat = "yyyy-MM-dd HH':'mm";
 
-  public newModalComponent = NewFileModalComponent;
 
   public refreshChanges = new EventEmitter<boolean>();
 
@@ -119,13 +90,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public refreshResetValue = new EventEmitter<boolean>();
 
-  public refreshMetadata = new EventEmitter<boolean>();
 
   public refreshLinkList = new EventEmitter<boolean>();
 
-  public assignees: User[] = [];
-
-  public assigneesInput$ = new Subject<string>();
 
   public projects: Project[] = [];
 
@@ -137,7 +104,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public directories: Directory[] = [];
 
-  public storagePrivileges?: Privileges;
 
   @ViewChild('uploadInput')
   public uploadInput!: ElementRef;
@@ -159,14 +125,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly websocketService: WebSocketService,
-    //private readonly projectsService: ProjectsService,
-    //private readonly userService: UserService,
-    //private readonly drivesService: DrivesService,
-    //private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
-    //private readonly userStore: UserStore
   ) {
   }
 
@@ -174,17 +135,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-  public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
-    if (this.lock) {
-      if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return {ownUser: true, user: this.lock.lock_details?.locked_by};
-      }
 
-      return {ownUser: false, user: this.lock.lock_details?.locked_by};
-    }
-
-    return {ownUser: false, user: null};
-  }
 
   public get descriptionTranslationKey(): string {
     return this.initialState?.description ? 'file.details.description.edit' : 'file.details.description.add';
@@ -195,7 +146,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
       title: this.f.title.value!,
       name: this.f.name.value!,
       projects: this.f.projects.value,
-      metadata: this.metadata!,
     };
 
     if (this.privileges?.fullAccess && this.directories.length) {
@@ -212,19 +162,8 @@ export class FilePageComponent implements OnInit, OnDestroy {
       this.currentUser = state.user;
     });
 
-    // this.websocketService.subscribe([{model: 'file', pk: this.id}]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.element_lock_changed?.model_pk === this.id) {
-        this.lock = data.element_lock_changed;
-        this.cdr.detectChanges();
-      }
-
       if (data.element_changed?.model_pk === this.id) {
-        if (this.lockUser.user && !this.lockUser.ownUser) {
-          this.modified = true;
-        } else {
-          this.modified = false;
-        }
         this.cdr.detectChanges();
       }
     });
@@ -236,7 +175,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {
@@ -246,10 +184,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
         skip(2),
         debounceTime(500),
         switchMap(() => {
-          if (!this.lock?.locked) {
-            return this.filesService.lock(this.id);
-          }
-
           return of([]);
         })
       )
@@ -258,76 +192,17 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public initSidebar(): void {
 
-    // this.route.params.subscribe(params => {
-    //   if (params.projectId) {
-    //     this.showSidebar = true;
-    //
-    //     this.projectsService.get(params.projectId).subscribe(project => {
-    //       this.projects = [...this.projects, project]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     });
-    //   }
-    // });
-
   }
 
   public initSearchInput(): void {
-
-    // this.assigneesInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.userService.search(input) : of([])))
-    //   )
-    //   .subscribe(users => {
-    //     if (users.length) {
-    //       this.assignees = [...users];
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-    //
-    // this.projectInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //     this.cdr.markForCheck();
-    //   });
-    //
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
 
   }
 
   public initPageTitle(): void {
 
-    // this.pageTitleService
-    //   .get()
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(title => {
-    //     this.titleService.setTitle(title);
-    //   });
   }
 
   public initDetails(formChanges = true): void {
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
 
     this.filesService
       .get(this.id)
@@ -355,46 +230,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
         }),
         switchMap(privilegesData => {
 
-          // if (privilegesData.data.projects.length) {
-          //   return from(privilegesData.data.projects).pipe(
-          //     mergeMap(id =>
-          //       this.projectsService.get(id).pipe(
-          //         untilDestroyed(this),
-          //         catchError(() =>
-          //           of({
-          //             pk: id,
-          //             name: this.translocoService.translate('formInput.unknownProject'),
-          //             is_favourite: false,
-          //           } as Project)
-          //         )
-          //       )
-          //     ),
-          //     map(project => {
-          //       this.projects = [...this.projects, project]
-          //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-          //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-          //       this.cdr.markForCheck();
-          //     }),
-          //     switchMap(() => of(privilegesData))
-          //   );
-          // }
 
           return of(privilegesData);
         }),
-        // switchMap(privilegesData =>
-        //   this.drivesService.getList().pipe(
-        //     map(drives => {
-        //       this.storages = [...drives.data];
-        //       this.directories = drives.data
-        //         .flatMap(dir => dir.sub_directories)
-        //         .flatMap(d =>
-        //           d.is_virtual_root ? { ...d, display: drives.data.find(drive => drive.pk === d.drive_id)?.display ?? d.display } : d
-        //         );
-        //       this.cdr.markForCheck();
-        //     }),
-        //     switchMap(() => of(privilegesData))
-        //   )
-        // )
       )
       .subscribe(
         privilegesData => {
@@ -402,11 +240,10 @@ export class FilePageComponent implements OnInit, OnDestroy {
           const privileges = privilegesData.privileges;
 
           this.detailsTitle = file.title;
-          //void this.pageTitleService.set(file.display);
 
           this.initialState = {...file};
           this.privileges = {...privileges};
-          // this.initDirectoryDetails();
+
 
 
           this.loading = false;
@@ -429,111 +266,16 @@ export class FilePageComponent implements OnInit, OnDestroy {
   }
 
   public onUpload(event: Event): void {
-    const files = (event.target as HTMLInputElement).files;
-
-    if (files?.length) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (this.loading) {
-          return;
-        }
-        this.loading = true;
-
-        this.filesService
-          .updateFile(this.id, files[0])
-          .pipe(untilDestroyed(this))
-          .subscribe(() => {
-            this.loading = false;
-            this.onSubmit();
-          });
-      };
-      reader.readAsBinaryString(files[0]);
-    }
   }
 
   public onSubmit(): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-
-    this.filesService
-      .patch(this.id, this.file)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        file => {
-          if (this.lock?.locked && this.lockUser.ownUser) {
-            this.filesService.unlock(this.id);
-          }
-
-          this.detailsTitle = file.title;
-          //void this.pageTitleService.set(file.display);
-
-          this.initialState = {...file};
-          this.initDirectoryDetails();
-          this.form.markAsPristine();
-          this.refreshChanges.next(true);
-          this.refreshVersions.next(true);
-          this.refreshMetadata.next(true);
-          this.refreshLinkList.next(true);
-          this.refreshResetValue.next(true);
-
-          this.loading = false;
-          this.cdr.markForCheck();
-          this.translocoService
-            .selectTranslate('file.details.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
   }
 
   public canDeactivate(): Observable<boolean> {
-
-    // if (this.showSidebar) {
-    //   const userStoreValue = this.userStore.getValue();
-    //   const userSetting = 'SkipDialog-LeaveProject';
-    //
-    //   const skipLeaveDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.[userSetting]);
-    //
-    //   if (skipLeaveDialog) {
-    //     return of(true);
-    //   }
-    //
-    //   // this.modalRef = this.modalService.open(LeaveProjectModalComponent, {
-    //   //   closeButton: false,
-    //   // });
-    //
-    //   // return this.modalRef.afterClosed$.pipe(
-    //   //   untilDestroyed(this),
-    //   //   take(1),
-    //   //   map(val => Boolean(val))
-    //   // );
-    // }
-
     return of(true);
   }
 
   public pendingChanges(): Observable<boolean> {
-
-    // if (this.form.dirty) {
-    //   this.modalRef = this.modalService.open(PendingChangesModalComponent, {
-    //     closeButton: false,
-    //   });
-    //
-    //   return this.modalRef.afterClosed$.pipe(
-    //     untilDestroyed(this),
-    //     take(1),
-    //     map(val => Boolean(val))
-    //   );
-    // }
-
     return of(true);
   }
 
@@ -541,7 +283,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
     this.initDetails(false);
     this.refreshVersions.next(true);
     this.refreshChanges.next(true);
-    this.refreshMetadata.next(true);
     this.refreshLinkList.next(true);
   }
 
@@ -559,81 +300,14 @@ export class FilePageComponent implements OnInit, OnDestroy {
         service: this.filesService,
       },
     } as DialogConfig);
-
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
-    //   if (callback.state === ModalState.Changed) {
-    //     this.comments.loadComments();
-    //   }
-    // });
   }
 
   public onOpenDescriptionModal(): void {
-    // this.filesService.lock(this.id).pipe(take(1)).subscribe();
-
-    // this.modalRef = this.modalService.open(DescriptionModalComponent, {
-    //   closeButton: false,
-    //   width: '912px',
-    //   data: {
-    //     id: this.id,
-    //     description: this.initialState?.description ?? '',
-    //     descriptionKey: 'description',
-    //     service: this.filesService,
-    //   },
-    // });
-
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback?: ModalCallback) => {
-    //   if (callback?.state === ModalState.Changed) {
-    //     this.initialState = { ...callback.data };
-    //     this.form.markAsPristine();
-    //     this.refreshChanges.next(true);
-    //     this.refreshResetValue.next(true);
-    //   }
-    //   this.filesService.unlock(this.id).pipe(take(1)).subscribe();
-    // });
-  }
-
-  public onUpdateMetadata(metadata: Metadata[]): void {
-    this.metadata = metadata;
   }
 
   public initDirectoryDetails(): void {
-    this.initialState!.directory = null;
-
-    const directory = this.directories.filter(directory => directory.pk === this.initialState!.directory_id);
-    if (directory.length) {
-      this.initialState!.directory = directory[0];
-
-      const storageId = this.getStorageIdForDirectory(this.initialState!.directory_id);
-      // @ts-ignore
-      this.drivesService.get(storageId, this.currentUser!.pk!).subscribe(privilegesData => {
-        this.storagePrivileges = privilegesData.privileges;
-      });
-    } else {
-      const directory: any = {
-        display: this.translocoService.translate('file.details.storage.unknown.label'),
-        name: '/',
-        pk: this.initialState!.directory_id,
-        drive_id: this.initialState!.directory_id,
-        directory: null,
-        is_virtual_root: true,
-      };
-
-      this.directories = [...this.directories, directory as Directory];
-      this.initialState!.directory = directory as Directory;
-    }
   }
 
-  public getStorageForDirectory(directoryId: string | null): Drive[] {
-    return this.storages.filter(storage => storage.sub_directories.filter(directory => directory.pk === directoryId).length);
-  }
-
-  public getStorageNameForDirectory(directoryId: string): string {
-    return this.getStorageForDirectory(directoryId)[0]?.display || this.translocoService.translate('file.details.storage.unknown.label');
-  }
-
-  public getStorageIdForDirectory(directoryId: string | null): string {
-    return this.getStorageForDirectory(directoryId)[0]?.pk || '';
-  }
 
   public go_to_file(): void {
     this.filesService

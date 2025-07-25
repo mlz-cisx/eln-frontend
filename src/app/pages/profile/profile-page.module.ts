@@ -1,16 +1,9 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormHelperModule } from '@app/modules/form-helper/form-helper.module';
-// import { HeaderModule } from '@app/modules/header/header.module';
 import { CustomControlErrorComponent } from '@app/modules/shared/control-error/control-error.component';
 import { UserModule } from '@app/modules/user/user.module';
 import { TranslocoRootModule } from '@app/transloco-root.module';
-// import { AngularCropperjsModule } from '@crawl/angular-cropperjs';
 import { FormsModule } from '@joeseln/forms';
 import { IconsModule } from '@joeseln/icons';
 import { SkeletonsModule } from '@joeseln/skeletons';
@@ -18,9 +11,7 @@ import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { TranslocoService } from '@ngneat/transloco';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-//import { PasswordPageComponent } from './components/password-page/password-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile.component';
-//import { SettingsPageComponent } from './components/settings-page/settings-page.component';
 import { ProfilePageRoutingModule } from './profile-page-routing.module';
 
 @NgModule({
@@ -29,7 +20,6 @@ import { ProfilePageRoutingModule } from './profile-page-routing.module';
     CommonModule,
     ProfilePageRoutingModule,
     TranslocoRootModule,
-    //HeaderModule,
     FormsModule,
     ErrorTailorModule.forRoot({
       errors: {
@@ -46,7 +36,6 @@ import { ProfilePageRoutingModule } from './profile-page-routing.module';
       controlErrorComponent: CustomControlErrorComponent,
     }),
     FormHelperModule,
-    //AngularCropperjsModule,
     AlertModule,
     IconsModule,
     SkeletonsModule,

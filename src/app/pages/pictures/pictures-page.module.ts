@@ -1,23 +1,11 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {CommentModule} from '@app/modules/comment/comment.module';
 import {
   DetailsDropdownModule
 } from '@app/modules/details-dropdown/details-dropdown.module';
-// import { FavoritesModule } from '@app/modules/favorites/favorites.module';
 import {FormHelperModule} from '@app/modules/form-helper/form-helper.module';
-// import { HeaderModule } from '@app/modules/header/header.module';
-// import { LabelModule } from '@app/modules/label/label.module';
-// import { LinkModule } from '@app/modules/link/link.module';
 import {LoadingModule} from '@app/modules/loading/loading.module';
-import {LockModule} from '@app/modules/lock/lock.module';
-import {MetadataModule} from '@app/modules/metadata/metadata.module';
-// import { ProjectModule } from '@app/modules/project/project.module';
 import {
   RecentChangesModule
 } from '@app/modules/recent-changes/recent-changes.module';
@@ -40,9 +28,6 @@ import {ErrorTailorModule} from '@ngneat/error-tailor';
 import {TranslocoService} from '@ngneat/transloco';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
-// import { ConvertTiffModalComponent } from './components/modals/convert-tiff/convert-tiff.component';
-// import { NewPictureModalComponent } from './components/modals/new/new.component';
-// import { SketchPictureModalComponent } from './components/modals/sketch/sketch.component';
 import {
   PicturePageComponent
 } from './components/picture-page/picture-page.component';
@@ -56,15 +41,11 @@ import {PicturesPageRoutingModule} from './pictures-page-routing.module';
   declarations: [
     PicturesPageComponent,
     PicturePageComponent,
-    // NewPictureModalComponent,
-    // SketchPictureModalComponent,
-    // ConvertTiffModalComponent,
   ],
   imports: [
     CommonModule,
     PicturesPageRoutingModule,
     TranslocoRootModule,
-    // HeaderModule,
     TableModule,
     FormsModule,
     ErrorTailorModule.forRoot({
@@ -81,7 +62,6 @@ import {PicturesPageRoutingModule} from './pictures-page-routing.module';
     TrashModule,
     UserModule,
     LoadingModule,
-    LockModule,
     FormHelperModule,
     ModalsModule,
     SharedModule,
@@ -90,14 +70,9 @@ import {PicturesPageRoutingModule} from './pictures-page-routing.module';
     RecentChangesModule,
     VersionsModule,
     BsDropdownModule.forRoot(),
-    MetadataModule,
-    // ProjectModule,
-    // LabelModule,
     IconsModule,
     SkeletonsModule,
-    // LinkModule,
     PictureEditorModule,
-    // FavoritesModule,
     CommentModule,
     TooltipModule.forRoot(),
   ],

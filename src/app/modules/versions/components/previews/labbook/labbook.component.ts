@@ -1,8 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -62,7 +57,6 @@ export class LabBookPreviewComponent implements OnInit {
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService,
     private readonly labBooksService: LabbooksService,
-    // private readonly projectsService: ProjectsService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef
   ) {
@@ -105,15 +99,6 @@ export class LabBookPreviewComponent implements OnInit {
   }
 
   public loadProjects(projects: string[]): void {
-    // projects.forEach(id => {
-    //   this.projectsService
-    //     .get(id)
-    //     .pipe(untilDestroyed(this))
-    //     .subscribe(project => {
-    //       this.projects = [...this.projects, project];
-    //       this.cdr.markForCheck();
-    //     });
-    // });
   }
 
   private location_reload() {

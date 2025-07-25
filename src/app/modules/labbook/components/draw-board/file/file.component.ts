@@ -1,8 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -162,10 +157,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       this.background_color = 'background-color: ' + admin_element_background_color;
     }
 
-    // this.websocketService.subscribe([{
-    //   model: 'file',
-    //   pk: this.initialState!.pk
-    // }]);
   }
 
   ngAfterViewInit() {
@@ -277,7 +268,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
               }
             )
           }
-          // title: plot[0] graph: plot [1]
           let layout = {
             title: {text: plot[0]}
           }
@@ -310,17 +300,10 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       .subscribe(
         file => {
           if (file) {
-            // this.initialState = {...file};
             this.form.markAsPristine();
 
             this.loading = false;
             this.cdr.markForCheck();
-            // this.translocoService
-            //   .selectTranslate('file.details.toastr.success')
-            //   .pipe(untilDestroyed(this))
-            //   .subscribe(success => {
-            //     this.toastrService.success(success);
-            //   });
             this.preloaded_content = file.description
             if (this.preload) {
               this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
@@ -352,14 +335,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public refreshElementRelationsCounter(): void {
-    this.labBooksService
-      .getElement(this.id, this.element.pk)
-      .pipe(untilDestroyed(this))
-      .subscribe(element => {
-        this.element.num_related_comments = element.num_related_comments!;
-        this.element.num_relations = element.num_relations!;
-        this.cdr.markForCheck();
-      });
   }
 
 

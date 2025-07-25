@@ -1,5 +1,3 @@
-
-
 import type { TemplateRef } from '@angular/core';
 import type { TableSortDirection } from '../enums/table-sort-direction.enum';
 

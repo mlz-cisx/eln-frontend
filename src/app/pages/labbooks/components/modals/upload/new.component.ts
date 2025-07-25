@@ -1,9 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-import {HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -13,27 +7,32 @@ import {
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
+  CommentsService,
   FilesService,
-  LabbooksService, NotesService,
-  PicturesService, CommentsService
+  LabbooksService,
+  NotesService,
+  PicturesService
 } from '@joeseln/services';
 import type {
-  LabBook, Project,
-  Picture, File,
-  Note, LabBookElementPayload,
-  CommentPayload, FileClonePayload,
-  NotePayload, PictureClonePayload,
+  CommentPayload,
+  File,
+  FileClonePayload,
+  LabBook,
   LabBookElementClonePayload,
+  LabBookElementPayload,
+  Note,
+  NotePayload,
+  Picture,
+  PictureClonePayload,
+  Project,
 } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, of, Subject, timeout} from 'rxjs';
+import {Subject} from 'rxjs';
 import JSZip from 'jszip';
-import JSZipObject from 'jszip';
-import {catchError, debounceTime, mergeMap, switchMap} from 'rxjs/operators';
 
 
 interface FormLabBook {

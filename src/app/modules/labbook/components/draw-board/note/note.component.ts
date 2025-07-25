@@ -1,9 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -366,14 +360,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public refreshElementRelationsCounter(): void {
-    this.labBooksService
-      .getElement(this.id, this.element.pk)
-      .pipe(untilDestroyed(this))
-      .subscribe(element => {
-        this.element.num_related_comments = element.num_related_comments!;
-        this.element.num_relations = element.num_relations!;
-        this.cdr.markForCheck();
-      });
   }
 
   public toggle_toolbar(): void {
@@ -398,17 +384,5 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
 
   public reload() {
-    this.labBooksService
-      .getElement(this.id, this.element.pk)
-      .pipe(untilDestroyed(this))
-      .subscribe(element => {
-        this.form.patchValue(
-          {
-            note_subject: element.child_object.subject,
-            note_content: element.child_object.content,
-          },
-          {emitEvent: false}
-        );
-      });
   }
 }

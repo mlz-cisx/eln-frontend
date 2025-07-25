@@ -1,8 +1,3 @@
-<!--
-  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
-  SPDX-License-Identifier: AGPL-3.0-or-later
--->
-
 <ng-container *transloco="let t">
   <eworkbench-loading [loading]="loading">
     <ng-container *ngIf="labBook">
@@ -30,48 +25,6 @@
           for="description-modal">{{ t('labBook.details.description.label') }}</label>
         <eworkbench-wysiwyg-editor [id]="'description-modal'"
                                    [formControl]="descriptionFormControl"></eworkbench-wysiwyg-editor>
-      </div>
-      <div class="mb-4">
-        <label
-          for="projects-modal">{{ t('labBook.details.projects.label') }}</label>
-        <ng-select
-          class="ewb-select"
-          name="projects-modal"
-          [formControl]="projectsFormControl"
-          [placeholder]="t('formInput.notDefined.placeholder')"
-          [multiple]="true"
-          [items]="projects"
-          bindLabel="name"
-          bindValue="pk"
-        >
-          <ng-template ng-label-tmp let-item="item" let-clear="clear">
-            {{ item.name }}
-          </ng-template>
-        </ng-select>
-      </div>
-      <div class="mb-4">
-        <label
-          for="metadata-modal">{{ t('labBook.details.metadata.label') }}</label>
-        <ng-container *ngIf="labBook.metadata.length">
-          <ng-container *ngFor="let field of labBook.metadata">
-            <div class="mb-2">
-              <div class="mb-1">{{ field.field_info?.display }}</div>
-              <!--              <eworkbench-metadata-field-->
-              <!--                [uuid]="field.pk"-->
-              <!--                [id]="field.pk"-->
-              <!--                [baseType]="field.field_info?.base_type"-->
-              <!--                [typeSettings]="field.field_info?.type_settings"-->
-              <!--                [label]="field.field_info?.display"-->
-              <!--                [values]="field.values"-->
-              <!--                [editable]="false"-->
-              <!--              ></eworkbench-metadata-field>-->
-            </div>
-          </ng-container>
-        </ng-container>
-        <div class="text-tum-disabled italic"
-             *ngIf="!labBook.metadata.length">
-          {{ t('formInput.notDefined.placeholder') }}
-        </div>
       </div>
       <div class="mb-4">
         <label>{{ t('labBook.details.elements.label') }}</label>

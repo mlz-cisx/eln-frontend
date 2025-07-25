@@ -1,9 +1,4 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-import {HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -17,31 +12,19 @@ import {
 import {Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ModalState} from '@app/enums/modal-state.enum';
-import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
 import {
   CommentsComponent
 } from '@app/modules/comment/components/comments/comments.component';
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-// import { PendingChangesModalComponent } from '@app/modules/shared/modals/pending-changes/pending-changes.component';
-// import { LeaveProjectModalComponent } from '@app/pages/projects/components/modals/leave/leave.component';
 import {
   AuthService,
-  // PageTitleService,
   PicturesService,
-  // ProjectsService,
+  UserService,
   WebSocketService
 } from '@app/services';
-import {
-  UserService,
-  // UserStore
-} from '@app/services';
 import type {
-  Lock,
-  Metadata,
-  ModalCallback,
   Picture,
   Privileges,
   Project,
@@ -52,18 +35,9 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, Observable, of, Subject} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  map,
-  mergeMap,
-  skip,
-  switchMap,
-  take
-} from 'rxjs/operators';
-// import { NewPictureModalComponent } from '../modals/new/new.component';
-import {mockUser} from "@joeseln/mocks";
+import {Observable, of, Subject} from 'rxjs';
+import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
+
 
 interface FormPicture {
   title: FormControl<string | null>;
@@ -87,13 +61,11 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public id = this.route.snapshot.paramMap.get('id')!;
 
-  public sidebarItem = ProjectSidebarItem.Pictures;
 
   public currentUser: User | null = null;
 
   public initialState?: Picture;
 
-  public metadata?: Metadata[];
 
   // some initialization
   public privileges: Privileges = {
@@ -105,7 +77,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     restore: false
   };
 
-  public lock: Lock | null = null;
+
 
   public modified = false;
 
@@ -117,7 +89,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public readonly dateFormat = "yyyy-MM-dd HH':'mm";
 
-  // public newModalComponent = NewPictureModalComponent;
 
   public refreshChanges = new EventEmitter<boolean>();
 
@@ -125,13 +96,8 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public refreshResetValue = new EventEmitter<boolean>();
 
-  public refreshMetadata = new EventEmitter<boolean>();
-
   public refreshLinkList = new EventEmitter<boolean>();
 
-  public assignees: User[] = [];
-
-  public assigneesInput$ = new Subject<string>();
 
   public projects: Project[] = [];
 
@@ -160,13 +126,10 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly websocketService: WebSocketService,
-    // private readonly projectsService: ProjectsService,
     private readonly userService: UserService,
-    // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
-    // private readonly userStore: UserStore
   ) {
   }
 
@@ -174,17 +137,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-  public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
-    if (this.lock) {
-      if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
-        return {ownUser: true, user: this.lock.lock_details?.locked_by};
-      }
 
-      return {ownUser: false, user: this.lock.lock_details?.locked_by};
-    }
-
-    return {ownUser: false, user: null};
-  }
 
   private get file(): any {
     return {
@@ -193,7 +146,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
       width: this.f.width.value,
       aspectRatio: this.f.aspectRatio.value ?? 1.0,
       projects: this.f.projects.value,
-      metadata: this.metadata,
     };
   }
 
@@ -202,22 +154,9 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      // console.log(this.currentUser)
     });
-
-    // this.websocketService.subscribe([{ model: 'picture', pk: this.id }]);
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.element_lock_changed?.model_pk === this.id) {
-        this.lock = data.element_lock_changed;
-        this.cdr.detectChanges();
-      }
-
       if (data.element_changed?.model_pk === this.id) {
-        if (this.lockUser.user && !this.lockUser.ownUser) {
-          this.modified = true;
-        } else {
-          this.modified = false;
-        }
         this.cdr.detectChanges();
       }
     });
@@ -229,7 +168,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {
@@ -240,9 +178,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
         debounceTime(500),
         switchMap(() => {
           this.cdr.markForCheck();
-          if (!this.lock?.locked) {
-            return this.picturesService.lock(this.id);
-          }
 
           return of([]);
         })
@@ -252,78 +187,17 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
   public initSidebar(): void {
 
-    // this.route.params.subscribe(params => {
-    //   if (params.projectId) {
-    //     this.showSidebar = true;
-    //
-    //     this.projectsService.get(params.projectId).subscribe(project => {
-    //       this.projects = [...this.projects, project]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     });
-    //   }
-    // });
-
   }
 
   public initSearchInput(): void {
-
-    // this.assigneesInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.userService.search(input) : of([])))
-    //   )
-    //   .subscribe(users => {
-    //     if (users.length) {
-    //       this.assignees = [...users];
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-    //
-    // this.projectInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //     this.cdr.markForCheck();
-    //   });
-    //
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
 
   }
 
   public initPageTitle(): void {
 
-    // this.pageTitleService
-    //   .get()
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(title => {
-    //     this.titleService.setTitle(title);
-    //   });
-
   }
 
   public initDetails(formChanges = true): void {
-
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
 
     this.picturesService
       .get(this.id)
@@ -350,34 +224,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
           return privilegesData;
         }),
-        // switchMap(privilegesData => {
-        //
-        //   // if (privilegesData.data.projects.length) {
-        //   //   return from(privilegesData.data.projects).pipe(
-        //   //     mergeMap(id =>
-        //   //       this.projectsService.get(id).pipe(
-        //   //         untilDestroyed(this),
-        //   //         catchError(() =>
-        //   //           of({
-        //   //             pk: id,
-        //   //             name: this.translocoService.translate('formInput.unknownProject'),
-        //   //             is_favourite: false,
-        //   //           } as Project)
-        //   //         )
-        //   //       )
-        //   //     ),
-        //   //     map(project => {
-        //   //       this.projects = [...this.projects, project]
-        //   //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-        //   //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-        //   //       this.cdr.markForCheck();
-        //   //     }),
-        //   //     switchMap(() => of(privilegesData))
-        //   //   );
-        //   // }
-        //
-        //   return of(privilegesData);
-        // })
       )
       .subscribe(
         privilegesData => {
@@ -410,87 +256,14 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    // input elements are in readonly mode
-    // if (this.loading) {
-    //   return;
-    // }
-    // this.loading = true;
-    //
-    // this.picturesService
-    //   .patch(this.id, this.file)
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     picture => {
-    //       if (this.lock?.locked && this.lockUser.ownUser) {
-    //         this.picturesService.unlock(this.id);
-    //       }
-    //
-    //       this.detailsTitle = picture.title;
-    //       // void this.pageTitleService.set(picture.display);
-    //
-    //       this.initialState = {...picture};
-    //       this.form.markAsPristine();
-    //       this.refreshChanges.next(true);
-    //       this.refreshVersions.next(true);
-    //       this.refreshMetadata.next(true);
-    //       this.refreshLinkList.next(true);
-    //       this.refreshResetValue.next(true);
-    //
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //       this.translocoService
-    //         .selectTranslate('picture.details.toastr.success')
-    //         .pipe(untilDestroyed(this))
-    //         .subscribe(success => {
-    //           this.toastrService.success(success);
-    //         });
-    //     },
-    //     () => {
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //     }
-    //   );
   }
 
   public canDeactivate(): Observable<boolean> {
-
-    // if (this.showSidebar) {
-    //   const userStoreValue = this.userStore.getValue();
-    //   const userSetting = 'SkipDialog-LeaveProject';
-    //
-    //   const skipLeaveDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.[userSetting]);
-    //
-    //   if (skipLeaveDialog) {
-    //     return of(true);
-    //   }
-    //
-    //   this.modalRef = this.modalService.open(LeaveProjectModalComponent, {
-    //     closeButton: false,
-    //   });
-    //
-    //   return this.modalRef.afterClosed$.pipe(
-    //     untilDestroyed(this),
-    //     take(1),
-    //     map(val => Boolean(val))
-    //   );
-    // }
 
     return of(true);
   }
 
   public pendingChanges(): Observable<boolean> {
-
-    // if (this.form.dirty) {
-    //   this.modalRef = this.modalService.open(PendingChangesModalComponent, {
-    //     closeButton: false,
-    //   });
-    //
-    //   return this.modalRef.afterClosed$.pipe(
-    //     untilDestroyed(this),
-    //     take(1),
-    //     map(val => Boolean(val))
-    //   );
-    // }
 
     return of(true);
   }
@@ -517,14 +290,8 @@ export class PicturePageComponent implements OnInit, OnDestroy {
       },
     } as DialogConfig);
 
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
-    //   if (callback.state === ModalState.Changed) {
-    //     this.comments.loadComments();
-    //   }
-    // });
   }
 
-  public onUpdateMetadata(metadata: Metadata[]): void {
-    this.metadata = metadata;
+  public onUpdateMetadata(): void {
   }
 }

@@ -1,18 +1,4 @@
-<!--
-  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
-  SPDX-License-Identifier: AGPL-3.0-or-later
--->
-
 <ng-container *transloco="let t">
-  <!--&lt;!&ndash;  <eworkbench-header [title]="detailsTitle">&ndash;&gt;-->
-  <!--    <ng-container slot="elements" *ngIf="initialState">-->
-  <!--      <eworkbench-favorite-button-->
-  <!--        class="inline-block mr-2"-->
-  <!--        [id]="initialState?.pk"-->
-  <!--        [contentType]="initialState?.content_type"-->
-  <!--        [favorited]="initialState?.is_favourite"-->
-  <!--        btnClass="btn bg-transparent ewb-button-big square-md text-white"-->
-  <!--      ></eworkbench-favorite-button>-->
   <div style="text-align: center"><strong>{{detailsTitle}}</strong>
     <eworkbench-details-dropdown
       [service]="picturesService"
@@ -25,8 +11,6 @@
       *ngIf="privileges"
     ></eworkbench-details-dropdown>
   </div>
-  <!--    </ng-container>-->
-  <!--  </eworkbench-header>-->
 </ng-container>
 
 <div *ngIf="!initialState" [class.with-sidebar]="showSidebar">
@@ -34,8 +18,6 @@
     <eworkbench-sidebar-skeleton></eworkbench-sidebar-skeleton>
   </aside>
   <div class="skeleton-wrapper">
-    <!--    <eworkbench-list-skeleton [lines]="0" [header]="true"></eworkbench-list-skeleton>-->
-    <!--    <eworkbench-list-skeleton [header]="true"></eworkbench-list-skeleton>-->
   </div>
 </div>
 
@@ -43,14 +25,10 @@
   <ng-container *transloco="let t">
     <div [class.with-sidebar]="showSidebar">
       <aside *ngIf="showSidebar">
-        <!--        <eworkbench-project-sidebar [sidebarItem]="sidebarItem"></eworkbench-project-sidebar>-->
       </aside>
       <main>
         <ng-container *ngIf="initialState.deleted">
-          <!--          <eworkbench-trash-notice></eworkbench-trash-notice>-->
         </ng-container>
-
-        <!--        <eworkbench-lock [id]="id" [lock]="lock" [lockUser]="lockUser" [modified]="modified" [service]="picturesService"></eworkbench-lock>-->
         <eworkbench-overview-collapse-element class="mb-4" [collapsed]="false">
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="picture"
                 errorTailor>
@@ -88,45 +66,6 @@
                       for="height">{{ t('picture.details.height.label') }}</label>
                     <div id="height">{{ initialState.height }}px</div>
                   </div>
-                  <!--                  <div class="mb-4">-->
-                  <!--                    <eworkbench-form-input-->
-                  <!--                      for="projects"-->
-                  <!--                      [label]="t('picture.details.projects.label')"-->
-                  <!--                      [loading]="loading"-->
-                  <!--                      [onSubmit]="refreshResetValue"-->
-                  <!--                    >-->
-                  <!--                      <ng-select-->
-                  <!--                        class="ewb-select"-->
-                  <!--                        formControlName="projects"-->
-                  <!--                        labelForId="projects"-->
-                  <!--                        name="projects"-->
-                  <!--                        [placeholder]="privileges?.edit ? t('picture.details.projects.placeholder') : t('formInput.notDefined.placeholder')"-->
-                  <!--                        [multiple]="true"-->
-                  <!--                        [typeahead]="projectInput$"-->
-                  <!--                        [items]="projects"-->
-                  <!--                        groupBy="is_favourite"-->
-                  <!--                        bindLabel="name"-->
-                  <!--                        bindValue="pk"-->
-                  <!--                        slot="input"-->
-                  <!--                      >-->
-                  <!--                        <ng-template ng-label-tmp let-item="item" let-clear="clear">-->
-                  <!--                          {{ item.name }}-->
-                  <!--                          <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>-->
-                  <!--                        </ng-template>-->
-                  <!--                        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">-->
-                  <!--                          <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>-->
-                  <!--                          <span [ngOptionHighlight]="search">{{ item.name }}</span>-->
-                  <!--                        </ng-template>-->
-                  <!--                        <ng-template ng-optgroup-tmp let-item="item">-->
-                  <!--                          <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
-                  <!--                          <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
-                  <!--                        </ng-template>-->
-                  <!--                        <ng-template ng-notfound-tmp>-->
-                  <!--                          <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
-                  <!--                        </ng-template>-->
-                  <!--                      </ng-select>-->
-                  <!--                    </eworkbench-form-input>-->
-                  <!--                  </div>-->
                   <div class="mb-4">
                     <label
                       for="created-by">{{ t('picture.details.createdBy.label') }}</label>
@@ -156,20 +95,6 @@
                   </div>
                 </ng-container>
               </eworkbench-details-collapse-element>
-
-              <!--              <eworkbench-details-collapse-element [labelText]="t('picture.details.element.metadata')">-->
-              <!--                <ng-container slot="body">-->
-              <!--                  <div class="mb-4">-->
-              <!--                    <eworkbench-metadata-->
-              <!--                      [selectedParameters]="initialState?.metadata ?? []"-->
-              <!--                      [editable]="privileges?.edit"-->
-              <!--                      [loading]="loading"-->
-              <!--                      [refresh]="refreshMetadata"-->
-              <!--                      (changed)="onUpdateMetadata($event)"-->
-              <!--                    ></eworkbench-metadata>-->
-              <!--                  </div>-->
-              <!--                </ng-container>-->
-              <!--              </eworkbench-details-collapse-element>-->
             </div>
             <div>
               <eworkbench-details-collapse-element
@@ -199,27 +124,6 @@
                   ></eworkbench-versions>
                 </ng-container>
               </eworkbench-details-collapse-element>
-
-              <!--              <eworkbench-details-collapse-element [labelText]="t('picture.details.element.comments')">-->
-              <!--                <ng-container slot="actions">-->
-              <!--                  <button-->
-              <!--                    type="button"-->
-              <!--                    class="btn ewb-button-regular ewb-button-outline"-->
-              <!--                    (click)="onOpenNewCommentModal()"-->
-              <!--                    [disabled]="loading"-->
-              <!--                  >-->
-              <!--                    {{ t('picture.details.comments.newComment') }}-->
-              <!--                  </button>-->
-              <!--                </ng-container>-->
-              <!--                <ng-container slot="body">-->
-              <!--                  <eworkbench-comments-->
-              <!--                    #comments-->
-              <!--                    [service]="picturesService"-->
-              <!--                    [id]="id"-->
-              <!--                    [contentType]="initialState.content_type"-->
-              <!--                  ></eworkbench-comments>-->
-              <!--                </ng-container>-->
-              <!--              </eworkbench-details-collapse-element>-->
             </div>
           </form>
         </eworkbench-overview-collapse-element>

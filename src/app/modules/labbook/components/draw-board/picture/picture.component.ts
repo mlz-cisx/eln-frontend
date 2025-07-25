@@ -1,9 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -129,10 +123,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
       this.background_color = 'background-color: ' + admin_element_background_color;
     }
 
-    // this.websocketService.subscribe([{
-    //   model: 'picture',
-    //   pk: this.initialState!.pk
-    // }]);
   }
   
   ngAfterViewInit() {
@@ -276,14 +266,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
   public refreshElementRelationsCounter(): void {
-    this.labBooksService
-      .getElement(this.id, this.element.pk)
-      .pipe(untilDestroyed(this))
-      .subscribe(element => {
-        this.element.num_related_comments = element.num_related_comments!;
-        this.element.num_relations = element.num_relations!;
-        this.cdr.markForCheck();
-      });
   }
 
   public create_new_note_below(): void {
