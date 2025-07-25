@@ -136,7 +136,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   public writeValue(value: string): void {
     if (this.editor && this.editor.editor.initialized) {
       const cursor = this.editor.editor.selection.getBookmark(3) as any
-      if (cursor['start'] && cursor['start'].startsWith('text()[0]')) {
+      if (cursor['start'] && cursor['start'].startsWith('text()')) {
         // do nothing because the cursor initially jumps back to first line with 'text()[0]'
         // while pasting in text from outside; moving to this bookmark after set content
         // creates this cursor jump which should be avoided;
