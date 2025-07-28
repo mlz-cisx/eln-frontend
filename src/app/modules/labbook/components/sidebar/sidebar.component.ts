@@ -1,33 +1,22 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   HostListener,
   Input,
   OnInit,
   Output,
   Renderer2,
-  ElementRef,
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import type {LabBookElementEvent, ModalCallback} from '@joeseln/types';
-import {
-  DialogConfig,
-  DialogRef,
-  DialogService
-} from '@ngneat/dialog';
+import {LabBookElement, LabBookElementPayload} from "@joeseln/types";
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {take} from 'rxjs/operators';
-import {
-  ImportLabBookElementsModalComponent
-} from '../../components/modals/import-elements/import-elements.component';
 import {
   NewLabBookFileElementModalComponent
 } from '../modals/new/file/new.component';
@@ -37,12 +26,6 @@ import {
 import {
   NewLabBookPictureElementModalComponent
 } from '../modals/new/picture/new.component';
-import {
-  NewLabBookPluginElementModalComponent
-} from '../modals/new/plugin/new.component';
-import {
-  NewLabBookSectionElementModalComponent
-} from '../modals/new/section/new.component';
 import {
   NewLabBookSketchModalComponent
 } from '../modals/new/sketch/new.component';
@@ -59,7 +42,6 @@ import {
   LabBookDrawBoardNoteComponent
 } from "@app/modules/labbook/components/draw-board/note/note.component";
 import {LabbooksService} from '@joeseln/services';
-import {LabBookElement, LabBookElementPayload} from "@joeseln/types";
 
 @UntilDestroy()
 @Component({
@@ -187,34 +169,12 @@ export class LabBookSidebarComponent implements OnInit {
   }
 
   public onOpenNewPluginElementModal(): void {
-    // this.modalRef = this.modalService.open(NewLabBookPluginElementModalComponent, {
-    //   closeButton: false,
-    //   width: '1200px',
-    //   data: {labBookId: this.id, projects: this.projects},
-    // });
-    //
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   public onOpenImportModal(): void {
-    // this.modalRef = this.modalService.open(ImportLabBookElementsModalComponent, {
-    //   closeButton: false,
-    //   enableClose: false,
-    //   data: {labBookId: this.id, projects: this.projects},
-    // });
-    //
-    // this.modalRef.afterClosed$
-    //   .pipe(untilDestroyed(this), take(1))
-    //   .subscribe((callback: ModalCallback) => this.onImportModalClose(callback));
   }
 
   public onOpenNewSectionModal(): void {
-    // this.modalRef = this.modalService.open(NewLabBookSectionElementModalComponent, {
-    //   closeButton: false,
-    //   data: {projects: this.projects},
-    // });
-
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   public onModalClose(callback?: ModalCallback): void {
@@ -311,6 +271,5 @@ export class LabBookSidebarComponent implements OnInit {
       );
 
   }
-
 
 }

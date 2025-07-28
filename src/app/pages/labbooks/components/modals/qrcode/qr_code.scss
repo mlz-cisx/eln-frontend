@@ -1,18 +1,14 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 :host {
   display: block;
 }
+
 
 ngneat-dialog {
   .ngneat-dialog-backdrop {
     align-items: unset;
     overflow: auto;
 
-    #modal-qrcode.ngneat-dialog-content {
+    #modal_qrcode.ngneat-dialog-content {
       height: fit-content;
       max-height: unset;
       min-height: unset !important;

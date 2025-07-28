@@ -1,17 +1,8 @@
-<!--
-  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
-  SPDX-License-Identifier: AGPL-3.0-or-later
--->
-
 <ng-container *ngIf="initialState">
   <ng-container *transloco="let t">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="element"
           errorTailor>
-      <div
-        class="header flex justify-between header-container"
-        [id]="title_id"
-        #title
-      >
+      <div class="header flex justify-between header_container" [id]="title_id" #title>
             <div class="flex-fill">
               <eworkbench-form-input [for]="'subject-' + uniqueHash"
                                      [loading]="loading" [margin]="false">
@@ -121,12 +112,8 @@
           </eworkbench-form-input>
         </ng-container>
         <ng-container>
-          <div
-            class="note-container"
-            [id]="preloaded_id"
-            #preload
-            [hidden]="editor_loaded"
-          ></div>
+          <div class='note_container' [id]="preloaded_id" #preload [hidden]="editor_loaded">
+          </div>
         </ng-container>
       </div>
       <!--      <div class="footer">-->

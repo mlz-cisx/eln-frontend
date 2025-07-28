@@ -1,21 +1,14 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit, ViewChild,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {UserService, StatService} from "@app/services";
-import {User, Stat, ModalCallback} from "@joeseln/types";
+import {StatService, UserService} from "@app/services";
+import {ModalCallback, Stat, User} from "@joeseln/types";
 import {ActivatedRoute, Router} from "@angular/router";
-import {
-  NewLabBookModalComponent
-} from "@app/pages/labbooks/components/modals/new/new.component";
 import {DialogConfig, DialogRef, DialogService} from "@ngneat/dialog";
 import {take} from "rxjs/operators";
 import {ModalState} from "@app/enums/modal-state.enum";
@@ -69,16 +62,14 @@ export class AdminPageComponent implements OnInit {
 
 
   public go_to_osers() {
-    console.log('users')
     this._router.navigate(['/admin/users'])
   }
 
   public go_to_groups() {
-        this._router.navigate(['/admin/groups'])
+    this._router.navigate(['/admin/groups'])
   }
 
   public go_to_admins() {
-    console.log('admins')
     this._router.navigate(['/admin/admins'])
   }
 

@@ -1,4 +1,4 @@
-@import "../../../../../styles/colors";
+@import '../../../../../styles/colors';
 
 :host {
   display: block;
@@ -8,9 +8,9 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   h4 {

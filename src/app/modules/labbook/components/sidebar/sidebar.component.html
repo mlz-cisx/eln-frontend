@@ -1,12 +1,6 @@
-<!--
-  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
-  SPDX-License-Identifier: AGPL-3.0-or-later
--->
-
 <ng-container *transloco="let t">
   <div class="sidebar" [style.position]="sidebarPosition"
        [style.top.px]="offsetHeader + offsetMargin">
-    <!--    <h1>{{ t('labBook.sidebar.add.header') }}</h1>-->
     <ul class="list-unstyled m-0">
       <li>
         <button
@@ -102,49 +96,6 @@
           QR
         </button>
       </li>
-
-
-
-
-      <!--           <li>
-                   <button
-                     type="button"
-                     class="btn ewb-button-regular text-white"
-                     [tooltip]="t('labBook.sidebar.add.plugin.tooltip')"
-                     containerClass="tooltip-sm"
-                     placement="right"
-                     [disabled]="!editable"
-                     (click)="onOpenNewPluginElementModal()"
-                   >
-                     <joeseln-icon className="wb-plugin"></joeseln-icon>
-                   </button>
-                 </li>
-                 <li>
-                   <button
-                     type="button"
-                     class="btn ewb-button-regular text-white"
-                     [tooltip]="t('labBook.sidebar.add.import.tooltip')"
-                     containerClass="tooltip-sm"
-                     placement="right"
-                     [disabled]="!editable"
-                     (click)="onOpenImportModal()"
-                   >
-                     <joeseln-icon className="wb-copy"></joeseln-icon>
-                   </button>
-                 </li>
-                 <li>
-                   <button
-                     type="button"
-                     class="btn ewb-button-regular text-white"
-                     [tooltip]="t('labBook.sidebar.add.section.tooltip')"
-                     containerClass="tooltip-sm"
-                     placement="right"
-                     [disabled]="!editable"
-                     (click)="onOpenNewSectionModal()"
-                   >
-                     <joeseln-icon className="wb-bars"></joeseln-icon>
-                   </button>
-                 </li>-->
     </ul>
   </div>
 </ng-container>

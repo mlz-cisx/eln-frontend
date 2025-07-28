@@ -1,8 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -28,24 +23,15 @@ import { LabBookDrawBoardGridComponent } from './components/draw-board/grid/grid
 import { LabBookDrawBoardNoteComponent } from './components/draw-board/note/note.component';
 import { LabBookDrawBoardPictureComponent } from './components/draw-board/picture/picture.component';
 import { LabBookElementDropdownComponent } from './components/element-dropdown/element-dropdown.component';
-import { DeleteLabBookSectionElementModalComponent } from './components/modals/delete-section/delete-section.component';
-import { ImportLabBookElementsModalComponent } from './components/modals/import-elements/import-elements.component';
-import { MoveLabBookElementToLabBookModalComponent } from './components/modals/move/element-to-labbook/element-to-labbook.component';
-import { MoveLabBookElementToSectionModalComponent } from './components/modals/move/element-to-section/element-to-section.component';
 import { NewLabBookFileElementModalComponent } from './components/modals/new/file/new.component';
 import { NewLabBookNoteElementModalComponent } from './components/modals/new/note/new.component';
 import { NewLabBookPictureElementModalComponent } from './components/modals/new/picture/new.component';
-import { NewLabBookPluginElementModalComponent } from './components/modals/new/plugin/new.component';
-import { NewLabBookSectionElementModalComponent } from './components/modals/new/section/new.component';
 import { NewLabBookSketchModalComponent } from './components/modals/new/sketch/new.component';
-import { LabBookElementRemoveModalComponent } from './components/modals/remove/remove.component';
 import { LabBookSidebarComponent } from './components/sidebar/sidebar.component';
 import { CommentModule } from '../comment/comment.module';
 import { FormHelperModule } from '../form-helper/form-helper.module';
 import { LoadingModule } from '../loading/loading.module';
-import { LockModule } from '../lock/lock.module';
 import { PictureModule } from '../picture/picture.module';
-import { PluginModule } from '../plugin/plugin.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { RecentChangesModalComponent } from './components/modals/recent-changes/recent-changes.component';
@@ -59,20 +45,13 @@ import {
 @NgModule({
   declarations: [
     LabBookSidebarComponent,
-    NewLabBookSectionElementModalComponent,
     NewLabBookNoteElementModalComponent,
     LabBookDrawBoardComponent,
     LabBookSidebarComponent,
     LabBookDrawBoardElementComponent,
     LabBookDrawBoardNoteComponent,
     LabBookElementDropdownComponent,
-    LabBookElementRemoveModalComponent,
-    ImportLabBookElementsModalComponent,
     LabBookDrawBoardGridComponent,
-    DeleteLabBookSectionElementModalComponent,
-    MoveLabBookElementToSectionModalComponent,
-    MoveLabBookElementToLabBookModalComponent,
-    NewLabBookPluginElementModalComponent,
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardPictureComponent,
     NewLabBookFileElementModalComponent,
@@ -108,8 +87,6 @@ import {
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     IconsModule,
-    LockModule,
-    PluginModule,
     AlertModule,
     PictureModule,
     CommentModule,
@@ -119,20 +96,13 @@ import {
   ],
   exports: [
     LabBookSidebarComponent,
-    NewLabBookSectionElementModalComponent,
     NewLabBookNoteElementModalComponent,
     LabBookDrawBoardComponent,
     LabBookSidebarComponent,
     LabBookDrawBoardElementComponent,
     LabBookDrawBoardNoteComponent,
     LabBookElementDropdownComponent,
-    LabBookElementRemoveModalComponent,
-    ImportLabBookElementsModalComponent,
     LabBookDrawBoardGridComponent,
-    DeleteLabBookSectionElementModalComponent,
-    MoveLabBookElementToSectionModalComponent,
-    MoveLabBookElementToLabBookModalComponent,
-    NewLabBookPluginElementModalComponent,
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardPictureComponent,
     NewLabBookFileElementModalComponent,

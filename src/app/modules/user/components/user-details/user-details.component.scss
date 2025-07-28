@@ -1,9 +1,4 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-@import "../../../../../styles/colors";
+@import '../../../../../styles/colors';
 
 $chip-size: 25px;
 
@@ -53,22 +48,22 @@ $chip-size: 25px;
 
   ::ng-deep {
     .bs-popover-right,
-    .bs-popover-auto[x-placement^="right"] {
+    .bs-popover-auto[x-placement^='right'] {
       margin-left: 2px;
     }
 
     .bs-popover-left,
-    .bs-popover-auto[x-placement^="left"] {
+    .bs-popover-auto[x-placement^='left'] {
       margin-right: 2px;
     }
 
     .bs-popover-top,
-    .bs-popover-auto[x-placement^="top"] {
+    .bs-popover-auto[x-placement^='top'] {
       margin-bottom: 2px;
     }
 
     .bs-popover-bottom,
-    .bs-popover-auto[x-placement^="bottom"] {
+    .bs-popover-auto[x-placement^='bottom'] {
       margin-top: 2px;
     }
   }

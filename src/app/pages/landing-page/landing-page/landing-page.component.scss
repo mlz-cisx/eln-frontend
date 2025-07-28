@@ -1,5 +1,6 @@
-@import "../../../../styles/colors";
-@import "../../../../styles/variables";
+@import '../../../../styles/colors';
+@import '../../../../styles/variables';
+
 
 :host {
   display: flex;
@@ -39,6 +40,7 @@
     font-size: 140px;
     font-weight: 700;
     color: $primary-color;
-    text-shadow: #fc0 1px 0 20px;
+    text-shadow: #FC0 1px 0 20px;
   }
+
 }

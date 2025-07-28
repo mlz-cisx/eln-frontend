@@ -1,39 +1,18 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-// import {PrivilegesService} from '@app/services/privileges/privileges.service';
 import {environment} from '@environments/environment';
 import type {TableViewService} from '@joeseln/table';
 import type {
-  DjangoAPI,
-  ExportLink,
-  ExportService,
-  FinalizeVersion,
-  LockService,
-  Note, Note_with_privileges,
-  NotePayload, PasswordPatchPayload,
-  PermissionsService,
-  Privileges,
-  PrivilegesApi,
+  PasswordPatchPayload,
   PrivilegesData,
-  RecentChanges,
-  RecentChangesService,
-  Relation,
-  RelationPayload,
-  RelationPutPayload, User, User_with_privileges, UserPatchPayload, UserPayload,
-  Version,
-  VersionsService,
+  User,
+  User_with_privileges,
+  UserPatchPayload,
+  UserPayload,
 } from '@joeseln/types';
 import type {Observable} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
-import {BehaviorSubject} from "rxjs";
-import {
-  mockLabBooksList,
-  mockLabBookVersion, mockNotesList,
-  mockNoteVersion,
-  mockPrivileges
-} from "@joeseln/mocks";
-import {LogoutService, ErrorserviceService} from "@app/services";
-import {Lab_Book, LabBook, LabBookPayload} from "@joeseln/types";
+import {catchError, map} from 'rxjs/operators';
+import {ErrorserviceService, LogoutService} from "@app/services";
 
 @Injectable({
   providedIn: 'root',

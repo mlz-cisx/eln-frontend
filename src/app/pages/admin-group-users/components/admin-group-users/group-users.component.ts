@@ -1,8 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -16,10 +11,7 @@ import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
-  AdminUsersService,
   AuthService, NotesService,
-  // PageTitleService,
-  // ProjectsService
 } from '@app/services';
 import {UserService} from '@app/services';
 import {
@@ -114,7 +106,6 @@ export class GroupUsersComponent implements OnInit {
 
   public favoriteProjects: Project[] = [];
 
-  public projectsInput$ = new Subject<string>();
 
   public project?: string;
 
@@ -132,8 +123,6 @@ export class GroupUsersComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
-    // private readonly projectsService: ProjectsService,
-    // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly authService: AuthService,
     private user_service: UserService,
@@ -167,17 +156,9 @@ export class GroupUsersComponent implements OnInit {
     this.initSearch();
     this.initSearchInput();
     this.initPageTitle();
-    //void this.pageTitleService.set(this.title);
   }
 
   public initTranslations(): void {
-    // this.translocoService
-    //   .selectTranslate('notes.title')
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(title => {
-    //     this.title = title;
-    //     //void this.pageTitleService.set(title);
-    //   });
 
     this.translocoService
       .selectTranslateObject('users.columns')
@@ -214,24 +195,12 @@ export class GroupUsersComponent implements OnInit {
             key: 'created_at',
             sortable: true,
           },
-          // {
-          //   cellTemplate: this.createdByCellTemplate,
-          //   name: column.createdBy,
-          //   key: 'created_by',
-          //   sortable: true,
-          // },
           {
             cellTemplate: this.lastModifiedAtCellTemplate,
             name: column.lastModifiedAt,
             key: 'last_modified_at',
             sortable: true,
           },
-          // {
-          //   cellTemplate: this.lastModifiedByCellTemplate,
-          //   name: column.lastModifiedBy,
-          //   key: 'last_modified_by',
-          //   sortable: true,
-          // },
           {
             cellTemplate: this.actionsCellTemplate,
             name: '',
@@ -239,143 +208,16 @@ export class GroupUsersComponent implements OnInit {
             hideable: false,
           },
         ];
-
-        // if (this.currentUser?.userprofile.ui_settings?.tables?.notes) {
-        //   const merged = merge(
-        //     keyBy(this.currentUser.userprofile.ui_settings.tables.notes, 'key'),
-        //     keyBy(
-        //       this.defaultColumns.map(column => ({
-        //         cellTemplate: column.cellTemplate,
-        //         name: column.name,
-        //         key: column.key,
-        //         sortable: column.sortable,
-        //         hideable: column.hidden,
-        //       })),
-        //       'key'
-        //     )
-        //   );
-        //   this.listColumns = values(merged);
-        // } else {
         this.listColumns = [...this.defaultColumns];
-        // }
-
-        // if (this.currentUser?.userprofile.ui_settings?.tables_sort?.notes) {
-        //   this.sorting = this.currentUser.userprofile.ui_settings.tables_sort.notes;
-        // }
-
-        // if (this.currentUser?.userprofile.ui_settings?.filter_settings?.notes) {
-        //   const filters = this.currentUser.userprofile.ui_settings?.filter_settings?.notes;
-        //
-        //   if (filters.active) {
-        //     this.savedFilters = true;
-        //   }
-
-        // if (filters.users) {
-        //   this.userService
-        //     .getUserById(filters.users)
-        //     .pipe(untilDestroyed(this))
-        //     .subscribe(users => {
-        //       if (users.length) {
-        //         this.users = [...users];
-        //         this.cdr.markForCheck();
-        //       }
-        //     });
-        //   this.usersControl.setValue(filters.users);
-        //   this.params = this.params.set('created_by', filters.users);
-        // }
-
-        // if (filters.projects) {
-        //   this.projectsService
-        //     .get(filters.projects)
-        //     .pipe(untilDestroyed(this))
-        //     .subscribe(project => {
-        //       this.projects = [...this.projects, project];
-        //       this.cdr.markForCheck();
-        //     });
-        //   this.projectsControl.setValue(filters.projects);
-        //   this.params = this.params.set('projects_recursive', filters.projects);
-        // }
-
-        //   if (filters.search) {
-        //     this.searchControl.setValue(filters.search);
-        //     this.params = this.params.set('search', filters.search);
-        //   }
-        //
-        //   if (filters.favorites) {
-        //     this.favoritesControl.setValue(Boolean(filters.favorites));
-        //     this.params = this.params.set('favourite', filters.favorites);
-        //   }
-        //
-        //   if (filters.active) {
-        //     this.tableView.loadData(false, this.params);
-        //   }
-        // }
       });
   }
 
   public initSidebar(): void {
-    // this.route.params.subscribe(params => {
-    //   if (params.projectId) {
-    //     this.projectsService.get(params.projectId).subscribe(project => {
-    //       this.projects = [...this.projects, project]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.projectsControl.setValue(params.projectId);
-    //       this.project = params.projectId;
-    //       this.cdr.markForCheck();
-    //     });
-    //   }
-    // });
   }
 
   public initSearch(project = false): void {
-    this.projectsControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
-      const queryParams = new URLSearchParams(window.location.search);
 
-      if (value) {
-        this.params = this.params.set('projects_recursive', value);
-        this.tableView.loadData(false, this.params);
-        if (!project) {
-          queryParams.set('projects', value);
-          history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
-        }
-      } else {
-        this.params = this.params.delete('projects_recursive');
-        this.tableView.loadData(false, this.params);
-        if (!project) {
-          queryParams.delete('projects');
-          history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
-        }
-      }
 
-      if (this.savedFilters) {
-        this.onSaveFilters(true);
-      } else {
-        this.onSaveFilters(false);
-      }
-    });
-
-    this.usersControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
-      const queryParams = new URLSearchParams(window.location.search);
-
-      if (value) {
-        this.params = this.params.set('created_by', value);
-        this.tableView.loadData(false, this.params);
-        queryParams.set('users', value.toString());
-        history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
-      } else {
-        this.params = this.params.delete('created_by');
-        this.tableView.loadData(false, this.params);
-        queryParams.delete('users');
-        history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
-      }
-
-      if (this.savedFilters) {
-        this.onSaveFilters(true);
-      } else {
-        this.onSaveFilters(false);
-      }
-    });
 
     this.searchControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
       const queryParams = new URLSearchParams(window.location.search);
@@ -399,57 +241,13 @@ export class GroupUsersComponent implements OnInit {
       }
     });
 
-    this.favoritesControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
-      const queryParams = new URLSearchParams(window.location.search);
 
-      if (value) {
-        this.params = this.params.set('favourite', value);
-        this.tableView.loadData(false, this.params);
-        queryParams.set('favorites', value.toString());
-        history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
-      } else {
-        this.params = this.params.delete('favourite');
-        this.tableView.loadData(false, this.params);
-        queryParams.delete('favorites');
-        history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
-      }
-
-      if (this.savedFilters) {
-        this.onSaveFilters(true);
-      } else {
-        this.onSaveFilters(false);
-      }
-    });
 
     this.route.queryParamMap.pipe(untilDestroyed(this), take(1)).subscribe(queryParams => {
       const users = queryParams.get('users');
       const projects = queryParams.get('projects');
       const search = queryParams.get('search');
       const favorites = queryParams.get('favorites');
-
-      // if (users) {
-      //   this.userService
-      //     .getUserById(users)
-      //     .pipe(untilDestroyed(this))
-      //     .subscribe(users => {
-      //       if (users.length) {
-      //         this.users = [...users];
-      //         this.cdr.markForCheck();
-      //       }
-      //     });
-      //   this.usersControl.setValue(Number(users));
-      // }
-
-      // if (projects && !project) {
-      //   this.projectsService
-      //     .get(projects)
-      //     .pipe(untilDestroyed(this))
-      //     .subscribe(project => {
-      //       this.projects = [...this.projects, project];
-      //       this.cdr.markForCheck();
-      //     });
-      //   this.projectsControl.setValue(projects);
-      // }
 
       if (search) {
         this.searchControl.setValue(search);
@@ -462,54 +260,9 @@ export class GroupUsersComponent implements OnInit {
   }
 
   public initSearchInput(): void {
-
-    // this.usersInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.userService.search(input) : of([])))
-    //   )
-    //   .subscribe(users => {
-    //     if (users.length) {
-    //       this.users = [...users];
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-
-    // this.projectsInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     if (projects.length) {
-    //       this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
   }
 
   public initPageTitle(): void {
-    // this.pageTitleService
-    //   .get()
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(title => {
-    //     this.titleService.setTitle(title);
-    //   });
     this.admin_groups_service.getpagetitle(this.id).pipe(untilDestroyed(this))
       .subscribe(title => {
           this.title = title
@@ -553,108 +306,14 @@ export class GroupUsersComponent implements OnInit {
       hideable: col.hideable,
     }));
 
-    // this.userService
-    //   .get()
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     take(1),
-    //     switchMap(user => {
-    //       const currentUser = user;
-    //       return this.userService.changeSettings({
-    //         userprofile: {
-    //           ui_settings: {
-    //             ...currentUser.userprofile.ui_settings,
-    //             tables: {
-    //               ...currentUser.userprofile.ui_settings?.tables,
-    //               notes: settings,
-    //             },
-    //           },
-    //         },
-    //       });
-    //     })
-    //   )
-    //   .subscribe();
   }
 
   public onSortChanged(event: TableSortChangedEvent): void {
-    // this.userService
-    //   .get()
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     take(1),
-    //     switchMap(user => {
-    //       const currentUser = user;
-    //       return this.userService.changeSettings({
-    //         userprofile: {
-    //           ui_settings: {
-    //             ...currentUser.userprofile.ui_settings,
-    //             tables_sort: {
-    //               ...currentUser.userprofile.ui_settings?.tables_sort,
-    //               notes: event,
-    //             },
-    //           },
-    //         },
-    //       });
-    //     })
-    //   )
-    //   .subscribe();
+
   }
 
   public onSaveFilters(save: boolean): void {
     this.savedFilters = save;
-    // if (save) {
-    //   this.userService
-    //     .get()
-    //     .pipe(
-    //       untilDestroyed(this),
-    //       take(1),
-    //       switchMap(user => {
-    //         const currentUser = user;
-    //         return this.userService.changeSettings({
-    //           userprofile: {
-    //             ui_settings: {
-    //               ...currentUser.userprofile.ui_settings,
-    //               filter_settings: {
-    //                 ...currentUser.userprofile.ui_settings?.filter_settings,
-    //                 notes: {
-    //                   active: true,
-    //                   users: this.usersControl.value,
-    //                   projects: this.projectsControl.value,
-    //                   search: this.searchControl.value,
-    //                   favorites: this.favoritesControl.value,
-    //                 },
-    //               },
-    //             },
-    //           },
-    //         });
-    //       })
-    //     )
-    //     .subscribe();
-    // } else {
-    //   this.userService
-    //     .get()
-    //     .pipe(
-    //       untilDestroyed(this),
-    //       take(1),
-    //       switchMap(user => {
-    //         const currentUser = user;
-    //         return this.userService.changeSettings({
-    //           userprofile: {
-    //             ui_settings: {
-    //               ...currentUser.userprofile.ui_settings,
-    //               filter_settings: {
-    //                 ...currentUser.userprofile.ui_settings?.filter_settings,
-    //                 notes: {
-    //                   active: false,
-    //                 },
-    //               },
-    //             },
-    //           },
-    //         });
-    //       })
-    //     )
-    //     .subscribe();
-    // }
   }
 
   public onUserFilterRadioAnyone(): void {
@@ -685,14 +344,6 @@ export class GroupUsersComponent implements OnInit {
   }
 
   public openNewModal(): void {
-    // const initialState = this.project ? {projects: [this.project]} : null;
-    //
-    // this.modalRef = this.modalService.open(NewUserModalComponent, {
-    //   closeButton: false,
-    //   data: {service: this.admin_users_service, initialState: initialState},
-    // });
-    //
-    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   public onModalClose(callback?: ModalCallback): void {

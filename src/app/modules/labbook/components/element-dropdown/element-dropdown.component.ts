@@ -1,8 +1,3 @@
-/**
- * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
@@ -26,12 +21,7 @@ import {
 import {
   DeleteModalComponent
 } from '@app/modules/trash/components/modals/delete/delete.component';
-import {
-  //LabBookSectionsService,
-
-  LabbooksService
-} from '@app/services';
-//import { UserStore } from '@app/stores/user';
+import {LabbooksService} from '@app/services';
 import type {
   ExportLink,
   LabBookElement,
@@ -42,22 +32,13 @@ import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {switchMap, take} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
-import {
-  MoveLabBookElementToLabBookModalComponent
-} from '../modals/move/element-to-labbook/element-to-labbook.component';
-import {
-  MoveLabBookElementToSectionModalComponent
-} from '../modals/move/element-to-section/element-to-section.component';
-import {
-  LabBookElementRemoveModalComponent
-} from '../modals/remove/remove.component';
 import {
   LabBookDrawBoardGridComponent
 } from "@app/modules/labbook/components/draw-board/grid/grid.component";
 import {lastValueFrom} from "rxjs";
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 interface ElementRemoval {
   id: string;
@@ -122,9 +103,7 @@ export class LabBookElementDropdownComponent implements OnInit {
   public detailsCollapsed = true;
 
   public constructor(
-    //private readonly userStore: UserStore,
     private readonly labBooksService: LabbooksService,
-    //private readonly labBookSectionsService: LabBookSectionsService,
     private readonly modalService: DialogService,
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService,
@@ -153,11 +132,6 @@ export class LabBookElementDropdownComponent implements OnInit {
   }
 
   public onOpenPrivilegesModal(): void {
-    this.modalService.open(PrivilegesModalComponent, {
-      closeButton: false,
-      width: '800px',
-      data: {service: this.service, id: this.id, data: this.initialState},
-    } as DialogConfig);
   }
 
   public onExport(): void {
@@ -199,10 +173,8 @@ export class LabBookElementDropdownComponent implements OnInit {
 
 
   public onDelete(): void {
-    // const userStoreValue = this.userStore.getValue();
     const userSetting = 'SkipDialog-Trash';
 
-    // const skipTrashDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.[userSetting]);
     const skipTrashDialog = true
 
     if (skipTrashDialog) {
@@ -242,19 +214,8 @@ export class LabBookElementDropdownComponent implements OnInit {
             .subscribe(success => {
               this.drawboardGridComponent.softReload()
               this.drawboardGridComponent.updateAllElements()
-              //  preloaded content has to be established
-              // ok this works
               this.cdr.markForCheck()
               this.cdr.detectChanges()
-              // localStorage.setItem('pageVerticalposition', String(bodyRect))
-              // localStorage.setItem('elem_deleted', String(1))
-              // this.labBooksService.getElements(this.labBookId).pipe(untilDestroyed(this))
-              //   .subscribe((elems) => {
-              //     this.removed.emit({id: this.elementId, gridReload: false});
-              //     this.loading = false;
-              //     this.cdr.markForCheck();
-              //   })
-              // this.toastrService.success(success);
             });
         },
         () => {
@@ -264,100 +225,12 @@ export class LabBookElementDropdownComponent implements OnInit {
   }
 
   public onOpenMoveToSectionModal(): void {
-    this.modalRef = this.modalService.open(MoveLabBookElementToSectionModalComponent, {
-      closeButton: false,
-      data: {labBookId: this.labBookId, elementId: this.elementId},
-    });
-
-    this.modalRef.afterClosed$
-      .pipe(untilDestroyed(this), take(1))
-      .subscribe((callback: ModalCallback) => this.onMoveElementToSectionModalClose(callback));
   }
 
   public onOpenMoveBackToLabBookModal(): void {
-    // const userStoreValue = this.userStore.getValue();
-    //
-    // const skipTrashDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.['SkipDialog-MoveElementOutOfSection']);
-    const skipTrashDialog = true
-
-    if (skipTrashDialog) {
-      this.moveBackToLabBook();
-    } else {
-      this.modalRef = this.modalService.open(MoveLabBookElementToLabBookModalComponent, {
-        closeButton: false,
-        data: {
-          labBookId: this.labBookId,
-          elementId: this.elementId,
-          sectionId: this.section
-        },
-      } as DialogConfig);
-
-      this.modalRef.afterClosed$
-        .pipe(untilDestroyed(this), take(1))
-        .subscribe((callback: ModalCallback) => this.onMoveElementToLabBookModalClose(callback));
-    }
   }
 
   public moveBackToLabBook(): void {
-
-    // if (this.loading) {
-    //   return;
-    // }
-    // this.loading = true;
-    //
-    // // 1. Get all elements of section
-    // this.labBooksService
-    //   .getElements(this.labBookId, this.section)
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     switchMap(elements => {
-    //       // 2. Filter elements of the section and patch it with the selected element removed
-    //       const childElements = elements.filter(element => element.pk !== this.elementId).map(element => element.pk);
-    //
-    //       return this.labBookSectionsService
-    //         .patch(this.section!, {
-    //           pk: this.section!,
-    //           child_elements: [...childElements],
-    //         })
-    //         .pipe(untilDestroyed(this));
-    //
-    //     }),
-    //     switchMap(() =>
-    //       // 3. Get all elements of main LabBook grid to calculate the new Y position in the next step
-    //       this.labBooksService.getElements(this.labBookId).pipe(untilDestroyed(this))
-    //     ),
-    //     switchMap(elements => {
-    //       // 4. Calculate and patch the new Y position for formerly removed element from the section
-    //       const filteredElements = elements.filter(element => element.pk !== this.elementId);
-    //
-    //       return this.labBooksService
-    //         .patchElement(this.labBookId, this.elementId, {
-    //           position_y: this.getMaxYPosition(filteredElements),
-    //         })
-    //         .pipe(untilDestroyed(this));
-    //     })
-    //   )
-    //   .subscribe(
-    //     () => {
-    //       this.onMoveElementToLabBookModalClose({
-    //         state: ModalState.Changed,
-    //         data: {id: this.elementId, gridReload: false},
-    //       });
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //       this.translocoService
-    //         .selectTranslate('labBook.moveElementToLabBookModal.toastr.success')
-    //         .pipe(untilDestroyed(this))
-    //         .subscribe(success => {
-    //           this.toastrService.success(success);
-    //         });
-    //     },
-    //     () => {
-    //       this.loading = false;
-    //       this.cdr.markForCheck();
-    //     }
-    //   );
-
   }
 
   public remove(): void {
@@ -377,7 +250,6 @@ export class LabBookElementDropdownComponent implements OnInit {
             .selectTranslate('labBook.elementDropdown.removeFromLabBook.toastr.success')
             .pipe(untilDestroyed(this))
             .subscribe(success => {
-              // this.toastrService.success(success);
             });
         },
         () => {
@@ -394,23 +266,6 @@ export class LabBookElementDropdownComponent implements OnInit {
   }
 
   public onRemove(): void {
-    // const userStoreValue = this.userStore.getValue();
-    //
-    // const skipTrashDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.['SkipDialog-RemoveElementFromLabbook']);
-
-    const skipTrashDialog = true
-
-    if (skipTrashDialog) {
-      this.remove();
-    } else {
-      this.modalRef = this.modalService.open(LabBookElementRemoveModalComponent, {
-        closeButton: false,
-      });
-
-      this.modalRef.afterClosed$
-        .pipe(untilDestroyed(this), take(1))
-        .subscribe((callback: ModalCallback) => this.onRemoveModalClose(callback));
-    }
   }
 
   public onOpenCommentsModal(): void {

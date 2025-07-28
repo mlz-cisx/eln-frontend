@@ -2,7 +2,7 @@
   min-height: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  grid-template-areas: "navbar" "main" "footer";
+  grid-template-areas: 'navbar' 'main' 'footer';
 
   .header {
     grid-area: navbar;
