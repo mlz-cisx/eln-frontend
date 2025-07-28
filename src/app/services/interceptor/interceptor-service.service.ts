@@ -1,14 +1,18 @@
 import {Injectable} from '@angular/core';
 import {
-  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
-  HttpInterceptor,
-  HttpRequest
+  HttpRequest,
+  HttpResponse,
+  HttpErrorResponse,
+  HttpInterceptor
 } from '@angular/common/http';
 import {EMPTY, Observable, Subject} from 'rxjs';
-import {catchError, filter, switchMap, take} from 'rxjs/operators';
-import {AuthService, LogoutService, UserService} from "@app/services";
+import {map, switchMap, take, filter} from 'rxjs/operators';
+import {Router} from '@angular/router';
+
+import {tap, catchError} from 'rxjs/operators';
+import {AuthService, UserService, LogoutService} from "@app/services";
 
 @Injectable({
   providedIn: 'root'

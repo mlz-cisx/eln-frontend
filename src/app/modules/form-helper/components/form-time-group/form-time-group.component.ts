@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import { ChangeDetectionStrategy, Component, Input, OnInit, Self } from '@angular/core';
 import { NgControl, Validators } from '@angular/forms';
 import type { DropdownElement, TimeGroup } from '@joeseln/types';

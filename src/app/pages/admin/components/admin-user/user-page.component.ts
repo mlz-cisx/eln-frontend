@@ -1,4 +1,9 @@
-import {HttpErrorResponse} from '@angular/common/http';
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -11,31 +16,50 @@ import {
 import {Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ModalState} from '@app/enums/modal-state.enum';
 import {
   CommentsComponent
 } from '@app/modules/comment/components/comments/comments.component';
 import {
+  NewCommentModalComponent
+} from '@app/modules/comment/components/modals/new/new.component';
+// import {PendingChangesModalComponent} from '@app/modules/shared/modals/pending-changes/pending-changes.component';
+import {
   AdminUsersService,
   AuthService,
   LabbooksService,
-  NotesService,
-  UserService,
+  NotesService, UserService,
+  // PageTitleService,
+  // ProjectsService,
   WebSocketService
 } from '@app/services';
 import type {
-  PasswordPatchPayload,
+  Lock,
+  Metadata,
+  ModalCallback,
+  Note,
+  NotePayload, PasswordPatchPayload,
   Privileges,
   Project,
-  User,
-  UserPatchPayload
+  User, UserPatchPayload, UserPayload
 } from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {Observable, of, Subject} from 'rxjs';
-import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
+import {from, Observable, of, Subject} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  skip,
+  switchMap,
+  take
+} from 'rxjs/operators';
+import {NewUserModalComponent} from '../user_modals/new/new.component';
+import {mockUser} from "@joeseln/mocks";
 
 
 interface FormUser {
@@ -68,9 +92,11 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public initialState?: User;
 
+  public metadata?: Metadata[];
 
   public privileges?: Privileges;
 
+  public lock: Lock | null = null;
 
   public modified = false;
 
@@ -86,9 +112,11 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public refreshResetValue = new EventEmitter<boolean>();
 
+  public refreshMetadata = new EventEmitter<boolean>();
 
   public refreshLinkList = new EventEmitter<boolean>();
 
+  public newModalComponent = NewUserModalComponent;
 
   public projects: Project[] = [];
 
@@ -121,6 +149,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly websocketService: WebSocketService,
+    // private readonly projectsService: ProjectsService,
+    // private readonly pageTitleService: PageTitleService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private readonly labbooksService: LabbooksService,
@@ -137,7 +167,17 @@ export class UserPageComponent implements OnInit, OnDestroy {
     return this.passwword_form.controls;
   }
 
+  public get lockUser(): { ownUser: boolean; user?: User | undefined | null } {
+    if (this.lock) {
+      if (this.lock.lock_details?.locked_by.pk === this.currentUser?.pk) {
+        return {ownUser: true, user: this.lock.lock_details?.locked_by};
+      }
 
+      return {ownUser: false, user: this.lock.lock_details?.locked_by};
+    }
+
+    return {ownUser: false, user: null};
+  }
 
   private get user(): UserPatchPayload {
     return {
@@ -159,8 +199,25 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
+      // console.log(this.currentUser)
     });
 
+    // this.websocketService.subscribe([{model: 'note', pk: this.id}]);
+    // this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
+    //   if (data.element_lock_changed?.model_pk === this.id) {
+    //     this.lock = data.element_lock_changed;
+    //     this.cdr.detectChanges();
+    //   }
+    //
+    //   if (data.element_changed?.model_pk === this.id) {
+    //     if (this.lockUser.user && !this.lockUser.ownUser) {
+    //       this.modified = true;
+    //     } else {
+    //       this.modified = false;
+    //     }
+    //     this.cdr.detectChanges();
+    //   }
+    // });
 
     this.initSidebar();
     this.initSearchInput();
@@ -169,6 +226,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    // this.websocketService.unsubscribe();
   }
 
   public initFormChanges(): void {
@@ -179,7 +237,9 @@ export class UserPageComponent implements OnInit, OnDestroy {
         debounceTime(500),
         switchMap(() => {
           this.cdr.markForCheck();
-
+          // if (!this.lock?.locked) {
+          //   return this.notesService.lock(this.id);
+          // }
 
           return of([]);
         })
@@ -189,19 +249,65 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public initSidebar(): void {
 
+    // this.route.params.subscribe(params => {
+    //   if (params.projectId) {
+    //     this.showSidebar = true;
+    //
+    //     this.projectsService.get(params.projectId).subscribe(project => {
+    //       this.projects = [...this.projects, project]
+    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
+    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+    //       this.cdr.markForCheck();
+    //     });
+    //   }
+    // });
 
   }
 
   public initSearchInput(): void {
 
+    // this.projectInput$
+    //   .pipe(
+    //     untilDestroyed(this),
+    //     debounceTime(500),
+    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
+    //   )
+    //   .subscribe(projects => {
+    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+    //     this.cdr.markForCheck();
+    //   });
+
+    // this.projectsService
+    //   .getList(new HttpParams().set('favourite', 'true'))
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(projects => {
+    //     if (projects.data.length) {
+    //       this.favoriteProjects = [...projects.data];
+    //       this.projects = [...this.projects, ...this.favoriteProjects]
+    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
+    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+    //       this.cdr.markForCheck();
+    //     }
+    //   });
+
   }
 
   public initPageTitle(): void {
 
+    // this.pageTitleService
+    //   .get()
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(title => {
+    //     this.titleService.setTitle(title);
+    //   });
+
   }
 
   public initDetails(formChanges = true): void {
-
+    // if (!this.currentUser?.pk) {
+    //   return;
+    // }
+    console.log('init Details')
 
     this.admin_users_service
       .get(this.id)
@@ -234,6 +340,29 @@ export class UserPageComponent implements OnInit, OnDestroy {
         }),
         switchMap(privilegesData => {
 
+          // if (privilegesData.data.projects.length) {
+          //   return from(privilegesData.data.projects).pipe(
+          //     mergeMap(id =>
+          //       this.projectsService.get(id).pipe(
+          //         untilDestroyed(this),
+          //         catchError(() =>
+          //           of({
+          //             pk: id,
+          //             name: this.translocoService.translate('formInput.unknownProject'),
+          //             is_favourite: false,
+          //           } as Project)
+          //         )
+          //       )
+          //     ),
+          //     map(project => {
+          //       this.projects = [...this.projects, project]
+          //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
+          //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+          //       this.cdr.markForCheck();
+          //     }),
+          //     switchMap(() => of(privilegesData))
+          //   );
+          // }
 
           return of(privilegesData);
         })
@@ -244,7 +373,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
           const privileges = privilegesData.privileges;
 
           this.detailsTitle = user.username;
-
+          // void this.pageTitleService.set(note.display);
 
           this.initialState = {...user};
           this.privileges = {...privileges};
@@ -279,14 +408,18 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         user => {
+          // if (this.lock?.locked && this.lockUser.ownUser) {
+          //   this.notesService.unlock(this.id);
+          // }
 
           this.detailsTitle = user.username;
-
+          // void this.pageTitleService.set(note.display);
 
           this.initialState = {...user};
           this.form.markAsPristine();
           this.refreshChanges.next(true);
           this.refreshVersions.next(true);
+          this.refreshMetadata.next(true);
           this.refreshLinkList.next(true);
           this.refreshResetValue.next(true);
 
@@ -317,15 +450,18 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         user => {
-
+          // if (this.lock?.locked && this.lockUser.ownUser) {
+          //   this.notesService.unlock(this.id);
+          // }
 
           this.detailsTitle = user.username;
-
+          // void this.pageTitleService.set(note.display);
 
           this.initialState = {...user};
           this.form.markAsPristine();
           this.refreshChanges.next(true);
           this.refreshVersions.next(true);
+          this.refreshMetadata.next(true);
           this.refreshLinkList.next(true);
           this.refreshResetValue.next(true);
 
@@ -347,6 +483,18 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public pendingChanges(): Observable<boolean> {
 
+    if (this.form.dirty) {
+      //   this.modalRef = this.modalService.open(PendingChangesModalComponent, {
+      //     closeButton: false,
+      //   });
+      //
+      //   return this.modalRef.afterClosed$.pipe(
+      //     untilDestroyed(this),
+      //     take(1),
+      //     map(val => Boolean(val))
+      //   );
+      //
+    }
 
     return of(true);
   }
@@ -355,6 +503,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.initDetails(false);
     this.refreshVersions.next(true);
     this.refreshChanges.next(true);
+    this.refreshMetadata.next(true);
     this.refreshLinkList.next(true);
   }
 
@@ -363,10 +512,55 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public onOpenNewCommentModal(): void {
+    // this.modalRef = this.modalService.open(NewCommentModalComponent, {
+    //   closeButton: false,
+    //   width: '912px',
+    //   data: {
+    //     id: this.id,
+    //     contentType: this.initialState?.username,
+    //     service: this.admin_users_service,
+    //   },
+    // });
 
+    // this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
+    //   if (callback.state === ModalState.Changed) {
+    //     this.comments.loadComments();
+    //   }
+    // });
   }
 
-  public onUpdateMetadata(): void {
+  public onUpdateMetadata(metadata: Metadata[]): void {
+    this.metadata = metadata;
   }
+
+  // public go_to_note(): void {
+  //   this.labbooksService
+  //     .getList()
+  //     .pipe(
+  //       untilDestroyed(this),
+  //     ).subscribe(
+  //     labbooks => {
+  //       labbooks.data.forEach(
+  //         lb => {
+  //           this.labbooksService
+  //             .getElements(lb.pk)
+  //             .pipe(untilDestroyed(this))
+  //             .subscribe(labBookElements => {
+  //               labBookElements.map(element => {
+  //                 if (element.child_object.pk === this.id) {
+  //                   localStorage.setItem('pageVerticalposition', String((element.position_y) * 36))
+  //                   void this.router.navigate([`/labbooks/${lb.pk}`])
+  //                   //
+  //                 }
+  //               })
+  //             });
+  //         }
+  //       )
+  //     }
+  //   )
+  //
+  //
+  // }
+
 
 }

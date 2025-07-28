@@ -1,16 +1,26 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+// import { PrivilegesService } from '@app/services/privileges/privileges.service';
 import {environment} from '@environments/environment';
 import type {TableViewService} from '@joeseln/table';
 import type {
+  ConvertTiffPayload,
+  DjangoAPI,
   ExportLink,
   ExportService,
   FinalizeVersion,
-  Pic_with_privileges,
-  Picture,
-  PictureClonePayload,
+  LockService,
+  PermissionsService, Pic_with_privileges,
+  Picture, PictureClonePayload,
   PictureEditorPayload,
   PicturePayload,
+  Privileges,
+  PrivilegesApi,
   PrivilegesData,
   RecentChanges,
   RecentChangesService,
@@ -21,19 +31,38 @@ import type {
   Version,
   VersionsService,
 } from '@joeseln/types';
+import {
+  mockLabBook,
+  mockLabBooksList,
+  mockLabBookHistory,
+  mockLabBookPayload,
+  mockLabBookNoteElement,
+  mockLabBookPluginInstanceElement,
+  mockLabBookVersion,
+  mockLabBookSection,
+  mockLabBookSectionPayload,
+  mockNotesList,
+  mockNotePayload,
+  mockExportLink,
+  mockRelationList, mockRelation, MockService,
+  mockPrivileges,
+  mockPrivilegesApi, mockNoteVersion, mockNoteHistory, mockPictureHistory
+} from "@joeseln/mocks";
 import type {Observable} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import type {Optional} from 'utility-types';
-import {ErrorserviceService, LogoutService} from "@app/services";
-
+import {BehaviorSubject} from "rxjs";
+import {LogoutService, ErrorserviceService} from "@app/services";
+import {Note, Note_with_privileges} from "@joeseln/types";
 
 @Injectable({
   providedIn: 'root',
 })
 export class PicturesService
-  implements TableViewService, RecentChangesService, VersionsService<Picture>, ExportService {
+  implements TableViewService, RecentChangesService, VersionsService<Picture>, LockService, ExportService, PermissionsService {
   public readonly apiUrl = `${environment.apiUrl}/pictures/`;
 
+  public privileges_list$ = new BehaviorSubject<any>('');
 
   public constructor(private readonly httpClient: HttpClient,
                      private readonly errorservice: ErrorserviceService,
@@ -79,6 +108,22 @@ export class PicturesService
     return this.httpClient.post<Picture>(`${this.apiUrl}clone/`, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
+  public _get(id: string, userId: number, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
+    return this.httpClient.get<Picture>(`${this.apiUrl}${id}`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      switchMap(picture =>
+        this.getUserPrivileges(id, userId, picture.deleted).pipe(
+          map(privileges => {
+            const privilegesData: PrivilegesData<Picture> = {
+              privileges,
+              data: picture,
+            };
+            return privilegesData;
+          })
+        )
+      )
+    );
+  }
+
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<Picture>> {
     return this.httpClient.get<Pic_with_privileges>(`${this.apiUrl}${id}/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
@@ -93,7 +138,39 @@ export class PicturesService
     );
   }
 
+  public getPrivilegesList(id: string): Observable<PrivilegesApi[]> {
+    return this.httpClient.get<PrivilegesApi[]>(`${this.apiUrl}${id}/privileges/`);
+  }
 
+  public getUserPrivileges(id: string, userId: number, deleted: boolean): Observable<Privileges> {
+    return this.privileges_list$.pipe(
+      map(() => {
+          return mockPrivileges
+        }
+      )
+    )
+  }
+
+  public addUserPrivileges(id: string, userId: number): Observable<PrivilegesApi> {
+    return this.httpClient.post<PrivilegesApi>(
+      `${this.apiUrl}${id}/privileges/`,
+      {
+        user_pk: userId,
+        view_privilege: 'AL',
+      },
+      {
+        params: new HttpParams().set('pk', userId.toString()),
+      }
+    );
+  }
+
+  public putUserPrivileges(id: string, userId: number, privileges: PrivilegesApi): Observable<PrivilegesApi> {
+    return this.httpClient.put<PrivilegesApi>(`${this.apiUrl}${id}/privileges/${userId}/`, privileges);
+  }
+
+  public deleteUserPrivileges(id: string, userId: number): Observable<PrivilegesApi[]> {
+    return this.httpClient.delete(`${this.apiUrl}${id}/privileges/${userId}/`).pipe(switchMap(() => this.getPrivilegesList(id)));
+  }
 
   public delete(id: string, labbook_pk: string, params = new HttpParams()): Observable<Picture> {
     return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params});
@@ -116,6 +193,18 @@ export class PicturesService
     return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});
   }
 
+
+  //   // TODO: needs proper interface for return type, maybe with a generic?
+  // public previewVersion(id: string, version: string): Observable<any> {
+  //       return this.privileges_list$.pipe(
+  //     map(() => {
+  //          return mockNoteVersion.metadata
+  //       }
+  //     )
+  //   )
+  // }
+
+  // TODO: needs proper interface for return type, maybe with a generic?
   public previewVersion(id: string, version: string): Observable<any> {
     return this.httpClient.get<any>(`${this.apiUrl}${id}/versions/${version}/preview/`);
   }
@@ -125,11 +214,22 @@ export class PicturesService
   }
 
   public restoreVersion(id: string, version: string, versionInProgress: boolean): Observable<Picture> {
+    // if (versionInProgress) {
+    //   return this.addVersion(id).pipe(
+    //     switchMap(() => this.httpClient.post<Picture>(`${this.apiUrl}${id}/versions/${version}/restore/`, {pk: id}))
+    //   );
+    // }
 
     return this.httpClient.post<Picture>(`${this.apiUrl}${id}/versions/${version}/restore/`, {pk: id});
   }
 
+  public lock(id: string, params = new HttpParams()): Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}${id}/lock/`, undefined, {params});
+  }
 
+  public unlock(id: string, params = new HttpParams()): Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}${id}/unlock/`, undefined, {params});
+  }
 
   public export(id: string): Observable<ExportLink> {
     return this.httpClient.get<ExportLink>(`${this.apiUrl}${id}/get_export_link/`);
@@ -176,4 +276,18 @@ export class PicturesService
     return this.httpClient.get<any>(url, {params});
   }
 
+  public convertTiff(url: string, picture: ConvertTiffPayload, params = new HttpParams()): Observable<Blob> {
+    const formData = new FormData();
+    for (const [key, val] of Object.entries(picture)) {
+      if (!val) continue;
+      if (val instanceof Blob) {
+        if (val.size) {
+          formData.append(key, val, (val as any).name);
+        }
+      } else {
+        formData.append(key, val);
+      }
+    }
+    return this.httpClient.post(url, formData, {params, responseType: 'blob'});
+  }
 }

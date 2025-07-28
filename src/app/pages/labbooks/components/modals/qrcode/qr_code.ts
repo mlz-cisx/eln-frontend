@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -6,6 +12,7 @@ import {
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
+// import { LabBooksService, ProjectsService } from '@app/services';
 import {LabbooksService} from '@joeseln/services';
 import type {LabBook, Project} from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
@@ -13,8 +20,9 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {Subject} from 'rxjs';
-
+import {from, of, Subject} from 'rxjs';
+import {catchError, debounceTime, mergeMap, switchMap} from 'rxjs/operators';
+import {QRCodeModule} from 'angularx-qrcode';
 
 interface FormLabBook {
   title: FormControl<string | null>;
@@ -61,6 +69,7 @@ export class NewQRcodeModalComponent implements OnInit {
     public readonly labBooksService: LabbooksService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
+    // private readonly projectsService: ProjectsService,
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService
   ) {
@@ -84,6 +93,30 @@ export class NewQRcodeModalComponent implements OnInit {
   }
 
   public initSearchInput(): void {
+
+    // this.projectInput$
+    //   .pipe(
+    //     untilDestroyed(this),
+    //     debounceTime(500),
+    //     // switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
+    //   )
+    //   .subscribe(projects => {
+    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+    //     this.cdr.markForCheck();
+    //   });
+
+    // this.projectsService
+    //   .getList(new HttpParams().set('favourite', 'true'))
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(projects => {
+    //     if (projects.data.length) {
+    //       this.favoriteProjects = [...projects.data];
+    //       this.projects = [...this.projects, ...this.favoriteProjects]
+    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
+    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+    //       this.cdr.markForCheck();
+    //     }
+    //   });
   }
 
   public patchFormValues(): void {
@@ -98,6 +131,26 @@ export class NewQRcodeModalComponent implements OnInit {
         {emitEvent: false}
       );
 
+      // if (this.initialState.projects.length) {
+      //   from(this.initialState.projects)
+      //     .pipe(
+      //       untilDestroyed(this),
+      //       mergeMap(id =>
+      //         this.projectsService.get(id).pipe(
+      //           untilDestroyed(this),
+      //           catchError(() =>
+      //             of({ pk: id, name: this.translocoService.translate('formInput.unknownProject'), is_favourite: false } as Project)
+      //           )
+      //         )
+      //       )
+      //     )
+      //     .subscribe(project => {
+      //       this.projects = [...this.projects, project]
+      //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
+      //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
+      //       this.cdr.markForCheck();
+      //     });
+      // }
     }
   }
 

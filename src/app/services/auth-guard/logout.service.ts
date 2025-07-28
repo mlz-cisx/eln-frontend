@@ -19,7 +19,18 @@ export class LogoutService {
   ) {
   }
 
+  // use this logout method if keycloak is never integrated
+  public _logout() {
+    if (this.authService.getToken()) {
+      // logout for username/password
+      this.authService.clearStorage()
+      this.router.navigate(['/login'])
+    } else {
+      this.router.navigate(['/login'])
+    }
+  }
 
+  // use this logout method if keycloak is integrated
   public logout() {
     if (this.authService.getToken()) {
       // logout for username/password

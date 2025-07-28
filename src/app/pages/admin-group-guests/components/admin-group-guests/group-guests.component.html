@@ -1,4 +1,10 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <ng-container *transloco="let t">
+  <!--  <eworkbench-header [title]="title">-->
 
   <ng-container slot="search">
     <div class="flex items-center"
@@ -30,6 +36,11 @@
     </div>
   </ng-container>
   <ng-container slot="elements">
+<!--    <button class="btn ewb-button-big ewb-button-background"-->
+<!--            (click)="openNewModal()">-->
+<!--      <joeseln-icon className="wb-plus-circle"></joeseln-icon>-->
+<!--      {{ t('users.new') }}-->
+<!--    </button>-->
   </ng-container>
   <div class="title">
     {{title}}'s <h4>{{t('user.groupGuests')}}</h4>
@@ -52,7 +63,88 @@
       ></eworkbench-table-manage-columns>
     </div>
 
+    <ng-container *transloco="let t">
+      <div class="flex justify-between pb-4 mb-5">
+        <div class="space-x-2">
+          <div *ngIf="!filtersChanged" class="text-sm text-tum-info-color">
+            {{ t('filterHeader.noFilters') }}
+          </div>
 
+          <div
+            *ngIf="getFilterSelectedUser"
+            class="bg-tum-primary hover:bg-tum-primary-hover text-white py-0.5 px-2.5 rounded-full inline-flex justify-between items-center"
+          >
+            <span class="text-sm mr-2"
+            >{{ t('filterHeader.createdBy') }}{{ ' '
+              }}{{ getFilterSelectedUser.pk === currentUser?.pk ? t('filterHeader.createdBy.myself') : '' }}</span
+            >
+            <eworkbench-user-details
+              *ngIf="getFilterSelectedUser.pk !== currentUser?.pk"
+              class="inline-block mr-2"
+              [user]="getFilterSelectedUser"
+              [active]="false"
+              [inverted]="true"
+              [avatarScale]="0.7"
+            ></eworkbench-user-details>
+            <button
+              type="button"
+              class="btn ewb-button-small text-white"
+              [tooltip]="t('filterHeader.chip.tooltip.remove')"
+              containerClass="tooltip-sm"
+              (click)="usersControl.setValue(null)"
+            >
+              <joeseln-icon className="wb-remove"></joeseln-icon>
+            </button>
+          </div>
+
+          <div
+            *ngIf="getFilterSelectedProject"
+            class="bg-tum-primary hover:bg-tum-primary-hover text-white py-0.5 px-2.5 rounded-full inline-flex justify-between items-center"
+          >
+            <span
+              class="text-sm mr-2">{{ getFilterSelectedProject.display }}</span>
+            <button
+              type="button"
+              class="btn ewb-button-small text-white"
+              [tooltip]="t('filterHeader.chip.tooltip.remove')"
+              containerClass="tooltip-sm"
+              (click)="projectsControl.setValue(null)"
+            >
+              <joeseln-icon className="wb-remove"></joeseln-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <div class="inline-block">
+            <div class="custom-control custom-checkbox">
+              <input
+                class="custom-control-input"
+                type="checkbox"
+                [formControl]="favoritesControl"
+                id="favorites-filter"
+                name="favorites-filter"
+                [checked]="favoritesControl.value"
+              />
+              <label for="favorites-filter"
+                     class="custom-control-label font-normal leading-5">
+                {{ t('filterHeader.favorites.label') }}
+              </label>
+            </div>
+          </div>
+
+          <button
+            *ngIf="filtersChanged"
+            type="button"
+            class="btn ewb-button-regular ewb-button-additional inline-flex items-center"
+            [disabled]="!filtersChanged"
+            (click)="onResetFilters()"
+          >
+            {{ t('filterHeader.resetAll') }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
 
     <eworkbench-table-view
       #tableView
@@ -69,6 +161,143 @@
 
   <ng-container *transloco="let t">
     <aside>
+      <!--      <eworkbench-filter-sidebar-->
+      <!--        [activeFilters]="filtersChanged"-->
+      <!--        [savedFilters]="savedFilters"-->
+      <!--        (resetFilters)="onResetFilters()"-->
+      <!--        (saveFilters)="onSaveFilters($event)"-->
+      <!--      >-->
+      <!--        <div>-->
+      <!--          <label for="users-filter" class="text-base font-bold">{{ t('plugins.filter.createdBy.label') }}</label>-->
+      <!--          <div class="mt-4">-->
+      <!--            <div class="space-y-2">-->
+      <!--              <div class="custom-control custom-radio">-->
+      <!--                <input-->
+      <!--                  type="radio"-->
+      <!--                  class="custom-control-input"-->
+      <!--                  name="filter-user-radio"-->
+      <!--                  id="filter-user-radio-1"-->
+      <!--                  [value]="null"-->
+      <!--                  [formControl]="usersControl"-->
+      <!--                  (change)="onUserFilterRadioAnyone()"-->
+      <!--                />-->
+      <!--                <label for="filter-user-radio-1" class="custom-control-label font-normal leading-6">{{-->
+      <!--                  t('filter-menu.anyone.label')-->
+      <!--                }}</label>-->
+      <!--              </div>-->
+      <!--              <div class="custom-control custom-radio">-->
+      <!--                <input-->
+      <!--                  type="radio"-->
+      <!--                  class="custom-control-input"-->
+      <!--                  name="filter-user-radio"-->
+      <!--                  id="filter-user-radio-2"-->
+      <!--                  [value]="currentUser?.pk"-->
+      <!--                  [formControl]="usersControl"-->
+      <!--                  (change)="onUserFilterRadioMyself($event.target?.checked)"-->
+      <!--                />-->
+      <!--                <label for="filter-user-radio-2" class="custom-control-label font-normal leading-6">{{-->
+      <!--                  t('filter-menu.myself.label')-->
+      <!--                }}</label>-->
+      <!--              </div>-->
+      <!--              <div class="custom-control custom-radio">-->
+      <!--                <input-->
+      <!--                  type="radio"-->
+      <!--                  class="custom-control-input"-->
+      <!--                  name="filter-user-radio"-->
+      <!--                  id="filter-user-radio-3"-->
+      <!--                  (change)="showUserFilter = $event.target?.checked"-->
+      <!--                />-->
+      <!--                <label for="filter-user-radio-3" class="custom-control-label font-normal leading-6">{{-->
+      <!--                  t('filter-menu.chooseAUser.label')-->
+      <!--                }}</label>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <div *ngIf="showUserFilter" class="mt-4">-->
+      <!--              <ng-select-->
+      <!--                #select-->
+      <!--                class="ewb-select"-->
+      <!--                [formControl]="usersControl"-->
+      <!--                labelForId="users-filter"-->
+      <!--                name="users-filter"-->
+      <!--                [placeholder]="t('plugins.filter.users.placeholder')"-->
+      <!--                [typeahead]="usersInput$"-->
+      <!--                [items]="users"-->
+      <!--                bindLabel="username"-->
+      <!--                bindValue="pk"-->
+      <!--              >-->
+      <!--                <ng-template ng-label-tmp let-item="item" let-clear="clear">-->
+      <!--                  <div class="flex items-center user-option">-->
+      <!--                    <eworkbench-user-details-->
+      <!--                      class="inline-block mr-1"-->
+      <!--                      [user]="item"-->
+      <!--                      [chip]="true"-->
+      <!--                      (click)="select.isOpen = false"-->
+      <!--                    ></eworkbench-user-details>-->
+      <!--                    <span class="sub-text">{{ item.email }}</span>-->
+      <!--                  </div>-->
+      <!--                </ng-template>-->
+
+      <!--                <ng-template ng-option-tmp let-item="item" let-search="searchTerm">-->
+      <!--                  <eworkbench-user-details-dropdown-->
+      <!--                    class="inline-block mr-1"-->
+      <!--                    [user]="item"-->
+      <!--                    [search]="search"-->
+      <!--                  ></eworkbench-user-details-dropdown>-->
+      <!--                </ng-template>-->
+      <!--              </ng-select>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+
+      <!--        <div>-->
+      <!--          <label for="projects-filter" class="text-base font-bold">{{ t('plugins.filter.projectRelation.label') }}</label>-->
+      <!--          <div class="mt-4">-->
+      <!--            <ng-select-->
+      <!--              class="ewb-select"-->
+      <!--              [formControl]="projectsControl"-->
+      <!--              labelForId="projects-filter"-->
+      <!--              name="projects-filter"-->
+      <!--              [placeholder]="t('plugins.filter.projects.placeholder')"-->
+      <!--              [typeahead]="projectsInput$"-->
+      <!--              [items]="projects"-->
+      <!--              groupBy="is_favourite"-->
+      <!--              bindLabel="name"-->
+      <!--              bindValue="pk"-->
+      <!--            >-->
+      <!--              <ng-template ng-option-tmp let-item="item" let-search="searchTerm">-->
+      <!--                <eworkbench-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></eworkbench-icon>-->
+      <!--                <span [ngOptionHighlight]="search">{{ item.name }}</span>-->
+      <!--              </ng-template>-->
+      <!--              <ng-template ng-optgroup-tmp let-item="item">-->
+      <!--                <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>-->
+      <!--                <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>-->
+      <!--              </ng-template>-->
+      <!--              <ng-template ng-notfound-tmp>-->
+      <!--                <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>-->
+      <!--              </ng-template>-->
+      <!--            </ng-select>-->
+      <!--          </div>-->
+      <!--        </div>-->
+
+      <!--        <div>-->
+      <!--          <label for="favorites-filter" class="text-base font-bold">{{ t('plugins.filter.favoriteMarker.label') }}</label>-->
+      <!--          <div class="mt-4">-->
+      <!--            <div class="custom-control custom-checkbox">-->
+      <!--              <input-->
+      <!--                class="custom-control-input"-->
+      <!--                type="checkbox"-->
+      <!--                [formControl]="favoritesControl"-->
+      <!--                id="favorites-filter"-->
+      <!--                name="favorites-filter"-->
+      <!--                [checked]="favoritesControl.value"-->
+      <!--              />-->
+      <!--              <label for="favorites-filter" class="custom-control-label font-normal leading-5">{{-->
+      <!--                t('plugins.filter.favorites.label')-->
+      <!--              }}</label>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </eworkbench-filter-sidebar>-->
     </aside>
   </ng-container>
 </div>
@@ -94,6 +323,12 @@
 </ng-template>
 <ng-template #actionsCellTemplate let-row>
   <div class="whitespace-nowrap text-right">
+    <!--    <eworkbench-favorite-button-->
+    <!--      class="inline-block mr-2"-->
+    <!--      [id]="row.pk"-->
+    <!--      [contentType]="row.content_type"-->
+    <!--      [favorited]="row.is_favourite"-->
+    <!--    ></eworkbench-favorite-button>-->
     <eworkbench-trash-button
       *ngIf="row.in_group"
       class="inline-block"

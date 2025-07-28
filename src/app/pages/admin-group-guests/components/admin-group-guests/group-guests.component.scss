@@ -1,4 +1,8 @@
-@import '../../../../../styles/colors';
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+@import "../../../../../styles/colors";
 
 :host {
   display: flex;
@@ -8,10 +12,9 @@
   .title {
     border: 1px solid #ccc;
     padding: 10px;
-    margin: 10px;
     border-radius: 5px;
     display: inline-block;
-    margin: 20px auto 0 auto;
+    margin: 20px auto 0;
   }
 
   h4 {

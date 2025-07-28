@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
+import type {WebSocketElementPayload} from '@joeseln/types';
 import {Subject} from 'rxjs';
 import {webSocket} from 'rxjs/webSocket';
 import {AuthService} from "@app/services";
@@ -14,6 +15,9 @@ export class WebSocketService {
 
   public elements = new Subject();
 
+  public elementsConnection = webSocket(`${environment.wsUrl}/pathvalue`);
+
+  public subscribedElements: WebSocketElementPayload[] = [];
 
   public constructor(
     private _auth: AuthService,
@@ -35,4 +39,30 @@ export class WebSocketService {
     });
   }
 
+  // we will not use it anymore, because of ws unidirectional approach
+  public subscribe(elements: WebSocketElementPayload[]): void {
+    for (const element of elements) {
+      this.subscribedElements = [...this.subscribedElements, element];
+      this.elementsConnection.next({
+        auth: this._auth.getToken(),
+        action: 'subscribe',
+        model_name: element.model,
+        model_pk: element.pk
+      });
+      //console.log(this.subscribedElements)
+    }
+  }
+
+  // we will not use it anymore, because of ws unidirectional approach
+  public unsubscribe(): void {
+    for (const element of this.subscribedElements) {
+      this.elementsConnection.next({
+        auth: null,
+        action: 'unsubscribe',
+        model_name: element.model,
+        model_pk: element.pk
+      });
+    }
+    this.subscribedElements = [];
+  }
 }

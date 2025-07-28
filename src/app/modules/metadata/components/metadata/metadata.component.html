@@ -1,0 +1,81 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <div
+    cdkDropList
+    [cdkDropListData]="selectedParameters"
+    [cdkDropListOrientation]="$any(dropListOrientation)"
+    (cdkDropListDropped)="onElementDrop($event)"
+    *ngIf="editable"
+  >
+    <div cdkDropListGroup>
+      <div class="mb-4" cdkDrag [cdkDragDisabled]="selectedParameters.length < 2" *ngFor="let parameter of selectedParameters">
+        <div cdkDragHandle>
+          <ng-container
+            [ngTemplateOutlet]="metadataFieldHelper"
+            [ngTemplateOutletContext]="{ parameter: parameter, editable: editable }"
+          ></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!editable">
+    <div class="mb-4" *ngFor="let parameter of selectedParameters">
+      <ng-container
+        [ngTemplateOutlet]="metadataFieldHelper"
+        [ngTemplateOutletContext]="{ parameter: parameter, editable: editable }"
+      ></ng-container>
+    </div>
+  </div>
+
+  <div class="flex" *ngIf="editable">
+    <div class="flex-fill">
+      <ng-select
+        class="ewb-select"
+        labelForId="parameters"
+        [formControl]="parametersFormControl"
+        [placeholder]="t('metadata.parameters.placeholder')"
+        [items]="parameters"
+        bindValue="value"
+        (change)="onAdd()"
+      >
+        <ng-template ng-footer-tmp let-item="item" let-clear="clear" let-search="searchTerm">
+          <div class="footer-option" (click)="openNewModal(search)">
+            <span class="footer-option-label">
+              {{ search ? t('metadata.parameters.add', { search: search }) : t('metadata.parameters.addNew') }}
+            </span>
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="ml-2 self-center" *ngIf="showButtons()">
+      <button
+        type="submit"
+        class="btn ewb-button-big ewb-button-primary square"
+        [disabled]="loading"
+        [tooltip]="t('formInput.save.tooltip')"
+        containerClass="tooltip-sm"
+      >
+        <joeseln-icon className="wb-check"></joeseln-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="text-tum-disabled italic" *ngIf="!selectedParameters?.length && !editable">
+    {{ t('formInput.notDefined.placeholder') }}
+  </div>
+</ng-container>
+
+<ng-template #metadataFieldHelper let-parameter="parameter">
+<!--  <eworkbench-metadata-field-helper-->
+<!--    [parameter]="parameter"-->
+<!--    [parametersCount]="selectedParameters.length"-->
+<!--    [loading]="loading"-->
+<!--    [editable]="editable"-->
+<!--    (changed)="onChanged($event)"-->
+<!--    (remove)="onRemove($event)"-->
+<!--  ></eworkbench-metadata-field-helper>-->
+</ng-template>

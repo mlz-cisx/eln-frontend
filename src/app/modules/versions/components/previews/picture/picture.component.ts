@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -55,6 +60,7 @@ export class PicturePreviewComponent implements OnInit {
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService,
     private readonly picturesService: PicturesService,
+    // private readonly projectsService: ProjectsService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef
   ) {
@@ -86,6 +92,15 @@ export class PicturePreviewComponent implements OnInit {
   }
 
   public loadProjects(projects: string[]): void {
+    // projects.forEach(id => {
+    //   this.projectsService
+    //     .get(id)
+    //     .pipe(untilDestroyed(this))
+    //     .subscribe(project => {
+    //       this.projects = [...this.projects, project];
+    //       this.cdr.markForCheck();
+    //     });
+    // });
   }
 
   public onRestoreVersion(): void {
@@ -109,7 +124,7 @@ export class PicturePreviewComponent implements OnInit {
               this.cdr.markForCheck()
               this.cdr.detectChanges()
               // TODO try to get rid of this
-              // location.reload()
+              location.reload()
             });
         },
         () => {

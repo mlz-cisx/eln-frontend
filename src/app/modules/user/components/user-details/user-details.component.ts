@@ -1,6 +1,12 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import type { User } from '@joeseln/types';
 import { DialogRef, DialogService } from '@ngneat/dialog';
+import { UserDetailsModalComponent } from '../modals/user-details/user-details.component';
 
 @Component({
   selector: 'eworkbench-user-details',
@@ -38,5 +44,16 @@ export class UserDetailsComponent {
   public constructor(private readonly modalService: DialogService) {}
 
   public openUserModal(event?: Event): void {
+    event?.preventDefault();
+
+    if (this.active) {
+      this.modalRef = this.modalService.open(UserDetailsModalComponent, {
+        closeButton: false,
+        width: '620px',
+        data: {
+          user: this.user,
+        },
+      });
+    }
   }
 }

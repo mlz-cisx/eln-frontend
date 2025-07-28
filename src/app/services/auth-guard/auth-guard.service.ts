@@ -1,9 +1,10 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable, inject} from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
   Router,
   RouterStateSnapshot,
+  UrlTree
 } from '@angular/router';
 import {AuthService} from '@app/services';
 
@@ -20,7 +21,7 @@ class AuthGuardService {
   ) {
   }
 
-
+  // use this canActivate method if keycloak is integrated
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.getToken()) {
       this.authenticated = true
@@ -32,6 +33,20 @@ class AuthGuardService {
     }
     return this.authenticated;
   }
+
+  // use this canActivate method if keycloak is never integrated
+  _canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.authService.getToken()) {
+      this.authenticated = true
+    }
+    // Force the user to log in if currently unauthenticated
+    if (!this.authenticated) {
+      localStorage.setItem('state_url', state.url);
+      this.router.navigate(['/login'])
+    }
+    return this.authenticated;
+  }
+
 
 }
 

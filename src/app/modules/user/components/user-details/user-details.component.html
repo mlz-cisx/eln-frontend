@@ -1,9 +1,15 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <ng-container *transloco="let t">
   <ng-container *ngIf="user">
     <ng-container *ngIf="user?.userprofile">
       <ng-container *ngIf="user?.userprofile?.anonymized">
         <div class="flex items-center whitespace-nowrap" [class.chip]="chip"
              [class.inverted]="inverted">
+          <!--          <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>-->
           <div [class.text-gray-600]="!inverted">
             {{ t('user.details.anonymizedUser') }}
           </div>
@@ -11,7 +17,7 @@
       </ng-container>
       <ng-container *ngIf="!user?.userprofile?.anonymized">
         <ng-container
-          *ngIf="user?.userprofile?.first_name && user?.userprofile?.last_name"
+          *ngIf="user?.userprofile?.first_name && user?.userprofile?.last_name; then userTemplate; else usernameTemplate"
         ></ng-container>
       </ng-container>
     </ng-container>
@@ -19,12 +25,85 @@
   <ng-container *ngIf="!user || !user?.userprofile">
     <div class="flex items-center whitespace-nowrap" [class.chip]="chip"
          [class.inverted]="inverted">
+      <!--      <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>-->
       <div>
         {{ user?.username}}
       </div>
     </div>
   </ng-container>
 
+  <ng-template #userTemplate>
+    <div
+      #popoverFocusElement
+      class="flex items-center whitespace-nowrap"
+      [class.chip]="chip"
+      [class.inverted]="inverted"
+      (mouseleave)="popoverTriggerElement.focus(); popoverTriggerElement.blur()"
+    >
+      <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>
+      <a
+        #popoverTriggerElement
+        href
+        [class.deactivated]="!active"
+        [class.inverted]="inverted"
+        [popover]="userDetailsPopover"
+        [popoverContext]="{ user: user }"
+        [containerClass]="modal ? '' : 'ewb-popover'"
+        [triggers]="modal ? '' : 'mouseenter:blur'"
+        (click)="modal ? openUserModal($event) : $event.preventDefault()"
+        (mouseenter)="popoverFocusElement.focus()"
+      >
+        {{ user?.userprofile?.first_name }} {{ user?.userprofile?.last_name }}
+      </a>
+      <span *ngIf="!user?.is_active"
+            class="inactive-indicator">{{ t('user.details.inactive') }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #usernameTemplate>
+    <div
+      #popoverFocusElement
+      class="flex items-center whitespace-nowrap"
+      [class.chip]="chip"
+      [class.inverted]="inverted"
+      (mouseleave)="popoverTriggerElement.focus(); popoverTriggerElement.blur()"
+    >
+      <ng-container [ngTemplateOutlet]="userAvatar"></ng-container>
+      <a
+        #popoverTriggerElement
+        href
+        [class.deactivated]="!active"
+        [class.inverted]="inverted"
+        [popover]="userDetailsPopover"
+        [popoverContext]="{ user }"
+        [containerClass]="modal ? '' : 'ewb-popover'"
+        [triggers]="modal ? '' : 'mouseenter:blur'"
+        (click)="modal ? openUserModal($event) : $event.preventDefault()"
+        (mouseenter)="popoverFocusElement.focus()"
+      >
+        {{ user?.username }}
+      </a>
+      <span *ngIf="!user?.is_active"
+            class="inactive-indicator">{{ t('user.details.inactive') }}</span>
+    </div>
+  </ng-template>
 </ng-container>
 
+<ng-template #userAvatar>
+  <eworkbench-user-avatar
+    [user]="user"
+    [chip]="chip"
+    [inverted]="inverted || invertedAvatar"
+    [scale]="avatarScale"
+    class="mr-2"
+    *ngIf="avatar"
+  ></eworkbench-user-avatar>
+</ng-template>
 
+<ng-template #userDetailsPopover let-user="user">
+  <eworkbench-user-details-preview
+    [user]="user"
+    (mousedown)="$event.stopPropagation()"
+    (click)="$event.stopPropagation()"
+  ></eworkbench-user-details-preview>
+</ng-template>

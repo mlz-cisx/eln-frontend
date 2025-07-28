@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -11,11 +16,21 @@ import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { TranslocoService } from '@ngneat/transloco';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+//import { MetadataFieldHelperComponent } from './components/field-helper/field-helper.component';
+//import { MetadataFieldComponent } from './components/field/field.component';
+import { MetadataComponent } from './components/metadata/metadata.component';
+import { NewMetadataFieldComponent } from './components/modals/new/new.component';
+//import { MetadataSearchParameterComponent } from './components/search-parameter/search-parameter.component';
 import { FormHelperModule } from '../form-helper/form-helper.module';
 import { LoadingModule } from '../loading/loading.module';
 
 @NgModule({
   declarations: [
+    //MetadataSearchParameterComponent,
+    MetadataComponent,
+  //  MetadataFieldHelperComponent,
+//    MetadataFieldComponent,
+    NewMetadataFieldComponent,
   ],
   imports: [
     CommonModule,
@@ -42,6 +57,11 @@ import { LoadingModule } from '../loading/loading.module';
     AlertModule,
   ],
   exports: [
+   // MetadataSearchParameterComponent,
+    MetadataComponent,
+    //MetadataFieldHelperComponent,
+    //MetadataFieldComponent,
+    NewMetadataFieldComponent,
   ],
 })
 export class MetadataModule {}

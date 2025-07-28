@@ -1,12 +1,42 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+// import {PrivilegesService} from '@app/services/privileges/privileges.service';
 import {environment} from '@environments/environment';
 import type {TableViewService} from '@joeseln/table';
-import type {PrivilegesData, User, User_with_privileges} from '@joeseln/types';
+import type {
+  DjangoAPI,
+  ExportLink,
+  ExportService,
+  FinalizeVersion,
+  LockService,
+  Note, Note_with_privileges,
+  NotePayload,
+  PermissionsService,
+  Privileges,
+  PrivilegesApi,
+  PrivilegesData,
+  RecentChanges,
+  RecentChangesService,
+  Relation,
+  RelationPayload,
+  RelationPutPayload, User, User_with_privileges, UserPayload,
+  Version,
+  VersionsService,
+} from '@joeseln/types';
 import type {Observable} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {ErrorserviceService, LogoutService} from "@app/services";
-
+import {catchError, map, switchMap} from 'rxjs/operators';
+import {BehaviorSubject} from "rxjs";
+import {
+  mockLabBooksList,
+  mockLabBookVersion, mockNotesList,
+  mockNoteVersion,
+  mockPrivileges
+} from "@joeseln/mocks";
+import {
+  ErrorserviceService,
+  LogoutService
+} from "@app/services";
+import {Lab_Book, LabBook, LabBookPayload} from "@joeseln/types";
 
 @Injectable({
   providedIn: 'root',
@@ -53,4 +83,8 @@ export class AdminAdminsService implements TableViewService {
     return this.httpClient.patch<User>(`${this.apiUrl}${id}/restore/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
+  // no adding
+  public add(user: UserPayload): Observable<User> {
+    return this.httpClient.post<User>(this.apiUrl, user).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
+  }
 }

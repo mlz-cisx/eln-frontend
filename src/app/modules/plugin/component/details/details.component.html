@@ -1,0 +1,61 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<ng-container *transloco="let t">
+  <div class="flex mb-4">
+    <div class="flex-fill">
+      <div class="flex">
+        <div class="max-w-sm mr-2" *ngIf="plugin.logo">
+          <img [src]="plugin.logo" [alt]="plugin.title" class="max-w-full h-auto" />
+        </div>
+        <div class="flex-fill">
+          <div>
+            <label for="title-modal" class="font-bold inline-block mr-1">{{ t('plugin.preview.title.label') }}</label>
+            {{ plugin.title }}
+          </div>
+          <div>
+            <label for="shortDescription-modal" class="font-bold inline-block mr-1">{{ t('plugin.preview.shortDescription.label') }}</label>
+            {{ plugin.short_description }}
+          </div>
+        </div>
+        <div class="flex-fill">
+          <div class="mb-4">
+            <label for="responsibleUsers-modal" class="font-bold inline-block mr-1">{{ t('plugin.preview.responsibleUsers.label') }}</label>
+            <div class="mb-2">
+              <eworkbench-users-grouping
+                [users]="plugin.responsible_users"
+                [chip]="true"
+                [modal]="false"
+                class="inline-block"
+              ></eworkbench-users-grouping>
+            </div>
+            <button
+              type="button"
+              class="btn ewb-button-big ewb-button-secondary"
+              (click)="onSelect({ type: 'feedback', id: plugin.pk, responsibleUsers: plugin.responsible_users })"
+            >
+              <joeseln-icon className="wb-envelope"></joeseln-icon> {{ t('plugin.detailsDropdown.giveFeedback') }}
+            </button>
+          </div>
+          <div>
+            <div [class.mb-2]="!plugin.is_accessible">
+              <eworkbench-plugin-accessibility-label [isAccessible]="plugin.is_accessible"></eworkbench-plugin-accessibility-label>
+            </div>
+            <button
+              type="button"
+              class="btn ewb-button-big ewb-button-secondary"
+              (click)="onSelect({ type: 'request_access', id: plugin.pk, responsibleUsers: plugin.responsible_users })"
+              *ngIf="!plugin.is_accessible"
+            >
+              <joeseln-icon className="wb-envelope"></joeseln-icon> {{ t('plugin.detailsDropdown.requestAccess') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3" [innerHTML]="plugin.long_description"></div>
+</ng-container>

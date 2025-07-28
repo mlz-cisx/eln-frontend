@@ -1,3 +1,8 @@
+<!--
+  Copyright (C) 2016-2020 TU Muenchen and contributors of ANEXIA Internetdienstleistungs GmbH
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <ng-container *transloco="let t">
   <div *ngIf="dropdown" class="inline-block h-full navbar-nav" dropdown container="body" placement="bottom right">
     <button
@@ -55,6 +60,16 @@
 </ng-container>
 
 <ng-template #dropdownUL let-t="t" let-menuClass="menuClass" let-itemClass="itemClass">
+  <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic">
+    <button type="button" [class]="itemClass" (click)="onOpenPrivilegesModal()" [disabled]="loading">
+      <joeseln-icon className="wb-unlock"></joeseln-icon> {{ t('labBook.elementDropdown.privileges') }}
+    </button>
+  </li>
+<!--  <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic && labBookEditable">-->
+<!--    <button type="button" [class]="itemClass" (click)="onOpenMoveToSectionModal()" [disabled]="loading">-->
+<!--      <joeseln-icon className="wb-bars"></joeseln-icon> {{ t('labBook.elementDropdown.moveToSection') }}-->
+<!--    </button>-->
+<!--  </li>-->
   <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic && section && labBookEditable">
     <button type="button" [class]="itemClass" (click)="onOpenMoveBackToLabBookModal()" [disabled]="loading">
       <joeseln-icon className="wb-bars"></joeseln-icon> {{ t('labBook.elementDropdown.moveBackToLabBook') }}
@@ -70,6 +85,11 @@
       <joeseln-icon className="wb-trash-1"></joeseln-icon> {{ t('labBook.elementDropdown.trashElement') }}
     </button>
   </li>
+<!--  <li [class]="menuClass" role="menuitem" *ngIf="labBookEditable">-->
+<!--    <button type="button" [class]="itemClass" (click)="onRemove()" [disabled]="loading">-->
+<!--      <joeseln-icon className="wb-remove"></joeseln-icon> {{ t('labBook.elementDropdown.removeFromLabBook') }}-->
+<!--    </button>-->
+<!--  </li>-->
   <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic">
     <button
       type="button"
@@ -85,4 +105,9 @@
       <joeseln-icon className="wb-undo"></joeseln-icon> {{ t('labBook.elementDropdown.recentChanges') }}
     </button>
   </li>
+<!--  <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic">-->
+<!--    <button type="button" [class]="itemClass" (click)="onOpenCommentsModal()" [disabled]="loading">-->
+<!--      <joeseln-icon className="wb-comment"></joeseln-icon> {{ t('labBook.elementDropdown.comments') }}-->
+<!--    </button>-->
+<!--  </li>-->
 </ng-template>
