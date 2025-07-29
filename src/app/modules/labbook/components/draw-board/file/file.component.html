@@ -2,7 +2,11 @@
   <ng-container *transloco="let t">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="element"
           errorTailor>
-      <div class="header flex justify-between header_container" [id]="title_id" #title>
+      <div
+        class="header flex justify-between header-container"
+        [id]="title_id"
+        #title
+      >
             <div class="flex-fill">
               <eworkbench-form-input [for]="'title-' + uniqueHash"
                                      [loading]="loading" [margin]="false">

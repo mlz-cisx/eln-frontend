@@ -1,53 +1,55 @@
-@import '../node_modules/bootstrap/scss/_functions.scss';
-@import '../node_modules/bootstrap/scss/_variables.scss';
-@import '../node_modules/bootstrap/scss/mixins';
-@import '../node_modules/bootstrap/scss/_root.scss';
-@import '../node_modules/bootstrap/scss/_type.scss';
-@import '../node_modules/bootstrap/scss/_tables.scss';
-@import '../node_modules/bootstrap/scss/_forms.scss';
-@import '../node_modules/bootstrap/scss/_buttons.scss';
-@import '../node_modules/bootstrap/scss/_mixins.scss';
-@import '../node_modules/bootstrap/scss/_dropdown.scss';
-@import '../node_modules/bootstrap/scss/_button-group.scss';
-@import '../node_modules/bootstrap/scss/_input-group.scss';
-@import '../node_modules/bootstrap/scss/_custom-forms.scss';
-@import '../node_modules/bootstrap/scss/_nav.scss';
-@import '../node_modules/bootstrap/scss/_navbar.scss';
-@import '../node_modules/bootstrap/scss/_breadcrumb.scss';
-@import '../node_modules/bootstrap/scss/_badge.scss';
-@import '../node_modules/bootstrap/scss/_alert.scss';
-@import '../node_modules/bootstrap/scss/_progress.scss';
-@import '../node_modules/bootstrap/scss/_close.scss';
-@import '../node_modules/bootstrap/scss/_modal.scss';
-@import '../node_modules/bootstrap/scss/_tooltip.scss';
-@import '../node_modules/bootstrap/scss/_popover.scss';
-@import '../node_modules/bootstrap/scss/_spinners.scss';
-@import '../node_modules/bootstrap/scss/utilities';
-
-@import '../node_modules/tailwindcss/base.css';
-@import '../node_modules/tailwindcss/components.css';
-@import '../node_modules/tailwindcss/utilities.css';
-
-@import '../node_modules/bootstrap/scss/_reboot.scss';
-
-@import 'styles/_fonts.scss';
-@import 'styles/_colors.scss';
-@import 'styles/_variables.scss';
-
-@import '../node_modules/@angular/cdk/overlay-prebuilt.css';
-@import '../node_modules/ngx-toastr/toastr';
-@import '../node_modules/flatpickr/dist/flatpickr.min.css';
-
-@import '../libs/forms/src/forms.scss';
+@import "../node_modules/bootstrap/scss/_functions";
+@import "../node_modules/bootstrap/scss/_variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/_root";
+@import "../node_modules/bootstrap/scss/_type";
+@import "../node_modules/bootstrap/scss/_tables";
+@import "../node_modules/bootstrap/scss/_forms";
+@import "../node_modules/bootstrap/scss/_buttons";
+@import "../node_modules/bootstrap/scss/_mixins";
+@import "../node_modules/bootstrap/scss/_dropdown";
+@import "../node_modules/bootstrap/scss/_button-group";
+@import "../node_modules/bootstrap/scss/_input-group";
+@import "../node_modules/bootstrap/scss/_custom-forms";
+@import "../node_modules/bootstrap/scss/_nav";
+@import "../node_modules/bootstrap/scss/_navbar";
+@import "../node_modules/bootstrap/scss/_breadcrumb";
+@import "../node_modules/bootstrap/scss/_badge";
+@import "../node_modules/bootstrap/scss/_alert";
+@import "../node_modules/bootstrap/scss/_progress";
+@import "../node_modules/bootstrap/scss/_close";
+@import "../node_modules/bootstrap/scss/_modal";
+@import "../node_modules/bootstrap/scss/_tooltip";
+@import "../node_modules/bootstrap/scss/_popover";
+@import "../node_modules/bootstrap/scss/_spinners";
+@import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/tailwindcss/base.css";
+@import "../node_modules/tailwindcss/components.css";
+@import "../node_modules/tailwindcss/utilities.css";
+@import "../node_modules/bootstrap/scss/_reboot";
+@import "styles/_fonts";
+@import "styles/_colors";
+@import "styles/_variables";
+@import "../node_modules/@angular/cdk/overlay-prebuilt.css";
+@import "../node_modules/ngx-toastr/toastr";
+@import "../node_modules/flatpickr/dist/flatpickr.min.css";
+@import "../libs/forms/src/forms";
 
 * {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
-}
-
-* {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+  font-family:
+    "Open Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji" !important;
 }
 
 .cursor-pointer {
@@ -57,18 +59,19 @@
 pre {
   font-family: monospace !important;
   font-size: smaller;
-  //background-color: #fafafa;
-  //border: 1px solid #ccc;
-  //padding: 9.5px;
+
+  // background-color: #fafafa;
+  // border: 1px solid #ccc;
+  // padding: 9.5px;
 }
 
-
-.note_container span {
+.note-container span {
   font-family: monospace !important;
   font-size: smaller;
-  //background-color: #fafafa;
-  //border: 1px solid #ccc;
-  //padding: 9.5px;
+
+  // background-color: #fafafa;
+  // border: 1px solid #ccc;
+  // padding: 9.5px;
 }
 
 html {
@@ -204,7 +207,7 @@ ngneat-dialog {
       overflow: visible;
     }
 
-    .ngneat-dialog-content:has(#modal_qrcode) {
+    .ngneat-dialog-content:has(#modal-qrcode) {
       width: 348px !important;
     }
   }
@@ -277,7 +280,7 @@ ngneat-dialog {
 
 .toast {
   &-message {
-    word-break: break-word;
+    word-break: normal;
   }
 
   &-info {

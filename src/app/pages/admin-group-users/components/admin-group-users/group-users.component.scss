@@ -1,4 +1,4 @@
-@import '../../../../../styles/colors';
+@import "../../../../../styles/colors";
 
 :host {
   display: flex;
@@ -8,10 +8,9 @@
   .title {
     border: 1px solid #ccc;
     padding: 10px;
-    margin: 10px;
     border-radius: 5px;
     display: inline-block;
-    margin: 20px auto 0 auto;
+    margin: 20px auto 0;
   }
 
   h4 {

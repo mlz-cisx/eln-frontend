@@ -1,5 +1,5 @@
-@import '../../../../../styles/colors';
-@import '../../../../../styles/variables';
+@import "../../../../../styles/colors";
+@import "../../../../../styles/variables";
 
 :host {
   display: block;
@@ -17,23 +17,23 @@
   }
 
   #oidc-button-container {
-    box-shadow: #FC0 1px 0 20px;
+    box-shadow: #fc0 1px 0 20px;
   }
 
   /* Form container styling */
   form {
-    background-color: #ffffff;
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: #FC0 1px 0 20px;
+    box-shadow: #fc0 1px 0 20px;
     width: 100%;
     max-width: 400px;
     margin-bottom: 50px;
   }
 
   /* Input field styling */
-  input[type='text'],
-  input[type='password'] {
+  input[type="text"],
+  input[type="password"] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -55,7 +55,7 @@
   }
 
   button:disabled {
-    background-color: #cccccc;
+    background-color: #ccc;
     cursor: not-allowed;
   }
 

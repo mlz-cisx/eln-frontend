@@ -1,5 +1,5 @@
-@import '../../../../../styles/colors';
-@import '../../../../../styles/variables';
+@import "../../../../../styles/colors";
+@import "../../../../../styles/variables";
 
 :host {
   display: block;
@@ -115,9 +115,8 @@
 
 .line {
   border-color: $border-color;
-  margin: 0 5px 0 5px;
+  margin: 0 5px;
 }
-
 
 button {
   min-width: 22px;

@@ -2,13 +2,16 @@
   <ng-container *transloco="let t">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="element"
           errorTailor>
-      <div class="header flex justify-between header_container" [id]="title_id">
-            <div class="flex-fill">
-              <eworkbench-form-input-pic [for]="'title-' + uniqueHash"
-                                     [loading]="loading" [margin]="false">
-                <input
-                  [style]=this.background_color
-                  type="text"
+      <div class="header flex justify-between header-container" [id]="title_id">
+        <div class="flex-fill">
+          <eworkbench-form-input-pic
+            [for]="'title-' + uniqueHash"
+            [loading]="loading"
+            [margin]="false"
+          >
+            <input
+              [style]="this.background_color"
+              type="text"
                   class="form-control ewb-input"
                   [id]="'title-' + uniqueHash"
                   formControlName="pic_title"

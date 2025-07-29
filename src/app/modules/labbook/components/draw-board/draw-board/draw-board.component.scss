@@ -1,4 +1,4 @@
-@import '../../../../../../styles/colors';
+@import "../../../../../../styles/colors";
 
 :host {
   display: block;
@@ -20,7 +20,7 @@
     }
   }
 
-  @media (max-width: 991px) {
+  @media (width <= 991px) {
     .with-sidebar {
       display: block;
     }

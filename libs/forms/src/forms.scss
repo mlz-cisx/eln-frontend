@@ -1,6 +1,6 @@
-@import 'styles/colors';
-@import 'styles/variables';
-@import '../node_modules/@ng-select/ng-select/themes/default.theme.css';
+@import "styles/colors";
+@import "styles/variables";
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 
 @mixin ewb-button($height, $padding, $font-size) {
   margin: 0;
@@ -467,7 +467,7 @@ a.ewb-button-regular {
 
   span.ng-arrow-wrapper {
     &::before {
-      content: '\e942';
+      content: "\e942";
       display: inline-block;
       font: normal normal normal 14px/1 wb-font;
       font-size: inherit;
@@ -486,7 +486,7 @@ a.ewb-button-regular {
 
       span.ng-arrow-wrapper {
         &::before {
-          content: '\e943';
+          content: "\e943";
           display: inline-block;
           font: normal normal normal 14px/1 wb-font;
           font-size: inherit;
@@ -647,7 +647,7 @@ dp-date-picker {
     font-size: $font-size-sm;
 
     &::before {
-      content: 'Today';
+      content: "Today";
       color: #fff;
     }
 
