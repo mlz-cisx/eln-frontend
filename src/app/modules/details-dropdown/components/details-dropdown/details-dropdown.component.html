@@ -3,7 +3,7 @@
     <button
       type="button"
       id="details-dropdown-button"
-      class="btn ewb-button-big ewb-button-background square-md"
+      class="btn mlzeln-button-big mlzeln-button-background square-md"
       aria-controls="details-dropdown-button"
       [disabled]="loading"
       dropdownToggle
@@ -23,7 +23,7 @@
           context: {
             t: t,
             menuClass: '',
-            itemClass: 'btn ewb-button-regular font-weight-normal w-100 text-left menu-item-button'
+            itemClass: 'btn mlzeln-button-regular font-weight-normal w-100 text-left menu-item-button'
           }
         "
       ></ng-template>
@@ -32,7 +32,7 @@
   <div *ngIf="!dropdown" class="inline-block w-full navbar-nav">
     <button
       type="button"
-      class="btn ewb-button-big ewb-button-background square-md"
+      class="btn mlzeln-button-big mlzeln-button-background square-md"
       [attr.aria-expanded]="!detailsCollapsed"
       aria-controls="details-dropdown-button"
       (click)="detailsCollapsed = !detailsCollapsed"
@@ -46,7 +46,7 @@
           context: {
             t: t,
             menuClass: 'menuitem',
-            itemClass: 'btn ewb-button-regular font-weight-normal w-100 text-left menu-item-button'
+            itemClass: 'btn mlzeln-button-regular font-weight-normal w-100 text-left menu-item-button'
           }
         "
       ></ng-template>

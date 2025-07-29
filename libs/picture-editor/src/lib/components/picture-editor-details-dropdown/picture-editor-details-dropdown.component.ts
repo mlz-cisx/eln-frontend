@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-picture-editor-details-dropdown',
+  selector: 'mlzeln-picture-editor-details-dropdown',
   templateUrl: './picture-editor-details-dropdown.component.html',
   styleUrls: ['./picture-editor-details-dropdown.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

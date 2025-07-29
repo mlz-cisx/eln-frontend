@@ -18,7 +18,7 @@ import type { TableColumn } from '../../interfaces/table-column.interface';
 import type { TableSortChangedEvent } from '../../interfaces/table-sort-changed-event.interface';
 
 @Component({
-  selector: 'eworkbench-table-view',
+  selector: 'mlzeln-table-view',
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

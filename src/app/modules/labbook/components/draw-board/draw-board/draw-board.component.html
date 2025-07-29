@@ -1,16 +1,16 @@
     <aside>
-      <eworkbench-labbook-sidebar *ngIf="editable"
+      <mlzeln-labbook-sidebar *ngIf="editable"
         [id]="id"
         [projects]="projects"
         [editable]="editable"
         (created)="onAddElement($event)"
         (refresh)="onRefreshGrid($event)"
-      ></eworkbench-labbook-sidebar>
+      ></mlzeln-labbook-sidebar>
     </aside>
-      <eworkbench-labbook-draw-board-grid
+      <mlzeln-labbook-draw-board-grid
         style="margin-bottom: 30px !important;"
         #drawBoardGrid
         [id]="id"
         [created]="created"
         [editable]="editable"
-      ></eworkbench-labbook-draw-board-grid>
+      ></mlzeln-labbook-draw-board-grid>

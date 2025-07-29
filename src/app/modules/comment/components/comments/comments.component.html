@@ -1,12 +1,12 @@
 <ng-container *ngIf="create">
 
-  <eworkbench-create-comment
+  <mlzeln-create-comment
     class="mb-4"
     [id]="id"
     [service]="service"
     [contentType]="contentType"
     (refresh)="loadComments()"
-  ></eworkbench-create-comment>
+  ></mlzeln-create-comment>
 
 </ng-container>
 
@@ -15,7 +15,7 @@
     <div>
       <label class="mr-2" for="comment-state">State</label>
       <ng-select
-        class="btn ewb-select inline-block text-left pl-0 min-w-[150px]"
+        class="btn mlzeln-select inline-block text-left pl-0 min-w-[150px]"
         [formControl]="dropdownStateControl"
         labelForId="comment-state"
         name="comment-state"
@@ -30,7 +30,7 @@
     <div>
       <label for="comment-sort">Sort per date</label>
       <ng-select
-        class="btn ewb-select inline-block text-left pr-0 min-w-[160px]"
+        class="btn mlzeln-select inline-block text-left pr-0 min-w-[160px]"
         [formControl]="dropdownSortControl"
         labelForId="comment-sort"
         name="comment-sort"
@@ -58,7 +58,7 @@
     </div>
   </div>
 
-  <eworkbench-table-view
+  <mlzeln-table-view
     #tableView
     [columns]="listColumns"
     [service]="service"
@@ -71,9 +71,9 @@
     [rowHover]="false"
     [noPadding]="true"
     [paginationSize]="6"
-  ></eworkbench-table-view>
+  ></mlzeln-table-view>
 </ng-container>
 
 <ng-template #containerCellTemplate let-row>
-  <eworkbench-comment class="comment-border" [comment]="row" [service]="service" (refresh)="loadComments()"></eworkbench-comment>
+  <mlzeln-comment class="comment-border" [comment]="row" [service]="service" (refresh)="loadComments()"></mlzeln-comment>
 </ng-template>

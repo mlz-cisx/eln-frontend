@@ -8,6 +8,6 @@ export class EllipsisDirective implements OnInit {
     if (this.el.nativeElement.closest('td')) {
       (this.el.nativeElement.closest('td') as any).style.maxWidth = '0';
     }
-    this.el.nativeElement.classList.add('ewb-ellipsis');
+    this.el.nativeElement.classList.add('mlzeln-ellipsis');
   }
 }

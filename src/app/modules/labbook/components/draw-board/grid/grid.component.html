@@ -1,6 +1,6 @@
   <!--  <button style="background-color: #003161; align-content: end"-->
   <!--          type="button"-->
-  <!--          class="btn ewb-button-big text-white"-->
+  <!--          class="btn mlzeln-button-big text-white"-->
   <!--          [tooltip]="'Continue Search'"-->
   <!--          containerClass="tooltip-sm"-->
   <!--          placement="bottom left"-->
@@ -8,7 +8,7 @@
   <!--  >-->
   <!--    <joeseln-icon className="wb-search"></joeseln-icon>-->
   <!--  </button>-->
-  <eworkbench-loading [loading]="loading">
+  <mlzeln-loading [loading]="loading">
     <!--    <div class="m-12 text-center" *ngIf="!drawBoardElements.length && !loading">-->
     <!--      {{ section ? t('labBook.drawBoardNote.noChildElementsInSection') : t('labBook.drawBoardNote.noChildElements') }}-->
     <!--    </div>-->
@@ -19,13 +19,13 @@
                      *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
       >
 
-        <eworkbench-labbook-draw-board-element
+        <mlzeln-labbook-draw-board-element
           #elementComponent
           [id]="id"
           [element]="item['element']"
           [editable]="editable"
-        ></eworkbench-labbook-draw-board-element>
+        ></mlzeln-labbook-draw-board-element>
 
       </gridster-item>
     </gridster>
-  </eworkbench-loading>
+  </mlzeln-loading>

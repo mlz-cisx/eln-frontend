@@ -32,7 +32,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-groups-page',
+  selector: 'mlzeln-groups-page',
   templateUrl: './groups-page.component.html',
   styleUrls: ['./groups-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

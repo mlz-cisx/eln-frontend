@@ -2,7 +2,7 @@
   <button
     type="button"
     id="table-columns-button"
-    class="btn ewb-button-big ewb-button-primary ewb-button-regular"
+    class="btn mlzeln-button-big mlzeln-button-primary mlzeln-button-regular"
     [class.active]="dropdown.isOpen"
     aria-controls="table-columns-dropdown-menu"
     dropdownToggle
@@ -21,7 +21,7 @@
       <ng-container *ngFor="let column of _columns">
         <li
           *ngIf="column.hideable !== false"
-          class="btn ewb-button-regular font-normal w-full text-left menu-item-button"
+          class="btn mlzeln-button-regular font-normal w-full text-left menu-item-button"
           role="menuitem"
           (change)="onColumnChanged(column)"
         >

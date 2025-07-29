@@ -3,7 +3,7 @@ import type { User } from '@joeseln/types';
 import { DialogRef, DialogService } from '@ngneat/dialog';
 
 @Component({
-  selector: 'eworkbench-user-details',
+  selector: 'mlzeln-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

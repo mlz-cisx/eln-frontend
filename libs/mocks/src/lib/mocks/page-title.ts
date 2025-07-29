@@ -1,1 +1,1 @@
-export const mockPageTitle = 'Contacts • eWorkbench';
+export const mockPageTitle = 'Contacts • mlzeln';

@@ -1,9 +1,9 @@
 <ng-container *transloco="let t">
-  <eworkbench-loading [loading]="loading">
+  <mlzeln-loading [loading]="loading">
     <div class="comment-container">
-<!--      <eworkbench-user-avatar class="avatar" [user]="currentUser" [scale]="5"></eworkbench-user-avatar>-->
+<!--      <mlzeln-user-avatar class="avatar" [user]="currentUser" [scale]="5"></mlzeln-user-avatar>-->
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <eworkbench-wysiwyg-editor class="mt-1" formControlName="content" style="min-width: 700px !important;"></eworkbench-wysiwyg-editor>
+        <mlzeln-wysiwyg-editor class="mt-1" formControlName="content" style="min-width: 700px !important;"></mlzeln-wysiwyg-editor>
         <div class="custom-control custom-checkbox inline-block mt-2">
           <input
             class="custom-control-input"
@@ -17,10 +17,10 @@
           </label>
         </div>
 
-        <button type="submit" class="btn ewb-button-big ewb-button-primary  mt-2" [disabled]="loading || form.invalid" style="min-width: 200px !important;">
+        <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary  mt-2" [disabled]="loading || form.invalid" style="min-width: 200px !important;">
           {{ t('comments.newCommentModal.create') }}
         </button>
       </form>
     </div>
-  </eworkbench-loading>
+  </mlzeln-loading>
 </ng-container>

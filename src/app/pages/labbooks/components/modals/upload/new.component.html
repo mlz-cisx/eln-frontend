@@ -1,10 +1,10 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('labBook.newModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-loading [loading]="loading">
+      <mlzeln-loading [loading]="loading">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor>
           <div class="mb-4">
             <label for="title-modal">
@@ -15,7 +15,7 @@
             </label>
             <input
                     type="text"
-                    class="form-control ewb-input"
+                    class="form-control mlzeln-input"
                     formControlName="title"
                     id="title-modal"
                     name="title-modal"
@@ -38,8 +38,8 @@
           </div>
           <div class="mb-4">
             <label for="description-modal">{{ t('labBook.newModal.description.label') }}</label>
-            <eworkbench-wysiwyg-editor [id]="'description-modal'"
-                                       formControlName="description"></eworkbench-wysiwyg-editor>
+            <mlzeln-wysiwyg-editor [id]="'description-modal'"
+                                       formControlName="description"></mlzeln-wysiwyg-editor>
           </div>
 
 
@@ -48,7 +48,7 @@
               <input type="file" class="custom-file-input"
                      (change)="onUpload($event)" id="file-modal"
                      name="file-modal" multiple/>
-              <label for="file-modal" class="custom-file-label ewb-input-file"
+              <label for="file-modal" class="custom-file-label mlzeln-input-file"
                      [class.custom-file-label-filled]="file_f.file.value">{{
                   filePlaceholder
                 }}</label>
@@ -59,7 +59,7 @@
             <button
                     *ngIf="form.dirty || duplicate"
                     type="button"
-                    class="btn ewb-button-big ewb-button-secondary mr-2"
+                    class="btn mlzeln-button-big mlzeln-button-secondary mr-2"
                     (click)="modalRef.close()"
                     [disabled]="loading"
             >
@@ -69,7 +69,7 @@
                     *ngIf="(form.dirty || duplicate) && !new_labbook_pk"
                     type="submit"
 
-                    class="btn ewb-button-big ewb-button-primary"
+                    class="btn mlzeln-button-big mlzeln-button-primary"
                     [disabled]="loading || form.invalid"
             >
               {{ duplicate ? t('labBook.newModal.duplicate') : 'Create Labbook and Select Zip File' }}
@@ -79,7 +79,7 @@
                     id='proceed_button'
                     *ngIf="new_labbook_pk"
                     type="button"
-                    class="btn ewb-button-big ewb-button-primary"
+                    class="btn mlzeln-button-big mlzeln-button-primary"
                     (click)="onZipProceed()"
                     [disabled]="loading"
             >
@@ -89,7 +89,7 @@
             <button
                     *ngIf="!form.dirty && !duplicate"
                     type="button"
-                    class="btn ewb-button-big ewb-button-primary"
+                    class="btn mlzeln-button-big mlzeln-button-primary"
                     (click)="modalRef.close()"
                     [disabled]="loading"
             >
@@ -98,7 +98,7 @@
 
           </div>
         </form>
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

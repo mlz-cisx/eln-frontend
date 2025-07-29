@@ -13,11 +13,11 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="note"
               errorTailor>
           <div>
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('note.details.element.details')">
               <ng-container slot="body">
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="username"
                     [label]="t('user.details.username.label')"
                     [loading]="loading"
@@ -26,18 +26,18 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="username"
                       formControlName="username"
                       name="username"
                       [placeholder]="t('user.details.username.placeholder')"
                       slot="input"
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
 
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="first_name"
                     [label]="t('user.details.first_name.label')"
                     [loading]="loading"
@@ -46,17 +46,17 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="first_name"
                       formControlName="first_name"
                       name="first_name"
                       [placeholder]="t('user.details.first_name.placeholder')"
                       slot="input"
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="last_name"
                     [label]="t('user.details.last_name.label')"
                     [loading]="loading"
@@ -65,18 +65,18 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="last_name"
                       formControlName="last_name"
                       name="last_name"
                       [placeholder]="t('user.details.last_name.placeholder')"
                       slot="input"
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
 
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="user_email"
                     [label]="t('user.details.email.label')"
                     [loading]="loading"
@@ -85,32 +85,32 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="user_email"
                       formControlName="user_email"
                       name="user_email"
                       [placeholder]="t('user.details.email.placeholder')"
                       slot="input"
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
           </div>
 
 
-    <eworkbench-details-collapse-element
+    <mlzeln-details-collapse-element
       [labelText]="t('user.details.groupInfo')">
           <ng-container slot="body">
               <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="user_groups"
                     [label]="t('user.details.group')"
                     [loading]="loading"
                     [onSubmit]="refreshResetValue"
                   >
                     <textarea
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="user_groups"
                       name="user_groups"
                       [value]="user_groups ? user_groups.join('\n') : ''"
@@ -118,17 +118,17 @@
                       slot="input"
                       rows="5"
                     ></textarea>
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
               </div>
               <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="user_group_admins"
                     [label]="t('user.details.groupadmin')"
                     [loading]="loading"
                     [onSubmit]="refreshResetValue"
                   >
                     <textarea
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="user_group_admins"
                       name="user_groups"
                       [value]="admin_groups ? admin_groups.join('\n') : ''"
@@ -136,19 +136,19 @@
                       slot="input"
                       rows="5"
                     ></textarea>
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
               </div>
           </ng-container>
-    </eworkbench-details-collapse-element>
+    </mlzeln-details-collapse-element>
     </form>
 
-    <eworkbench-details-collapse-element
+    <mlzeln-details-collapse-element
       [labelText]="t('user.details.password_reset.label')" *ngIf=!initialState.oidc_user>
           <ng-container slot="body">
         <form [formGroup]="passwword_form" (ngSubmit)="password_reset()"
               errorTailor>
               <div class="mb-4">
-                <eworkbench-form-input
+                <mlzeln-form-input
                   for="password_patch"
                   [label]="t('user.details.password_reset.label')"
                   [loading]="loading"
@@ -160,13 +160,13 @@
                          autocomplete="off"
                          readonly
                          onfocus="this.removeAttribute('readonly');"
-                         class="form-control ewb-input"
+                         class="form-control mlzeln-input"
                          id="password_patch"
                          formControlName="password_patch"
                          name="password_patch"
                          slot="input"
                   />
-                </eworkbench-form-input>
+                </mlzeln-form-input>
               </div>
             </form>
             <div style="width: 30%">Password must contain at least one lowercase
@@ -175,7 +175,7 @@
               and sixteen characters in length.
             </div>
           </ng-container>
-      </eworkbench-details-collapse-element>
+      </mlzeln-details-collapse-element>
 
       </main>
     </div>

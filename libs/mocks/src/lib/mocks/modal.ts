@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
-  selector: 'eworkbench-mock-new-modal-component',
+  selector: 'mlzeln-mock-new-modal-component',
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -17,7 +17,7 @@ interface FormDelete {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-delete-modal',
+  selector: 'mlzeln-delete-modal',
   templateUrl: './delete.component.html',
   styleUrls: ['./delete.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

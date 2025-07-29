@@ -54,7 +54,7 @@ interface FormLabBook {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-page',
+  selector: 'mlzeln-labbook-page',
   templateUrl: './labbook-page.component.html',
   styleUrls: ['./labbook-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

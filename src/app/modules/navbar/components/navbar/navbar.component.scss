@@ -75,7 +75,7 @@
           &:hover {
             border-color: $primary-color;
 
-            .ewb-button-regular {
+            .mlzeln-button-regular {
               color: $primary-color;
             }
           }
@@ -85,7 +85,7 @@
   }
 }
 
-.ewb-button-regular {
+.mlzeln-button-regular {
   height: unset;
   min-height: 25px;
 
@@ -101,7 +101,7 @@
   &:hover {
     border-color: $primary-color;
 
-    > .ewb-button-regular {
+    > .mlzeln-button-regular {
       color: $primary-color;
     }
   }
@@ -152,6 +152,6 @@ button {
   }
 }
 
-button.ewb-button-big {
+button.mlzeln-button-big {
   font-size: 18px;
 }

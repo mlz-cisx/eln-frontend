@@ -34,7 +34,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-group-guests-page',
+  selector: 'mlzeln-group-guests-page',
   templateUrl: './group-guests.component.html',
   styleUrls: ['./group-guests.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

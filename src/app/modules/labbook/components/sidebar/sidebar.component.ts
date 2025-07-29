@@ -45,7 +45,7 @@ import {LabbooksService} from '@joeseln/services';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-sidebar',
+  selector: 'mlzeln-labbook-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,21 +1,21 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal>
+  <mlzeln-modal>
     <div slot="header">
       {{ t('comments.commentsModal.header', { name: element.display }) }}
     </div>
     <div slot="body">
-      <eworkbench-comments
+      <mlzeln-comments
         [service]="service"
         [id]="element.pk"
         [contentType]="element.content_type"
         [create]="create"
-      ></eworkbench-comments>
+      ></mlzeln-comments>
     </div>
 
     <div slot="footer">
-      <button type="button" class="btn ewb-button-big ewb-button-primary" (click)="on_click()">
+      <button type="button" class="btn mlzeln-button-big mlzeln-button-primary" (click)="on_click()">
         {{ t('comments.commentsModal.close') }}
       </button>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

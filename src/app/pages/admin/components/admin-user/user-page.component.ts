@@ -50,7 +50,7 @@ interface FormPassword {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-user-page',
+  selector: 'mlzeln-user-page',
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

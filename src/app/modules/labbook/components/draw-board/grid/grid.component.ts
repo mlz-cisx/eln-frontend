@@ -28,7 +28,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-draw-board-grid',
+  selector: 'mlzeln-labbook-draw-board-grid',
   templateUrl: './grid.component.html',
   styleUrls: ['./grid.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

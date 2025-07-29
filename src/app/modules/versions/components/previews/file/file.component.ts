@@ -19,7 +19,7 @@ import {map} from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-file-preview',
+  selector: 'mlzeln-file-preview',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

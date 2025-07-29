@@ -13,7 +13,7 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-restore-button',
+  selector: 'mlzeln-restore-button',
   templateUrl: './restore-button.component.html',
   styleUrls: ['./restore-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

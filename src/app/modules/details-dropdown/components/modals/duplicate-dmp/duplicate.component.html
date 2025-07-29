@@ -1,10 +1,10 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('detailsDropdown.duplicateDMPModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-loading [loading]="loading">
+      <mlzeln-loading [loading]="loading">
         <form [formGroup]="form"
               (ngSubmit)="onSubmit()" *ngIf="!loading">
           <div class="mb-4">
@@ -41,15 +41,15 @@
                 }}</label>
               </div>
             </span>
-            <button type="button" class="btn ewb-button-big ewb-button-secondary mr-2" [disabled]="loading" (click)="modalRef.close()">
+            <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary mr-2" [disabled]="loading" (click)="modalRef.close()">
               {{ t('detailsDropdown.duplicateDMPModal.cancel') }}
             </button>
-            <button type="submit" class="btn ewb-button-big ewb-button-primary" [disabled]="loading">
+            <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary" [disabled]="loading">
               {{ t('detailsDropdown.duplicateDMPModal.confirm') }}
             </button>
           </div>
         </form>
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

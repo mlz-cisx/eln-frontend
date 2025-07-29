@@ -36,12 +36,12 @@
           <div class="mb-4">
             <label for="password">
               {{ t('changePassword.newPassword') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="password"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               id="password"
               formControlName="password"
               name="password"
@@ -51,19 +51,19 @@
           <div class="mb-4">
             <label for="passwordConfirm">
               {{ t('changePassword.confirmNewPassword') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="password"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               id="passwordConfirm"
               formControlName="passwordConfirm"
               name="passwordConfirm"
               [placeholder]="t('changePassword.confirmNewPassword')"
             />
           </div>
-          <button type="submit" class="btn ewb-button-big ewb-button-primary"
+          <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary"
                   [disabled]="loading || form.invalid">
             {{ t('changePassword.confirm') }}
           </button>

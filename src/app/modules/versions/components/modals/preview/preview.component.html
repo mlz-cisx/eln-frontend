@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('versions.previewModal.header') }}
       <ng-container *ngIf="versionNumber">{{ versionNumber }}</ng-container>
@@ -11,9 +11,9 @@
         <div class="flex items-center" id="versionCreated">
           <span
             class="mr-2">{{ version.created_at| formatDate }}{{ ' ' }}{{ t('versions.by') }}</span>
-          <eworkbench-user-details class="inline-block"
+          <mlzeln-user-details class="inline-block"
                                    [user]="version.created_by"
-                                   [modal]="false"></eworkbench-user-details>
+                                   [modal]="false"></mlzeln-user-details>
         </div>
       </div>
       <div class="mb-4">
@@ -25,45 +25,45 @@
       </div>
       <hr/>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 
 
-  <eworkbench-note-preview
+  <mlzeln-note-preview
     *ngIf="contentType === 'note'"
     [id]="version.object_id"
     [version]="version.pk"
     [versionInProgress]="versionInProgress"
     [modalRef]="modalRef"
     (closed)="onModalClose($event)"
-  ></eworkbench-note-preview>
+  ></mlzeln-note-preview>
 
 
-  <eworkbench-labbook-preview
+  <mlzeln-labbook-preview
     *ngIf="contentType === 'labBook'"
     [id]="version.object_id"
     [version]="version.pk"
     [versionInProgress]="versionInProgress"
     [modalRef]="modalRef"
     (closed)="onModalClose($event)"
-  ></eworkbench-labbook-preview>
+  ></mlzeln-labbook-preview>
 
 
-  <eworkbench-file-preview
+  <mlzeln-file-preview
     *ngIf="contentType === 'file'"
     [id]="version.object_id"
     [version]="version.pk"
     [versionInProgress]="versionInProgress"
     [modalRef]="modalRef"
     (closed)="onModalClose($event)"
-  ></eworkbench-file-preview>
+  ></mlzeln-file-preview>
 
-  <eworkbench-picture-preview
+  <mlzeln-picture-preview
     *ngIf="contentType === 'picture'"
     [id]="version.object_id"
     [version]="version.pk"
     [versionInProgress]="versionInProgress"
     [modalRef]="modalRef"
     (closed)="onModalClose($event)"
-  ></eworkbench-picture-preview>
+  ></mlzeln-picture-preview>
 
 </ng-container>

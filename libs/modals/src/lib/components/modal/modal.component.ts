@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 import { DialogRef } from '@ngneat/dialog';
 
 @Component({
-  selector: 'eworkbench-modal',
+  selector: 'mlzeln-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,7 +2,7 @@
   <button
     type="button"
     id="details-dropdown-button"
-    class="btn ewb-button-big ewb-button-background square-md"
+    class="btn mlzeln-button-big mlzeln-button-background square-md"
     aria-controls="details-dropdown-menu"
     [disabled]="loading"
     dropdownToggle
@@ -21,7 +21,7 @@
         dropdownUL;
         context: {
           menuClass: '',
-          itemClass: 'btn ewb-button-regular font-weight-normal w-100 text-left menu-item-button'
+          itemClass: 'btn mlzeln-button-regular font-weight-normal w-100 text-left menu-item-button'
         }
       "
     ></ng-template>
@@ -30,7 +30,7 @@
 <div *ngIf="!dropdown" class="inline-block w-full navbar-nav">
   <button
     type="button"
-    class="btn ewb-button-big ewb-button-background square-md"
+    class="btn mlzeln-button-big mlzeln-button-background square-md"
     [attr.aria-expanded]="!detailsCollapsed"
     aria-controls="collapseBasic"
     (click)="detailsCollapsed = !detailsCollapsed"
@@ -43,7 +43,7 @@
         dropdownUL;
         context: {
           menuClass: 'menuitem',
-          itemClass: 'btn ewb-button-regular font-weight-normal w-100 text-left menu-item-button'
+          itemClass: 'btn mlzeln-button-regular font-weight-normal w-100 text-left menu-item-button'
         }
       "
     ></ng-template>
@@ -66,7 +66,7 @@
 <!--    <input-->
 <!--      #uploadInput-->
 <!--      type="file"-->
-<!--      class="ewb-file-button"-->
+<!--      class="mlzeln-file-button"-->
 <!--      [disabled]="loading"-->
 <!--      (change)="onUploadBackgroundImage($event)"-->
 <!--      id="uploadFile"-->

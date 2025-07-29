@@ -4,7 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-form-asterisk',
+  selector: 'mlzeln-form-asterisk',
   templateUrl: './form-asterisk.component.html',
   styleUrls: ['./form-asterisk.component.scss'],
 })

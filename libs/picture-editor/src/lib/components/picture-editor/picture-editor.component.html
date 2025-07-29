@@ -1,5 +1,5 @@
-<div class="ewb-canvas" [ngStyle]="style">
-  <eworkbench-picture-editor-toolbar
+<div class="mlzeln-canvas" [ngStyle]="style">
+  <mlzeln-picture-editor-toolbar
     *ngIf="!loading && canvas"
     [picture]="picture"
     [sketch]="sketch"
@@ -8,20 +8,20 @@
     [service]="service"
     [editable]="editable"
     (saveSketch)="saveSketch.emit($event)"
-  ></eworkbench-picture-editor-toolbar>
+  ></mlzeln-picture-editor-toolbar>
 
   <div
-    class="ewb-canvas-drawboard"
+    class="mlzeln-canvas-drawboard"
     mwlResizable
     [validateResize]="resizeValidate"
     (resizing)="onResize($event)"
     (resizeEnd)="onResize($event)"
   >
-    <div class="ewb-canvas-resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
-    <div class="ewb-canvas-resize-handle-bottom" mwlResizeHandle [resizeEdges]="{ bottom: true }"></div>
+    <div class="mlzeln-canvas-resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    <div class="mlzeln-canvas-resize-handle-bottom" mwlResizeHandle [resizeEdges]="{ bottom: true }"></div>
     <div
       #core
-      class="ewb-canvas-helper"
+      class="mlzeln-canvas-helper"
       [ngStyle]="{
         'width.px': picture.width ? picture.width : 600,
         'height.px': picture.height ? picture.height : 600

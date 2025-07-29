@@ -1,13 +1,13 @@
 <ng-container *transloco="let t">
   <div style="text-align: center"><strong>{{detailsTitle}}</strong>
-    <eworkbench-details-dropdown
+    <mlzeln-details-dropdown
       [service]="notesService"
       [id]="id"
       [redirectDestination]="[showSidebar ? '.' : '' + '/notes', id]"
       [initialState]="initialState"
       [privileges]="privileges"
       *ngIf="privileges"
-    ></eworkbench-details-dropdown>
+    ></mlzeln-details-dropdown>
   </div>
 </ng-container>
 
@@ -23,11 +23,11 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="note"
               errorTailor>
           <div>
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('note.details.element.details')">
               <ng-container slot="body">
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="subject"
                     [label]="t('note.details.subject.label')"
                     [loading]="loading"
@@ -36,7 +36,7 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="subject"
                       formControlName="subject"
                       name="subject"
@@ -44,7 +44,7 @@
                       slot="input"
                       readonly
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
                 <div class="mb-4">
                 </div>
@@ -52,11 +52,11 @@
                   <label
                     for="created-by">{{ t('note.details.createdBy.label') }}</label>
                   <div class="flex items-center space-x-1">
-                    <eworkbench-user-details
+                    <mlzeln-user-details
                       id="created-by"
                       class="inline-block"
                       [user]="initialState.created_by"
-                    ></eworkbench-user-details>
+                    ></mlzeln-user-details>
                     <span> | </span>
                     <span
                       id="created-at">{{ initialState.created_at | formatDate }}</span>
@@ -66,10 +66,10 @@
                   <label
                     for="last-modified-by">{{ t('note.details.lastModifiedBy.label') }}</label>
                   <div class="flex items-center space-x-1">
-                    <eworkbench-user-details id="last-modified-by"
+                    <mlzeln-user-details id="last-modified-by"
                                              class="inline-block"
                                              [user]="initialState.last_modified_by">
-                    </eworkbench-user-details>
+                    </mlzeln-user-details>
                     <span> | </span>
                     <span
                       id="last-modified-at">{{ initialState.last_modified_at | formatDate }}</span>
@@ -79,40 +79,40 @@
                   <button
                     *ngIf="!initialState.deleted"
                     type="button"
-                    class="btn ewb-button-regular ewb-button-outline"
+                    class="btn mlzeln-button-regular mlzeln-button-outline"
                     (click)="go_to_note()"
                     [disabled]="loading"
                   >
                     {{ t('note.details.gotoBottom') }}
                   </button>
                 </div>
-                <eworkbench-wysiwyg-editor
+                <mlzeln-wysiwyg-editor
                   [id]="'content'"
                   [disabled]=true
                   formControlName="content"
                   slot="input"
                   toolbar="---">
-                </eworkbench-wysiwyg-editor>
+                </mlzeln-wysiwyg-editor>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
           </div>
           <div>
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('note.details.element.recentChanges')">
               <ng-container slot="body">
-                <eworkbench-recent-changes
+                <mlzeln-recent-changes
                   id="recent-changes"
                   [service]="notesService"
                   [changesId]="id"
                   [refresh]="refreshChanges"
-                ></eworkbench-recent-changes>
+                ></mlzeln-recent-changes>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
 
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('note.details.element.versions')">
               <ng-container slot="body">
-                <eworkbench-versions
+                <mlzeln-versions
                   id="versions"
                   contentType="note"
                   [service]="notesService"
@@ -121,9 +121,9 @@
                   [refresh]="refreshVersions"
                   [editable]="privileges?.restore"
                   (changed)="onVersionChanged()"
-                ></eworkbench-versions>
+                ></mlzeln-versions>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
           </div>
         </form>
       </main>

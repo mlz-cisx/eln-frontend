@@ -21,7 +21,7 @@ interface FormShareContact {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-share-modal',
+  selector: 'mlzeln-share-modal',
   templateUrl: './share.component.html',
   styleUrls: ['./share.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

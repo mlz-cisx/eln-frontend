@@ -1,12 +1,12 @@
 <ng-container *ngIf="data.length">
-  <eworkbench-table-view
+  <mlzeln-table-view
     #tableView
     class="mb-4"
     [columns]="listColumns"
     [data]="data"
     [columnHeader]="false"
     [paginationSize]="5"
-  ></eworkbench-table-view>
+  ></mlzeln-table-view>
 </ng-container>
 
 <ng-template #numberCellTemplate let-row>v{{ row.number }}</ng-template>
@@ -20,7 +20,7 @@
   <ng-container *transloco="let t">
     <div *ngIf="row.created_at" class="flex items-center whitespace-nowrap">
       <span class="mr-2">{{ t('versions.createdBy') }}</span>
-      <eworkbench-user-details class="inline-block" [user]="row.created_by"></eworkbench-user-details>
+      <mlzeln-user-details class="inline-block" [user]="row.created_by"></mlzeln-user-details>
     </div>
   </ng-container>
 </ng-template>
@@ -30,7 +30,7 @@
 <ng-template #restoreCellTemplate let-row>
   <button
     type="button"
-    class="btn ewb-button-small ewb-button-background square"
+    class="btn mlzeln-button-small mlzeln-button-background square"
     (click)="onPreviewModal(row, row.number)"
     [disabled]="loading"
     *ngIf="row.created_at && editable"
@@ -42,7 +42,7 @@
 <ng-container *transloco="let t">
   <button
     type="button"
-    class="btn ewb-button-big ewb-button-primary"
+    class="btn mlzeln-button-big mlzeln-button-primary"
     (click)="onFinalizeVersionModal()"
     [disabled]="loading"
     *ngIf="editable"

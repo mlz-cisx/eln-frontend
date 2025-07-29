@@ -4,7 +4,7 @@ import type { TableColumnChangedEvent } from '@joeseln/table';
 import type { TableColumn } from '@joeseln/table';
 
 @Component({
-  selector: 'eworkbench-table-manage-columns',
+  selector: 'mlzeln-table-manage-columns',
   templateUrl: './table-columns.component.html',
   styleUrls: ['./table-columns.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

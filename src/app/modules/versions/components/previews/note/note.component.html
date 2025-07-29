@@ -1,11 +1,11 @@
 <ng-container *transloco="let t">
-  <eworkbench-loading [loading]="loading">
+  <mlzeln-loading [loading]="loading">
     <ng-container *ngIf="note">
       <div class="mb-4">
         <label for="subject-modal">{{ t('note.details.subject.label') }}</label>
         <input
           type="text"
-          class="form-control ewb-input"
+          class="form-control mlzeln-input"
           id="subject-modal"
           [placeholder]="t('note.details.subject.placeholder')"
           [readonly]="true"
@@ -14,14 +14,14 @@
       </div>
       <div class="mb-4">
         <label for="content-modal">{{ t('note.details.content.label') }}</label>
-        <eworkbench-wysiwyg-editor [id]="'content-modal'" [formControl]="contentFormControl"></eworkbench-wysiwyg-editor>
+        <mlzeln-wysiwyg-editor [id]="'content-modal'" [formControl]="contentFormControl"></mlzeln-wysiwyg-editor>
       </div>
 
       <div class="modal-footer p-0 mt-5">
-        <button type="button" class="btn ewb-button-big ewb-button-secondary mr-2" (click)="modalRef.close()" [disabled]="loading">
+        <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary mr-2" (click)="modalRef.close()" [disabled]="loading">
           {{ t('versions.previewModal.close') }}
         </button>
-        <button type="button" class="btn ewb-button-big ewb-button-primary" (click)="onRestoreVersion()" [disabled]="loading">
+        <button type="button" class="btn mlzeln-button-big mlzeln-button-primary" (click)="onRestoreVersion()" [disabled]="loading">
           {{ t('versions.previewModal.restoreVersion') }}
         </button>
       </div>
@@ -32,5 +32,5 @@
         {{ t('versions.previewModal.notice.failedToLoad') }}
       </alert>
     </ng-container>
-  </eworkbench-loading>
+  </mlzeln-loading>
 </ng-container>

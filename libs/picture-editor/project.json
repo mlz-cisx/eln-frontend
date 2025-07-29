@@ -2,7 +2,7 @@
   "projectType": "library",
   "root": "libs/picture-editor",
   "sourceRoot": "libs/picture-editor/src",
-  "prefix": "eworkbench",
+  "prefix": "mlzeln",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",

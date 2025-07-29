@@ -40,7 +40,7 @@ interface FormNote {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-draw-board-note',
+  selector: 'mlzeln-labbook-draw-board-note',
   templateUrl: './note.component.html',
   styleUrls: ['./note.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

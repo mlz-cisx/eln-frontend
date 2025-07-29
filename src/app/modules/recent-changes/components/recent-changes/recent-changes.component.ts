@@ -27,7 +27,7 @@ interface MetadataParameters {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-recent-changes',
+  selector: 'mlzeln-recent-changes',
   templateUrl: './recent-changes.component.html',
   styleUrls: ['./recent-changes.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

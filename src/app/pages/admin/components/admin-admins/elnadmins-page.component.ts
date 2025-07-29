@@ -32,7 +32,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-admins-page',
+  selector: 'mlzeln-admins-page',
   templateUrl: './elnadmins-page.component.html',
   styleUrls: ['./elnadmins-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

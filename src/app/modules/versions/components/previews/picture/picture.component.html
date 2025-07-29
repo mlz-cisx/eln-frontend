@@ -1,11 +1,11 @@
 <ng-container *transloco="let t">
-  <eworkbench-loading [loading]="loading">
+  <mlzeln-loading [loading]="loading">
     <ng-container *ngIf="picture">
       <div class="mb-4">
         <label for="title-modal">{{ t('picture.details.title.label') }}</label>
         <input
           type="text"
-          class="form-control ewb-input"
+          class="form-control mlzeln-input"
           id="title-modal"
           [placeholder]="t('picture.details.title.placeholder')"
           [disabled]="true"
@@ -21,10 +21,10 @@
       </div>
 
       <div class="modal-footer p-0 mt-5">
-        <button type="button" class="btn ewb-button-big ewb-button-secondary mr-2" (click)="modalRef.close()" [disabled]="loading">
+        <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary mr-2" (click)="modalRef.close()" [disabled]="loading">
           {{ t('versions.previewModal.close') }}
         </button>
-        <button type="button" class="btn ewb-button-big ewb-button-primary" (click)="onRestoreVersion()" [disabled]="loading">
+        <button type="button" class="btn mlzeln-button-big mlzeln-button-primary" (click)="onRestoreVersion()" [disabled]="loading">
           {{ t('versions.previewModal.restoreVersion') }}
         </button>
       </div>
@@ -35,5 +35,5 @@
         {{ t('versions.previewModal.notice.failedToLoad') }}
       </alert>
     </ng-container>
-  </eworkbench-loading>
+  </mlzeln-loading>
 </ng-container>

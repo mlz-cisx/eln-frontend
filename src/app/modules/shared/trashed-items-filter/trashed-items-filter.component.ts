@@ -3,7 +3,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-trashed-items-filter',
+  selector: 'mlzeln-trashed-items-filter',
   templateUrl: './trashed-items-filter.component.html',
   styleUrls: ['./trashed-items-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

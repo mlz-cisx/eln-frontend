@@ -20,7 +20,7 @@ import {UserService} from "@app/services";
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-comment',
+  selector: 'mlzeln-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

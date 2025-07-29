@@ -16,7 +16,7 @@ interface FormDateGroup {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-form-date-group',
+  selector: 'mlzeln-form-date-group',
   templateUrl: './form-date-group.component.html',
   styleUrls: ['./form-date-group.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

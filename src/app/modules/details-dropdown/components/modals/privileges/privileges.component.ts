@@ -17,7 +17,7 @@ interface InitialPrivileges {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-privileges-modal',
+  selector: 'mlzeln-privileges-modal',
   templateUrl: './privileges.component.html',
   styleUrls: ['./privileges.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

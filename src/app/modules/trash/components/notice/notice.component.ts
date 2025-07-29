@@ -4,7 +4,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-trash-notice',
+  selector: 'mlzeln-trash-notice',
   templateUrl: './notice.component.html',
   styleUrls: ['./notice.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

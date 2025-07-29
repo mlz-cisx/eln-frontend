@@ -3,11 +3,11 @@
     <div class="inline-block">
       <label [for]="'reminderValue' + uniqueHash">
         {{ t('formTimeGroup.reminderValue.label') }}
-        <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>
+        <mlzeln-form-asterisk class="inline-block"></mlzeln-form-asterisk>
       </label>
       <input
         type="text"
-        class="form-control ewb-input"
+        class="form-control mlzeln-input"
         [formControl]="f.time"
         [id]="'reminderValue' + uniqueHash"
         [name]="'reminderValue' + uniqueHash"
@@ -19,12 +19,12 @@
     <div class="inline-block">
       <label [for]="'reminderUnit' + uniqueHash">
         {{ t('formTimeGroup.reminderUnit.label') }}
-        <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>
+        <mlzeln-form-asterisk class="inline-block"></mlzeln-form-asterisk>
       </label>
       <div class="flex items-center">
         <div class="flex-fill mr-3">
           <ng-select
-            class="ewb-select"
+            class="mlzeln-select"
             [formControl]="f.unit"
             [labelForId]="'reminderUnit' + uniqueHash"
             [placeholder]="t('formTimeGroup.reminderUnit.placeholder')"

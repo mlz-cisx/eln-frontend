@@ -24,7 +24,7 @@ declare global {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-picture-editor-toolbar',
+  selector: 'mlzeln-picture-editor-toolbar',
   templateUrl: './picture-editor-toolbar.component.html',
   styleUrls: ['./picture-editor-toolbar.component.scss'],
   encapsulation: ViewEncapsulation.None,

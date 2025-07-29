@@ -13,7 +13,7 @@ import {EditorComponent} from '@tinymce/tinymce-angular';
 
 
 @Component({
-  selector: 'eworkbench-wysiwyg-editor',
+  selector: 'mlzeln-wysiwyg-editor',
   templateUrl: './wysiwyg-editor.component.html',
   styleUrls: ['./wysiwyg-editor.component.scss'],
 })

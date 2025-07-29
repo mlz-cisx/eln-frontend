@@ -14,7 +14,7 @@ interface FormDuplicate {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-duplicate-project-modal',
+  selector: 'mlzeln-duplicate-project-modal',
   templateUrl: './duplicate.component.html',
   styleUrls: ['./duplicate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

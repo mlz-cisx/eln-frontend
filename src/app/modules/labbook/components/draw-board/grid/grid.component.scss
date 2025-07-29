@@ -21,16 +21,16 @@
         border-radius: 15px;
       }
 
-      gridster-item eworkbench-labbook-draw-board-element {
+      gridster-item mlzeln-labbook-draw-board-element {
         pointer-events: initial;
         height: inherit;
       }
 
-      .gridster-item-moving eworkbench-labbook-draw-board-element {
+      .gridster-item-moving mlzeln-labbook-draw-board-element {
         pointer-events: none;
       }
 
-      .gridster-item-resizing eworkbench-labbook-draw-board-element {
+      .gridster-item-resizing mlzeln-labbook-draw-board-element {
         pointer-events: none;
       }
     }

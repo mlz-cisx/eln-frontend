@@ -7,7 +7,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-picture-editor-modal',
+  selector: 'mlzeln-picture-editor-modal',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

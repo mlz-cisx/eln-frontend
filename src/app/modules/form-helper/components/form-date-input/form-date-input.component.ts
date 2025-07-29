@@ -4,7 +4,7 @@ import type { DatePickerConfig } from '@joeseln/types';
 import flatpickr from 'flatpickr';
 
 @Component({
-  selector: 'eworkbench-form-date-input',
+  selector: 'mlzeln-form-date-input',
   templateUrl: './form-date-input.component.html',
   styleUrls: ['./form-date-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -27,7 +27,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-new-group-modal',
+  selector: 'mlzeln-new-group-modal',
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,14 +1,14 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('comments.newCommentModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-loading [loading]="loading">
+      <mlzeln-loading [loading]="loading">
         <div class="comment-container">
-<!--          <eworkbench-user-avatar class="avatar" [user]="currentUser" [scale]="5"></eworkbench-user-avatar>-->
+<!--          <mlzeln-user-avatar class="avatar" [user]="currentUser" [scale]="5"></mlzeln-user-avatar>-->
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <eworkbench-wysiwyg-editor class="mt-1" formControlName="content"></eworkbench-wysiwyg-editor>
+            <mlzeln-wysiwyg-editor class="mt-1" formControlName="content"></mlzeln-wysiwyg-editor>
             <div class="custom-control custom-checkbox inline-block mt-2">
               <input
                 class="custom-control-input"
@@ -23,16 +23,16 @@
             </div>
 
             <div class="modal-footer p-0 mt-5">
-              <button type="button" class="btn ewb-button-big ewb-button-primary mr-2" [disabled]="loading" (click)="modalRef.close()">
+              <button type="button" class="btn mlzeln-button-big mlzeln-button-primary mr-2" [disabled]="loading" (click)="modalRef.close()">
                 {{ t('comments.newCommentModal.close') }}
               </button>
-              <button type="submit" class="btn ewb-button-big ewb-button-primary" [disabled]="loading || form.invalid">
+              <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary" [disabled]="loading || form.invalid">
                 {{ t('comments.newCommentModal.create') }}
               </button>
             </div>
           </form>
         </div>
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

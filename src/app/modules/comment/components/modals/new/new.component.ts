@@ -26,7 +26,7 @@ interface FormComment {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-new-comment-modal',
+  selector: 'mlzeln-new-comment-modal',
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

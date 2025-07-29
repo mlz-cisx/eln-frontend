@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal>
+  <mlzeln-modal>
     <div slot="header">
       {{ t('detailsDropdown.privilegesModal.header') }}
     </div>
@@ -9,14 +9,14 @@
         <ng-container *ngIf="readonly">{{ t('detailsDropdown.privilegesModal.body.notAllowed') }}</ng-container>
       </div>
 
-      <eworkbench-loading [loading]="loading">
-        <eworkbench-table-view class="block mb-4" [columns]="listColumns" [data]="privileges"></eworkbench-table-view>
+      <mlzeln-loading [loading]="loading">
+        <mlzeln-table-view class="block mb-4" [columns]="listColumns" [data]="privileges"></mlzeln-table-view>
 
 <!--        <ng-container *ngIf="userPrivileges?.edit">-->
 <!--          <label for="user-modal">{{ t('detailsDropdown.privilegesModal.user.label') }}</label>-->
 <!--          <ng-select-->
 <!--            #select-->
-<!--            class="ewb-select"-->
+<!--            class="mlzeln-select"-->
 <!--            formControl="usersControl"-->
 <!--            labelForId="user-modal"-->
 <!--            name="user-modal"-->
@@ -29,38 +29,38 @@
 <!--          >-->
 <!--&lt;!&ndash;            <ng-template ng-label-tmp let-item="item" let-clear="clear">&ndash;&gt;-->
 <!--&lt;!&ndash;              <div class="flex items-center user-option">&ndash;&gt;-->
-<!--&lt;!&ndash;                <eworkbench-user-details&ndash;&gt;-->
+<!--&lt;!&ndash;                <mlzeln-user-details&ndash;&gt;-->
 <!--&lt;!&ndash;                  class="inline-block mr-1"&ndash;&gt;-->
 <!--&lt;!&ndash;                  [user]="item"&ndash;&gt;-->
 <!--&lt;!&ndash;                  [chip]="true"&ndash;&gt;-->
 <!--&lt;!&ndash;                  [modal]="false"&ndash;&gt;-->
 <!--&lt;!&ndash;                  (click)="select.isOpen = false"&ndash;&gt;-->
-<!--&lt;!&ndash;                ></eworkbench-user-details>&ndash;&gt;-->
+<!--&lt;!&ndash;                ></mlzeln-user-details>&ndash;&gt;-->
 <!--&lt;!&ndash;                <span class="sub-text">{{ item.email }}</span>&ndash;&gt;-->
 <!--&lt;!&ndash;              </div>&ndash;&gt;-->
 <!--&lt;!&ndash;            </ng-template>&ndash;&gt;-->
 
 <!--&lt;!&ndash;            <ng-template ng-option-tmp let-item="item" let-search="searchTerm">&ndash;&gt;-->
-<!--&lt;!&ndash;              <eworkbench-user-details-dropdown&ndash;&gt;-->
+<!--&lt;!&ndash;              <mlzeln-user-details-dropdown&ndash;&gt;-->
 <!--&lt;!&ndash;                class="inline-block mr-1"&ndash;&gt;-->
 <!--&lt;!&ndash;                [user]="item"&ndash;&gt;-->
 <!--&lt;!&ndash;                [search]="search"&ndash;&gt;-->
-<!--&lt;!&ndash;              ></eworkbench-user-details-dropdown>&ndash;&gt;-->
+<!--&lt;!&ndash;              ></mlzeln-user-details-dropdown>&ndash;&gt;-->
 <!--&lt;!&ndash;            </ng-template>&ndash;&gt;-->
 <!--          </ng-select>-->
 <!--        </ng-container>-->
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
     <div slot="footer">
-      <button type="button" class="btn ewb-button-big ewb-button-secondary" (click)="modalRef.close()" [disabled]="loading">
+      <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary" (click)="modalRef.close()" [disabled]="loading">
         {{ t('detailsDropdown.privilegesModal.close') }}
       </button>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>
 
 <!--<ng-template #userCellTemplate let-row>-->
-<!--  <eworkbench-user-details [user]="row.user" [modal]="false"></eworkbench-user-details>-->
+<!--  <mlzeln-user-details [user]="row.user" [modal]="false"></mlzeln-user-details>-->
 <!--</ng-template>-->
 <ng-template #fullAccessButtonCellTemplate let-row>
   <ng-container
@@ -123,7 +123,7 @@
       <div class="whitespace-nowrap text-nowrap">
         <button
           type="button"
-          class="btn ewb-button-big ewb-button-secondary square mr-2"
+          class="btn mlzeln-button-big mlzeln-button-secondary square mr-2"
           [disabled]="loading || privileges.length === 1"
           [tooltip]="t('detailsDropdown.privilegesModal.resetPrivileges.tooltip')"
           containerClass="tooltip-sm"
@@ -133,7 +133,7 @@
         </button>
         <button
           type="button"
-          class="btn ewb-button-big ewb-button-primary square"
+          class="btn mlzeln-button-big mlzeln-button-primary square"
           [disabled]="loading || privileges.length === 1"
           [tooltip]="t('detailsDropdown.privilegesModal.removeUser.tooltip')"
           containerClass="tooltip-sm"
@@ -149,9 +149,9 @@
 <ng-template #buttonTemplate let-privilege="privilege" let-user_pk="user_pk" let-value="value" let-fullAccess="fullAccess" let-icon="icon">
   <button
     type="button"
-    class="btn ewb-button-big square mr-1"
-    [class.ewb-button-primary]="value === 'AL'"
-    [class.ewb-button-secondary]="value !== 'AL'"
+    class="btn mlzeln-button-big square mr-1"
+    [class.mlzeln-button-primary]="value === 'AL'"
+    [class.mlzeln-button-secondary]="value !== 'AL'"
     [disabled]="loading || fullAccess || privileges.length === 1 || !userPrivileges?.edit"
     [tooltip]="$any(getTooltip(privilege))"
     containerClass="tooltip-sm"

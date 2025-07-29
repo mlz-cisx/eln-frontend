@@ -4,7 +4,7 @@ import type { TableColumn } from '@joeseln/table';
 import type { TableSortChangedEvent } from '@joeseln/table';
 
 @Component({
-  selector: 'eworkbench-table-sort',
+  selector: 'mlzeln-table-sort',
   templateUrl: './table-sort.component.html',
   styleUrls: ['./table-sort.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

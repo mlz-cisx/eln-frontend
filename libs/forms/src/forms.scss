@@ -2,7 +2,7 @@
 @import "styles/variables";
 @import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 
-@mixin ewb-button($height, $padding, $font-size) {
+@mixin mlzeln-button($height, $padding, $font-size) {
   margin: 0;
   border-radius: 0;
   height: $height;
@@ -21,23 +21,23 @@ label {
   margin-bottom: 3.5px;
 }
 
-.ewb-required {
+.mlzeln-required {
   font-size: $font-size-sm;
   color: $text-color;
   opacity: 0.7;
 }
 
-.ewb-button {
+.mlzeln-button {
   &-big {
-    @include ewb-button(30px, 0 10.5px, $font-size-sm);
+    @include mlzeln-button(30px, 0 10.5px, $font-size-sm);
   }
 
   &-regular {
-    @include ewb-button(25px, 0 10px, $font-size-sm);
+    @include mlzeln-button(25px, 0 10px, $font-size-sm);
   }
 
   &-small {
-    @include ewb-button(16px, 0, 10px);
+    @include mlzeln-button(16px, 0, 10px);
 
     width: 16px;
   }
@@ -46,7 +46,7 @@ label {
     color: #fff;
     background-color: $primary-color;
 
-    &.ewb-button-regular {
+    &.mlzeln-button-regular {
       color: $primary-color;
       background-color: unset;
       border-color: $primary-color;
@@ -104,7 +104,7 @@ label {
     color: $primary-color;
     background-color: #fff;
 
-    &.ewb-button-secondary {
+    &.mlzeln-button-secondary {
       color: #fff;
       background-color: unset;
       border-color: #fff;
@@ -154,11 +154,11 @@ label {
   }
 }
 
-a.ewb-button-regular {
+a.mlzeln-button-regular {
   padding: 2px 10px;
 }
 
-@mixin ewb-input($label: false) {
+@mixin mlzeln-input($label: false) {
   color: $text-color;
   background-color: #fff;
   border-color: $border-color;
@@ -199,21 +199,21 @@ a.ewb-button-regular {
   }
 }
 
-.ewb-input {
-  @include ewb-input;
+.mlzeln-input {
+  @include mlzeln-input;
 }
 
 .input-group {
-  .ewb-input {
+  .mlzeln-input {
     padding: 6px 10px;
   }
 }
 
-.ewb-input-file {
-  @include ewb-input($label: true);
+.mlzeln-input-file {
+  @include mlzeln-input($label: true);
 }
 
-.ewb-file-button {
+.mlzeln-file-button {
   width: 0.1px;
   height: 0.1px;
   opacity: 0;
@@ -288,14 +288,14 @@ a.ewb-button-regular {
 }
 
 .custom-file-label-filled {
-  &.ewb-input-file {
+  &.mlzeln-input-file {
     &:read-only {
       background-color: #fff;
     }
   }
 }
 
-.ewb-textarea {
+.mlzeln-textarea {
   color: $text-color;
   background-color: #fff;
   border-color: $border-color;
@@ -325,7 +325,7 @@ a.ewb-button-regular {
   }
 }
 
-.ng-select.ewb-select {
+.ng-select.mlzeln-select {
   .ng-select-container {
     border-radius: 0;
     min-height: 34px;

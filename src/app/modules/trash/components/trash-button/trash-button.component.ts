@@ -17,7 +17,7 @@ import {DeleteModalComponent} from '../modals/delete/delete.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-trash-button',
+  selector: 'mlzeln-trash-button',
   templateUrl: './trash-button.component.html',
   styleUrls: ['./trash-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

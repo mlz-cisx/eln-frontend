@@ -3,13 +3,13 @@
     <div class="inline-block w-full pr-3">
       <label [for]="'startDate' + uniqueHash" *ngIf="labels">
         {{ t(customLabel.start ?? 'formDateGroup.startDate.label') }}
-        <eworkbench-form-asterisk class="inline-block" *ngIf="required"></eworkbench-form-asterisk>
+        <mlzeln-form-asterisk class="inline-block" *ngIf="required"></mlzeln-form-asterisk>
       </label>
       <div class="input-group">
         <input
           #startDate
           type="text"
-          class="form-control ewb-input"
+          class="form-control mlzeln-input"
           [formControl]="f.start"
           [id]="'startDate' + uniqueHash"
           [name]="'startDate' + uniqueHash"
@@ -23,7 +23,7 @@
           autocomplete="off"
         />
         <div class="input-group-append cursor-pointer" (click)="startDate.click()" *ngIf="!f.start.disabled">
-          <span class="input-group-text ewb-input">
+          <span class="input-group-text mlzeln-input">
             <joeseln-icon className="wb-calendar"></joeseln-icon>
           </span>
         </div>
@@ -32,13 +32,13 @@
     <div class="inline-block w-full" *ngIf="endDate">
       <label [for]="'endDate' + uniqueHash" *ngIf="labels">
         {{ t(customLabel.end ?? 'formDateGroup.endDate.label') }}
-        <eworkbench-form-asterisk class="inline-block" *ngIf="required"></eworkbench-form-asterisk>
+        <mlzeln-form-asterisk class="inline-block" *ngIf="required"></mlzeln-form-asterisk>
       </label>
       <div class="input-group">
         <input
           #endDate
           type="text"
-          class="form-control ewb-input"
+          class="form-control mlzeln-input"
           [formControl]="f.end"
           [id]="'endDate' + uniqueHash"
           [name]="'endDate' + uniqueHash"
@@ -52,7 +52,7 @@
           autocomplete="off"
         />
         <div class="input-group-append cursor-pointer" (click)="endDate.click()" *ngIf="!f.end.disabled">
-          <span class="input-group-text ewb-input">
+          <span class="input-group-text mlzeln-input">
             <joeseln-icon className="wb-calendar"></joeseln-icon>
           </span>
         </div>

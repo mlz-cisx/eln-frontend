@@ -13,7 +13,7 @@ interface FormFinalizeVersion {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-finalize-version-modal',
+  selector: 'mlzeln-finalize-version-modal',
   templateUrl: './finalize.component.html',
   styleUrls: ['./finalize.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

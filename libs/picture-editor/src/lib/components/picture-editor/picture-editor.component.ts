@@ -33,7 +33,7 @@ export const PICTURE_EDITOR_SCRIPT_SRC = new InjectionToken<string>('PICTURE_EDI
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-picture-editor',
+  selector: 'mlzeln-picture-editor',
   templateUrl: './picture-editor.component.html',
   styleUrls: ['./picture-editor.component.scss'],
   encapsulation: ViewEncapsulation.None,

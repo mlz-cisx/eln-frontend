@@ -6,7 +6,7 @@
 </div>
 
 <ng-container *ngIf="firstDataLoaded">
-  <eworkbench-loading [loading]="!firstDataLoaded && loading">
+  <mlzeln-loading [loading]="!firstDataLoaded && loading">
     <table cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="onColumnDrop($event)" cdk-table [dataSource]="dataSource$">
       <ng-container cdkColumnDef="select">
         <th cdk-header-cell *cdkHeaderCellDef>
@@ -29,13 +29,13 @@
         >
           <ng-container *ngIf="columnHeader">
             {{ column.name }}
-            <eworkbench-table-sort
+            <mlzeln-table-sort
               [class.invisible]="!column.sortable"
               [column]="column"
               [sortBy]="sortBy"
               [sort]="sort"
               (sortChanged)="onSortChanged($event)"
-            ></eworkbench-table-sort>
+            ></mlzeln-table-sort>
           </ng-container>
         </th>
         <td cdk-cell *cdkCellDef="let element" [ngClass]="{ 'p-0': noPadding }">
@@ -63,10 +63,10 @@
         class="text-center mt-4"
         *ngIf="pagination"
       >
-        <button type="button" class="btn ewb-button-big ewb-button-table" (click)="onLoadMore()">show more</button>
+        <button type="button" class="btn mlzeln-button-big mlzeln-button-table" (click)="onLoadMore()">show more</button>
       </div>
     </div>
-  </eworkbench-loading>
+  </mlzeln-loading>
 </ng-container>
 
 <ng-template #firstTemplate>

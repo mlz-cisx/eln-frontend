@@ -1,13 +1,13 @@
 <ng-container *transloco="let t">
   <div style="text-align: center"><strong>{{detailsTitle}}</strong>
-    <eworkbench-details-dropdown
+    <mlzeln-details-dropdown
       [service]="filesService"
       [id]="id"
       [redirectDestination]="[showSidebar ? '.' : '' + '/files', id]"
       [initialState]="initialState"
       [privileges]="privileges"
       *ngIf="privileges"
-    ></eworkbench-details-dropdown>
+    ></mlzeln-details-dropdown>
   </div>
 </ng-container>
 
@@ -25,11 +25,11 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="file"
               errorTailor>
           <div>
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('file.details.element.details')">
               <ng-container slot="body">
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="title"
                     [label]="t('file.details.title.label')"
                     [loading]="loading"
@@ -38,7 +38,7 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="title"
                       formControlName="title"
                       name="title"
@@ -46,10 +46,10 @@
                       slot="input"
                       readonly
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
                 <div class="mb-4">
-                  <eworkbench-form-input
+                  <mlzeln-form-input
                     for="name"
                     [label]="t('file.details.name.label')"
                     [loading]="loading"
@@ -58,7 +58,7 @@
                   >
                     <input
                       type="text"
-                      class="form-control ewb-input"
+                      class="form-control mlzeln-input"
                       id="name"
                       formControlName="name"
                       name="name"
@@ -66,7 +66,7 @@
                       slot="input"
                       readonly
                     />
-                  </eworkbench-form-input>
+                  </mlzeln-form-input>
                 </div>
 
                 <div class="mb-4">
@@ -89,11 +89,11 @@
                   <label
                     for="created-by">{{ t('file.details.createdBy.label') }}</label>
                   <div class="flex items-center space-x-1">
-                    <eworkbench-user-details
+                    <mlzeln-user-details
                       id="created-by"
                       class="inline-block"
                       [user]="initialState.created_by"
-                    ></eworkbench-user-details>
+                    ></mlzeln-user-details>
                     <span> | </span>
                     <span
                       id="created-at">{{ initialState.created_at | formatDate }}</span>
@@ -103,23 +103,23 @@
                   <label
                     for="last-modified-by">{{ t('file.details.lastModifiedBy.label') }}</label>
                   <div class="flex items-center space-x-1">
-                    <eworkbench-user-details id="last-modified-by"
+                    <mlzeln-user-details id="last-modified-by"
                                              class="inline-block"
                                              [user]="initialState.last_modified_by">
-                    </eworkbench-user-details>
+                    </mlzeln-user-details>
                     <span> | </span>
                     <span
                       id="last-modified-at">{{ initialState.last_modified_at | formatDate }}</span>
                   </div>
                 </div>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
 
             <ng-container slot="actions" *transloco="let t">
               <button
                 *ngIf="!initialState.deleted"
                 type="button"
-                class="btn ewb-button-regular ewb-button-outline"
+                class="btn mlzeln-button-regular mlzeln-button-outline"
                 (click)="go_to_file()"
                 [disabled]="loading"
               >
@@ -128,22 +128,22 @@
             </ng-container>
           </div>
           <div>
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('file.details.element.recentChanges')">
               <ng-container slot="body">
-                <eworkbench-recent-changes
+                <mlzeln-recent-changes
                   id="recent-changes"
                   [service]="filesService"
                   [changesId]="id"
                   [refresh]="refreshChanges"
-                ></eworkbench-recent-changes>
+                ></mlzeln-recent-changes>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
 
-            <eworkbench-details-collapse-element
+            <mlzeln-details-collapse-element
               [labelText]="t('file.details.element.versions')">
               <ng-container slot="body">
-                <eworkbench-versions
+                <mlzeln-versions
                   id="versions"
                   contentType="file"
                   [service]="filesService"
@@ -152,9 +152,9 @@
                   [refresh]="refreshVersions"
                   [editable]="privileges?.restore"
                   (changed)="onVersionChanged()"
-                ></eworkbench-versions>
+                ></mlzeln-versions>
               </ng-container>
-            </eworkbench-details-collapse-element>
+            </mlzeln-details-collapse-element>
           </div>
         </form>
       </main>

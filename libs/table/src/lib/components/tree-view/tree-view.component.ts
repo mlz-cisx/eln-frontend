@@ -7,7 +7,7 @@ import type { TableColumn } from '../../interfaces/table-column.interface';
 import type { TableSortChangedEvent } from '../../interfaces/table-sort-changed-event.interface';
 
 @Component({
-  selector: 'eworkbench-tree-view',
+  selector: 'mlzeln-tree-view',
   templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

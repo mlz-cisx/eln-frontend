@@ -3,7 +3,7 @@
     <div>
       <label [for]="for" *ngIf="label">
         {{ label }}
-        <eworkbench-form-asterisk *ngIf="required" class="inline-block"></eworkbench-form-asterisk>
+        <mlzeln-form-asterisk *ngIf="required" class="inline-block"></mlzeln-form-asterisk>
       </label>
       <ng-content select="[slot=label]" *ngIf="!label"></ng-content>
     </div>
@@ -14,7 +14,7 @@
       <div class="ml-2 whitespace-nowrap" [class]="buttonPosition" *ngIf="showButtons">
         <button
           type="submit"
-          class="btn ewb-button-big ewb-button-primary square mr-1"
+          class="btn mlzeln-button-big mlzeln-button-primary square mr-1"
           [tooltip]="t('formInput.save.tooltip')"
           containerClass="tooltip-sm"
           [disabled]="loading || ngControl?.invalid"
@@ -23,7 +23,7 @@
         </button>
         <button
           type="button"
-          class="btn ewb-button-big ewb-button-secondary square"
+          class="btn mlzeln-button-big mlzeln-button-secondary square"
           [tooltip]="t('formInput.reset.tooltip')"
           containerClass="tooltip-sm"
           [disabled]="loading"

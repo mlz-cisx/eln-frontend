@@ -4,7 +4,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-draw-board',
+  selector: 'mlzeln-labbook-draw-board',
   templateUrl: './draw-board.component.html',
   styleUrls: ['./draw-board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

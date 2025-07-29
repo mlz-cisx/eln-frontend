@@ -25,7 +25,7 @@ import {Subject} from 'rxjs';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-new-user-modal',
+  selector: 'mlzeln-new-user-modal',
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

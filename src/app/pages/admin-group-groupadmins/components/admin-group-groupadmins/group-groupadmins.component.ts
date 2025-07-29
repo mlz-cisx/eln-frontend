@@ -37,7 +37,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-group-groupadmin-page',
+  selector: 'mlzeln-group-groupadmin-page',
   templateUrl: './group-groupadmins.component.html',
   styleUrls: ['./group-groupadmins.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -47,7 +47,7 @@ interface FormNote {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-note-page',
+  selector: 'mlzeln-note-page',
   templateUrl: './note-page.component.html',
   styleUrls: ['./note-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

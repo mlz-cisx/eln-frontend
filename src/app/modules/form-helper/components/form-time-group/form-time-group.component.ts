@@ -14,7 +14,7 @@ interface FormTimeGroup {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-form-time-group',
+  selector: 'mlzeln-form-time-group',
   templateUrl: './form-time-group.component.html',
   styleUrls: ['./form-time-group.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

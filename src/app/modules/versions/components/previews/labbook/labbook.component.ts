@@ -18,7 +18,7 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-preview',
+  selector: 'mlzeln-labbook-preview',
   templateUrl: './labbook.component.html',
   styleUrls: ['./labbook.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

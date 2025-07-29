@@ -43,7 +43,7 @@ interface FormFile {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-draw-board-file',
+  selector: 'mlzeln-labbook-draw-board-file',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,11 +8,11 @@
         #title
       >
             <div class="flex-fill">
-              <eworkbench-form-input [for]="'title-' + uniqueHash"
+              <mlzeln-form-input [for]="'title-' + uniqueHash"
                                      [loading]="loading" [margin]="false">
                 <input [style]=this.background_color
                        type="text"
-                       class="form-control ewb-input"
+                       class="form-control mlzeln-input"
                        [id]="'title-' + uniqueHash"
                        formControlName="file_title"
                        name="title"
@@ -20,28 +20,28 @@
                        slot="input"
                        [readOnly]= "!editable"
                 />
-              </eworkbench-form-input>
+              </mlzeln-form-input>
             </div>
             <div class="ml-2 self-center">
-              <span class="ewb-button-big ewb-button-background"
+              <span class="mlzeln-button-big mlzeln-button-background"
                     [id]="span_id"
                     #span
                     style="visibility: hidden; text-align: center">Conflict</span>
 
               <button type="button"
-                      class="btn ewb-button-big ewb-button-background"
+                      class="btn mlzeln-button-big mlzeln-button-background"
                       (click)="create_new_note_below()"
                       *ngIf="editable">
                 NoteBelow
               </button>
               <button type="button"
-                      class="btn ewb-button-big ewb-button-background"
+                      class="btn mlzeln-button-big mlzeln-button-background"
                       (click)="create_new_note_aside()"
                       *ngIf="editable">
                 NoteAside
               </button>
               <button type="button"
-                      class="btn ewb-button-big ewb-button-background"
+                      class="btn mlzeln-button-big mlzeln-button-background"
                       (click)="onOpenCommentsModal()"
                       *ngIf="editable">
                 <joeseln-icon className="wb-comment"
@@ -58,23 +58,23 @@
                   {{ t('labBook.drawBoard.element.footer.comments', {count: element.num_related_comments}) }}
                 </ng-container>
               </button>
-              <button type="button" class="btn ewb-button-big"
+              <button type="button" class="btn mlzeln-button-big"
                       (click)="toggle_editor()"
                       *ngIf="editable"
                       [disabled]="privileges ? !privileges!.edit : true">
                 {{ !editor_loaded ? 'Open Editor' : 'Close Editor' }}
               </button>
-              <button type="button" class="btn ewb-button-big"
+              <button type="button" class="btn mlzeln-button-big"
                       (click)="graph_loaded = !graph_loaded;"
                       [disabled]="!graph_exists">
                 Load Plot
               </button>
               <button type="button"
-                      class="btn ewb-button-big square-md ewb-button-none cursor-move drag-handle mr-2"
+                      class="btn mlzeln-button-big square-md mlzeln-button-none cursor-move drag-handle mr-2"
                       *ngIf="editable">
                 <joeseln-icon className="wb-arrow-cross"></joeseln-icon>
               </button>
-              <eworkbench-labbook-element-dropdown
+              <mlzeln-labbook-element-dropdown
                 *ngIf="editable"
                 [service]="filesService"
                 [id]="initialState.pk"
@@ -85,12 +85,12 @@
                 routerBaseLink="/files"
                 [privileges]="privileges"
                 [labBookEditable]="editable"
-              ></eworkbench-labbook-element-dropdown>
+              ></mlzeln-labbook-element-dropdown>
             </div>
           </div>
       <div class="body" [id]="'description-' + uniqueHash">
-        <!--        <eworkbench-lock [id]="element.child_object_id" [lock]="lock" [lockUser]="lockUser"-->
-        <!--                         [service]="filesService"></eworkbench-lock>-->
+        <!--        <mlzeln-lock [id]="element.child_object_id" [lock]="lock" [lockUser]="lockUser"-->
+        <!--                         [service]="filesService"></mlzeln-lock>-->
         <div class="mb-3">
           <alert type="info">
             <div class="text-center">
@@ -108,30 +108,30 @@
           </alert>
         </div>
         <ng-container *ngIf="editor_loaded">
-          <eworkbench-form-input [for]="'description-' + uniqueHash"
+          <mlzeln-form-input [for]="'description-' + uniqueHash"
                                  [loading]="loading" [margin]="false"
           *ngIf="editable">
-            <!--          <eworkbench-wysiwyg-editor-->
+            <!--          <mlzeln-wysiwyg-editor-->
             <!--            [id]="'description-' + uniqueHash"-->
             <!--            formControlName="file_description"-->
             <!--            [inline] = true-->
             <!--            slot="input"-->
-            <!--          ></eworkbench-wysiwyg-editor>-->
-            <eworkbench-wysiwyg-editor
+            <!--          ></mlzeln-wysiwyg-editor>-->
+            <mlzeln-wysiwyg-editor
               [id]="'description-' + uniqueHash"
               [maxHeight]="undefined"
               [actual_height]=height
               [inline]=false
               formControlName="file_description"
               slot="input"
-            ></eworkbench-wysiwyg-editor>
-            <!--            <eworkbench-wysiwyg-editor *ngIf="toolbar_shown===false"-->
+            ></mlzeln-wysiwyg-editor>
+            <!--            <mlzeln-wysiwyg-editor *ngIf="toolbar_shown===false"-->
             <!--                                       [id]="'content-' + uniqueHash"-->
             <!--                                       [inline]=false-->
             <!--                                       formControlName="file_description"-->
             <!--                                       slot="input"-->
-            <!--            ></eworkbench-wysiwyg-editor>-->
-          </eworkbench-form-input>
+            <!--            ></mlzeln-wysiwyg-editor>-->
+          </mlzeln-form-input>
         </ng-container>
         <ng-container>
           <div [id]="preloaded_id" #preload [hidden]=editor_loaded>
@@ -148,15 +148,15 @@
       <!--      <div class="footer">-->
       <!--        <div>-->
       <!--          {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}-->
-      <!--          <eworkbench-user-details-->
+      <!--          <mlzeln-user-details-->
       <!--            [user]="element.child_object.last_modified_by"-->
-      <!--            class="last-modified-by"></eworkbench-user-details>-->
+      <!--            class="last-modified-by"></mlzeln-user-details>-->
       <!--          {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}-->
       <!--          {{ element.child_object.last_modified_at | formatDate}}-->
       <!--        </div>-->
       <!--        <div class="actions">-->
       <!--          &lt;!&ndash;          <a [routerLink]="['/files', element.child_object_id]" target="_blank">&ndash;&gt;-->
-      <!--          &lt;!&ndash;            <button type="button" class="btn ewb-button-big ewb-button-background mr-2">&ndash;&gt;-->
+      <!--          &lt;!&ndash;            <button type="button" class="btn mlzeln-button-big mlzeln-button-background mr-2">&ndash;&gt;-->
       <!--          &lt;!&ndash;              <joeseln-icon className="wb-link" class="mr-1"></joeseln-icon>&ndash;&gt;-->
       <!--          &lt;!&ndash;              <ng-container *ngIf="!element.num_relations">&ndash;&gt;-->
       <!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.linkWith') }}&ndash;&gt;-->
@@ -169,11 +169,11 @@
       <!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
       <!--          &lt;!&ndash;            </button>&ndash;&gt;-->
       <!--          &lt;!&ndash;          </a>&ndash;&gt;-->
-      <!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
       <!--                  (click)="create_new_note_below()">-->
       <!--            NoteBelow-->
       <!--          </button>-->
-      <!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
       <!--                  (click)="onOpenCommentsModal()">-->
       <!--            <joeseln-icon className="wb-comment" class="mr-1"></joeseln-icon>-->
       <!--            <ng-container *ngIf="!element.num_related_comments">-->

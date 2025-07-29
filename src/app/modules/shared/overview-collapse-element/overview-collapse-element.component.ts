@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 
 @Component({
-  selector: 'eworkbench-overview-collapse-element',
+  selector: 'mlzeln-overview-collapse-element',
   templateUrl: './overview-collapse-element.component.html',
   styleUrls: ['./overview-collapse-element.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

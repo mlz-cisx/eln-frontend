@@ -4,7 +4,7 @@
           errorTailor>
       <div class="header flex justify-between header-container" [id]="title_id">
         <div class="flex-fill">
-          <eworkbench-form-input-pic
+          <mlzeln-form-input-pic
             [for]="'title-' + uniqueHash"
             [loading]="loading"
             [margin]="false"
@@ -12,7 +12,7 @@
             <input
               [style]="this.background_color"
               type="text"
-                  class="form-control ewb-input"
+                  class="form-control mlzeln-input"
                   [id]="'title-' + uniqueHash"
                   formControlName="pic_title"
                   name="title"
@@ -20,23 +20,23 @@
                   slot="input"
                   [readOnly]=!this.title_editable
                 />
-              </eworkbench-form-input-pic>
+              </mlzeln-form-input-pic>
             </div>
             <div class="ml-2 self-center">
               <button type="button"
-                      class="btn ewb-button-big ewb-button-background"
+                      class="btn mlzeln-button-big mlzeln-button-background"
                       (click)="create_new_note_below()"
                       *ngIf="editable">
                 NoteBelow
               </button>
               <button type="button"
-                      class="btn ewb-button-big ewb-button-background"
+                      class="btn mlzeln-button-big mlzeln-button-background"
                       (click)="create_new_note_aside()"
                       *ngIf="editable">
                 NoteAside
               </button>
               <button type="button"
-                      class="btn ewb-button-big ewb-button-background"
+                      class="btn mlzeln-button-big mlzeln-button-background"
                       (click)="onOpenCommentsModal()"
                       *ngIf="editable">
                 <joeseln-icon className="wb-comment"
@@ -54,11 +54,11 @@
                 </ng-container>
               </button>
               <button type="button"
-                      class="btn ewb-button-big square-md ewb-button-none cursor-move drag-handle mr-2"
+                      class="btn mlzeln-button-big square-md mlzeln-button-none cursor-move drag-handle mr-2"
                       *ngIf="editable">
                 <joeseln-icon className="wb-arrow-cross"></joeseln-icon>
               </button>
-              <eworkbench-labbook-element-dropdown
+              <mlzeln-labbook-element-dropdown
                 *ngIf="editable"
                 [service]="picturesService"
                 [id]="initialState.pk"
@@ -69,13 +69,13 @@
                 routerBaseLink="/pictures"
                 [privileges]="privileges"
                 [labBookEditable]="editable"
-              ></eworkbench-labbook-element-dropdown>
+              ></mlzeln-labbook-element-dropdown>
             </div>
           </div>
       <div class="body">
-        <!--        <eworkbench-lock [id]="element.child_object_id" [lock]="lock"-->
+        <!--        <mlzeln-lock [id]="element.child_object_id" [lock]="lock"-->
         <!--                         [lockUser]="lockUser"-->
-        <!--                         [service]="picturesService"></eworkbench-lock>-->
+        <!--                         [service]="picturesService"></mlzeln-lock>-->
         <a href (click)="onOpenPictureEditorModal($event)"
         ><img class="max-w-full h-auto"
               [src]="initialState.download_rendered_image"
@@ -85,15 +85,15 @@
       <!--      <div class="footer">-->
       <!--        <div>-->
       <!--          {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}-->
-      <!--          <eworkbench-user-details-->
+      <!--          <mlzeln-user-details-->
       <!--            [user]="element.child_object.last_modified_by"-->
-      <!--            class="last-modified-by"></eworkbench-user-details>-->
+      <!--            class="last-modified-by"></mlzeln-user-details>-->
       <!--          {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}-->
       <!--          {{ element.child_object.last_modified_at | formatDate }}-->
       <!--        </div>-->
       <!--        <div class="actions">-->
       <!--          &lt;!&ndash;          <a [routerLink]="['/pictures', element.child_object_id]" target="_blank">&ndash;&gt;-->
-      <!--          &lt;!&ndash;            <button type="button" class="btn ewb-button-big ewb-button-background mr-2">&ndash;&gt;-->
+      <!--          &lt;!&ndash;            <button type="button" class="btn mlzeln-button-big mlzeln-button-background mr-2">&ndash;&gt;-->
       <!--          &lt;!&ndash;              <joeseln-icon className="wb-link" class="mr-1"></joeseln-icon>&ndash;&gt;-->
       <!--          &lt;!&ndash;              <ng-container *ngIf="!element.num_relations">&ndash;&gt;-->
       <!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.linkWith') }}&ndash;&gt;-->
@@ -106,15 +106,15 @@
       <!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
       <!--          &lt;!&ndash;            </button>&ndash;&gt;-->
       <!--          &lt;!&ndash;          </a>&ndash;&gt;-->
-      <!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
       <!--                  (click)="create_new_note_below()">-->
       <!--            NoteBelow-->
       <!--          </button>-->
-      <!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
       <!--                  (click)="create_new_note_aside()">-->
       <!--            NoteAside-->
       <!--          </button>-->
-      <!--          <button type="button" class="btn ewb-button-big ewb-button-background"-->
+      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
       <!--                  (click)="onOpenCommentsModal()">-->
       <!--            <joeseln-icon className="wb-comment"-->
       <!--                          class="mr-1"></joeseln-icon>-->

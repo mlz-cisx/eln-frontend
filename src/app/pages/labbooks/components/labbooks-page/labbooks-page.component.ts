@@ -30,7 +30,7 @@ import {NewLabBookModalComponent} from '../modals/new/new.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbooks-page',
+  selector: 'mlzeln-labbooks-page',
   templateUrl: './labbooks-page.component.html',
   styleUrls: ['./labbooks-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

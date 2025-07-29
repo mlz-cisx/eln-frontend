@@ -1,15 +1,15 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('versions.finalizeModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-loading [loading]="loading">
+      <mlzeln-loading [loading]="loading">
         <form [formGroup]="form" (ngSubmit)="onFinalizeVersion()">
           <div class="mb-4">
             <label for="summary">{{ t('versions.finalizeModal.summary.label') }}</label>
             <textarea
-              class="form-control ewb-textarea"
+              class="form-control mlzeln-textarea"
               formControlName="summary"
               [id]="'summary'"
               [name]="'summary'"
@@ -18,15 +18,15 @@
           </div>
 
           <div class="modal-footer p-0 mt-5">
-            <button type="button" class="btn ewb-button-big ewb-button-secondary mr-2" [disabled]="loading" (click)="modalRef.close()">
+            <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary mr-2" [disabled]="loading" (click)="modalRef.close()">
               {{ t('versions.finalizeModal.close') }}
             </button>
-            <button type="submit" class="btn ewb-button-big ewb-button-primary" [disabled]="loading">
+            <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary" [disabled]="loading">
               {{ t('versions.finalizeModal.finalizeVersion') }}
             </button>
           </div>
         </form>
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

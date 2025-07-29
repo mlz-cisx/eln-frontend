@@ -33,7 +33,7 @@ import {NewUserModalComponent} from '../user_modals/new/new.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-users-page',
+  selector: 'mlzeln-users-page',
   templateUrl: './users-page.component.html',
   styleUrls: ['./users-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

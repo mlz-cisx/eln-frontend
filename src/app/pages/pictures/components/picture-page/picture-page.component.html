@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
   <div style="text-align: center"><strong>{{detailsTitle}}</strong>
-    <eworkbench-details-dropdown
+    <mlzeln-details-dropdown
       [service]="picturesService"
       [id]="id"
       [redirectDestination]="[showSidebar ? '.' : '' + '/pictures', id]"
@@ -9,7 +9,7 @@
       [privileges]="privileges"
       [duplicateElement]="false"
       *ngIf="privileges"
-    ></eworkbench-details-dropdown>
+    ></mlzeln-details-dropdown>
   </div>
 </ng-container>
 
@@ -21,15 +21,15 @@
       <main>
         <ng-container *ngIf="initialState.deleted">
         </ng-container>
-        <eworkbench-overview-collapse-element class="mb-4" [collapsed]="false">
+        <mlzeln-overview-collapse-element class="mb-4" [collapsed]="false">
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="picture"
                 errorTailor>
             <div>
-              <eworkbench-details-collapse-element
+              <mlzeln-details-collapse-element
                 [labelText]="t('picture.details.element.details')">
                 <ng-container slot="body">
                   <div class="mb-4">
-                    <eworkbench-form-input
+                    <mlzeln-form-input
                       for="title"
                       [label]="t('picture.details.title.label')"
                       [loading]="loading"
@@ -38,7 +38,7 @@
                     >
                       <input
                         type="text"
-                        class="form-control ewb-input"
+                        class="form-control mlzeln-input"
                         id="title"
                         formControlName="title"
                         name="title"
@@ -46,7 +46,7 @@
                         slot="input"
                         readonly
                       />
-                    </eworkbench-form-input>
+                    </mlzeln-form-input>
                   </div>
                   <div class="mb-4">
                     <label
@@ -62,11 +62,11 @@
                     <label
                       for="created-by">{{ t('picture.details.createdBy.label') }}</label>
                     <div class="flex items-center space-x-1">
-                      <eworkbench-user-details
+                      <mlzeln-user-details
                         id="created-by"
                         class="inline-block"
                         [user]="initialState.created_by"
-                      ></eworkbench-user-details>
+                      ></mlzeln-user-details>
                       <span> | </span>
                       <span
                         id="created-at">{{ initialState.created_at | formatDate }}</span>
@@ -76,35 +76,35 @@
                     <label
                       for="last-modified-by">{{ t('picture.details.lastModifiedBy.label') }}</label>
                     <div class="flex items-center space-x-1">
-                      <eworkbench-user-details id="last-modified-by"
+                      <mlzeln-user-details id="last-modified-by"
                                                class="inline-block"
                                                [user]="initialState.last_modified_by">
-                      </eworkbench-user-details>
+                      </mlzeln-user-details>
                       <span> | </span>
                       <span
                         id="last-modified-at">{{ initialState.last_modified_at | formatDate }}</span>
                     </div>
                   </div>
                 </ng-container>
-              </eworkbench-details-collapse-element>
+              </mlzeln-details-collapse-element>
             </div>
             <div>
-              <eworkbench-details-collapse-element
+              <mlzeln-details-collapse-element
                 [labelText]="t('picture.details.element.recentChanges')">
                 <ng-container slot="body">
-                  <eworkbench-recent-changes
+                  <mlzeln-recent-changes
                     id="recent-changes"
                     [service]="picturesService"
                     [changesId]="id"
                     [refresh]="refreshChanges"
-                  ></eworkbench-recent-changes>
+                  ></mlzeln-recent-changes>
                 </ng-container>
-              </eworkbench-details-collapse-element>
+              </mlzeln-details-collapse-element>
 
-              <eworkbench-details-collapse-element
+              <mlzeln-details-collapse-element
                 [labelText]="t('picture.details.element.versions')">
                 <ng-container slot="body">
-                  <eworkbench-versions
+                  <mlzeln-versions
                     id="versions"
                     contentType="picture"
                     [service]="picturesService"
@@ -113,19 +113,19 @@
                     [refresh]="refreshVersions"
                     [editable]="privileges.restore"
                     (changed)="onVersionChanged()"
-                  ></eworkbench-versions>
+                  ></mlzeln-versions>
                 </ng-container>
-              </eworkbench-details-collapse-element>
+              </mlzeln-details-collapse-element>
             </div>
           </form>
-        </eworkbench-overview-collapse-element>
+        </mlzeln-overview-collapse-element>
 
         <div class="border border-tum-border-gray p-4">
-          <eworkbench-picture-editor
+          <mlzeln-picture-editor
             [picture]="initialState"
             [service]="picturesService"
             [editable]="privileges.edit"
-          ></eworkbench-picture-editor>
+          ></mlzeln-picture-editor>
         </div>
       </main>
     </div>

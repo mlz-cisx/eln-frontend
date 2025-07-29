@@ -11,7 +11,7 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-delete-comment-modal',
+  selector: 'mlzeln-delete-comment-modal',
   templateUrl: './delete.component.html',
   styleUrls: ['./delete.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

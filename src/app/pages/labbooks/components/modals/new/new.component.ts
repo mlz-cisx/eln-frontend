@@ -24,7 +24,7 @@ interface FormLabBook {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-new-labbook-modal',
+  selector: 'mlzeln-new-labbook-modal',
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

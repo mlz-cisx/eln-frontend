@@ -12,7 +12,7 @@ import { VersionPreviewModalComponent } from '../modals/preview/preview.componen
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-versions',
+  selector: 'mlzeln-versions',
   templateUrl: './versions.component.html',
   styleUrls: ['./versions.component.scss'],
 })

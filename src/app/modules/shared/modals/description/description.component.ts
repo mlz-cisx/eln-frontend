@@ -12,7 +12,7 @@ interface FormDescription {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-description-modal',
+  selector: 'mlzeln-description-modal',
   templateUrl: './description.component.html',
   styleUrls: ['./description.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

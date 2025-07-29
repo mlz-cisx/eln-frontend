@@ -1,20 +1,20 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('group.newModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-loading [loading]="loading">
+      <mlzeln-loading [loading]="loading">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor>
           <div class="mb-4">
             <label for="groupname-modal">
               {{ t('group.newModal.groupname.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="text"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="groupname"
               id="groupname-modal"
               name="groupname-modal"
@@ -26,14 +26,14 @@
           <!--          <div class="mb-4">-->
           <!--            <label for="content-modal">-->
           <!--              {{ t('note.newModal.content.label') }}-->
-          <!--              <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>-->
+          <!--              <mlzeln-form-asterisk class="inline-block"></mlzeln-form-asterisk>-->
           <!--            </label>-->
-          <!--            <eworkbench-wysiwyg-editor [id]="'content-modal'" formControlName="content"></eworkbench-wysiwyg-editor>-->
+          <!--            <mlzeln-wysiwyg-editor [id]="'content-modal'" formControlName="content"></mlzeln-wysiwyg-editor>-->
           <!--          </div>-->
           <!--          <div class="mb-4">-->
           <!--            <label for="projects-modal">{{ t('note.newModal.projects.label') }}</label>-->
           <!--            <ng-select-->
-          <!--              class="ewb-select"-->
+          <!--              class="mlzeln-select"-->
           <!--              formControlName="projects"-->
           <!--              labelForId="projects-modal"-->
           <!--              name="projects-modal"-->
@@ -66,17 +66,17 @@
 
           <div class="modal-footer p-0 mt-5">
             <button type="button"
-                    class="btn ewb-button-big ewb-button-secondary mr-2"
+                    class="btn mlzeln-button-big mlzeln-button-secondary mr-2"
                     [disabled]="loading" (click)="modalRef.close()">
               {{ t('group.newModal.cancel') }}
             </button>
-            <button type="submit" class="btn ewb-button-big ewb-button-primary"
+            <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary"
                     [disabled]="loading || form.invalid">
               {{ t('group.newModal.create') }}
             </button>
           </div>
         </form>
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

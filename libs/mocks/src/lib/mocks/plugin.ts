@@ -132,6 +132,6 @@ export const mockPluginInstanceVersion: any = {
 export const mockPluginFeedbackPayload: PluginFeedbackPayload = {
   pluginPk: 'f76b6f87-1076-4ce8-8150-3ac928118845',
   subject: 'Test feedback',
-  message: '<p>from Workbench</p>',
+  message: '<p>from ELN</p>',
   type: 'feedback',
 };

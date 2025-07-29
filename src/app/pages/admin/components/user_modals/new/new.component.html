@@ -1,20 +1,20 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal [modalFooter]="false">
+  <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t('user.newModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-loading [loading]="loading">
+      <mlzeln-loading [loading]="loading">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor>
           <div class="mb-4">
             <label for="username-modal">
               {{ t('user.newModal.username.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="text"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="username"
               id="username-modal"
               name="username-modal"
@@ -22,12 +22,12 @@
             />
             <label for="first_name-modal">
               {{ t('user.newModal.first_name.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="text"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="first_name"
               id="first_name-modal"
               name="first_name-modal"
@@ -35,12 +35,12 @@
             />
             <label for="last_name-modal">
               {{ t('user.newModal.last_name.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="text"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="last_name"
               id="last_name-modal"
               name="last_name-modal"
@@ -48,12 +48,12 @@
             />
             <label for="email-modal">
               {{ t('user.newModal.email.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="email"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="email"
               id="email-modal"
               name="email-modal"
@@ -61,12 +61,12 @@
             />
             <label for="password-modal">
               {{ t('user.newModal.password.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="password"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="password"
               id="password-modal"
               name="password-modal"
@@ -74,12 +74,12 @@
             />
             <label for="password_confirmed-modal">
               {{ t('user.newModal.password_confirm.label') }}
-              <eworkbench-form-asterisk
-                class="inline-block"></eworkbench-form-asterisk>
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
             </label>
             <input
               type="password"
-              class="form-control ewb-input"
+              class="form-control mlzeln-input"
               formControlName="password_confirmed"
               id="password_confirmed-modal"
               name="password_confirmed-modal"
@@ -95,14 +95,14 @@
           <!--          <div class="mb-4">-->
           <!--            <label for="content-modal">-->
           <!--              {{ t('note.newModal.content.label') }}-->
-          <!--              <eworkbench-form-asterisk class="inline-block"></eworkbench-form-asterisk>-->
+          <!--              <mlzeln-form-asterisk class="inline-block"></mlzeln-form-asterisk>-->
           <!--            </label>-->
-          <!--            <eworkbench-wysiwyg-editor [id]="'content-modal'" formControlName="content"></eworkbench-wysiwyg-editor>-->
+          <!--            <mlzeln-wysiwyg-editor [id]="'content-modal'" formControlName="content"></mlzeln-wysiwyg-editor>-->
           <!--          </div>-->
           <!--          <div class="mb-4">-->
           <!--            <label for="projects-modal">{{ t('note.newModal.projects.label') }}</label>-->
           <!--            <ng-select-->
-          <!--              class="ewb-select"-->
+          <!--              class="mlzeln-select"-->
           <!--              formControlName="projects"-->
           <!--              labelForId="projects-modal"-->
           <!--              name="projects-modal"-->
@@ -135,17 +135,17 @@
 
           <div class="modal-footer p-0 mt-5">
             <button type="button"
-                    class="btn ewb-button-big ewb-button-secondary mr-2"
+                    class="btn mlzeln-button-big mlzeln-button-secondary mr-2"
                     [disabled]="loading" (click)="modalRef.close()">
               {{ t('user.newModal.cancel') }}
             </button>
-            <button type="submit" class="btn ewb-button-big ewb-button-primary"
+            <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary"
                     [disabled]="loading || form.invalid">
               {{ t('user.newModal.create') }}
             </button>
           </div>
         </form>
-      </eworkbench-loading>
+      </mlzeln-loading>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

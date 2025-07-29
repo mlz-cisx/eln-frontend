@@ -47,7 +47,7 @@ interface ElementRemoval {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-element-dropdown',
+  selector: 'mlzeln-labbook-element-dropdown',
   templateUrl: './element-dropdown.component.html',
   styleUrls: ['./element-dropdown.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

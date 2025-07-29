@@ -1,18 +1,18 @@
 <ng-container *ngIf="data.length">
-  <eworkbench-table-view
+  <mlzeln-table-view
     #tableView
     [columns]="listColumns"
     [data]="data"
     [columnHeader]="false"
     [paginationSize]="5"
-  ></eworkbench-table-view>
+  ></mlzeln-table-view>
 </ng-container>
 <ng-template #dateCellTemplate let-row>
   <ng-container *transloco="let t">
     <div class="flex items-center">
       <button
         type="button"
-        class="btn ewb-button-small close-button mr-2"
+        class="btn mlzeln-button-small close-button mr-2"
         [attr.aria-expanded]="!row.collapsed"
         aria-controls="collapseBasic"
         (click)="onToggleExpanded(row)"
@@ -35,8 +35,8 @@
             class="ml-1 mr-2">{{ t('recentChanges.trashedBy') }}</span>
       <span *ngIf="row.changeset_type === 'I'"
             class="ml-1 mr-2">{{ t('recentChanges.createdBy') }}</span>
-      <eworkbench-user-details class="inline-block"
-                               [user]="row.user"></eworkbench-user-details>
+      <mlzeln-user-details class="inline-block"
+                               [user]="row.user"></mlzeln-user-details>
     </div>
 
     <ng-container
@@ -94,10 +94,10 @@
           <ng-container *ngIf="isLabelsField(change.field_name)">
             {{ formatFieldName(change.field_name) }}
             <div class="bg-danger p-2" *ngIf="change.old_value">
-              <!--              <eworkbench-recent-changes-labels [value]="change.old_value"></eworkbench-recent-changes-labels>-->
+              <!--              <mlzeln-recent-changes-labels [value]="change.old_value"></mlzeln-recent-changes-labels>-->
             </div>
             <div class="bg-success p-2" *ngIf="change.new_value">
-              <!--              <eworkbench-recent-changes-labels [value]="change.new_value"></eworkbench-recent-changes-labels>-->
+              <!--              <mlzeln-recent-changes-labels [value]="change.new_value"></mlzeln-recent-changes-labels>-->
             </div>
           </ng-container>
 

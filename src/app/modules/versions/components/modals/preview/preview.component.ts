@@ -4,7 +4,7 @@ import { DialogRef } from '@ngneat/dialog';
 import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
-  selector: 'eworkbench-version-preview-modal',
+  selector: 'mlzeln-version-preview-modal',
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

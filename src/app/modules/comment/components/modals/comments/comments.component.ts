@@ -7,7 +7,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-comments-modal',
+  selector: 'mlzeln-comments-modal',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

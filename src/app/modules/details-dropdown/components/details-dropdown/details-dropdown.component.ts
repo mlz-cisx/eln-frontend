@@ -39,7 +39,7 @@ import {environment} from "@environments/environment";
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-details-dropdown',
+  selector: 'mlzeln-details-dropdown',
   templateUrl: './details-dropdown.component.html',
   styleUrls: ['./details-dropdown.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

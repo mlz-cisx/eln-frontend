@@ -39,7 +39,7 @@ interface FromSearch {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-global-search',
+  selector: 'mlzeln-global-search',
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

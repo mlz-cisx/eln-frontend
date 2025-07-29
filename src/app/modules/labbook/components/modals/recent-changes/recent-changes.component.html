@@ -1,15 +1,15 @@
 <ng-container *transloco="let t">
-  <eworkbench-modal>
+  <mlzeln-modal>
     <div slot="header">
       {{ t('recentChanges.recentChangesModal.header') }}
     </div>
     <div slot="body">
-      <eworkbench-recent-changes [service]="service" [changesId]="id"></eworkbench-recent-changes>
+      <mlzeln-recent-changes [service]="service" [changesId]="id"></mlzeln-recent-changes>
     </div>
     <div slot="footer">
-      <button type="button" class="btn ewb-button-big ewb-button-secondary" (click)="modalRef.close()">
+      <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary" (click)="modalRef.close()">
         {{ t('recentChanges.recentChangesModal.close') }}
       </button>
     </div>
-  </eworkbench-modal>
+  </mlzeln-modal>
 </ng-container>

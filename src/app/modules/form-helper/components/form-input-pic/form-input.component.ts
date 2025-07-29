@@ -21,7 +21,7 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-form-input-pic',
+  selector: 'mlzeln-form-input-pic',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
 })

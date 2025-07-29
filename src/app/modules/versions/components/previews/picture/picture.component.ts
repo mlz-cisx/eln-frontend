@@ -18,7 +18,7 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-picture-preview',
+  selector: 'mlzeln-picture-preview',
   templateUrl: './picture.component.html',
   styleUrls: ['./picture.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

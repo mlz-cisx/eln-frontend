@@ -42,7 +42,7 @@ interface FormPicture {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-labbook-draw-board-picture',
+  selector: 'mlzeln-labbook-draw-board-picture',
   templateUrl: './picture.component.html',
   styleUrls: ['./picture.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

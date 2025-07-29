@@ -28,7 +28,7 @@ interface FormElement {
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-new-labbook-note-element-modal',
+  selector: 'mlzeln-new-labbook-note-element-modal',
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

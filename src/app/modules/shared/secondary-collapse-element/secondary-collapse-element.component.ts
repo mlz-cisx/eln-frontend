@@ -6,7 +6,7 @@ interface CollapseData {
 }
 
 @Component({
-  selector: 'eworkbench-secondary-collapse-element',
+  selector: 'mlzeln-secondary-collapse-element',
   templateUrl: './secondary-collapse-element.component.html',
   styleUrls: ['./secondary-collapse-element.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -6,16 +6,16 @@
 </div>
 
 <ng-container *ngIf="firstDataLoaded">
-  <eworkbench-loading [loading]="!firstDataLoaded && loading">
+  <mlzeln-loading [loading]="!firstDataLoaded && loading">
     <table cdk-table [dataSource]="dataSource$">
       <ng-container *ngFor="let column of columns; first as isFirst" [cdkColumnDef]="column.key">
         <th cdk-header-cell [style.width]="column.width" *cdkHeaderCellDef>
           {{ column.name }}
-          <eworkbench-table-sort
+          <mlzeln-table-sort
             [class.invisible]="!column.sortable"
             [column]="column"
             (sortChanged)="onSortChanged($event)"
-          ></eworkbench-table-sort>
+          ></mlzeln-table-sort>
         </th>
         <td class="expand-cell" cdk-cell *cdkCellDef="let element">
           <div [ngClass]="{ 'd-flex': isFirst }">
@@ -52,17 +52,17 @@
         class="text-center mt-4"
         *ngIf="pagination && total > paginationSize && (data.length < total || dataSource$.value.length < total)"
       >
-        <button type="button" class="btn ewb-button-big ewb-button-table" (click)="onLoadMore()">show more</button>
+        <button type="button" class="btn mlzeln-button-big mlzeln-button-table" (click)="onLoadMore()">show more</button>
       </div>
     </div>
-  </eworkbench-loading>
+  </mlzeln-loading>
 </ng-container>
 
 <ng-template #expandTemplate let-isFirst="isFirst" let-element="element" let-column="column">
   <div *ngIf="isFirst" class="inline-block" [style.padding-left.px]="element.level * 30"></div>
   <button
     type="button"
-    class="btn ewb-button-regular ewb-button-icon ewb-button-expand square mr-2"
+    class="btn mlzeln-button-regular mlzeln-button-icon mlzeln-button-expand square mr-2"
     *ngIf="column.key === expandKey && expandable"
     [class.expand-hidden]="!hasRelation(element)"
     (click)="onExpandChange(element)"

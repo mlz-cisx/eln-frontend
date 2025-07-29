@@ -28,7 +28,7 @@ import {debounceTime, skip, take} from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
-  selector: 'eworkbench-notes-page',
+  selector: 'mlzeln-notes-page',
   templateUrl: './notes-page.component.html',
   styleUrls: ['./notes-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

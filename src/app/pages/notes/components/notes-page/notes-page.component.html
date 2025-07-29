@@ -8,7 +8,7 @@
             <div class="input-group search-input-group">
               <input
                 type="text"
-                class="form-control ewb-input"
+                class="form-control mlzeln-input"
                 id="search-header"
                 name="search-header"
                 [formControl]="searchControl"
@@ -37,19 +37,19 @@
   <main>
     <div
       class="flex justify-between pb-4 mb-5 border-0 border-b-[3px] border-solid border-tum-border-gray">
-      <eworkbench-trashed-items-filter
-        (stateChanged)="onFilterItems($event)"></eworkbench-trashed-items-filter>
-      <eworkbench-table-manage-columns
+      <mlzeln-trashed-items-filter
+        (stateChanged)="onFilterItems($event)"></mlzeln-trashed-items-filter>
+      <mlzeln-table-manage-columns
         class="flex justify-end"
         [columns]="listColumns"
         [defaultColumns]="defaultColumns"
         (columnsChanged)="onColumnsChanged($event)"
-      ></eworkbench-table-manage-columns>
+      ></mlzeln-table-manage-columns>
     </div>
 
 
 
-    <eworkbench-table-view
+    <mlzeln-table-view
       #tableView
       [columns]="listColumns"
       [service]="notesService"
@@ -58,7 +58,7 @@
       [sort]="sorting?.direction"
       (orderChanged)="onColumnsChanged($event)"
       (sortChanged)="onSortChanged($event)"
-    ></eworkbench-table-view>
+    ></mlzeln-table-view>
   </main>
 
   <ng-container *transloco="let t">
@@ -77,24 +77,24 @@
   {{ row.created_at | formatDate }}
 </ng-template>
 <ng-template #createdByCellTemplate let-row>
-  <eworkbench-user-details [user]="row.created_by"></eworkbench-user-details>
+  <mlzeln-user-details [user]="row.created_by"></mlzeln-user-details>
 </ng-template>
 <ng-template #lastModifiedAtCellTemplate let-row>
   {{ row.last_modified_at | formatDate }}
 </ng-template>
 <ng-template #lastModifiedByCellTemplate let-row>
-  <eworkbench-user-details
-    [user]="row.last_modified_by"></eworkbench-user-details>
+  <mlzeln-user-details
+    [user]="row.last_modified_by"></mlzeln-user-details>
 </ng-template>
 <ng-template #actionsCellTemplate let-row>
   <div class="whitespace-nowrap text-right">
-    <eworkbench-restore-button
+    <mlzeln-restore-button
       *ngIf="row.deleted"
       class="inline-block"
       [service]="notesService"
       [id]="row.pk"
       [tableView]="tableView"
       (restored)="onRestore($event)"
-    ></eworkbench-restore-button>
+    ></mlzeln-restore-button>
   </div>
 </ng-template>
