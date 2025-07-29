@@ -6,7 +6,6 @@ import { UserModule } from '@app/modules/user/user.module';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { FormsModule } from '@joeseln/forms';
 import { IconsModule } from '@joeseln/icons';
-import { SkeletonsModule } from '@joeseln/skeletons';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { TranslocoService } from '@ngneat/transloco';
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -38,10 +37,8 @@ import { ProfilePageRoutingModule } from './profile-page-routing.module';
     FormHelperModule,
     AlertModule,
     IconsModule,
-    SkeletonsModule,
     UserModule,
     TooltipModule.forRoot(),
-    SkeletonsModule,
   ],
 })
 export class ProfilePageModule {}

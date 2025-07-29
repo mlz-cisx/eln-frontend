@@ -12,7 +12,6 @@ import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
 
 
-
 @Component({
   selector: 'eworkbench-wysiwyg-editor',
   templateUrl: './wysiwyg-editor.component.html',
@@ -137,12 +136,12 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     if (this.editor && this.editor.editor.initialized) {
       const cursor = this.editor.editor.selection.getBookmark(3) as any
       if (cursor['start'] && cursor['start'].startsWith('text()')) {
-        // do nothing because the cursor initially jumps back to first line with 'text()[0]'
+        // do nothing because the cursor initially jumps back to first line with 'text()'
         // while pasting in text from outside; moving to this bookmark after set content
         // creates this cursor jump which should be avoided;
         // if you paste in text from inside the editor or write text by keyboard
         // the cursor starts with a paragraph tag created by TMCE like
-        // 'p[element_index]/text()[0]'
+        // 'p[element_index]/text()[element_index]'
       } else {
         this.editor.editor.setContent(value);
         this.editor.editor.selection.moveToBookmark(cursor);

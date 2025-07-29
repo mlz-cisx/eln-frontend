@@ -20,7 +20,6 @@ import {
   LabbooksService,
   NotesService,
   UserService,
-  WebSocketService
 } from '@app/services';
 import type {
   PasswordPatchPayload,
@@ -120,7 +119,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly websocketService: WebSocketService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private readonly labbooksService: LabbooksService,

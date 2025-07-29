@@ -18,18 +18,8 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-import {
-  AuthService,
-  PicturesService,
-  UserService,
-  WebSocketService
-} from '@app/services';
-import type {
-  Picture,
-  Privileges,
-  Project,
-  User
-} from '@joeseln/types';
+import { AuthService, PicturesService, UserService } from '@app/services';
+import type { Picture, Privileges, Project, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
@@ -60,7 +50,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public detailsTitle?: string;
 
   public id = this.route.snapshot.paramMap.get('id')!;
-
 
   public currentUser: User | null = null;
 
@@ -125,7 +114,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly websocketService: WebSocketService,
     private readonly userService: UserService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
@@ -154,11 +142,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-    });
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.element_changed?.model_pk === this.id) {
-        this.cdr.detectChanges();
-      }
     });
 
     this.initSidebar();

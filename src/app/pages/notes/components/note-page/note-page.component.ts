@@ -22,7 +22,6 @@ import {
   LabbooksService,
   NotesService,
   UserService,
-  WebSocketService
 } from '@app/services';
 import type {
   Note,
@@ -106,7 +105,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly websocketService: WebSocketService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private readonly labbooksService: LabbooksService,
@@ -134,12 +132,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
       this.currentUser = state.user;
     });
 
-    // this.websocketService.subscribe([{model: 'note', pk: this.id}]);
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.element_changed?.model_pk === this.id) {
-        this.cdr.detectChanges();
-      }
-    });
 
     this.initSidebar();
     this.initSearchInput();

@@ -17,7 +17,6 @@ import {TranslocoRootModule} from '@app/transloco-root.module';
 import {FormsModule} from '@joeseln/forms';
 import {IconsModule} from '@joeseln/icons';
 import {ModalsModule} from '@joeseln/modals';
-import {SkeletonsModule } from '@joeseln/skeletons';
 import {TableModule} from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
@@ -73,7 +72,6 @@ import {NavbarModule} from "@app/modules/navbar/navbar.module";
       controlErrorComponent: CustomControlErrorComponent,
     }),
     IconsModule,
-    SkeletonsModule,
     CommentModule,
     TooltipModule.forRoot(),
     QRCodeModule,

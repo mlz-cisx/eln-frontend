@@ -4,7 +4,6 @@ import { TranslocoRootModule } from '@app/transloco-root.module';
 import { FormsModule } from '@joeseln/forms';
 import { IconsModule } from '@joeseln/icons';
 import { ModalsModule } from '@joeseln/modals';
-//import { SkeletonsModule } from '@eworkbench/skeletons';
 import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -18,8 +17,6 @@ import { NewCommentModalComponent } from './components/modals/new/new.component'
 import { FormHelperModule } from '../form-helper/form-helper.module';
 import { LoadingModule } from '../loading/loading.module';
 import { SharedModule } from '../shared/shared.module';
-
-// import { UserModule } from '../user/user.module';
 
 @NgModule({
   declarations: [
@@ -37,11 +34,9 @@ import { SharedModule } from '../shared/shared.module';
     FormHelperModule,
     WysiwygEditorModule,
     SharedModule,
-    // UserModule,
     ModalsModule,
     LoadingModule,
     IconsModule,
-    // SkeletonsModule,
     TableModule,
     TooltipModule.forRoot(),
     ToastrModule,

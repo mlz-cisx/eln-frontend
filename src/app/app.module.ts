@@ -1,7 +1,5 @@
-import {
-  HttpClientModule, HTTP_INTERCEPTORS, HttpRequest, HttpHandler
-} from '@angular/common/http';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -13,7 +11,7 @@ import {TranslocoService} from '@ngneat/transloco';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
 import {NavbarModule} from "@app/modules/navbar/navbar.module";
 import {WysiwygEditorModule} from '@joeseln/wysiwyg-editor';
-import {DialogConfig, provideDialogConfig} from '@ngneat/dialog';
+import { provideDialogConfig } from '@ngneat/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   LabBookDrawBoardGridComponent
@@ -37,8 +35,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {InterceptorService} from "@app/services";
 import {ColorPickerService} from "ngx-color-picker"
-
-
 
 
 @NgModule({
@@ -77,15 +73,7 @@ import {ColorPickerService} from "ngx-color-picker"
     FormsModule,
   ],
   providers: [
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: KeycloakBearerInterceptor,
-    //   multi: true
-    // },
     {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
-    // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    // {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    // {provide: HEADER_TOP_OFFSET, useValue: new BehaviorSubject<number | null>(null)},
     LabBookDrawBoardNoteComponent,
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardGridComponent,

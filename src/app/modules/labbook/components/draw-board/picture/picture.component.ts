@@ -2,10 +2,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {
@@ -15,10 +13,9 @@ import {
   PictureEditorModalComponent
 } from '@app/modules/picture/modals/editor.component';
 import {
-  // AuthService,
   LabbooksService,
   NotesService,
-  PicturesService, UserService,
+  PicturesService,
   WebSocketService
 } from '@app/services';
 import type {
@@ -26,7 +23,6 @@ import type {
   Picture,
   PicturePayload,
   Privileges,
-  User,
 } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -161,13 +157,9 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.initialState = {...this.element.child_object};
     this.title_id = `${this.initialState!.pk}_title_id`;
-    // console.log(this.element.child_object.created_by.admin)
   }
 
   public initPrivileges(): void {
-    // if (!this.currentUser?.pk) {
-    //   return;
-    // }
 
     this.picturesService
       .get(this.initialState!.pk)

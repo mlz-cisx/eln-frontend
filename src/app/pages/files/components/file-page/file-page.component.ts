@@ -19,12 +19,7 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-import {
-  AuthService,
-  FilesService,
-  UserService,
-  WebSocketService
-} from '@app/services';
+import { AuthService, FilesService, UserService } from '@app/services';
 import type {
   Directory,
   Drive,
@@ -124,7 +119,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly websocketService: WebSocketService,
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
@@ -160,12 +154,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-    });
-
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.element_changed?.model_pk === this.id) {
-        this.cdr.detectChanges();
-      }
     });
 
     this.initSidebar();

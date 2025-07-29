@@ -6,7 +6,8 @@ import {
   EventEmitter,
   OnDestroy,
   OnInit,
-  QueryList, Renderer2,
+  QueryList,
+  Renderer2,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
@@ -25,34 +26,24 @@ import type {
 import {
   DescriptionModalComponent
 } from '@app/modules/shared/modals/description/description.component';
-import {WebSocketService} from '@joeseln/services';
-import {LabbooksService} from '@joeseln/services';
+import { LabbooksService, WebSocketService } from '@joeseln/services';
 import {UserService} from "@app/services";
 import type {
   LabBook,
+  LabBookElement,
+  LabBookElementPayload,
   LabBookPayload,
   ModalCallback,
   Privileges,
   Project,
   User,
-  LabBookElementPayload, LabBookElement
 } from '@joeseln/types';
-import {
-  DialogConfig,
-  DialogRef,
-  DialogService
-} from '@ngneat/dialog';
+import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {from, Observable, of, Subject} from 'rxjs';
-import {
-  debounceTime,
-  map,
-  skip,
-  switchMap,
-  take
-} from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 
 interface FormLabBook {

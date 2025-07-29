@@ -50,9 +50,6 @@
       "@joeseln/picture-editor": [
         "./libs/picture-editor/src/index.ts"
       ],
-      "@joeseln/skeletons": [
-        "./libs/skeletons/src/index.ts"
-      ],
       "@joeseln/modals": [
         "./libs/modals/src/index.ts"
       ],

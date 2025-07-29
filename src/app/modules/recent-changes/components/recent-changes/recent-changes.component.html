@@ -1,4 +1,3 @@
-<!--<eworkbench-list-skeleton *ngIf="!data.length" [lines]="5"></eworkbench-list-skeleton>-->
 <ng-container *ngIf="data.length">
   <eworkbench-table-view
     #tableView
@@ -73,29 +72,11 @@
             <ng-container *ngFor="let field of change.old_value">
               <div class="bg-danger p-2">
                 {{ metadataParameters?.[field.fields.field]?.display }}
-                <!--                <eworkbench-metadata-field-->
-                <!--                  [uuid]="field.fields.field"-->
-                <!--                  [id]="field.fields.field"-->
-                <!--                  [baseType]="metadataParameters?.[field.fields.field]?.base_type"-->
-                <!--                  [typeSettings]="metadataParameters?.[field.fields.field]?.type_settings"-->
-                <!--                  [label]="metadataParameters?.[field.fields.field]?.display"-->
-                <!--                  [values]="field.fields.values"-->
-                <!--                  [editable]="false"-->
-                <!--                ></eworkbench-metadata-field>-->
               </div>
             </ng-container>
             <ng-container *ngFor="let field of change.new_value">
               <div class="bg-success p-2">
                 {{ metadataParameters?.[field.fields.field]?.display }}
-                <!--                <eworkbench-metadata-field-->
-                <!--                  [uuid]="field.fields.field"-->
-                <!--                  [id]="field.fields.field"-->
-                <!--                  [baseType]="metadataParameters?.[field.fields.field]?.base_type"-->
-                <!--                  [typeSettings]="metadataParameters?.[field.fields.field]?.type_settings"-->
-                <!--                  [label]="metadataParameters?.[field.fields.field]?.display"-->
-                <!--                  [values]="field.fields.values"-->
-                <!--                  [editable]="false"-->
-                <!--                ></eworkbench-metadata-field>-->
               </div>
             </ng-container>
           </ng-container>
@@ -104,11 +85,9 @@
             {{ formatFieldName(change.field_name) }}
             <div class="bg-danger p-2"
                  *ngIf="change.old_value && change.old_value !== '[]'">
-              <!--              <eworkbench-recent-changes-task-checklist [value]="change.old_value"></eworkbench-recent-changes-task-checklist>-->
             </div>
             <div class="bg-success p-2"
                  *ngIf="change.new_value && change.new_value !== '[]'">
-              <!--              <eworkbench-recent-changes-task-checklist [value]="change.new_value"></eworkbench-recent-changes-task-checklist>-->
             </div>
           </ng-container>
 
@@ -124,40 +103,25 @@
 
           <ng-container *ngIf="isTaskBoardColumnsField(change.field_name)">
             {{ formatFieldName(change.field_name) }}
-            <!--            <eworkbench-recent-changes-task-board-columns-->
-            <!--              [oldValue]="change.old_value"-->
-            <!--              [newValue]="change.new_value"-->
-            <!--            ></eworkbench-recent-changes-task-board-columns>-->
           </ng-container>
 
           <ng-container
             *ngIf="isDriveDirectoryStructureField(change.field_name)">
             {{ formatFieldName(change.field_name) }}
-            <!--            <eworkbench-recent-changes-directory-structure-->
-            <!--              [oldValue]="change.old_value"-->
-            <!--              [newValue]="change.new_value"-->
-            <!--            ></eworkbench-recent-changes-directory-structure>-->
           </ng-container>
 
           <ng-container *ngIf="isDMPFormField(change.field_name)">
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-recent-changes-dmp-form class="inline-block" [value]="change.new_value"></eworkbench-recent-changes-dmp-form>-->
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-recent-changes-dmp-form class="inline-block" [value]="change.old_value"></eworkbench-recent-changes-dmp-form>-->
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-recent-changes-dmp-form class="inline-block" [value]="change.new_value"></eworkbench-recent-changes-dmp-form>-->
             </ng-container>
           </ng-container>
 
           <ng-container *ngIf="isDMPFormDataField(change.field_name)">
-            <!--            <eworkbench-recent-changes-dmp-form-data-->
-            <!--              [oldValue]="change.old_value"-->
-            <!--              [newValue]="change.new_value"-->
-            <!--            ></eworkbench-recent-changes-dmp-form-data>-->
           </ng-container>
 
           <ng-container
@@ -165,13 +129,10 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-dmp-status class="inline-block" [status]="change.new_value"></eworkbench-dmp-status>-->
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-dmp-status class="inline-block" [status]="change.old_value"></eworkbench-dmp-status>-->
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-dmp-status class="inline-block" [status]="change.new_value"></eworkbench-dmp-status>-->
             </ng-container>
           </ng-container>
 
@@ -193,16 +154,6 @@
             }}
           </ng-container>
 
-          <!--          <ng-container *ngIf="isDateTimeField(change.field_name)">-->
-          <!--            {{-->
-          <!--            t(row.changeset_type === 'I' ? 'recentChanges.createDetailsSpecialField' : 'recentChanges.changeDetailsSpecialField', {-->
-          <!--              field: formatFieldName(change.field_name),-->
-          <!--              oldValue: (change.old_value | formatDate) || "'-'",-->
-          <!--              newValue: (change.new_value | formatDate) || "'-'"-->
-          <!--            })-->
-          <!--            }}-->
-          <!--          </ng-container>-->
-
 
           <ng-container *ngIf="isFileSizeField(change.field_name)">
             {{
@@ -213,48 +164,19 @@
             })
             }}
           </ng-container>
-
-          <!--          <ng-container *ngIf="isFileSizeField(change.field_name)">-->
-          <!--            {{-->
-          <!--            t(row.changeset_type === 'I' ? 'recentChanges.createDetailsSpecialField' : 'recentChanges.changeDetailsSpecialField', {-->
-          <!--              field: formatFieldName(change.field_name),-->
-          <!--              oldValue: (change.old_value | formatFileSize) || "'-'",-->
-          <!--              newValue: (change.new_value | formatFileSize) || "'-'"-->
-          <!--            })-->
-          <!--            }}-->
-          <!--          </ng-container>-->
-
           <div *ngIf="isUserField(change.field_name)" class="flex">
             <span class="mr-1">{{ formatFieldName(change.field_name) }}</span>
             <ng-container *ngIf="row.changeset_type === 'I'">
               <span
                 class="mr-2">{{ t('recentChanges.createDetailsWasSetTo') }}</span>
-              <!--              <eworkbench-recent-changes-users-->
-              <!--                class="inline-block"-->
-              <!--                [users]="users ?? []"-->
-              <!--                [value]="change.new_value"-->
-              <!--                *ngIf="change.new_value"-->
-              <!--              ></eworkbench-recent-changes-users>-->
               <ng-container *ngIf="!change.new_value">'-'</ng-container>
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               <span
                 class="mr-2">{{ t('recentChanges.changeDetailsWasChangedFrom') }}</span>
-              <!--              <eworkbench-recent-changes-users-->
-              <!--                class="inline-block"-->
-              <!--                [users]="users ?? []"-->
-              <!--                [value]="change.old_value"-->
-              <!--                *ngIf="change.old_value"-->
-              <!--              ></eworkbench-recent-changes-users>-->
               <ng-container *ngIf="!change.old_value">'-'</ng-container>
               <span
                 class="mr-2">{{ t('recentChanges.changeDetailsWasChangedTo') }}</span>
-              <!--              <eworkbench-recent-changes-users-->
-              <!--                class="inline-block"-->
-              <!--                [users]="users ?? []"-->
-              <!--                [value]="change.new_value"-->
-              <!--                *ngIf="change.new_value"-->
-              <!--              ></eworkbench-recent-changes-users>-->
               <ng-container *ngIf="!change.new_value">'-'</ng-container>
             </ng-container>
           </div>
@@ -263,27 +185,12 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-recent-changes-projects-->
-              <!--                class="inline-block"-->
-              <!--                [value]="change.new_value"-->
-              <!--                *ngIf="change.new_value"-->
-              <!--              ></eworkbench-recent-changes-projects>-->
               <ng-container *ngIf="!change.new_value">'-'</ng-container>
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-recent-changes-projects-->
-              <!--                class="inline-block"-->
-              <!--                [value]="change.old_value"-->
-              <!--                *ngIf="change.old_value"-->
-              <!--              ></eworkbench-recent-changes-projects>-->
               <ng-container *ngIf="!change.old_value">'-'</ng-container>
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-recent-changes-projects-->
-              <!--                class="inline-block"-->
-              <!--                [value]="change.new_value"-->
-              <!--                *ngIf="change.new_value"-->
-              <!--              ></eworkbench-recent-changes-projects>-->
               <ng-container *ngIf="!change.new_value">'-'</ng-container>
             </ng-container>
           </ng-container>
@@ -293,13 +200,10 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-task-state class="inline-block" [state]="change.new_value"></eworkbench-task-state>-->
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-task-state class="inline-block" [state]="change.old_value"></eworkbench-task-state>-->
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-task-state class="inline-block" [state]="change.new_value"></eworkbench-task-state>-->
             </ng-container>
           </ng-container>
 
@@ -308,13 +212,10 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-task-priority class="inline-block" [priority]="change.new_value"></eworkbench-task-priority>-->
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-task-priority class="inline-block" [priority]="change.old_value"></eworkbench-task-priority>-->
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-task-priority class="inline-block" [priority]="change.new_value"></eworkbench-task-priority>-->
             </ng-container>
           </ng-container>
 
@@ -323,13 +224,10 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-resource-type class="inline-block" [type]="change.new_value"></eworkbench-resource-type>-->
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-resource-type class="inline-block" [type]="change.old_value"></eworkbench-resource-type>-->
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-resource-type class="inline-block" [type]="change.new_value"></eworkbench-resource-type>-->
             </ng-container>
           </ng-container>
 
@@ -338,13 +236,10 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-resource-usage-setting class="inline-block" [usageSetting]="change.new_value"></eworkbench-resource-usage-setting>-->
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-resource-usage-setting class="inline-block" [usageSetting]="change.old_value"></eworkbench-resource-usage-setting>-->
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-resource-usage-setting class="inline-block" [usageSetting]="change.new_value"></eworkbench-resource-usage-setting>-->
             </ng-container>
           </ng-container>
 
@@ -353,27 +248,12 @@
             {{ formatFieldName(change.field_name) }}
             <ng-container *ngIf="row.changeset_type === 'I'">
               {{ t('recentChanges.createDetailsWasSetTo') }}
-              <!--              <eworkbench-recent-changes-resource-usage-setting-user-groups-->
-              <!--                class="inline-block"-->
-              <!--                [value]="change.new_value"-->
-              <!--                *ngIf="change.new_value"-->
-              <!--              ></eworkbench-recent-changes-resource-usage-setting-user-groups>-->
               <ng-container *ngIf="!change.new_value">'-'</ng-container>
             </ng-container>
             <ng-container *ngIf="row.changeset_type !== 'I'">
               {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <!--              <eworkbench-recent-changes-resource-usage-setting-user-groups-->
-              <!--                class="inline-block"-->
-              <!--                [value]="change.old_value"-->
-              <!--                *ngIf="change.old_value"-->
-              <!--              ></eworkbench-recent-changes-resource-usage-setting-user-groups>-->
               <ng-container *ngIf="!change.old_value">'-'</ng-container>
               {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <!--              <eworkbench-recent-changes-resource-usage-setting-user-groups-->
-              <!--                class="inline-block"-->
-              <!--                [value]="change.new_value"-->
-              <!--                *ngIf="change.new_value"-->
-              <!--              ></eworkbench-recent-changes-resource-usage-setting-user-groups>-->
               <ng-container *ngIf="!change.new_value">'-'</ng-container>
             </ng-container>
           </ng-container>

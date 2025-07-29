@@ -14,7 +14,6 @@ import { TranslocoRootModule } from '@app/transloco-root.module';
 import { FormsModule } from '@joeseln/forms';
 import { IconsModule } from '@joeseln/icons';
 import { ModalsModule } from '@joeseln/modals';
-import { SkeletonsModule } from '@joeseln/skeletons';
 import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
@@ -56,7 +55,6 @@ import { FilesPageRoutingModule } from './files-page-routing.module';
     VersionsModule,
     BsDropdownModule.forRoot(),
     IconsModule,
-    SkeletonsModule,
     CommentModule,
     TooltipModule.forRoot(),
   ],

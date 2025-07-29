@@ -8,32 +8,22 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
-import {
-  LabbooksService,
-  WebSocketService,
-  NotesService,
-} from '@app/services';
+import { LabbooksService, NotesService, WebSocketService } from '@app/services';
 import {environment} from '@environments/environment';
 import type {
   LabBookElement,
   LabBookElementEvent,
   LabBookElementPayload,
 } from '@joeseln/types';
-import {
-  DialogRef,
-} from '@ngneat/dialog';
+import { DialogRef } from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import type {
-  GridsterConfig,
-  GridsterItem
-} from 'angular-gridster2';
+import type { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import {of} from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {gridsterConfig} from '../../../config/gridster-config';
 import {
   highlight_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
-
 
 
 @UntilDestroy()
@@ -93,19 +83,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       this.addElement(event);
     });
 
-    // this.refresh?.subscribe((reload: boolean) => {
-    //   if (reload) {
-    //     this.reload();
-    //   }
-    // });
   }
   
   ngAfterViewInit() {
-    // this.websocketService.subscribe([{model: 'labbook', pk: this.id}]);
     this.websocketService.elements.pipe().subscribe((data: any) => {
-      // console.log('grid pipe ', data['action'])
       if (data.model_pk === this.id) {
-
         // Sadly, we need a timeout here because the logic for the LabBook operations is
         // mainly in the frontend and the backend sends a socket request when the first
         // API request (in the browser of another user) resolved. But we really should wait
@@ -120,7 +102,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    // this.websocketService.unsubscribe();
   }
 
 
@@ -196,24 +177,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
           return this.labBooksService.addElement(this.id, element).pipe(untilDestroyed(this));
         }),
-
-        // switchMap(labBookElement => {
-        //   if (addToLabBook) {
-        //     return of(labBookElement);
-        //   }
-        //
-        //   sectionElements ??= [];
-        //
-        //   return this.labBookSectionsService
-        //     .patch(event.parentElement, {
-        //       pk: event.parentElement,
-        //       child_elements: [...sectionElements.map(e => e.pk), labBookElement.pk],
-        //     })
-        //     .pipe(
-        //       untilDestroyed(this),
-        //       map(() => labBookElement)
-        //     );
-        // })
       )
       .subscribe(
         labBookElement => {
@@ -264,10 +227,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public updateAllElements(elements?: LabBookElementPayload[]): void {
-    // if (!this.editable) {
-    //   return;
-    // }
-
     // Delay the process for a tick or else gridster won't recognize the changes
     setTimeout(() => {
       if (this.loading) {
@@ -275,7 +234,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       }
       this.loading = true;
 
-      // this.updated_self = true;
 
       const elementsPayload = elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
 
@@ -308,7 +266,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       }
       this.loading = true;
 
-      // this.updated_self = true;
 
       const elementsPayload = elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
 

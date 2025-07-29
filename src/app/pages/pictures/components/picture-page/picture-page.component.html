@@ -13,14 +13,6 @@
   </div>
 </ng-container>
 
-<div *ngIf="!initialState" [class.with-sidebar]="showSidebar">
-  <aside *ngIf="showSidebar">
-    <eworkbench-sidebar-skeleton></eworkbench-sidebar-skeleton>
-  </aside>
-  <div class="skeleton-wrapper">
-  </div>
-</div>
-
 <ng-container *ngIf="initialState">
   <ng-container *transloco="let t">
     <div [class.with-sidebar]="showSidebar">
