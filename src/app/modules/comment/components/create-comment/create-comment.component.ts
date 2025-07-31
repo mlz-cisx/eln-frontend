@@ -88,7 +88,6 @@ export class CreateCommentComponent implements OnInit {
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      // console.log(this.currentUser)
     });
   }
 

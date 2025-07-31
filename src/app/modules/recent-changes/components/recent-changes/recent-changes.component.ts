@@ -8,7 +8,6 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-// import { MetadataService } from '@app/services';
 import {TableColumn, TableViewComponent} from '@joeseln/table';
 import type {
   MetadataField,
@@ -19,7 +18,7 @@ import type {
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {cloneDeep} from 'lodash';
-import {map, switchMap} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 interface MetadataParameters {
   [id: string]: MetadataField;
@@ -60,7 +59,6 @@ export class RecentChangesComponent implements OnInit {
   public metadataParameters?: MetadataParameters;
 
   public constructor(
-    //private readonly metadataService: MetadataService,
     private readonly translocoService: TranslocoService,
     private readonly cdr: ChangeDetectorRef
   ) {
@@ -96,20 +94,6 @@ export class RecentChangesComponent implements OnInit {
       return;
     }
     this.loading = true;
-
-    // this.metadataService
-    //   .getFields()
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     map(fields => {
-    //       const metadataParameters: MetadataParameters = {};
-    //
-    //       fields.map(field => {
-    //         metadataParameters[field.pk!] = field;
-    //       });
-    //       this.metadataParameters = metadataParameters;
-    //     }),
-    //     switchMap(() =>
     this.service?.history(this.changesId).pipe(
       untilDestroyed(this),
       map((recentChanges: RecentChanges[]) => {

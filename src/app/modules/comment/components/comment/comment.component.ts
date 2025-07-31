@@ -7,8 +7,6 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-// import { UserDetailsModalComponent } from '@app/modules/user/components/modals/user-details/user-details.component';
-//import { AuthService } from '@app/services';
 import type {Note, Relation, User} from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
@@ -42,7 +40,6 @@ export class CommentComponent implements OnInit {
   public loading = false;
 
   public constructor(
-    //private readonly authService: AuthService,
     private readonly modalService: DialogService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
@@ -54,7 +51,6 @@ export class CommentComponent implements OnInit {
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      // console.log(this.currentUser)
     });
   }
 
@@ -81,12 +77,6 @@ export class CommentComponent implements OnInit {
   }
 
   public openUserModal(): void {
-    // this.modalRef = this.modalService.open(UserDetailsModalComponent, {
-    //   closeButton: false,
-    //   data: {
-    //     user: this.comment.left_content_object.created_by,
-    //   },
-    // });
   }
 
   public onOpenDeleteModal(): void {

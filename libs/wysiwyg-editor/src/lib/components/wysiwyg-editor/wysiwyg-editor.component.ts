@@ -117,7 +117,6 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
   public ngOnInit(): void {
     this.init.max_height = this.maxHeight;
     this.init.height = this.actual_height;
-    // this.init.inline = true;
   }
 
   public ngAfterViewInit(): void {

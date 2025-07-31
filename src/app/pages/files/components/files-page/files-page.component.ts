@@ -9,14 +9,7 @@ import {
 } from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ModalState} from '@app/enums/modal-state.enum';
-import {
-  AuthService,
-  FilesService,
-} from '@app/services';
-import {
-  UserService,
-} from '@app/services';
+import { AuthService, FilesService, UserService } from '@app/services';
 import {
   TableColumn,
   TableColumnChangedEvent,
@@ -30,13 +23,13 @@ import type {
   Project,
   User
 } from '@joeseln/types';
-import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
+import { DialogRef, DialogService } from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {keyBy, merge, values} from 'lodash';
 import {Observable, of, Subject} from 'rxjs';
-import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
+import { debounceTime, skip, take } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -192,7 +185,6 @@ export class FilesPageComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(title => {
         this.title = title;
-        //void this.pageTitleService.set(title);
       });
 
     this.translocoService

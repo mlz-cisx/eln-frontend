@@ -12,7 +12,6 @@ import {
 import {
   LabBookDrawBoardFileComponent
 } from "@app/modules/labbook/components/draw-board/file/file.component";
-import {NotesService} from "@app/services";
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {cloneDeep, isEqual} from 'lodash';
 import {
@@ -104,19 +103,6 @@ export class FormInputComponent implements AfterViewInit {
     }
 
     return false
-
-
-    // if ((this.ngControl?.name === 'note_subject' || this.ngControl?.name === 'note_content') &&
-    //   Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue))) {
-    //   this.ngControl.valueChanges?.pipe(debounceTime(1000)).subscribe(
-    //     () => {
-    //       this.labbookdrawboard.onSubmit()
-    //     }
-    //   )
-    // } else if (!(this.ngControl?.name === 'note_subject' || this.ngControl?.name === 'note_content')) {
-    //   return Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue));
-    // }
-    // return false
 
   }
 

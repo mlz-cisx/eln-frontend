@@ -29,5 +29,4 @@ export interface RelationPayload {
   private?: boolean;
 }
 
-// TODO: should only be RelationPayload and patch relevant data
 export type RelationPutPayload = Relation;

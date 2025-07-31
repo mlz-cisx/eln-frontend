@@ -152,19 +152,12 @@ export class GlobalSearchComponent implements OnInit {
               .pipe(untilDestroyed(this))
               .subscribe(labBookElements => {
                 labBookElements.map(element => {
-                  // if (element.child_object.pk === result_pk) {
-                  //   localStorage.setItem('pageVerticalposition', String((element.position_y) * 36))
-                  //   // void this.router.navigate([`/labbooks/${lb.pk}`])
-                  //   //
-                  // }
                 })
               });
           }
         )
       }
     )
-
-
   }
 
   public resetSearch(): void {

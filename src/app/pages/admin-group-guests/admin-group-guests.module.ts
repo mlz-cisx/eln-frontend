@@ -40,7 +40,6 @@ import {
     CommonModule,
     AdminGroupGuestsRoutingModule,
     TranslocoRootModule,
-    // HeaderModule,
     TableModule,
     FormsModule,
     ErrorTailorModule.forRoot({

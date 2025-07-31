@@ -13,9 +13,6 @@ import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
 import {
-  PrivilegesModalComponent
-} from '@app/modules/details-dropdown/components/modals/privileges/privileges.component';
-import {
   RecentChangesModalComponent
 } from '@app/modules/labbook/components/modals/recent-changes/recent-changes.component';
 import {
@@ -145,7 +142,6 @@ export class LabBookElementDropdownComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         (exportLink: ExportLink) => {
-          //window.open(exportLink.url, '_blank');
           this.onClick(exportLink.url, exportLink.filename)
           this.loading = false;
           this.cdr.markForCheck();

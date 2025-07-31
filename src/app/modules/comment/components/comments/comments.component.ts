@@ -9,7 +9,6 @@ import {
   ViewChild
 } from '@angular/core';
 import {CommentsState} from '@app/enums/comments-state.enum';
-//import { SitePreferencesService } from '@app/services';
 import {
   TableColumn,
   TableSortDirection,
@@ -63,7 +62,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public initialLoading = true;
 
   public constructor(
-    ///private readonly sitePreferencesService: SitePreferencesService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService
   ) {
@@ -117,15 +115,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   public initSitePreferences(): void {
 
-
-    // this.sitePreferencesService
-    //   .get()
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe((preferences: SitePreferences) => {
-    //     this.params = this.params.set('with_content_type', preferences.content_types['shared_elements.comment']);
-    //     this.initialLoading = false;
-    //     this.cdr.markForCheck();
-    //   });
     this.initialLoading = false;
 
   }

@@ -11,30 +11,14 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import {
   DeleteModalComponent
 } from '@app/modules/trash/components/modals/delete/delete.component';
-import type {
-  DMP,
-  ExportLink,
-  ModalCallback,
-  Privileges,
-  Project
-} from '@joeseln/types';
+import type { ExportLink, ModalCallback, Privileges } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';
-import {
-  DuplicateDMPModalComponent
-} from '../modals/duplicate-dmp/duplicate.component';
-import {
-  DuplicateProjectModalComponent
-} from '../modals/duplicate-project/duplicate.component';
-import {
-  PrivilegesModalComponent
-} from '../modals/privileges/privileges.component';
-import {ShareModalComponent} from '../modals/share/share.component';
 import {lastValueFrom} from "rxjs";
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {environment} from "@environments/environment";
 
 @UntilDestroy()
@@ -121,13 +105,6 @@ export class DetailsDropdownComponent implements OnInit {
   }
 
   public onOpenPrivilegesModal(): void {
-    this.modalRef = this.modalService.open(PrivilegesModalComponent, {
-      closeButton: false,
-      width: '800px',
-      data: {service: this.service, id: this.id, data: this.initialState},
-    } as DialogConfig);
-
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   public onExport(): void {
@@ -180,7 +157,6 @@ export class DetailsDropdownComponent implements OnInit {
     a.setAttribute('download', filename)
     a.click();
     document.body.removeChild(a);
-    //window.open(url, '_blank');
   }
 
   public onDelete(): void {
@@ -261,44 +237,9 @@ export class DetailsDropdownComponent implements OnInit {
   }
 
   public onOpenDuplicateModal(): void {
-
-
-    if (this.initialState.content_type_model === 'projects.project') {
-      const skipDuplicateDialog = true
-
-      if (skipDuplicateDialog) {
-        this.duplicateProject(this.id!);
-      } else {
-        this.modalRef = this.modalService.open(DuplicateProjectModalComponent, {
-          closeButton: false,
-          data: {id: this.id},
-        } as DialogConfig);
-
-        this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
-      }
-    } else if (this.initialState.content_type_model === 'dmp.dmp') {
-      const skipDuplicateDialog = true
-
-      if (skipDuplicateDialog) {
-        this.duplicateDMP(this.id!);
-      } else {
-        this.modalRef = this.modalService.open(DuplicateDMPModalComponent, {
-          closeButton: false,
-          data: {id: this.id},
-        } as DialogConfig);
-
-        this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
-      }
-    } else {
-      this.onOpenNewModal(this.initialState, this.initialState.pk);
-    }
   }
 
   public onOpenShareModal(): void {
-    this.modalRef = this.modalService.open(ShareModalComponent, {
-      closeButton: false,
-      data: {id: this.id, service: this.service},
-    });
   }
 
   public onModalClose(callback?: ModalCallback): void {
@@ -310,52 +251,8 @@ export class DetailsDropdownComponent implements OnInit {
   }
 
   public duplicateProject(id: string): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-
-    this.service
-      .duplicate(id)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (project: Project) => {
-          void this.router.navigate(['/projects', project.pk]);
-          this.translocoService
-            .selectTranslate('project.duplicate.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
-        },
-        () => {
-          this.loading = false;
-        }
-      );
   }
 
   public duplicateDMP(id: string): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-
-    this.service
-      .duplicate(id)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (dmp: DMP) => {
-          void this.router.navigate(['/dmps', dmp.pk]);
-          this.translocoService
-            .selectTranslate('dmp.duplicate.toastr.success')
-            .pipe(untilDestroyed(this))
-            .subscribe(success => {
-              this.toastrService.success(success);
-            });
-        },
-        () => {
-          this.loading = false;
-        }
-      );
   }
 }
