@@ -11,44 +11,6 @@
 
       <mlzeln-loading [loading]="loading">
         <mlzeln-table-view class="block mb-4" [columns]="listColumns" [data]="privileges"></mlzeln-table-view>
-
-<!--        <ng-container *ngIf="userPrivileges?.edit">-->
-<!--          <label for="user-modal">{{ t('detailsDropdown.privilegesModal.user.label') }}</label>-->
-<!--          <ng-select-->
-<!--            #select-->
-<!--            class="mlzeln-select"-->
-<!--            formControl="usersControl"-->
-<!--            labelForId="user-modal"-->
-<!--            name="user-modal"-->
-<!--            [placeholder]="t('detailsDropdown.privilegesModal.user.placeholder')"-->
-<!--            [typeahead]="usersInput$"-->
-<!--            [items]="users"-->
-<!--            bindLabel="username"-->
-<!--            bindValue="pk"-->
-<!--            dropdownPosition="top"-->
-<!--          >-->
-<!--&lt;!&ndash;            <ng-template ng-label-tmp let-item="item" let-clear="clear">&ndash;&gt;-->
-<!--&lt;!&ndash;              <div class="flex items-center user-option">&ndash;&gt;-->
-<!--&lt;!&ndash;                <mlzeln-user-details&ndash;&gt;-->
-<!--&lt;!&ndash;                  class="inline-block mr-1"&ndash;&gt;-->
-<!--&lt;!&ndash;                  [user]="item"&ndash;&gt;-->
-<!--&lt;!&ndash;                  [chip]="true"&ndash;&gt;-->
-<!--&lt;!&ndash;                  [modal]="false"&ndash;&gt;-->
-<!--&lt;!&ndash;                  (click)="select.isOpen = false"&ndash;&gt;-->
-<!--&lt;!&ndash;                ></mlzeln-user-details>&ndash;&gt;-->
-<!--&lt;!&ndash;                <span class="sub-text">{{ item.email }}</span>&ndash;&gt;-->
-<!--&lt;!&ndash;              </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </ng-template>&ndash;&gt;-->
-
-<!--&lt;!&ndash;            <ng-template ng-option-tmp let-item="item" let-search="searchTerm">&ndash;&gt;-->
-<!--&lt;!&ndash;              <mlzeln-user-details-dropdown&ndash;&gt;-->
-<!--&lt;!&ndash;                class="inline-block mr-1"&ndash;&gt;-->
-<!--&lt;!&ndash;                [user]="item"&ndash;&gt;-->
-<!--&lt;!&ndash;                [search]="search"&ndash;&gt;-->
-<!--&lt;!&ndash;              ></mlzeln-user-details-dropdown>&ndash;&gt;-->
-<!--&lt;!&ndash;            </ng-template>&ndash;&gt;-->
-<!--          </ng-select>-->
-<!--        </ng-container>-->
       </mlzeln-loading>
     </div>
     <div slot="footer">
@@ -58,10 +20,6 @@
     </div>
   </mlzeln-modal>
 </ng-container>
-
-<!--<ng-template #userCellTemplate let-row>-->
-<!--  <mlzeln-user-details [user]="row.user" [modal]="false"></mlzeln-user-details>-->
-<!--</ng-template>-->
 <ng-template #fullAccessButtonCellTemplate let-row>
   <ng-container
     [ngTemplateOutlet]="buttonTemplate"

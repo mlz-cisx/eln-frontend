@@ -20,23 +20,10 @@
           >
             <ng-template ng-label-tmp let-item="item" let-clear="clear">
               <div class="flex items-center user-option">
-<!--                <mlzeln-user-details-->
-<!--                  class="inline-block mr-1"-->
-<!--                  [user]="item"-->
-<!--                  [chip]="true"-->
-<!--                  [modal]="false"-->
-<!--                  (click)="select.isOpen = false"-->
-<!--                ></mlzeln-user-details>-->
                 <span class="sub-text">{{ item.email }}</span>
               </div>
             </ng-template>
-
             <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-<!--              <mlzeln-user-details-dropdown-->
-<!--                class="inline-block mr-1"-->
-<!--                [user]="item"-->
-<!--                [search]="search"-->
-<!--              ></mlzeln-user-details-dropdown>-->
             </ng-template>
           </ng-select>
           <div class="modal-footer p-0 mt-5">

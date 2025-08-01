@@ -59,11 +59,9 @@
             {{ formatFieldName(change.field_name) }}
             <div class="bg-danger p-2" *ngIf="change.old_value">
               <div [innerHTML]="change.old_value"></div>
-              <!--                            <div [innerHTML]="change.old_value | safeHTML"></div>-->
             </div>
             <div class="bg-success p-2" *ngIf="change.new_value">
               <div [innerHTML]="change.new_value"></div>
-              <!--                            <div [innerHTML]="change.new_value | safeHTML"></div>-->
             </div>
           </ng-container>
 
@@ -94,10 +92,8 @@
           <ng-container *ngIf="isLabelsField(change.field_name)">
             {{ formatFieldName(change.field_name) }}
             <div class="bg-danger p-2" *ngIf="change.old_value">
-              <!--              <mlzeln-recent-changes-labels [value]="change.old_value"></mlzeln-recent-changes-labels>-->
             </div>
             <div class="bg-success p-2" *ngIf="change.new_value">
-              <!--              <mlzeln-recent-changes-labels [value]="change.new_value"></mlzeln-recent-changes-labels>-->
             </div>
           </ng-container>
 

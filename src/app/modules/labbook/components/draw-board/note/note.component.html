@@ -23,11 +23,6 @@
               </mlzeln-form-input>
             </div>
             <div class="ml-2 self-center">
-              <!--              <button type="button" class="btn mlzeln-button-big"-->
-              <!--                      (click)="toggle_toolbar()"-->
-              <!--                      *ngIf="editable && this.display_toolbar_button">-->
-              <!--                Toolbar-->
-              <!--              </button>-->
               <span class="mlzeln-button-big mlzeln-button-background"
                     [id]="span_id"
                     #span
@@ -88,9 +83,6 @@
             ></mlzeln-labbook-element-dropdown>
           </div>
       <div class="body" [id]="'content-' + uniqueHash" #content>
-        <!--        <mlzeln-lock [id]="element.child_object_id" [lock]="lock"-->
-        <!--                         [lockUser]="lockUser"-->
-        <!--                         [service]="notesService"></mlzeln-lock>-->
         <ng-container *ngIf="editor_loaded">
           <mlzeln-form-input
             [for]="'content-' + uniqueHash"
@@ -106,13 +98,6 @@
               formControlName="note_content"
               slot="input"
             ></mlzeln-wysiwyg-editor>
-            <!--            <mlzeln-wysiwyg-editor *ngIf="toolbar_shown===false"-->
-            <!--                                       [id]="'content-' + uniqueHash"-->
-            <!--                                       [maxHeight]="undefined"-->
-            <!--                                       [inline]=true-->
-            <!--                                       formControlName="note_content"-->
-            <!--                                       slot="input"-->
-            <!--            ></mlzeln-wysiwyg-editor>-->
           </mlzeln-form-input>
         </ng-container>
         <ng-container>
@@ -124,65 +109,6 @@
           ></div>
         </ng-container>
       </div>
-      <!--      <div class="footer">-->
-      <!--                <div>-->
-      <!--                  {{ t('labBook.drawBoard.element.footer.lastModifiedBy') }}-->
-      <!--                  <mlzeln-user-details [user]="element.child_object.last_modified_by" class="last-modified-by"></mlzeln-user-details>-->
-      <!--                  {{ t('labBook.drawBoard.element.footer.lastModifiedAt.at') }}-->
-      <!--                  {{ element.child_object.last_modified_at | formatDate }}-->
-      <!--                </div>-->
-      <!--        <div class="actions">-->
-      <!--          &lt;!&ndash;          <a [routerLink]="['/notes', element.child_object_id]" target="_blank">&ndash;&gt;-->
-      <!--          &lt;!&ndash;            <button type="button" class="btn mlzeln-button-big mlzeln-button-background mr-2">&ndash;&gt;-->
-      <!--          &lt;!&ndash;              <joeseln-icon className="wb-link" class="mr-1"></joeseln-icon>&ndash;&gt;-->
-      <!--          &lt;!&ndash;              <ng-container *ngIf="!element.num_relations">&ndash;&gt;-->
-      <!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.linkWith') }}&ndash;&gt;-->
-      <!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
-      <!--          &lt;!&ndash;              <ng-container *ngIf="element.num_relations && element.num_relations === 1">&ndash;&gt;-->
-      <!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.link', { count: element.num_relations }) }}&ndash;&gt;-->
-      <!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
-      <!--          &lt;!&ndash;              <ng-container *ngIf="element.num_relations && element.num_relations > 1">&ndash;&gt;-->
-      <!--          &lt;!&ndash;                {{ t('labBook.drawBoard.element.footer.links', { count: element.num_relations }) }}&ndash;&gt;-->
-      <!--          &lt;!&ndash;              </ng-container>&ndash;&gt;-->
-      <!--          &lt;!&ndash;            </button>&ndash;&gt;-->
-      <!--          &lt;!&ndash;          </a>&ndash;&gt;-->
-      <!--&lt;!&ndash;          <label style="margin-right: 3px">Rows</label>&ndash;&gt;-->
-      <!--&lt;!&ndash;          <input type="number" [id]="enlarge_rows_id" step="1"&ndash;&gt;-->
-      <!--&lt;!&ndash;                 value="10" min="1" max="100" size="5">&ndash;&gt;-->
-      <!--&lt;!&ndash;          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"&ndash;&gt;-->
-      <!--&lt;!&ndash;                  (click)="enlarge_note()">&ndash;&gt;-->
-      <!--&lt;!&ndash;            Enlarge&ndash;&gt;-->
-      <!--&lt;!&ndash;          </button>&ndash;&gt;-->
-      <!--&lt;!&ndash;          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"&ndash;&gt;-->
-      <!--&lt;!&ndash;                  (click)="create_new_sketch_below()">&ndash;&gt;-->
-      <!--&lt;!&ndash;            SketchBelow&ndash;&gt;-->
-      <!--&lt;!&ndash;          </button>&ndash;&gt;-->
-      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
-      <!--                  (click)="create_new_note_below()">-->
-      <!--            NoteBelow-->
-      <!--          </button>-->
-      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
-      <!--                  (click)="create_new_note_aside()">-->
-      <!--            NoteAside-->
-      <!--          </button>-->
-      <!--          <button type="button" class="btn mlzeln-button-big mlzeln-button-background"-->
-      <!--                  (click)="onOpenCommentsModal()">-->
-      <!--            <joeseln-icon className="wb-comment"-->
-      <!--                          class="mr-1"></joeseln-icon>-->
-      <!--            <ng-container *ngIf="!element.num_related_comments">-->
-      <!--              {{ t('labBook.drawBoard.element.footer.createComment') }}-->
-      <!--            </ng-container>-->
-      <!--            <ng-container-->
-      <!--              *ngIf="element.num_related_comments && element.num_related_comments === 1">-->
-      <!--              {{ t('labBook.drawBoard.element.footer.comment', {count: element.num_related_comments}) }}-->
-      <!--            </ng-container>-->
-      <!--            <ng-container-->
-      <!--              *ngIf="element.num_related_comments && element.num_related_comments > 1">-->
-      <!--              {{ t('labBook.drawBoard.element.footer.comments', {count: element.num_related_comments}) }}-->
-      <!--            </ng-container>-->
-      <!--          </button>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </form>
   </ng-container>
 </ng-container>

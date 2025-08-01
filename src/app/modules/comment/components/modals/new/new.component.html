@@ -6,7 +6,6 @@
     <div slot="body">
       <mlzeln-loading [loading]="loading">
         <div class="comment-container">
-<!--          <mlzeln-user-avatar class="avatar" [user]="currentUser" [scale]="5"></mlzeln-user-avatar>-->
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <mlzeln-wysiwyg-editor class="mt-1" formControlName="content"></mlzeln-wysiwyg-editor>
             <div class="custom-control custom-checkbox inline-block mt-2">

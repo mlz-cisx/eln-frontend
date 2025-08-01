@@ -1,31 +1,16 @@
-  <!--  <button style="background-color: #003161; align-content: end"-->
-  <!--          type="button"-->
-  <!--          class="btn mlzeln-button-big text-white"-->
-  <!--          [tooltip]="'Continue Search'"-->
-  <!--          containerClass="tooltip-sm"-->
-  <!--          placement="bottom left"-->
-  <!--          (click)="continue_search()"-->
-  <!--  >-->
-  <!--    <joeseln-icon className="wb-search"></joeseln-icon>-->
-  <!--  </button>-->
-  <mlzeln-loading [loading]="loading">
-    <!--    <div class="m-12 text-center" *ngIf="!drawBoardElements.length && !loading">-->
-    <!--      {{ section ? t('labBook.drawBoardNote.noChildElementsInSection') : t('labBook.drawBoardNote.noChildElements') }}-->
-    <!--    </div>-->
-
-    <gridster #drawBoard [options]="options">
-      <gridster-item [id]="'elem_' + item['element']['child_object_id'] "
-                     [item]="item"
-                     *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
-      >
-
-        <mlzeln-labbook-draw-board-element
-          #elementComponent
-          [id]="id"
-          [element]="item['element']"
-          [editable]="editable"
-        ></mlzeln-labbook-draw-board-element>
-
-      </gridster-item>
-    </gridster>
-  </mlzeln-loading>
+<mlzeln-loading [loading]="loading">
+  <gridster #drawBoard [options]="options">
+    <gridster-item
+      [id]="'elem_' + item['element']['child_object_id']"
+      [item]="item"
+      *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
+    >
+      <mlzeln-labbook-draw-board-element
+        #elementComponent
+        [id]="id"
+        [element]="item['element']"
+        [editable]="editable"
+      ></mlzeln-labbook-draw-board-element>
+    </gridster-item>
+  </gridster>
+</mlzeln-loading>
