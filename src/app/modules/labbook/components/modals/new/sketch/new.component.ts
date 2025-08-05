@@ -1,10 +1,14 @@
-import {HttpParams} from '@angular/common/http';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {LabbooksService, PicturesService,
-  //ProjectsService
-} from '@app/services';
+import { LabbooksService, PicturesService } from '@app/services';
 import type {SaveSketchEvent} from '@joeseln/picture-editor';
 import type {
   DropdownElement,
@@ -18,9 +22,7 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, of, Subject} from 'rxjs';
-import {catchError, debounceTime, mergeMap, switchMap} from 'rxjs/operators';
-
+import { Subject } from 'rxjs';
 
 interface FormElement {
   parentElement: FormControl<string | null>;
@@ -46,7 +48,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
 
   public labBookId = this.modalRef.data.labBookId;
 
-  public projectsList: string[] = this.modalRef.data.projects ?? [];
 
   public loading = true;
 
@@ -78,7 +79,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
   public constructor(
     public readonly modalRef: DialogRef,
     private readonly labBooksService: LabbooksService,
-    //private readonly projectsService: ProjectsService,
     private readonly picturesService: PicturesService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
@@ -137,30 +137,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
 
   public initSearchInput(): void {
 
-    // this.projectInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //     this.cdr.markForCheck();
-    //   });
-    //
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-
   }
 
   public initDetails(): void {
@@ -193,37 +169,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
 
   public patchFormValues(): void {
 
-    // if (this.projectsList.length) {
-    //   from(this.projectsList)
-    //     .pipe(
-    //       untilDestroyed(this),
-    //       mergeMap(id =>
-    //         this.projectsService.get(id).pipe(
-    //           untilDestroyed(this),
-    //           catchError(() =>
-    //             of({
-    //               pk: id,
-    //               name: this.translocoService.translate('formInput.unknownProject'),
-    //               is_favourite: false
-    //             } as Project)
-    //           )
-    //         )
-    //       )
-    //     )
-    //     .subscribe(project => {
-    //       this.projects = [...this.projects, project]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     });
-    // }
-    //
-    // this.form.patchValue(
-    //   {
-    //     projects: this.projectsList,
-    //   },
-    //   {emitEvent: false}
-    // );
 
   }
 

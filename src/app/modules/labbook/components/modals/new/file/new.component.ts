@@ -1,4 +1,3 @@
-import {HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -9,12 +8,7 @@ import {
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {
-  // DrivesService,
-  FilesService,
-  LabbooksService,
-  //ProjectsService
-} from '@app/services';
+import { FilesService, LabbooksService } from '@app/services';
 import type {
   Directory,
   DropdownElement,
@@ -28,14 +22,7 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, of, Subject} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  map,
-  mergeMap,
-  switchMap
-} from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import {environment} from "@environments/environment";
 
 interface FormElement {
@@ -62,7 +49,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
   public labBookId = this.modalRef.data.labBookId;
 
-  public projectsList: string[] = this.modalRef.data.projects ?? [];
 
   public loading = true;
 
@@ -100,9 +86,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
   public constructor(
     public readonly modalRef: DialogRef,
     private readonly labBooksService: LabbooksService,
-    // private readonly projectsService: ProjectsService,
     private readonly filesService: FilesService,
-    // private readonly drivesService: DrivesService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
@@ -163,53 +147,9 @@ export class NewLabBookFileElementModalComponent implements OnInit {
   }
 
   public initSearchInput(): void {
-
-    // this.projectInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //     this.cdr.markForCheck();
-    //   });
-    //
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-
   }
 
   public initDetails(): void {
-
-    // this.drivesService
-    //   .getList()
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     map(drives => {
-    //       this.directories = this.flattenTree(
-    //         this.createTree(
-    //           drives.data
-    //             .flatMap(dir => dir.sub_directories)
-    //             .flatMap(d =>
-    //               d.is_virtual_root ? { ...d, display: drives.data.find(drive => drive.pk === d.drive_id)?.display ?? d.display } : d
-    //             )
-    //         )
-    //       );
-    //       this.cdr.markForCheck();
-    //     })
-    //   )
-    //   .subscribe();
 
     this.labBooksService
       .getElements(this.labBookId)
@@ -220,16 +160,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
           this.lb_elements_count = labBookElements.length
 
-          // labBookElements.map(element => {
-          //   if (element.child_object_content_type_model === 'labbooks.labbooksection') {
-          //     sections.push({
-          //       value: element.child_object.pk,
-          //       label: `${element.child_object.date as string}: ${element.child_object.title as string}`,
-          //     });
-          //   }
-          // });
 
-          // this.parentElement = [...this.parentElement, ...sections];
           this.loading = false;
           this.cdr.markForCheck();
         },
@@ -242,35 +173,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
   }
 
   public patchFormValues(): void {
-
-    // if (this.projectsList.length) {
-    //   from(this.projectsList)
-    //     .pipe(
-    //       untilDestroyed(this),
-    //       mergeMap(id =>
-    //         this.projectsService.get(id).pipe(
-    //           untilDestroyed(this),
-    //           catchError(() =>
-    //             of({ pk: id, name: this.translocoService.translate('formInput.unknownProject'), is_favourite: false } as Project)
-    //           )
-    //         )
-    //       )
-    //     )
-    //     .subscribe(project => {
-    //       this.projects = [...this.projects, project]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     });
-    // }
-    //
-    //
-    // this.form.patchValue(
-    //   {
-    //     projects: this.projectsList,
-    //   },
-    //   { emitEvent: false }
-    // );
 
   }
 

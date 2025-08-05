@@ -115,8 +115,6 @@ export class CreateCommentComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {
-          // page is blocked if you reset here
-          // this.form.reset();
           this.form.markAsPristine();
           this.loading = false;
           this.refresh.next(true);

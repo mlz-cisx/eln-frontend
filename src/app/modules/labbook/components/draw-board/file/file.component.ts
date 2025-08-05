@@ -14,7 +14,6 @@ import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
 import {
-  //AuthService,
   FilesService,
   LabbooksService, NotesService, UserService,
   WebSocketService
@@ -162,7 +161,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   ngAfterViewInit() {
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      // console.log('file pipe ', data)
       if (data.model_pk === this.initialState!.pk) {
         if (data.model_name === 'comments') {
           this.element.num_related_comments = data['comments_count']
@@ -247,7 +245,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           this.form.disable({emitEvent: false});
         }
         this.convertPlotData(privilegesData.data);
-        // TODO think about this
+
         this.graph_exists = this._graph_exists
         this.cdr.markForCheck();
       });

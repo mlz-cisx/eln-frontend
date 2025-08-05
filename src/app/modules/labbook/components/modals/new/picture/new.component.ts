@@ -1,5 +1,4 @@
 import {DOCUMENT} from '@angular/common';
-import {HttpParams} from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -14,12 +13,7 @@ import {Validators} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {scriptLoader} from '@app/modules/picture/util/script-loader';
-//import { ConvertTiffModalComponent } from '@app/pages/pictures/components/modals/convert-tiff/convert-tiff.component';
-import {
-  LabbooksService, PicturesService,
-  //ProjectsService
-} from '@app/services';
-//import { UserStore } from '@app/stores/user';
+import { LabbooksService, PicturesService } from '@app/services';
 import {environment} from '@environments/environment';
 import type {
   DropdownElement,
@@ -34,14 +28,8 @@ import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import type * as pdfjs from 'pdfjs-dist';
-import {from, lastValueFrom, of, Subject} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  mergeMap,
-  switchMap
-} from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 declare global {
   interface Window {
@@ -98,7 +86,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
   public displayImage: SafeUrl | null = null;
 
-  public convertTiffModalRef?: DialogRef;
 
   public form = this.fb.group<FormElement>({
     parentElement: this.fb.control('labBook', Validators.required),
@@ -115,7 +102,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
   public constructor(
     public readonly modalRef: DialogRef,
     private readonly labBooksService: LabbooksService,
-    //private readonly projectsService: ProjectsService,
     private readonly picturesService: PicturesService,
     private readonly domSanitizer: DomSanitizer,
     private readonly fb: FormBuilder,
@@ -123,7 +109,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,
     private readonly modalService: DialogService,
-    //private readonly userStore: UserStore,
     @Inject(DOCUMENT) private readonly document: Document
   ) {
   }
@@ -199,30 +184,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
   public initSearchInput(): void {
 
-    // this.projectInput$
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     debounceTime(500),
-    //     switchMap(input => (input ? this.projectsService.search(input) : of([...this.favoriteProjects])))
-    //   )
-    //   .subscribe(projects => {
-    //     this.projects = [...projects].sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //     this.cdr.markForCheck();
-    //   });
-    //
-    // this.projectsService
-    //   .getList(new HttpParams().set('favourite', 'true'))
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(projects => {
-    //     if (projects.data.length) {
-    //       this.favoriteProjects = [...projects.data];
-    //       this.projects = [...this.projects, ...this.favoriteProjects]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     }
-    //   });
-
   }
 
   public initDetails(): void {
@@ -255,34 +216,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
   public patchFormValues(): void {
 
-    // if (this.projectsList.length) {
-    //   from(this.projectsList)
-    //     .pipe(
-    //       untilDestroyed(this),
-    //       mergeMap(id =>
-    //         this.projectsService.get(id).pipe(
-    //           untilDestroyed(this),
-    //           catchError(() =>
-    //             of({ pk: id, name: this.translocoService.translate('formInput.unknownProject'), is_favourite: false } as Project)
-    //           )
-    //         )
-    //       )
-    //     )
-    //     .subscribe(project => {
-    //       this.projects = [...this.projects, project]
-    //         .filter((value, index, array) => array.map(project => project.pk).indexOf(value.pk) === index)
-    //         .sort((a, b) => Number(b.is_favourite) - Number(a.is_favourite));
-    //       this.cdr.markForCheck();
-    //     });
-    // }
-    //
-    // this.form.patchValue(
-    //   {
-    //     projects: this.projectsList,
-    //   },
-    //   { emitEvent: false }
-    // );
-
   }
 
   public onUpload(event: Event): void {
@@ -299,31 +232,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
             files = [new File([blob], `${files[0].name as string}.png`)];
           }
         }
-        // else if (files[0].type === 'image/tiff') {
-        //   const userStoreValue = this.userStore.getValue();
-        //   const userSetting = 'SkipDialog-ConvertTiff';
-        //
-        //   const skipTiffDialog = Boolean(userStoreValue.user?.userprofile.ui_settings?.confirm_dialog?.[userSetting]);
-        //   let shouldConvert = false;
-        //
-        //   if (!skipTiffDialog) {
-        //     this.convertTiffModalRef = this.modalService.open(ConvertTiffModalComponent, {
-        //       closeButton: false,
-        //     });
-        //     shouldConvert = await lastValueFrom(this.convertTiffModalRef.afterClosed$);
-        //   }
-        //
-        //   if (skipTiffDialog || shouldConvert) {
-        //     const tiffFile: any = await fetch(URL.createObjectURL(files[0])).then(res => res.blob());
-        //     const blob = await lastValueFrom(
-        //       this.picturesService.convertTiff(`${environment.apiUrl}/convert_tiff_to_png/`, {file: tiffFile})
-        //     );
-        //     files = [new File([blob], `${files[0].name as string}.png`)];
-        //   } else {
-        //     return this.modalRef.close();
-        //   }
-        // }
-
         const image = URL.createObjectURL(files[0]);
         this.displayImage = this.domSanitizer.bypassSecurityTrustUrl(image);
         this.originalImage.src = image;

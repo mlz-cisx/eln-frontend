@@ -10,7 +10,6 @@ import {
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {CommentsService, UserService} from '@app/services';
-//import { AuthService } from '@app/services/auth/auth.service';
 import type {CommentPayload, User} from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -64,7 +63,6 @@ export class NewCommentModalComponent implements OnInit {
     public readonly modalRef: DialogRef,
     private readonly commentsService: CommentsService,
     private readonly fb: FormBuilder,
-    //private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
     private readonly toastrService: ToastrService,
@@ -88,7 +86,6 @@ export class NewCommentModalComponent implements OnInit {
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
-      // console.log(this.currentUser)
     });
 
     if (!this.id) {
