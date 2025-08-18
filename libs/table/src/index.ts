@@ -1,6 +1,5 @@
 export * from './lib/table.module';
 export * from './lib/components/table-view/table-view.component';
-export * from './lib/components/tree-view/tree-view.component';
 export * from './lib/enums/table-sort-direction.enum';
 export * from './lib/interfaces/table-column.interface';
 export * from './lib/interfaces/table-view-service.interface';

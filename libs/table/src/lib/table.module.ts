@@ -10,7 +10,7 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { TableColumnComponent } from './components/table-columns/table-columns.component';
 import { TableSortComponent } from './components/table-sort/table-sort.component';
 import { TableViewComponent } from './components/table-view/table-view.component';
-import { TreeViewComponent } from './components/tree-view/tree-view.component';
+
 
 
 @NgModule({
@@ -19,9 +19,8 @@ import { TreeViewComponent } from './components/tree-view/tree-view.component';
     TableColumnComponent,
     TableSortComponent,
     TableViewComponent,
-    TreeViewComponent
   ],
   imports: [CommonModule, CdkTableModule, DragDropModule, IconsModule, FormsModule, BsDropdownModule.forRoot(), TooltipModule.forRoot()],
-  exports: [TableColumnComponent, TableColumnComponent, TreeViewComponent, TableViewComponent],
+  exports: [TableColumnComponent, TableColumnComponent, TableViewComponent],
 })
 export class TableModule {}

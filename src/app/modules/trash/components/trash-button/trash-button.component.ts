@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
-import type {TableViewComponent, TreeViewComponent} from '@joeseln/table';
+import type { TableViewComponent } from '@joeseln/table';
 import type {ModalCallback} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@ngneat/transloco';
@@ -37,7 +37,7 @@ export class TrashButtonComponent {
   public service!: any;
 
   @Input()
-  public tableView?: TableViewComponent | TreeViewComponent;
+  public tableView?: TableViewComponent;
 
   @Input()
   public loading = false;

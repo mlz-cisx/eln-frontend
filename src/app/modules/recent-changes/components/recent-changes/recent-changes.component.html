@@ -66,66 +66,10 @@
           </ng-container>
 
 
-          <ng-container *ngIf="isChecklistField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <div class="bg-danger p-2"
-                 *ngIf="change.old_value && change.old_value !== '[]'">
-            </div>
-            <div class="bg-success p-2"
-                 *ngIf="change.new_value && change.new_value !== '[]'">
-            </div>
-          </ng-container>
-
-          <ng-container *ngIf="isLabelsField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <div class="bg-danger p-2" *ngIf="change.old_value">
-            </div>
-            <div class="bg-success p-2" *ngIf="change.new_value">
-            </div>
-          </ng-container>
-
-          <ng-container *ngIf="isTaskBoardColumnsField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-          </ng-container>
-
-          <ng-container
-            *ngIf="isDriveDirectoryStructureField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-          </ng-container>
-
-          <ng-container *ngIf="isDMPFormField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-            </ng-container>
-          </ng-container>
-
-          <ng-container *ngIf="isDMPFormDataField(change.field_name)">
-          </ng-container>
-
-          <ng-container
-            *ngIf="isDMPStatusField(row.object_type.model, change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-            </ng-container>
-          </ng-container>
-
           <ng-container *ngIf="isLabBookChildElementsField(change.field_name)">
             {{ t('recentChanges.labBookChildElementWasChanged') }}
           </ng-container>
 
-          <ng-container *ngIf="isTermsOfUsePDFField(change.field_name)">
-            {{ t('recentChanges.wasChanged', {field: formatFieldName(change.field_name)}) }}
-          </ng-container>
 
           <ng-container *ngIf="isDateTimeField(change.field_name)">
             {{
@@ -164,69 +108,6 @@
             </ng-container>
           </div>
 
-
-          <ng-container
-            *ngIf="isTaskStateField(row.object_type.model, change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-            </ng-container>
-          </ng-container>
-
-          <ng-container
-            *ngIf="isTaskPriorityField(row.object_type.model, change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-            </ng-container>
-          </ng-container>
-
-          <ng-container
-            *ngIf="isResourceTypeField(row.object_type.model, change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-            </ng-container>
-          </ng-container>
-
-          <ng-container
-            *ngIf="isResourceGeneralUsageSettingField(row.object_type.model, change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-            </ng-container>
-          </ng-container>
-
-          <ng-container
-            *ngIf="isResourceUsageSettingSelectedUserGroupsField(row.object_type.model, change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-              <ng-container *ngIf="!change.new_value">'-'</ng-container>
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <ng-container *ngIf="!change.old_value">'-'</ng-container>
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <ng-container *ngIf="!change.new_value">'-'</ng-container>
-            </ng-container>
-          </ng-container>
         </div>
       </div>
     </ng-container>

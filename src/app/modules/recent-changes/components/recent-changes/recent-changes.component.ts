@@ -167,24 +167,10 @@ export class RecentChangesComponent implements OnInit {
   public isStandardField(contentTypeModel: string, fieldName: string): boolean {
     return (
       !this.isHtmlField(fieldName) &&
-      !this.isChecklistField(fieldName) &&
-      !this.isLabelsField(fieldName) &&
-      !this.isTaskBoardColumnsField(fieldName) &&
-      !this.isDriveDirectoryStructureField(fieldName) &&
-      !this.isDMPFormField(fieldName) &&
-      !this.isDMPFormDataField(fieldName) &&
-      !this.isDMPStatusField(contentTypeModel, fieldName) &&
-      !this.isMetadataField(fieldName) &&
       !this.isLabBookChildElementsField(fieldName) &&
-      !this.isTermsOfUsePDFField(fieldName) &&
       !this.isDateTimeField(fieldName) &&
       !this.isFileSizeField(fieldName) &&
-      !this.isUserField(fieldName) &&
-      !this.isTaskStateField(contentTypeModel, fieldName) &&
-      !this.isTaskPriorityField(contentTypeModel, fieldName) &&
-      !this.isResourceTypeField(contentTypeModel, fieldName) &&
-      !this.isResourceGeneralUsageSettingField(contentTypeModel, fieldName) &&
-      !this.isResourceUsageSettingSelectedUserGroupsField(contentTypeModel, fieldName)
+      !this.isUserField(fieldName)
     );
   }
 
@@ -192,44 +178,9 @@ export class RecentChangesComponent implements OnInit {
     return ['html_content', 'description', 'content', 'text', 'notes'].includes(fieldName);
   }
 
-  public isChecklistField(fieldName: string): boolean {
-    return fieldName === 'checklist_items';
-  }
-
-  public isLabelsField(fieldName: string): boolean {
-    return fieldName === 'labels';
-  }
-
-  public isTaskBoardColumnsField(fieldName: string): boolean {
-    return fieldName === 'kanban_board_columns';
-  }
-
-  public isDriveDirectoryStructureField(fieldName: string): boolean {
-    return fieldName === 'sub_directories';
-  }
-
-  public isDMPFormField(fieldName: string): boolean {
-    return fieldName === 'dmp_form';
-  }
-
-  public isDMPFormDataField(fieldName: string): boolean {
-    return fieldName === 'dmp_form_data';
-  }
-
-  public isDMPStatusField(contentTypeModel: string, fieldName: string): boolean {
-    return contentTypeModel === 'dmp' && fieldName === 'status';
-  }
-
-  public isMetadataField(fieldName: string): boolean {
-    return fieldName === 'metadata';
-  }
 
   public isLabBookChildElementsField(fieldName: string): boolean {
     return fieldName === 'child_elements';
-  }
-
-  public isTermsOfUsePDFField(fieldName: string): boolean {
-    return fieldName === 'terms_of_use_pdf';
   }
 
   public isDateTimeField(fieldName: string): boolean {
@@ -245,23 +196,4 @@ export class RecentChangesComponent implements OnInit {
   }
 
 
-  public isTaskStateField(contentTypeModel: string, fieldName: string): boolean {
-    return contentTypeModel === 'task' && fieldName === 'state';
-  }
-
-  public isTaskPriorityField(contentTypeModel: string, fieldName: string): boolean {
-    return contentTypeModel === 'task' && fieldName === 'priority';
-  }
-
-  public isResourceTypeField(contentTypeModel: string, fieldName: string): boolean {
-    return contentTypeModel === 'resource' && fieldName === 'type';
-  }
-
-  public isResourceGeneralUsageSettingField(contentTypeModel: string, fieldName: string): boolean {
-    return contentTypeModel === 'resource' && fieldName === 'general_usage_setting';
-  }
-
-  public isResourceUsageSettingSelectedUserGroupsField(contentTypeModel: string, fieldName: string): boolean {
-    return contentTypeModel === 'resource' && fieldName === 'usage_setting_selected_user_groups';
-  }
 }
