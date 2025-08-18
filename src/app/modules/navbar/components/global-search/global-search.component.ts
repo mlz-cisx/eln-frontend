@@ -17,23 +17,13 @@ import {FormBuilder} from '@ngneat/reactive-forms';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 import {debounceTime, skip} from 'rxjs/operators';
-import {Router} from "@angular/router";
 
 interface FromSearch {
   search: string | null;
-  appointment: boolean;
   note: boolean;
-  contact: boolean;
-  dmp: boolean;
-  dss: boolean;
   file: boolean;
   labbook: boolean;
   picture: boolean;
-  plugin: boolean;
-  resource: boolean;
-  drive: boolean;
-  task: boolean;
-  taskboard: boolean;
 }
 
 @UntilDestroy()
@@ -60,19 +50,10 @@ export class GlobalSearchComponent implements OnInit {
 
   public form = this.fb.group<FromSearch>({
     search: null,
-    appointment: false,
     note: false,
-    contact: false,
-    dmp: false,
-    dss: false,
     file: false,
     labbook: false,
     picture: false,
-    plugin: false,
-    resource: false,
-    drive: false,
-    task: false,
-    taskboard: false,
   });
 
   public constructor(
