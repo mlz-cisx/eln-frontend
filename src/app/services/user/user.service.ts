@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {environment} from '@environments/environment';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map, tap, switchMap} from 'rxjs/operators';
-import type {User, Test} from "@joeseln/types";
-import {LogoutService, AuthService} from "@app/services";
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import type { User } from '@joeseln/types';
+import { AuthService, ErrorserviceService, LogoutService } from '@app/services';
 import {Router} from "@angular/router";
 import {UserState, UserStore} from "@app/services/user/user.store";
 import {UserQuery} from "@app/services/user/user.query";
-import {ErrorserviceService} from "@app/services";
 
 @Injectable({
   providedIn: 'root'

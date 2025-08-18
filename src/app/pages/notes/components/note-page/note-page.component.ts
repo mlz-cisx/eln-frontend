@@ -23,26 +23,19 @@ import {
   NotesService,
   UserService,
 } from '@app/services';
-import type {
-  Note,
-  NotePayload,
-  Privileges,
-  Project,
-  User
-} from '@joeseln/types';
+import type { Note, NotePayload, Privileges, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {Observable, of, Subject} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 
 
 interface FormNote {
   subject: FormControl<string | null>;
   content: string | null;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -84,16 +77,9 @@ export class NotePageComponent implements OnInit, OnDestroy {
   public refreshLinkList = new EventEmitter<boolean>();
 
 
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
-
   public form = this.fb.group<FormNote>({
     subject: this.fb.control(null, Validators.required),
     content: null,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -122,7 +108,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
     return {
       subject: this.f.subject.value!,
       content: this.f.content.value ?? '',
-      projects: this.f.projects.value,
     };
   }
 
@@ -182,7 +167,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
             {
               subject: note.subject,
               content: note.content,
-              projects: note.projects,
             },
             {emitEvent: false}
           );

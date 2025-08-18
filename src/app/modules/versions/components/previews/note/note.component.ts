@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {NotesService} from '@app/services';
-import type {ModalCallback, Note, Project} from '@joeseln/types';
+import type { ModalCallback, Note } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
@@ -45,9 +45,7 @@ export class NotePreviewComponent implements OnInit {
 
   public contentFormControl = this.fb.control<string | null>(null);
 
-  public projectsFormControl = this.fb.control<string[] | null>(null);
 
-  public projects: Project[] = [];
 
   public loading = true;
 
@@ -79,9 +77,6 @@ export class NotePreviewComponent implements OnInit {
           this.contentFormControl.patchValue(note.content, {emitEvent: false});
           this.contentFormControl.disable({emitEvent: false});
 
-          //this.loadProjects(note.projects);
-          this.projectsFormControl.patchValue(note.projects, {emitEvent: false});
-          this.projectsFormControl.disable({emitEvent: false});
 
           this.loading = false;
           this.cdr.markForCheck();
@@ -93,9 +88,6 @@ export class NotePreviewComponent implements OnInit {
       );
   }
 
-
-  public loadProjects(projects: string[]): void {
-  }
 
   public onRestoreVersion(): void {
     if (this.loading) {

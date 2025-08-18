@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {LabbooksService} from '@app/services';
-import type {LabBook, ModalCallback, Project} from '@joeseln/types';
+import type { LabBook, ModalCallback } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
@@ -45,11 +45,8 @@ export class LabBookPreviewComponent implements OnInit {
 
   public descriptionFormControl = this.fb.control<string | null>(null);
 
-  public projectsFormControl = this.fb.control<string[] | null>(null);
-
   public isTemplateFormControl = this.fb.control<boolean>(false);
 
-  public projects: Project[] = [];
 
   public loading = true;
 
@@ -84,9 +81,6 @@ export class LabBookPreviewComponent implements OnInit {
           this.descriptionFormControl.patchValue(labBook.description, {emitEvent: false});
           this.descriptionFormControl.disable({emitEvent: false});
 
-          this.loadProjects(labBook.projects);
-          this.projectsFormControl.patchValue(labBook.projects, {emitEvent: false});
-          this.projectsFormControl.disable({emitEvent: false});
 
           this.loading = false;
           this.cdr.markForCheck();
@@ -98,8 +92,6 @@ export class LabBookPreviewComponent implements OnInit {
       );
   }
 
-  public loadProjects(projects: string[]): void {
-  }
 
   private location_reload() {
     location.reload()

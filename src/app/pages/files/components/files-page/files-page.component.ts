@@ -16,13 +16,7 @@ import {
   TableSortChangedEvent,
   TableViewComponent
 } from '@joeseln/table';
-import type {
-  Drive,
-  DssContainer,
-  ModalCallback,
-  Project,
-  User
-} from '@joeseln/types';
+import type { ModalCallback, User } from '@joeseln/types';
 import { DialogRef, DialogService } from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
@@ -82,7 +76,6 @@ export class FilesPageComponent implements OnInit {
 
   public modalRef?: DialogRef;
 
-  public projectsControl = this.fb.control<string | null>(null);
 
   public usersControl = this.fb.control<number | null>(null);
 
@@ -101,21 +94,12 @@ export class FilesPageComponent implements OnInit {
   public usersInput$ = new Subject<string>();
 
 
-  public projects: Project[] = [];
 
-  public favoriteProjects: Project[] = [];
-
-  public projectsInput$ = new Subject<string>();
-
-  public dssContainers: DssContainer[] = [];
 
   public showSidebar = false;
 
-  public project?: string;
 
   public sorting?: TableSortChangedEvent;
-
-  public directories: Drive[] = [];
 
   public showUserFilter = false;
 
@@ -139,7 +123,6 @@ export class FilesPageComponent implements OnInit {
   public get filtersChanged(): boolean {
     /* eslint-disable */
     return Boolean(
-      this.projectsControl.value ||
       this.usersControl.value ||
       this.searchControl.value ||
       this.dssContainersControl.value ||
@@ -153,17 +136,8 @@ export class FilesPageComponent implements OnInit {
     return this.users.find(user => user.pk === this.usersControl.value);
   }
 
-  public get getFilterSelectedProject(): Project | undefined {
-    return this.projects.find(project => project.pk === this.projectsControl.value);
-  }
 
-  public get getFilterSelectedDSSContainer(): DssContainer | undefined {
-    return this.dssContainers.find(dssContainer => dssContainer.pk === this.dssContainersControl.value);
-  }
 
-  public get getFilterSelectedStorage(): Drive | undefined {
-    return this.directories.find(directory => directory.pk === this.storageControl.value);
-  }
 
   public ngOnInit(): void {
 
@@ -171,15 +145,15 @@ export class FilesPageComponent implements OnInit {
       this.currentUser = state.user;
     });
 
-    this.initTranslations(this.showSidebar);
+    this.initTranslations();
     this.initDetails();
     this.initSidebar();
-    this.initSearch(this.showSidebar);
+    this.initSearch();
     this.initSearchInput();
     this.initPageTitle();
   }
 
-  public initTranslations(project = false): void {
+  public initTranslations(): void {
     this.translocoService
       .selectTranslate('files.title')
       .pipe(untilDestroyed(this))
@@ -268,7 +242,7 @@ export class FilesPageComponent implements OnInit {
   public initSidebar(): void {
   }
 
-  public initSearch(project = false): void {
+  public initSearch(): void {
 
 
     this.searchControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
@@ -296,8 +270,6 @@ export class FilesPageComponent implements OnInit {
 
 
     this.route.queryParamMap.pipe(untilDestroyed(this), take(1)).subscribe(queryParams => {
-      const users = queryParams.get('users');
-      const projects = queryParams.get('projects');
       const search = queryParams.get('search');
       const dssContainer = queryParams.get('dssContainers');
       const storages = queryParams.get('storages');
@@ -394,8 +366,6 @@ export class FilesPageComponent implements OnInit {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
 
-    this.projectsControl.setValue(null, {emitEvent: false});
-    this.projects = [];
 
     this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];
@@ -403,7 +373,6 @@ export class FilesPageComponent implements OnInit {
     this.searchControl.setValue(null, {emitEvent: false});
 
     this.dssContainersControl.setValue(null, {emitEvent: false});
-    this.dssContainers = [];
 
     this.storageControl.setValue(null, {emitEvent: false});
 

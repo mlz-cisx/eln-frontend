@@ -24,7 +24,6 @@ import {
 import type {
   PasswordPatchPayload,
   Privileges,
-  Project,
   User,
   UserPatchPayload
 } from '@joeseln/types';
@@ -88,12 +87,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   public refreshLinkList = new EventEmitter<boolean>();
 
-
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   public user_groups = []
   public admin_groups = []

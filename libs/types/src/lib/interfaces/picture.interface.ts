@@ -1,7 +1,5 @@
-import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
 import {Privileges} from "./privileges.interface";
-import {Note} from "./note.interface";
 
 export interface PicturePayload {
   title: string;
@@ -9,8 +7,6 @@ export interface PicturePayload {
   width: number;
   aspectRatio: number;
   background_image: globalThis.File | Blob | string | null;
-  projects?: string[];
-  metadata?: Metadata[];
 }
 
 export interface SketchPayload {
@@ -19,7 +15,6 @@ export interface SketchPayload {
   width: number;
   rendered_image: globalThis.File | Blob | string;
   shapes_image?: globalThis.File | Blob | string | null;
-  projects?: string[];
 }
 
 export interface ConvertTiffPayload {
@@ -59,9 +54,7 @@ export interface Picture {
   scale: number;
   last_modified_at: string;
   last_modified_by: User;
-  metadata: Metadata[];
   pk: string;
-  projects: string[];
   title: string;
   url: string;
   version_number: number;

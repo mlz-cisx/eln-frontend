@@ -3,7 +3,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input, OnDestroy,
+  Input,
+  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild
@@ -14,7 +15,7 @@ import {
   TableSortDirection,
   TableViewComponent
 } from '@joeseln/table';
-import type {DropdownElement, SitePreferences} from '@joeseln/types';
+import type { DropdownElement } from '@joeseln/types';
 import {FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -69,11 +70,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.initTranslations();
-    this.initSitePreferences();
   }
 
   public ngOnDestroy(): void {
-
   }
 
 
@@ -113,11 +112,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public initSitePreferences(): void {
-
-    this.initialLoading = false;
-
-  }
 
   public loadComments(): void {
     this.tableView.loadData();

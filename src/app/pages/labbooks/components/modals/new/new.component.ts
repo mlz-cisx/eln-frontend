@@ -7,19 +7,17 @@ import {
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {LabbooksService} from '@joeseln/services';
-import type {LabBook, Project} from '@joeseln/types';
+import type { LabBook } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {from, of, Subject} from 'rxjs';
 
 interface FormLabBook {
   title: FormControl<string | null>;
   isTemplate: boolean;
   description: string | null;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -40,17 +38,11 @@ export class NewLabBookModalComponent implements OnInit {
 
   public state = ModalState.Unchanged;
 
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   public form = this.fb.group<FormLabBook>({
     title: this.fb.control(null, Validators.required),
     isTemplate: false,
     description: null,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -58,7 +50,6 @@ export class NewLabBookModalComponent implements OnInit {
     public readonly labBooksService: LabbooksService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
-    // private readonly projectsService: ProjectsService,
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService
   ) {
@@ -73,7 +64,6 @@ export class NewLabBookModalComponent implements OnInit {
       title: this.f.title.value,
       is_template: this.f.isTemplate.value,
       description: this.f.description.value ?? '',
-      projects: this.f.projects.value,
     };
   }
 
@@ -93,7 +83,6 @@ export class NewLabBookModalComponent implements OnInit {
           title: this.initialState.title,
           isTemplate: this.initialState.is_template,
           description: this.initialState.description,
-          projects: this.initialState.projects,
         },
         {emitEvent: false}
       );

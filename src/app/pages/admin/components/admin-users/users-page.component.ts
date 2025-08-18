@@ -12,23 +12,23 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
   AdminUsersService,
-  AuthService, NotesService
+  AuthService,
+  NotesService,
+  UserService,
 } from '@app/services';
-import {UserService} from '@app/services';
 import {
   TableColumn,
   TableColumnChangedEvent,
   TableSortChangedEvent,
   TableViewComponent
 } from '@joeseln/table';
-import type {ModalCallback, Project, User} from '@joeseln/types';
+import type { ModalCallback, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {keyBy, merge, values} from 'lodash';
-import {of, Subject} from 'rxjs';
-import {debounceTime, skip, switchMap, take} from 'rxjs/operators';
+import { debounceTime, skip, take } from 'rxjs/operators';
 import {NewUserModalComponent} from '../user_modals/new/new.component';
 
 @UntilDestroy()
@@ -87,8 +87,6 @@ export class UsersPageComponent implements OnInit {
 
   public loading = false;
 
-  public projectsControl = this.fb.control<string | null>(null);
-
   public usersControl = this.fb.control<number | null>(null);
 
   public searchControl = this.fb.control<string | null>(null);
@@ -99,14 +97,6 @@ export class UsersPageComponent implements OnInit {
 
   public users: User[] = [];
 
-  public usersInput$ = new Subject<string>();
-
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-
-  public project?: string;
 
   public sorting?: TableSortChangedEvent;
 
@@ -129,19 +119,6 @@ export class UsersPageComponent implements OnInit {
   ) {
   }
 
-  public get filtersChanged(): boolean {
-    /* eslint-disable */
-    return Boolean(this.projectsControl.value || this.usersControl.value || this.searchControl.value || this.favoritesControl.value);
-    /* eslint-enable */
-  }
-
-  public get getFilterSelectedUser(): User | undefined {
-    return this.users.find(user => user.pk === this.usersControl.value);
-  }
-
-  public get getFilterSelectedProject(): Project | undefined {
-    return this.projects.find(project => project.pk === this.projectsControl.value);
-  }
 
   public ngOnInit(): void {
 
@@ -234,9 +211,7 @@ export class UsersPageComponent implements OnInit {
 
   }
 
-  public initSearch(project = false): void {
-
-
+  public initSearch(): void {
 
 
     this.searchControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
@@ -263,8 +238,6 @@ export class UsersPageComponent implements OnInit {
 
 
     this.route.queryParamMap.pipe(untilDestroyed(this), take(1)).subscribe(queryParams => {
-      const users = queryParams.get('users');
-      const projects = queryParams.get('projects');
       const search = queryParams.get('search');
       const favorites = queryParams.get('favorites');
 
@@ -344,9 +317,6 @@ export class UsersPageComponent implements OnInit {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
 
-    this.projectsControl.setValue(null, {emitEvent: false});
-    this.projects = [];
-
     this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];
 
@@ -356,7 +326,7 @@ export class UsersPageComponent implements OnInit {
   }
 
   public openNewModal(): void {
-    const initialState = this.project ? {projects: [this.project]} : null;
+    const initialState = null;
 
     this.modalRef = this.modalService.open(NewUserModalComponent, {
       closeButton: false,

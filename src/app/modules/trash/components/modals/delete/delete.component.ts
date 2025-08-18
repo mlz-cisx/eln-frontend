@@ -9,7 +9,6 @@ import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {switchMap, take} from 'rxjs/operators';
 
 interface FormDelete {
   doNotShowMessageAgain: boolean;
@@ -50,9 +49,6 @@ export class DeleteModalComponent {
     return this.form.controls;
   }
 
-  public get isProject(): boolean {
-    return true
-  }
 
   public onSubmit(): void {
     if (this.loading || !this.service?.delete) {

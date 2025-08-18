@@ -1,7 +1,6 @@
     <aside>
       <mlzeln-labbook-sidebar *ngIf="editable"
         [id]="id"
-        [projects]="projects"
         [editable]="editable"
         (created)="onAddElement($event)"
         (refresh)="onRefreshGrid($event)"

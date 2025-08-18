@@ -9,8 +9,7 @@ import {
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {CommentsService, UserService} from '@app/services';
-import {LogoutService} from '@app/services';
+import { CommentsService, LogoutService, UserService } from '@app/services';
 import type {CommentPayload, User} from '@joeseln/types';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
@@ -53,7 +52,6 @@ export class CreateCommentComponent implements OnInit {
 
   public state = ModalState.Unchanged;
 
-  public projects: any;
 
   public form = this.fb.group<FormComment>({
     content: this.fb.control(null, Validators.required),

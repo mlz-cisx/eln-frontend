@@ -14,7 +14,6 @@ import type {
   DropdownElement,
   LabBookElementEvent,
   ModalCallback,
-  Project,
   SketchPayload,
 } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
@@ -22,7 +21,6 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import { Subject } from 'rxjs';
 
 interface FormElement {
   parentElement: FormControl<string | null>;
@@ -32,7 +30,6 @@ interface FormElement {
   width: number | null;
   rendered_image: globalThis.File | Blob | string | null;
   shapes_image: globalThis.File | Blob | string | null;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -59,11 +56,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
 
   public position: DropdownElement[] = [];
 
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   public form = this.fb.group<FormElement>({
     parentElement: this.fb.control('labBook', Validators.required),
@@ -73,7 +65,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
     width: null,
     rendered_image: null,
     shapes_image: null,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -107,7 +98,6 @@ export class NewLabBookSketchModalComponent implements OnInit {
       width: 600,
       rendered_image: this.f.rendered_image.value!,
       shapes_image: this.f.shapes_image.value,
-      projects: this.f.projects.value,
     };
   }
 

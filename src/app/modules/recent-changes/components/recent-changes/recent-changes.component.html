@@ -65,19 +65,6 @@
             </div>
           </ng-container>
 
-          <ng-container *ngIf="isMetadataField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngFor="let field of change.old_value">
-              <div class="bg-danger p-2">
-                {{ metadataParameters?.[field.fields.field]?.display }}
-              </div>
-            </ng-container>
-            <ng-container *ngFor="let field of change.new_value">
-              <div class="bg-success p-2">
-                {{ metadataParameters?.[field.fields.field]?.display }}
-              </div>
-            </ng-container>
-          </ng-container>
 
           <ng-container *ngIf="isChecklistField(change.field_name)">
             {{ formatFieldName(change.field_name) }}
@@ -177,19 +164,6 @@
             </ng-container>
           </div>
 
-          <ng-container *ngIf="isProjectField(change.field_name)">
-            {{ formatFieldName(change.field_name) }}
-            <ng-container *ngIf="row.changeset_type === 'I'">
-              {{ t('recentChanges.createDetailsWasSetTo') }}
-              <ng-container *ngIf="!change.new_value">'-'</ng-container>
-            </ng-container>
-            <ng-container *ngIf="row.changeset_type !== 'I'">
-              {{ t('recentChanges.changeDetailsWasChangedFrom') }}
-              <ng-container *ngIf="!change.old_value">'-'</ng-container>
-              {{ t('recentChanges.changeDetailsWasChangedTo') }}
-              <ng-container *ngIf="!change.new_value">'-'</ng-container>
-            </ng-container>
-          </ng-container>
 
           <ng-container
             *ngIf="isTaskStateField(row.object_type.model, change.field_name)">

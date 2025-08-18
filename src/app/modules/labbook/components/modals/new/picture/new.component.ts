@@ -20,7 +20,6 @@ import type {
   LabBookElementEvent,
   ModalCallback,
   PicturePayload,
-  Project
 } from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -28,7 +27,6 @@ import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import type * as pdfjs from 'pdfjs-dist';
-import { Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 declare global {
@@ -46,7 +44,6 @@ interface FormElement {
   aspectRatio: number | null;
   keepAspectRatio: boolean;
   file: FormControl<globalThis.File | Blob | string | null>;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -62,7 +59,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
   public labBookId = this.modalRef.data.labBookId;
 
-  public projectsList: string[] = this.modalRef.data.projects ?? [];
 
   public loading = true;
 
@@ -74,11 +70,7 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
 
   public position: DropdownElement[] = [];
 
-  public projects: Project[] = [];
 
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   public filePlaceholder = this.translocoService.translate('picture.newModal.file.placeholder');
 
@@ -96,7 +88,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
     aspectRatio: null,
     keepAspectRatio: true,
     file: this.fb.control(null, Validators.required),
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -133,7 +124,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
       width: this.f.width.value!,
       aspectRatio: this.f.aspectRatio.value!,
       background_image: this.f.file.value,
-      projects: this.f.projects.value,
     };
   }
 

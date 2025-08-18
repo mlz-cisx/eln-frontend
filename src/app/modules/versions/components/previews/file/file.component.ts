@@ -9,13 +9,12 @@ import {
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {FilesService} from '@app/services';
-import type {Directory, File, ModalCallback, Project} from '@joeseln/types';
+import type { File, ModalCallback } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {map} from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -48,11 +47,7 @@ export class FilePreviewComponent implements OnInit {
 
   public descriptionFormControl = this.fb.control<string | null>(null);
 
-  public projectsFormControl = this.fb.control<string[] | null>(null);
 
-  public projects: Project[] = [];
-
-  public directories: Directory[] = [];
 
   public loading = true;
 
@@ -60,8 +55,6 @@ export class FilePreviewComponent implements OnInit {
     private readonly toastrService: ToastrService,
     private readonly translocoService: TranslocoService,
     private readonly filesService: FilesService,
-    // private readonly drivesService: DrivesService,
-    // private readonly projectsService: ProjectsService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef
   ) {
@@ -83,7 +76,6 @@ export class FilePreviewComponent implements OnInit {
         (file: File) => {
           this.file = {...file};
 
-          this.loadStorages();
           this.storageFormControl.patchValue(file.directory_id, {emitEvent: false});
           this.storageFormControl.disable({emitEvent: false});
 
@@ -91,9 +83,6 @@ export class FilePreviewComponent implements OnInit {
           this.descriptionFormControl.disable({emitEvent: false});
 
 
-          this.loadProjects(file.projects);
-          this.projectsFormControl.patchValue(file.projects, {emitEvent: false});
-          this.projectsFormControl.disable({emitEvent: false});
 
           this.loading = false;
           this.cdr.markForCheck();
@@ -106,39 +95,6 @@ export class FilePreviewComponent implements OnInit {
   }
 
 
-  public loadProjects(projects: string[]): void {
-    // projects.forEach(id => {
-    //   this.projectsService
-    //     .get(id)
-    //     .pipe(untilDestroyed(this))
-    //     .subscribe(project => {
-    //       this.projects = [...this.projects, project];
-    //       this.cdr.markForCheck();
-    //     });
-    // });
-  }
-
-  public loadStorages(): void {
-    // this.drivesService
-    //   .getList()
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     map(drives => {
-    //       this.directories = this.flattenTree(
-    //         this.createTree(
-    //           drives.data
-    //             .flatMap(dir => dir.sub_directories)
-    //             .flatMap(d =>
-    //               d.is_virtual_root ? { ...d, display: drives.data.find(drive => drive.pk === d.drive_id)?.display ?? d.display } : d
-    //             )
-    //         )
-    //       );
-    //     })
-    //   )
-    //   .subscribe(() => {
-    //     this.cdr.markForCheck();
-    //   });
-  }
 
   public createTree(items: any[], id = null, level = 0): any[] {
     return items.filter(dir => dir.directory === id).map(d => ({

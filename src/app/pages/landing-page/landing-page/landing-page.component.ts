@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-import {Test} from "@joeseln/types";
+import { Component, OnInit } from '@angular/core';
 import {UntypedFormControl} from '@angular/forms';
 import {Router} from '@angular/router'
 import {UserService, WebSocketService} from "@app/services";
@@ -14,7 +10,6 @@ import {UserStore} from "@app/services/user/user.store";
   styleUrls: ['./landing-page.component.scss'],
 })
 export class LandingPageComponent implements OnInit {
-  test: Test[] = []
   name = new UntypedFormControl('');
   intervalID: any;
 

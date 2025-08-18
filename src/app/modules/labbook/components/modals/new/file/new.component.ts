@@ -10,19 +10,16 @@ import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import { FilesService, LabbooksService } from '@app/services';
 import type {
-  Directory,
   DropdownElement,
   FilePayload,
   LabBookElementEvent,
   ModalCallback,
-  Project
 } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import { Subject } from 'rxjs';
 import {environment} from "@environments/environment";
 
 interface FormElement {
@@ -33,7 +30,6 @@ interface FormElement {
   file: FormControl<globalThis.File | string | null>;
   storage: string | null;
   description: string | null;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -62,13 +58,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
   public position: DropdownElement[] = [];
 
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
-
-  public directories: Directory[] = [];
 
   public filePlaceholder = this.translocoService.translate('file.newModal.file.placeholder');
 
@@ -80,7 +69,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
     file: this.fb.control(null, Validators.required),
     storage: null,
     description: null,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -114,7 +102,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       path: this.f.file.value!,
       directory_id: this.f.storage.value ?? undefined!,
       description: this.f.description.value ?? '',
-      projects: this.f.projects.value,
       labbook_pk: this.labBookId
     };
   }

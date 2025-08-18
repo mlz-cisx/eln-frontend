@@ -1,8 +1,5 @@
-import type {Directory} from './directory.interface';
-import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
 import {Privileges} from "./privileges.interface";
-import {Note} from "./note.interface";
 
 export interface FilePayload {
   title: string;
@@ -10,8 +7,6 @@ export interface FilePayload {
   directory_id?: string | null;
   path: globalThis.File | string | null;
   description?: string;
-  projects?: string[];
-  metadata?: Metadata[];
   labbook_pk?: string
 }
 
@@ -29,7 +24,6 @@ export interface File {
   deleted: boolean;
   description: string;
   directory_id: string | null;
-  directory?: Directory | null;
   display: string;
   download: string;
   envelope_id: string | null;
@@ -40,12 +34,10 @@ export interface File {
   last_modified_at: string;
   last_modified_by: User;
   location: string;
-  metadata: Metadata[];
   mime_type: string;
   name: string;
   original_filename: string;
   pk: string;
-  projects: string[];
   title: string;
   url: string;
   version_number: number;

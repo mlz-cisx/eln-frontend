@@ -10,27 +10,21 @@ import {
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {
-  AuthService,
-  PicturesService,
-} from '@app/services';
-import {
-  UserService,
-} from '@app/services';
+import { AuthService, PicturesService, UserService } from '@app/services';
 import {
   TableColumn,
   TableColumnChangedEvent,
   TableSortChangedEvent,
   TableViewComponent
 } from '@joeseln/table';
-import type {ModalCallback, Project, User} from '@joeseln/types';
+import type { ModalCallback, User } from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {keyBy, merge, values} from 'lodash';
-import {Observable, of, Subject} from 'rxjs';
-import {debounceTime,  skip, take} from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { debounceTime, skip, take } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -80,7 +74,6 @@ export class PicturesPageComponent implements OnInit {
 
   public modalRef?: DialogRef;
 
-  public projectsControl = this.fb.control<string | null>(null);
 
   public usersControl = this.fb.control<number | null>(null);
 
@@ -92,16 +85,9 @@ export class PicturesPageComponent implements OnInit {
 
   public users: User[] = [];
 
-  public usersInput$ = new Subject<string>();
-
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
 
   public showSidebar = false;
 
-  public project?: string;
 
   public sorting?: TableSortChangedEvent;
 
@@ -124,18 +110,8 @@ export class PicturesPageComponent implements OnInit {
   ) {
   }
 
-  public get filtersChanged(): boolean {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return Boolean(this.projectsControl.value || this.usersControl.value || this.searchControl.value || this.favoritesControl.value);
-  }
 
-  public get getFilterSelectedUser(): User | undefined {
-    return this.users.find(user => user.pk === this.usersControl.value);
-  }
 
-  public get getFilterSelectedProject(): Project | undefined {
-    return this.projects.find(project => project.pk === this.projectsControl.value);
-  }
 
   public ngOnInit(): void {
 
@@ -143,14 +119,14 @@ export class PicturesPageComponent implements OnInit {
       this.currentUser = state.user;
     });
 
-    this.initTranslations(this.showSidebar);
+    this.initTranslations();
     this.initSidebar();
-    this.initSearch(this.showSidebar);
+    this.initSearch();
     this.initSearchInput();
     this.initPageTitle();
   }
 
-  public initTranslations(project = false): void {
+  public initTranslations(): void {
     this.translocoService
       .selectTranslate('pictures.title')
       .pipe(untilDestroyed(this))
@@ -229,10 +205,7 @@ export class PicturesPageComponent implements OnInit {
   public initSidebar(): void {
   }
 
-  public initSearch(project = false): void {
-
-
-
+  public initSearch(): void {
     this.searchControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
       const queryParams = new URLSearchParams(window.location.search);
 
@@ -334,9 +307,6 @@ export class PicturesPageComponent implements OnInit {
   public onResetFilters(): void {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
-
-    this.projectsControl.setValue(null, {emitEvent: false});
-    this.projects = [];
 
     this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];

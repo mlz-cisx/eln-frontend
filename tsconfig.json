@@ -32,9 +32,6 @@
       "@joeseln/types": [
         "./libs/types/src/index.ts"
       ],
-      "@joeseln/mocks": [
-        "./libs/mocks/src/index.ts"
-      ],
       "@joeseln/forms": [
         "./libs/forms/src/index.ts"
       ],

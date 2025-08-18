@@ -35,21 +35,19 @@ import type {
   LabBookPayload,
   ModalCallback,
   Privileges,
-  Project,
   User,
 } from '@joeseln/types';
 import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 
 interface FormLabBook {
   labbook_title: FormControl<string | null>;
   strict_mode: boolean;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -102,18 +100,12 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public newModalComponent = NewLabBookModalComponent;
 
-  public projects: Project[] = [];
 
-  public favoriteProjects: Project[] = [];
-
-
-  public projectInput$ = new Subject<string>();
 
 
   public form = this.fb.group<FormLabBook>({
     labbook_title: this.fb.control(null, Validators.required),
     strict_mode: false,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -144,7 +136,6 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     return {
       title: this.f.labbook_title.value!,
       strict_mode: this.f.strict_mode.value,
-      projects: this.f.projects.value,
     };
   }
 
@@ -221,7 +212,6 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
             {
               labbook_title: labBook.title,
               strict_mode: labBook.strict_mode,
-              projects: labBook.projects,
             },
             {emitEvent: false}
           );

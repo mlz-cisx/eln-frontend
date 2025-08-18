@@ -17,13 +17,13 @@ import {
   TableSortChangedEvent,
   TableViewComponent
 } from '@joeseln/table';
-import type {ModalCallback, Project, User} from '@joeseln/types';
+import type { ModalCallback, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {keyBy, merge, values} from 'lodash';
-import {Observable, of, Subject} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {debounceTime, skip, take} from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 
@@ -72,7 +72,6 @@ export class LabBooksPageComponent implements OnInit {
 
   public loading = false;
 
-  public projectsControl = this.fb.control<string | null>(null);
 
   public usersControl = this.fb.control<number | null>(null);
 
@@ -84,17 +83,11 @@ export class LabBooksPageComponent implements OnInit {
 
   public params = new HttpParams();
 
-  public usersInput$ = new Subject<string>();
 
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectsInput$ = new Subject<string>();
 
   public showSidebar = false;
 
-  public project?: string;
+
 
   public sorting?: TableSortChangedEvent;
 
@@ -123,10 +116,6 @@ export class LabBooksPageComponent implements OnInit {
     return this.users.find(user => user.pk === this.usersControl.value);
   }
 
-  public get getFilterSelectedProject(): Project | undefined {
-    return this.projects.find(project => project.pk === this.projectsControl.value);
-  }
-
   public ngOnInit(): void {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
@@ -135,14 +124,14 @@ export class LabBooksPageComponent implements OnInit {
       }
     });
 
-    this.initTranslations(this.showSidebar);
+    this.initTranslations();
     this.initSidebar();
-    this.initSearch(this.showSidebar);
+    this.initSearch();
     this.initSearchInput();
     this.initPageTitle();
   }
 
-  public initTranslations(project = false): void {
+  public initTranslations(): void {
     this.translocoService
       .selectTranslate('labbooks.title')
       .pipe(untilDestroyed(this))
@@ -202,7 +191,7 @@ export class LabBooksPageComponent implements OnInit {
   public initSidebar(): void {
   }
 
-  public initSearch(project = false): void {
+  public initSearch(): void {
 
 
     this.searchControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
@@ -229,8 +218,6 @@ export class LabBooksPageComponent implements OnInit {
 
 
     this.route.queryParamMap.pipe(untilDestroyed(this), take(1)).subscribe(queryParams => {
-      const users = queryParams.get('users');
-      const projects = queryParams.get('projects');
       const search = queryParams.get('search');
       const favorites = queryParams.get('favorites');
 
@@ -311,8 +298,6 @@ export class LabBooksPageComponent implements OnInit {
     this.params = new HttpParams();
     history.pushState(null, '', window.location.pathname);
 
-    this.projectsControl.setValue(null, {emitEvent: false});
-    this.projects = [];
 
     this.usersControl.setValue(null, {emitEvent: false});
     this.users = [];

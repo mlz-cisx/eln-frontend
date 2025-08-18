@@ -236,8 +236,6 @@ export class DetailsDropdownComponent implements OnInit {
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
-  public onOpenDuplicateModal(): void {
-  }
 
   public onOpenShareModal(): void {
   }
@@ -250,9 +248,4 @@ export class DetailsDropdownComponent implements OnInit {
     }
   }
 
-  public duplicateProject(id: string): void {
-  }
-
-  public duplicateDMP(id: string): void {
-  }
 }

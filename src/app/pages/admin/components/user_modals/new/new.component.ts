@@ -4,23 +4,18 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import {UntypedFormGroup, Validators, UntypedFormBuilder,} from '@angular/forms';
-import {ModalState} from '@app/enums/modal-state.enum';
 import {
-  AdminUsersService,
-  NotesService,
-} from '@app/services';
-import type {
-  Project,
-  UserPayload,
-  User
-} from '@joeseln/types';
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { ModalState } from '@app/enums/modal-state.enum';
+import { AdminUsersService, NotesService } from '@app/services';
+import type { User, UserPayload } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
-import {FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {Subject} from 'rxjs';
 
 
 @UntilDestroy()
@@ -37,11 +32,7 @@ export class NewUserModalComponent implements OnInit {
 
   public state = ModalState.Unchanged;
 
-  public projects: Project[] = [];
 
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   public form = this.fb.group({
 

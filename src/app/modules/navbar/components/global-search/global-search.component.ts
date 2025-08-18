@@ -30,7 +30,6 @@ interface FromSearch {
   labbook: boolean;
   picture: boolean;
   plugin: boolean;
-  project: boolean;
   resource: boolean;
   drive: boolean;
   task: boolean;
@@ -70,7 +69,6 @@ export class GlobalSearchComponent implements OnInit {
     labbook: false,
     picture: false,
     plugin: false,
-    project: false,
     resource: false,
     drive: false,
     task: false,
@@ -83,7 +81,6 @@ export class GlobalSearchComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly labbooksService: LabbooksService,
-    private readonly router: Router,
   ) {
   }
 

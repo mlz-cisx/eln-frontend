@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import {TableColumn, TableViewComponent} from '@joeseln/table';
 import type {
-  MetadataField,
   RecentChanges,
   RecentChangesChangeRecord,
   User
@@ -19,10 +18,6 @@ import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {cloneDeep} from 'lodash';
 import { map } from 'rxjs/operators';
-
-interface MetadataParameters {
-  [id: string]: MetadataField;
-}
 
 @UntilDestroy()
 @Component({
@@ -56,7 +51,6 @@ export class RecentChangesComponent implements OnInit {
 
   public loading = false;
 
-  public metadataParameters?: MetadataParameters;
 
   public constructor(
     private readonly translocoService: TranslocoService,
@@ -186,7 +180,6 @@ export class RecentChangesComponent implements OnInit {
       !this.isDateTimeField(fieldName) &&
       !this.isFileSizeField(fieldName) &&
       !this.isUserField(fieldName) &&
-      !this.isProjectField(fieldName) &&
       !this.isTaskStateField(contentTypeModel, fieldName) &&
       !this.isTaskPriorityField(contentTypeModel, fieldName) &&
       !this.isResourceTypeField(contentTypeModel, fieldName) &&
@@ -251,9 +244,6 @@ export class RecentChangesComponent implements OnInit {
     return ['attending_users', 'assigned_users', 'responsible_users'].includes(fieldName);
   }
 
-  public isProjectField(fieldName: string): boolean {
-    return ['projects', 'parent_project'].includes(fieldName);
-  }
 
   public isTaskStateField(contentTypeModel: string, fieldName: string): boolean {
     return contentTypeModel === 'task' && fieldName === 'state';

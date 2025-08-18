@@ -12,7 +12,6 @@ import {
 import {Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ProjectSidebarItem} from '@app/enums/project-sidebar-item.enum';
 import {
   CommentsComponent
 } from '@app/modules/comment/components/comments/comments.component';
@@ -20,21 +19,13 @@ import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
 import { AuthService, FilesService, UserService } from '@app/services';
-import type {
-  Directory,
-  Drive,
-  File,
-  FilePayload,
-  Privileges,
-  Project,
-  User
-} from '@joeseln/types';
+import type { File, FilePayload, Privileges, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {Observable, of, Subject} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 
 
@@ -42,7 +33,6 @@ interface FormFile {
   title: FormControl<string | null>;
   name: FormControl<string | null>;
   storage: string | null;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -59,7 +49,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public id = this.route.snapshot.paramMap.get('id')!;
 
-  public sidebarItem = ProjectSidebarItem.Files;
 
   public currentUser: User | null = null;
 
@@ -89,15 +78,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
   public refreshLinkList = new EventEmitter<boolean>();
 
 
-  public projects: Project[] = [];
 
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
-
-  public storages: Drive[] = [];
-
-  public directories: Directory[] = [];
 
 
   @ViewChild('uploadInput')
@@ -107,7 +88,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
     title: this.fb.control(null, Validators.required),
     name: this.fb.control(null, Validators.required),
     storage: null,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -139,10 +119,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
     const payload: Omit<FilePayload, 'path'> = {
       title: this.f.title.value!,
       name: this.f.name.value!,
-      projects: this.f.projects.value,
     };
 
-    if (this.privileges?.fullAccess && this.directories.length) {
+    if (this.privileges?.fullAccess) {
       payload.directory_id = this.f.storage.value ?? null;
     }
 
@@ -205,7 +184,6 @@ export class FilePageComponent implements OnInit, OnDestroy {
               title: file.title,
               name: file.name,
               storage: file.directory_id,
-              projects: file.projects,
             },
             {emitEvent: false}
           );

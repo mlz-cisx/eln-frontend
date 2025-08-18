@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+} from '@angular/core';
 import type { LabBookElementEvent } from '@joeseln/types';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -13,8 +18,6 @@ export class LabBookDrawBoardComponent {
   @Input()
   public id!: string;
 
-  @Input()
-  public projects: string[] = [];
 
   @Input()
   public editable? = false;

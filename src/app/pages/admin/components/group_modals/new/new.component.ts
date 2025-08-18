@@ -10,7 +10,6 @@ import {
   NotesService,
 } from '@app/services';
 import type {
-  Project,
   GroupPayload,
   Group
 } from '@joeseln/types';
@@ -38,12 +37,6 @@ export class NewGroupModalComponent implements OnInit {
   public loading = false;
 
   public state = ModalState.Unchanged;
-
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   public form = this.fb.group({
       groupname: [null, [Validators.required]],

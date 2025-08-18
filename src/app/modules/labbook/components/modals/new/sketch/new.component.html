@@ -66,38 +66,7 @@
                 [placeholder]="t('labBook.newSketchModal.title.placeholder')"
               />
             </div>
-            <div class="mb-4">
-              <label for="projects-modal">{{ t('labBook.newSketchModal.projects.label') }}</label>
-              <ng-select
-                class="mlzeln-select"
-                formControlName="projects"
-                labelForId="projects-modal"
-                name="projects-modal"
-                [placeholder]="t('labBook.newSketchModal.projects.placeholder')"
-                [multiple]="true"
-                [typeahead]="projectInput$"
-                [items]="projects"
-                groupBy="is_favourite"
-                bindLabel="name"
-                bindValue="pk"
-              >
-                <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                  {{ item.name }}
-                  <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                  <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>
-                  <span [ngOptionHighlight]="search">{{ item.name }}</span>
-                </ng-template>
-                <ng-template ng-optgroup-tmp let-item="item">
-                  <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>
-                  <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>
-                </ng-template>
-                <ng-template ng-notfound-tmp>
-                  <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>
-                </ng-template>
-              </ng-select>
-            </div>
+
             <div class="mb-4">
               <mlzeln-picture-editor [sketch]="true" [editable]="true" (saveSketch)="onSubmit($event)"></mlzeln-picture-editor>
             </div>

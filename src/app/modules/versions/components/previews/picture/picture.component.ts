@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {PicturesService} from '@app/services';
-import type {ModalCallback, Picture, Project} from '@joeseln/types';
+import type { ModalCallback, Picture } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
@@ -43,11 +43,7 @@ export class PicturePreviewComponent implements OnInit {
 
   public picture?: Picture;
 
-  public contentFormControl = this.fb.control<string | null>(null);
 
-  public projectsFormControl = this.fb.control<string[] | null>(null);
-
-  public projects: Project[] = [];
 
   public loading = true;
 
@@ -71,9 +67,6 @@ export class PicturePreviewComponent implements OnInit {
       .subscribe(
         (picture: Picture) => {
           this.picture = {...picture};
-          this.loadProjects(picture.projects);
-          this.projectsFormControl.patchValue(picture.projects, {emitEvent: false});
-          this.projectsFormControl.disable({emitEvent: false});
 
           this.loading = false;
           this.cdr.markForCheck();
@@ -85,8 +78,6 @@ export class PicturePreviewComponent implements OnInit {
       );
   }
 
-  public loadProjects(projects: string[]): void {
-  }
 
   public onRestoreVersion(): void {
     if (this.loading) {

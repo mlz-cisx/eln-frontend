@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {UserService} from "@app/services";
-import {User, Test} from "@joeseln/types";
+import { User } from '@joeseln/types';
 import {UserStore} from "@app/services/user/user.store";
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {ChangeDetectorRef} from '@angular/core';
 import {TranslocoService} from '@ngneat/transloco';
 import {ToastrService} from 'ngx-toastr';
 
@@ -16,7 +15,6 @@ import {ToastrService} from 'ngx-toastr';
 })
 
 export class ProfilePageComponent implements OnInit {
-  test: Test[] = []
   user: User | undefined;
   public loading = false;
 

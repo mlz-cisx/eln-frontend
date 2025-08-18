@@ -1,13 +1,9 @@
-import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
 import {Privileges} from "./privileges.interface";
-import {LabBook} from "./labbook.interface";
 
 export interface NotePayload {
   subject: string;
   content: string | null;
-  projects?: string[];
-  metadata?: Metadata[];
 }
 
 export interface Note {
@@ -17,9 +13,7 @@ export interface Note {
   created_at: string | null;
   content_type_model: string;
   subject: string;
-  metadata: Metadata[];
   version_number: number;
-  projects: string[];
   display: string;
   content: string;
   url: string;

@@ -1,6 +1,4 @@
 import {Privileges} from "./privileges.interface";
-import {Note} from "./note.interface";
-import {Metadata} from "./metadata.interface";
 
 export interface UserProfile {
   academic_title: string;
@@ -26,9 +24,7 @@ export interface UserProfile {
 }
 
 export interface User {
-  available_storage_megabyte?: number;
   color?: string;
-  used_storage_megabyte?: number;
   email: string;
   is_active?: boolean;
   is_staff?: boolean;
@@ -58,11 +54,6 @@ export interface UserState {
   user: User | null;
   token: string | null;
   loggedIn: boolean;
-}
-
-export interface ExternalUserPayload {
-  email: string;
-  message: string;
 }
 
 export interface User_with_privileges {

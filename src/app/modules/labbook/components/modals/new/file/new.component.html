@@ -78,70 +78,12 @@
                 }}</label>
               </div>
             </div>
-            <div class="mb-4">
-              <label for="storage-modal">{{ t('labBook.newFileElementModal.storage.label') }}</label>
-              <ng-select
-                class="mlzeln-select"
-                formControlName="storage"
-                labelForId="storage-modal"
-                name="storage-modal"
-                [placeholder]="t('labBook.newFileElementModal.storage.placeholder')"
-                [items]="directories"
-                bindLabel="display"
-                bindValue="pk"
-                [clearable]="true"
-                [searchable]="true"
-                slot="input"
-              >
-                <ng-template ng-label-tmp let-item="item">
-                  <joeseln-icon [className]="item.is_virtual_root ? 'wb-storages' : 'wb-folder'"></joeseln-icon>{{ ' '
-                  }}{{ item.display }}
-                </ng-template>
 
-                <ng-template ng-option-tmp let-item="item">
-                  <div [style.padding-left.px]="item.is_virtual_root ? 0 : item.level * 10">
-                    <joeseln-icon [className]="item.is_virtual_root ? 'wb-storages' : 'wb-folder'"></joeseln-icon>{{ ' '
-                    }}{{ item.display }}
-                  </div>
-                </ng-template>
-              </ng-select>
-            </div>
             <div class="mb-4">
               <label for="description-modal">{{ t('labBook.newFileElementModal.description.label') }}</label>
               <mlzeln-wysiwyg-editor [id]="'description-modal'" formControlName="description"></mlzeln-wysiwyg-editor>
             </div>
-            <div class="mb-4">
-              <label for="projects-modal">{{ t('labBook.newFileElementModal.projects.label') }}</label>
-              <ng-select
-                class="mlzeln-select"
-                formControlName="projects"
-                labelForId="projects-modal"
-                name="projects-modal"
-                [placeholder]="t('labBook.newFileElementModal.projects.placeholder')"
-                [multiple]="true"
-                [typeahead]="projectInput$"
-                [items]="projects"
-                groupBy="is_favourite"
-                bindLabel="name"
-                bindValue="pk"
-              >
-                <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                  {{ item.name }}
-                  <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                  <joeseln-icon className="wb-favorite-3" class="favorite-icon" *ngIf="item.is_favourite"></joeseln-icon>
-                  <span [ngOptionHighlight]="search">{{ item.name }}</span>
-                </ng-template>
-                <ng-template ng-optgroup-tmp let-item="item">
-                  <ng-container *ngIf="item.is_favourite">{{ t('formInput.select.optgroup.favorite') }}</ng-container>
-                  <ng-container *ngIf="!item.is_favourite">{{ t('formInput.select.optgroup.other') }}</ng-container>
-                </ng-template>
-                <ng-template ng-notfound-tmp>
-                  <div class="ng-option">{{ t('formInput.select.noMatch') }}</div>
-                </ng-template>
-              </ng-select>
-            </div>
+
 
             <div class="flex justify-between mt-5">
               <div>

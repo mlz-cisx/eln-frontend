@@ -54,8 +54,7 @@ export class LabBookSidebarComponent implements OnInit {
   @Input()
   public id!: string;
 
-  @Input()
-  public projects: string[] = [];
+
 
   @Input()
   public editable? = false;
@@ -134,7 +133,7 @@ export class LabBookSidebarComponent implements OnInit {
   public onOpenNewNoteElementModal(): void {
     this.modalRef = this.modalService.open(NewLabBookNoteElementModalComponent, {
       closeButton: false,
-      data: {labBookId: this.id, projects: this.projects},
+        data: { labBookId: this.id },
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
@@ -144,7 +143,7 @@ export class LabBookSidebarComponent implements OnInit {
     this.modalRef = this.modalService.open(NewLabBookSketchModalComponent, {
       closeButton: false,
       width: '652px',
-      data: {labBookId: this.id, projects: this.projects},
+      data: { labBookId: this.id },
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
@@ -153,7 +152,7 @@ export class LabBookSidebarComponent implements OnInit {
   public onOpenNewPictureElementModal(): void {
     this.modalRef = this.modalService.open(NewLabBookPictureElementModalComponent, {
       closeButton: false,
-      data: {labBookId: this.id, projects: this.projects},
+        data: { labBookId: this.id },
     } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
@@ -162,7 +161,7 @@ export class LabBookSidebarComponent implements OnInit {
   public onOpenNewFileElementModal(): void {
     this.modalRef = this.modalService.open(NewLabBookFileElementModalComponent, {
       closeButton: false,
-      data: {labBookId: this.id, projects: this.projects},
+        data: { labBookId: this.id },
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
@@ -196,7 +195,7 @@ export class LabBookSidebarComponent implements OnInit {
   public onOpenQRCodeModal() {
     this.modalRef = this.modalService.open(NewQRcodeModalComponent, {
       closeButton: false,
-      data: {labBookId: this.id, projects: this.projects},
+      data: { labBookId: this.id },
     } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));

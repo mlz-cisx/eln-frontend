@@ -19,13 +19,13 @@ import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
 import { AuthService, PicturesService, UserService } from '@app/services';
-import type { Picture, Privileges, Project, User } from '@joeseln/types';
+import type { Picture, Privileges, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@ngneat/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {Observable, of, Subject} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 
 
@@ -34,7 +34,6 @@ interface FormPicture {
   height: number | null;
   width: number | null;
   aspectRatio: number | null;
-  projects: FormControl<string[]>;
 }
 
 @UntilDestroy()
@@ -88,11 +87,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public refreshLinkList = new EventEmitter<boolean>();
 
 
-  public projects: Project[] = [];
-
-  public favoriteProjects: Project[] = [];
-
-  public projectInput$ = new Subject<string>();
 
   @ViewChild('uploadInput')
   public uploadInput!: ElementRef;
@@ -102,7 +96,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     height: null,
     width: null,
     aspectRatio: null,
-    projects: this.fb.control([]),
   });
 
   public constructor(
@@ -133,7 +126,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
       height: this.f.height.value,
       width: this.f.width.value,
       aspectRatio: this.f.aspectRatio.value ?? 1.0,
-      projects: this.f.projects.value,
     };
   }
 
@@ -196,7 +188,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
               height: picture.height,
               width: picture.width,
               aspectRatio: picture.width / picture.height,
-              projects: picture.projects,
             },
             {emitEvent: false}
           );

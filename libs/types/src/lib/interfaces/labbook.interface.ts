@@ -1,13 +1,10 @@
-import type {Metadata} from './metadata.interface';
 import type {User} from './user.interface';
 import {Privileges} from "./privileges.interface";
 
 export interface LabBookPayload {
   title: string;
-  projects: string[];
   description?: string;
   strict_mode: boolean;
-  metadata?: Metadata[];
 }
 
 export interface LabBookChildElement {
@@ -26,9 +23,7 @@ export interface LabBook {
   created_at: string;
   last_modified_by: User;
   last_modified_at: string;
-  metadata: Metadata[];
   display: string;
-  projects: string[];
   description: string;
   created_by: User;
   url: string;
