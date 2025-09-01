@@ -172,7 +172,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             position_x: 0,
             position_y: event.position === 'top' ? 0 : this.getMaxYPosition(sectionElements),
             width: 13,
-            height: event.height ?? 7,
+            height: event.height ?? 10,
           };
 
           return this.labBooksService.addElement(this.id, element).pipe(untilDestroyed(this));
