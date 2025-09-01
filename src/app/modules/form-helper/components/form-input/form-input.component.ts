@@ -66,6 +66,7 @@ export class FormInputComponent implements AfterViewInit {
         Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue))) {
         this.labbookdrawboard_file.onSubmit()
       }
+      this.reset();
       return false
     })
 
