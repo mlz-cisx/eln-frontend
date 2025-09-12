@@ -10,14 +10,25 @@
     align-items: center;
     justify-content: center;
     min-height: 95vh;
-    background-image: url("../../../../../assets/images/lb.png");
+    padding: 0;
+    background-image: url("../../../../../assets/images/login_landscape.png");
     background-repeat: no-repeat;
     background-position: center;
-    padding: 0;
+    background-size: contain;
+  }
+
+  .spacer-top {
+    height: 10vh;
+  }
+
+  .spacer-bottom {
+    height: 20vh;
   }
 
   #oidc-button-container {
-    box-shadow: #fc0 1px 0 20px;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
   }
 
   /* Form container styling */
@@ -25,7 +36,7 @@
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: #fc0 1px 0 20px;
+    border: 1px solid $primary-color;
     width: 100%;
     max-width: 400px;
     margin-bottom: 50px;
@@ -79,6 +90,42 @@
       &:visited {
         color: $invalid-border-color;
       }
+    }
+  }
+
+  @media (orientation: portrait) {
+    main {
+      background-image: url("../../../../../assets/images/login_portait.png");
+    }
+  }
+
+  @media (width <= 1280px) {
+    main {
+      padding: 0 10px;
+      background-size: contain;
+    }
+
+    form {
+      padding: 10px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    button {
+      font-size: 13px;
+      padding: 8px;
+    }
+
+    .button-container {
+      flex-direction: column;
+    }
+
+    .spacer-top {
+      height: 5vh;
+    }
+
+    .spacer-bottom {
+      height: 10vh;
     }
   }
 }

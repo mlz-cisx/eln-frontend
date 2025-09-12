@@ -18,27 +18,22 @@
     justify-content: center;
     display: flex;
     align-items: center;
+    margin-top: 0;
     background-repeat: no-repeat;
     background-position: center;
-    margin-top: 0;
-    background-image: url("../../../../assets/images/lb.png");
+    background-image: url("../../../../assets/images/landing_landscape.png");
+    background-size: contain;
   }
 
   ::ng-deep.description-container {
     overflow-wrap: break-word;
     max-height: 300px;
     overflow-y: auto;
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
   }
 
-  span {
-    font-size: 140px;
-    font-weight: 700;
-    color: $primary-color;
-    text-shadow: #fc0 1px 0 20px;
+  @media (orientation: portrait) {
+    #bg-img {
+      background-image: url("../../../../assets/images/landing_portrait.png");
+    }
   }
 }
