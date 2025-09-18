@@ -108,7 +108,7 @@ label {
 }
 
 .search-input {
-  width: 100%;
+  width: 40% !important;
 
   @media (min-width: $breakpoint-lg) {
     width: 415px;
@@ -536,4 +536,8 @@ mlzeln-dashboard-page {
 .changes img {
   max-width: 200px;
   height: auto;
+}
+
+.navbar {
+  justify-content: flex-start !important;
 }
