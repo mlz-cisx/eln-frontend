@@ -1,4 +1,4 @@
-import {DOCUMENT} from '@angular/common';
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -7,7 +7,8 @@ import {
   EventEmitter,
   Inject,
   OnInit,
-  Output
+  Output,
+  DOCUMENT
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';

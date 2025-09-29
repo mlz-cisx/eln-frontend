@@ -1,5 +1,5 @@
 import {
-  afterRender,
+  afterEveryRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -110,7 +110,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly modalService: DialogService,
     private readonly renderer: Renderer2,
   ) {
-    afterRender(() => {
+    afterEveryRender(() => {
       if (this.contentContainer) {
         const elements = this.contentContainer.nativeElement.getElementsByClassName('tox-tinymce');
         if (elements[0]) {

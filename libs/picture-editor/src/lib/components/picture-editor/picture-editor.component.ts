@@ -1,4 +1,4 @@
-import {DOCUMENT} from '@angular/common';
+
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -15,6 +15,7 @@ import {
   Output,
   ViewChild,
   ViewEncapsulation,
+  DOCUMENT
 } from '@angular/core';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type {ResizeEvent} from 'angular-resizable-element';
