@@ -4,9 +4,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-form-asterisk',
-  templateUrl: './form-asterisk.component.html',
-  styleUrls: ['./form-asterisk.component.scss'],
+    selector: 'mlzeln-form-asterisk',
+    templateUrl: './form-asterisk.component.html',
+    styleUrls: ['./form-asterisk.component.scss'],
+    standalone: false
 })
 export class FormAsteriskComponent implements OnInit {
   @Input()

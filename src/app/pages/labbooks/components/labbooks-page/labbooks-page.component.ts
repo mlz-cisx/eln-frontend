@@ -30,10 +30,11 @@ import {NewLabBookModalComponent} from '../modals/new/new.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbooks-page',
-  templateUrl: './labbooks-page.component.html',
-  styleUrls: ['./labbooks-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbooks-page',
+    templateUrl: './labbooks-page.component.html',
+    styleUrls: ['./labbooks-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBooksPageComponent implements OnInit {
   public title = '';

@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { format, parseISO } from 'date-fns';
 
 @Pipe({
-  name: 'formatDate',
+    name: 'formatDate',
+    standalone: false
 })
 export class FormatDatePipe implements PipeTransform {
   public transform(

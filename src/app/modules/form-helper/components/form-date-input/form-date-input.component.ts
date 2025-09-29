@@ -4,10 +4,11 @@ import type { DatePickerConfig } from '@joeseln/types';
 import flatpickr from 'flatpickr';
 
 @Component({
-  selector: 'mlzeln-form-date-input',
-  templateUrl: './form-date-input.component.html',
-  styleUrls: ['./form-date-input.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-form-date-input',
+    templateUrl: './form-date-input.component.html',
+    styleUrls: ['./form-date-input.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FormDateInputComponent implements ControlValueAccessor, AfterViewInit {
   @Input()

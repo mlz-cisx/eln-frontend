@@ -22,10 +22,11 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-comments',
-  templateUrl: './comments.component.html',
-  styleUrls: ['./comments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-comments',
+    templateUrl: './comments.component.html',
+    styleUrls: ['./comments.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CommentsComponent implements OnInit, OnDestroy {
   @Input()

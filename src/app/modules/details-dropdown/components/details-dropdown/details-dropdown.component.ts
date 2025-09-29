@@ -23,10 +23,11 @@ import {environment} from "@environments/environment";
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-details-dropdown',
-  templateUrl: './details-dropdown.component.html',
-  styleUrls: ['./details-dropdown.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-details-dropdown',
+    templateUrl: './details-dropdown.component.html',
+    styleUrls: ['./details-dropdown.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DetailsDropdownComponent implements OnInit {
   @Input()

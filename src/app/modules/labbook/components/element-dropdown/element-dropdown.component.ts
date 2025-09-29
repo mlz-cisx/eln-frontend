@@ -44,10 +44,11 @@ interface ElementRemoval {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-element-dropdown',
-  templateUrl: './element-dropdown.component.html',
-  styleUrls: ['./element-dropdown.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-element-dropdown',
+    templateUrl: './element-dropdown.component.html',
+    styleUrls: ['./element-dropdown.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookElementDropdownComponent implements OnInit {
   @Input()

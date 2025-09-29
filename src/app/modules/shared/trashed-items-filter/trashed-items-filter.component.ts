@@ -3,10 +3,11 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-trashed-items-filter',
-  templateUrl: './trashed-items-filter.component.html',
-  styleUrls: ['./trashed-items-filter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-trashed-items-filter',
+    templateUrl: './trashed-items-filter.component.html',
+    styleUrls: ['./trashed-items-filter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TrashedItemsFilterComponent {
 

@@ -36,7 +36,7 @@ import {
   NewQRcodeModalComponent
 } from "@app/pages/labbooks/components/modals/qrcode/qr_code";
 import {LabBooksPageRoutingModule} from './labbooks-page-routing.module';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeComponent as QRCodeModule } from 'angularx-qrcode';
 import {NavbarModule} from "@app/modules/navbar/navbar.module";
 
 

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'mlzeln-details-collapse-element',
-  templateUrl: './details-collapse-element.component.html',
-  styleUrls: ['./details-collapse-element.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-details-collapse-element',
+    templateUrl: './details-collapse-element.component.html',
+    styleUrls: ['./details-collapse-element.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DetailsCollapseElementComponent {
   @Input()

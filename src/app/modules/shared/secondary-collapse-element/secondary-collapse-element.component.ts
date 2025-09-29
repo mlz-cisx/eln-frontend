@@ -6,10 +6,11 @@ interface CollapseData {
 }
 
 @Component({
-  selector: 'mlzeln-secondary-collapse-element',
-  templateUrl: './secondary-collapse-element.component.html',
-  styleUrls: ['./secondary-collapse-element.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-secondary-collapse-element',
+    templateUrl: './secondary-collapse-element.component.html',
+    styleUrls: ['./secondary-collapse-element.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SecondaryCollapseElementComponent implements OnInit {
   @Input()

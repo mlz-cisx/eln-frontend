@@ -48,10 +48,11 @@ interface FormElement {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-new-labbook-picture-element-modal',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-new-labbook-picture-element-modal',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NewLabBookPictureElementModalComponent implements OnInit, AfterViewInit {
   @Output()

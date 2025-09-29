@@ -26,10 +26,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-new-group-modal',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-new-group-modal',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NewGroupModalComponent implements OnInit {
   public initialState?: Group = this.modalRef.data?.initialState;

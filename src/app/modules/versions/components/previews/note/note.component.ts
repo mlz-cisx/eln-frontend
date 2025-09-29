@@ -18,10 +18,11 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-note-preview',
-  templateUrl: './note.component.html',
-  styleUrls: ['./note.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-note-preview',
+    templateUrl: './note.component.html',
+    styleUrls: ['./note.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NotePreviewComponent implements OnInit {
   @Input()

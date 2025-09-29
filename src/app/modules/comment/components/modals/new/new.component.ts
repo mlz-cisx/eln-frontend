@@ -25,10 +25,11 @@ interface FormComment {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-new-comment-modal',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-new-comment-modal',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NewCommentModalComponent implements OnInit {
   @Input()

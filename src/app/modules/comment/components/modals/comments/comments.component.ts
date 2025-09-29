@@ -7,10 +7,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-comments-modal',
-  templateUrl: './comments.component.html',
-  styleUrls: ['./comments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-comments-modal',
+    templateUrl: './comments.component.html',
+    styleUrls: ['./comments.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CommentsModalComponent {
   public element: any = this.modalRef.data.element;

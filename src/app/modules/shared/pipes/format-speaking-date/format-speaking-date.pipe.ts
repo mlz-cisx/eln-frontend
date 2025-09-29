@@ -3,7 +3,8 @@ import { TranslocoService } from '@ngneat/transloco';
 import { format, parseISO, set } from 'date-fns';
 
 @Pipe({
-  name: 'formatSpeakingDate',
+    name: 'formatSpeakingDate',
+    standalone: false
 })
 export class FormatSpeakingDatePipe implements PipeTransform {
   public constructor(private readonly translocoService: TranslocoService) {}

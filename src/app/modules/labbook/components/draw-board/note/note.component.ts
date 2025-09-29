@@ -40,10 +40,11 @@ interface FormNote {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-draw-board-note',
-  templateUrl: './note.component.html',
-  styleUrls: ['./note.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-draw-board-note',
+    templateUrl: './note.component.html',
+    styleUrls: ['./note.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookDrawBoardNoteComponent implements OnInit {
   @Input()

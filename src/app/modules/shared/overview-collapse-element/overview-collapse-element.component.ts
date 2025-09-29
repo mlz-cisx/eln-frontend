@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 
 @Component({
-  selector: 'mlzeln-overview-collapse-element',
-  templateUrl: './overview-collapse-element.component.html',
-  styleUrls: ['./overview-collapse-element.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-overview-collapse-element',
+    templateUrl: './overview-collapse-element.component.html',
+    styleUrls: ['./overview-collapse-element.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class OverviewCollapseElementComponent {
   @Input()

@@ -28,10 +28,11 @@ interface FromSearch {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-global-search',
-  templateUrl: './global-search.component.html',
-  styleUrls: ['./global-search.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-global-search',
+    templateUrl: './global-search.component.html',
+    styleUrls: ['./global-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GlobalSearchComponent implements OnInit {
   @ViewChild('searchDropdown')

@@ -42,10 +42,11 @@ interface FormFile {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-draw-board-file',
-  templateUrl: './file.component.html',
-  styleUrls: ['./file.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-draw-board-file',
+    templateUrl: './file.component.html',
+    styleUrls: ['./file.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookDrawBoardFileComponent implements OnInit {
   @Input()

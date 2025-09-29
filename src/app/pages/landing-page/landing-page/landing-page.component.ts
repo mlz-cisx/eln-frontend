@@ -5,9 +5,10 @@ import {UserService, WebSocketService} from "@app/services";
 import {UserStore} from "@app/services/user/user.store";
 
 @Component({
-  selector: 'app-landing-page',
-  templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.scss'],
+    selector: 'app-landing-page',
+    templateUrl: './landing-page.component.html',
+    styleUrls: ['./landing-page.component.scss'],
+    standalone: false
 })
 export class LandingPageComponent implements OnInit {
   name = new UntypedFormControl('');

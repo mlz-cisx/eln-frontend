@@ -42,10 +42,11 @@ interface FormPicture {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-draw-board-picture',
-  templateUrl: './picture.component.html',
-  styleUrls: ['./picture.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-draw-board-picture',
+    templateUrl: './picture.component.html',
+    styleUrls: ['./picture.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookDrawBoardPictureComponent implements OnInit {
   @Input()

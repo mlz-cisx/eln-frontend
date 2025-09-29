@@ -3,7 +3,8 @@ import { ContentTypeModelService } from '@app/services';
 import type { ContentTypeModelItem, ContentTypeModels } from '@joeseln/types';
 
 @Pipe({
-  name: 'formatContentTypeModel',
+    name: 'formatContentTypeModel',
+    standalone: false
 })
 export class FormatContentTypeModelPipe implements PipeTransform {
   public constructor(private readonly contentTypeModelService: ContentTypeModelService) {}

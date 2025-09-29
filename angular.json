@@ -62,6 +62,14 @@
             ],
             "browser": "src/main.ts",
             "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": [
+                  "color-functions",
+                  "global-builtin",
+                  "import",
+                  "mixed-decls"
+                ]
+              },
               "includePaths": [
                 "."
               ]

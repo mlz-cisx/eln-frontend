@@ -13,9 +13,10 @@ import {EditorComponent} from '@tinymce/tinymce-angular';
 
 
 @Component({
-  selector: 'mlzeln-wysiwyg-editor',
-  templateUrl: './wysiwyg-editor.component.html',
-  styleUrls: ['./wysiwyg-editor.component.scss'],
+    selector: 'mlzeln-wysiwyg-editor',
+    templateUrl: './wysiwyg-editor.component.html',
+    styleUrls: ['./wysiwyg-editor.component.scss'],
+    standalone: false
 })
 export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, AfterViewInit {
   @Input()

@@ -2,10 +2,11 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DialogRef } from '@ngneat/dialog';
 
 @Component({
-  selector: 'mlzeln-recent-changes-modal',
-  templateUrl: './recent-changes.component.html',
-  styleUrls: ['./recent-changes.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-recent-changes-modal',
+    templateUrl: './recent-changes.component.html',
+    styleUrls: ['./recent-changes.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RecentChangesModalComponent {
   public id: string = this.modalRef.data.id;

@@ -4,10 +4,11 @@ import { DialogRef } from '@ngneat/dialog';
 import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
-  selector: 'mlzeln-version-preview-modal',
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-version-preview-modal',
+    templateUrl: './preview.component.html',
+    styleUrls: ['./preview.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class VersionPreviewModalComponent {
   public contentType: string = this.modalRef.data?.contentType ?? '';

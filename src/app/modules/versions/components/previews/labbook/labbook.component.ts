@@ -18,10 +18,11 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-preview',
-  templateUrl: './labbook.component.html',
-  styleUrls: ['./labbook.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-preview',
+    templateUrl: './labbook.component.html',
+    styleUrls: ['./labbook.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookPreviewComponent implements OnInit {
   @Input()

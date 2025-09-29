@@ -13,10 +13,11 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-restore-button',
-  templateUrl: './restore-button.component.html',
-  styleUrls: ['./restore-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-restore-button',
+    templateUrl: './restore-button.component.html',
+    styleUrls: ['./restore-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RestoreButtonComponent {
 

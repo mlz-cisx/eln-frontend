@@ -45,10 +45,11 @@ import {LabbooksService} from '@joeseln/services';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookSidebarComponent implements OnInit {
   @Input()

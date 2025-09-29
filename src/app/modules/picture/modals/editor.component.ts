@@ -7,10 +7,11 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-picture-editor-modal',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-picture-editor-modal',
+    templateUrl: './editor.component.html',
+    styleUrls: ['./editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PictureEditorModalComponent implements OnInit {
   public initialState?: Picture = this.modalRef.data?.initialState;

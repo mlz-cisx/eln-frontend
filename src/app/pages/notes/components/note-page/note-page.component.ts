@@ -40,10 +40,11 @@ interface FormNote {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-note-page',
-  templateUrl: './note-page.component.html',
-  styleUrls: ['./note-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-note-page',
+    templateUrl: './note-page.component.html',
+    styleUrls: ['./note-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NotePageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)

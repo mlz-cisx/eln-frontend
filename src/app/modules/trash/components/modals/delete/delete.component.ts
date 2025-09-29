@@ -16,10 +16,11 @@ interface FormDelete {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-delete-modal',
-  templateUrl: './delete.component.html',
-  styleUrls: ['./delete.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-delete-modal',
+    templateUrl: './delete.component.html',
+    styleUrls: ['./delete.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DeleteModalComponent {
   public service: any = this.modalRef.data.service;

@@ -20,9 +20,10 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-form-input',
-  templateUrl: './form-input.component.html',
-  styleUrls: ['./form-input.component.scss'],
+    selector: 'mlzeln-form-input',
+    templateUrl: './form-input.component.html',
+    styleUrls: ['./form-input.component.scss'],
+    standalone: false
 })
 
 export class FormInputComponent implements AfterViewInit {

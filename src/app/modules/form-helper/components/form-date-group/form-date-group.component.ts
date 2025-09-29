@@ -16,10 +16,11 @@ interface FormDateGroup {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-form-date-group',
-  templateUrl: './form-date-group.component.html',
-  styleUrls: ['./form-date-group.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-form-date-group',
+    templateUrl: './form-date-group.component.html',
+    styleUrls: ['./form-date-group.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FormDateGroupComponent implements OnInit, AfterViewInit {
   // eslint-disable-next-line @angular-eslint/no-input-rename

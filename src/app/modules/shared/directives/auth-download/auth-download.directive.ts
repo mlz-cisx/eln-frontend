@@ -3,7 +3,8 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 
 @Directive({
-  selector: '[authDownload]',
+    selector: '[authDownload]',
+    standalone: false
 })
 export class AuthDownloadDirective {
   @Input('authDownload')

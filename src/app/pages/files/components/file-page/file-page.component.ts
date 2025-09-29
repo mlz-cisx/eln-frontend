@@ -37,9 +37,10 @@ interface FormFile {
 
 @UntilDestroy()
 @Component({
-  templateUrl: './file-page.component.html',
-  styleUrls: ['./file-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './file-page.component.html',
+    styleUrls: ['./file-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FilePageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)

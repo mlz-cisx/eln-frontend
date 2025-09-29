@@ -33,10 +33,11 @@ import {NewUserModalComponent} from '../user_modals/new/new.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-users-page',
-  templateUrl: './users-page.component.html',
-  styleUrls: ['./users-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-users-page',
+    templateUrl: './users-page.component.html',
+    styleUrls: ['./users-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UsersPageComponent implements OnInit {
   public title = '';

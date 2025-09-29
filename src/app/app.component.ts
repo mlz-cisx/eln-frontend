@@ -3,9 +3,10 @@ import {setTheme} from 'ngx-bootstrap/utils';
 import {WebSocketService} from './services';
 
 @Component({
-  selector: 'joeseln-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'joeseln-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
 

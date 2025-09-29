@@ -33,10 +33,11 @@ export const PICTURE_EDITOR_SCRIPT_SRC = new InjectionToken<string>('PICTURE_EDI
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-picture-editor',
-  templateUrl: './picture-editor.component.html',
-  styleUrls: ['./picture-editor.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'mlzeln-picture-editor',
+    templateUrl: './picture-editor.component.html',
+    styleUrls: ['./picture-editor.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class PictureEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()

@@ -32,10 +32,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-admins-page',
-  templateUrl: './elnadmins-page.component.html',
-  styleUrls: ['./elnadmins-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-admins-page',
+    templateUrl: './elnadmins-page.component.html',
+    styleUrls: ['./elnadmins-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ElnadminsPageComponent implements OnInit {
   public title = '';

@@ -18,10 +18,11 @@ import {UserService} from "@app/services";
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-comment',
-  templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-comment',
+    templateUrl: './comment.component.html',
+    styleUrls: ['./comment.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CommentComponent implements OnInit {
   @Input()

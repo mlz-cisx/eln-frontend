@@ -12,9 +12,10 @@ import { VersionPreviewModalComponent } from '../modals/preview/preview.componen
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-versions',
-  templateUrl: './versions.component.html',
-  styleUrls: ['./versions.component.scss'],
+    selector: 'mlzeln-versions',
+    templateUrl: './versions.component.html',
+    styleUrls: ['./versions.component.scss'],
+    standalone: false
 })
 export class VersionsComponent implements OnInit {
   @ViewChild('tableView')

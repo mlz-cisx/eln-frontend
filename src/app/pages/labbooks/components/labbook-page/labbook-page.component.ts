@@ -52,10 +52,11 @@ interface FormLabBook {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-page',
-  templateUrl: './labbook-page.component.html',
-  styleUrls: ['./labbook-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-page',
+    templateUrl: './labbook-page.component.html',
+    styleUrls: ['./labbook-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookPageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)

@@ -13,10 +13,11 @@ import {environment} from "@environments/environment";
 
 @UntilDestroy()
 @Component({
-  selector: 'joeseln-login-page',
-  templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'joeseln-login-page',
+    templateUrl: './login-page.component.html',
+    styleUrls: ['./login-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LoginPageComponent implements OnInit {
   public title = '';

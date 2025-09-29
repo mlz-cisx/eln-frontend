@@ -46,10 +46,11 @@ interface FormFile {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-new-labbook-modal',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-new-labbook-modal',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UploadLabBookModalComponent implements OnInit {
   public initialState?: LabBook = this.modalRef.data?.initialState;

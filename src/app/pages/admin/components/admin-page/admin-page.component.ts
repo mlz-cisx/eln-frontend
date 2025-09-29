@@ -20,10 +20,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'joeseln-admin-page',
-  templateUrl: './admin-page.component.html',
-  styleUrls: ['./admin-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'joeseln-admin-page',
+    templateUrl: './admin-page.component.html',
+    styleUrls: ['./admin-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AdminPageComponent implements OnInit {
 

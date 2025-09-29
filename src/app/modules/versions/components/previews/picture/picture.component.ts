@@ -18,10 +18,11 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-picture-preview',
-  templateUrl: './picture.component.html',
-  styleUrls: ['./picture.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-picture-preview',
+    templateUrl: './picture.component.html',
+    styleUrls: ['./picture.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PicturePreviewComponent implements OnInit {
   @Input()

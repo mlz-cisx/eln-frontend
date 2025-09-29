@@ -11,10 +11,11 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-delete-comment-modal',
-  templateUrl: './delete.component.html',
-  styleUrls: ['./delete.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-delete-comment-modal',
+    templateUrl: './delete.component.html',
+    styleUrls: ['./delete.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DeleteCommentModalComponent {
   public service: any = this.modalRef.data.service;

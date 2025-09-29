@@ -23,10 +23,11 @@ interface FormLabBook {
 
 @UntilDestroy()
 @Component({
-  selector: 'qr_code',
-  templateUrl: './qr_code.html',
-  styleUrls: ['./qr_code.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'qr_code',
+    templateUrl: './qr_code.html',
+    styleUrls: ['./qr_code.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NewQRcodeModalComponent implements OnInit {
   public initialState?: LabBook = this.modalRef.data?.initialState;

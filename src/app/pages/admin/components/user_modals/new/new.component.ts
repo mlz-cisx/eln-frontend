@@ -20,10 +20,11 @@ import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-new-user-modal',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-new-user-modal',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NewUserModalComponent implements OnInit {
   public initialState?: User = this.modalRef.data?.initialState;

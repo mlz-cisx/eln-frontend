@@ -27,10 +27,11 @@ import {debounceTime, skip, take} from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-notes-page',
-  templateUrl: './notes-page.component.html',
-  styleUrls: ['./notes-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-notes-page',
+    templateUrl: './notes-page.component.html',
+    styleUrls: ['./notes-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NotesPageComponent implements OnInit {
   public title = '';

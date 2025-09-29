@@ -34,10 +34,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-group-users-page',
-  templateUrl: './group-users.component.html',
-  styleUrls: ['./group-users.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-group-users-page',
+    templateUrl: './group-users.component.html',
+    styleUrls: ['./group-users.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GroupUsersComponent implements OnInit {
   public title = '';

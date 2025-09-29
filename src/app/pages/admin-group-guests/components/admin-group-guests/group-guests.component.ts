@@ -33,10 +33,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-group-guests-page',
-  templateUrl: './group-guests.component.html',
-  styleUrls: ['./group-guests.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-group-guests-page',
+    templateUrl: './group-guests.component.html',
+    styleUrls: ['./group-guests.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GroupGuestsComponent implements OnInit {
   public title = '';

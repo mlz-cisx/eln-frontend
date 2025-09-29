@@ -14,10 +14,11 @@ interface FormTimeGroup {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-form-time-group',
-  templateUrl: './form-time-group.component.html',
-  styleUrls: ['./form-time-group.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-form-time-group',
+    templateUrl: './form-time-group.component.html',
+    styleUrls: ['./form-time-group.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FormTimeGroupComponent implements OnInit {
   // eslint-disable-next-line @angular-eslint/no-input-rename

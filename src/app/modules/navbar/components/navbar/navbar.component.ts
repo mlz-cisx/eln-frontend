@@ -5,9 +5,10 @@ import {LogoutService} from "@app/services";
 
 @UntilDestroy()
 @Component({
-  selector: 'joeseln-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
+    selector: 'joeseln-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
+    standalone: false
 })
 
 

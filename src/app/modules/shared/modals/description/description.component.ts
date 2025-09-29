@@ -12,10 +12,11 @@ interface FormDescription {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-description-modal',
-  templateUrl: './description.component.html',
-  styleUrls: ['./description.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-description-modal',
+    templateUrl: './description.component.html',
+    styleUrls: ['./description.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DescriptionModalComponent implements OnInit {
   public id: string = this.modalRef.data.id;

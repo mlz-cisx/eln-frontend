@@ -49,10 +49,11 @@ interface FormPassword {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-user-page',
-  templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-user-page',
+    templateUrl: './user-page.component.html',
+    styleUrls: ['./user-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UserPageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)

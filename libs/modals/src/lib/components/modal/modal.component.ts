@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 import { DialogRef } from '@ngneat/dialog';
 
 @Component({
-  selector: 'mlzeln-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+    selector: 'mlzeln-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ModalComponent {
   @Input()

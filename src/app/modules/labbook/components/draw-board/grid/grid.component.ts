@@ -28,10 +28,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-labbook-draw-board-grid',
-  templateUrl: './grid.component.html',
-  styleUrls: ['./grid.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-labbook-draw-board-grid',
+    templateUrl: './grid.component.html',
+    styleUrls: ['./grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()

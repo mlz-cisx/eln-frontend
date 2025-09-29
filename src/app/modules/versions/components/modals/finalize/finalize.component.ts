@@ -13,10 +13,11 @@ interface FormFinalizeVersion {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-finalize-version-modal',
-  templateUrl: './finalize.component.html',
-  styleUrls: ['./finalize.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-finalize-version-modal',
+    templateUrl: './finalize.component.html',
+    styleUrls: ['./finalize.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FinalizeVersionModalComponent {
   public id: string = this.modalRef.data?.id ?? '';

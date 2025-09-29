@@ -17,10 +17,11 @@ import {DeleteModalComponent} from '../modals/delete/delete.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-trash-button',
-  templateUrl: './trash-button.component.html',
-  styleUrls: ['./trash-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-trash-button',
+    templateUrl: './trash-button.component.html',
+    styleUrls: ['./trash-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TrashButtonComponent {
 

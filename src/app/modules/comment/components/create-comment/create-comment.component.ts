@@ -26,10 +26,11 @@ interface FormComment {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-create-comment',
-  templateUrl: './create-comment.component.html',
-  styleUrls: ['./create-comment.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-create-comment',
+    templateUrl: './create-comment.component.html',
+    styleUrls: ['./create-comment.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CreateCommentComponent implements OnInit {
   @Input()

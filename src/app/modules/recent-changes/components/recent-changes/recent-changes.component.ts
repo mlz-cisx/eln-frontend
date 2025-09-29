@@ -21,10 +21,11 @@ import { map } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-recent-changes',
-  templateUrl: './recent-changes.component.html',
-  styleUrls: ['./recent-changes.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-recent-changes',
+    templateUrl: './recent-changes.component.html',
+    styleUrls: ['./recent-changes.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RecentChangesComponent implements OnInit {
   @ViewChild('tableView')

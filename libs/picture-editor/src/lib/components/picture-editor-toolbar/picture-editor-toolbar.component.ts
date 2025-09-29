@@ -24,10 +24,11 @@ declare global {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-picture-editor-toolbar',
-  templateUrl: './picture-editor-toolbar.component.html',
-  styleUrls: ['./picture-editor-toolbar.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'mlzeln-picture-editor-toolbar',
+    templateUrl: './picture-editor-toolbar.component.html',
+    styleUrls: ['./picture-editor-toolbar.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class PictureEditorToolbarComponent implements OnInit {
   @Input()

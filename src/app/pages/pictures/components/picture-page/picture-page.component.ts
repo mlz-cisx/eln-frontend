@@ -38,9 +38,10 @@ interface FormPicture {
 
 @UntilDestroy()
 @Component({
-  templateUrl: './picture-page.component.html',
-  styleUrls: ['./picture-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './picture-page.component.html',
+    styleUrls: ['./picture-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PicturePageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)

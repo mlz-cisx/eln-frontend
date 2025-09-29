@@ -33,10 +33,11 @@ import {
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-group-groupadmin-page',
-  templateUrl: './group-groupadmins.component.html',
-  styleUrls: ['./group-groupadmins.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-group-groupadmin-page',
+    templateUrl: './group-groupadmins.component.html',
+    styleUrls: ['./group-groupadmins.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GroupGroupadminsComponent implements OnInit {
   public title = '';

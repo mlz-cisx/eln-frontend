@@ -28,9 +28,10 @@ import { debounceTime, skip, take } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
-  templateUrl: './pictures-page.component.html',
-  styleUrls: ['./pictures-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './pictures-page.component.html',
+    styleUrls: ['./pictures-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PicturesPageComponent implements OnInit {
   public title = '';

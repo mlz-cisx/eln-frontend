@@ -5,10 +5,11 @@ import { cloneDeep } from 'lodash';
 
 @UntilDestroy()
 @Component({
-  selector: 'mlzeln-picture-editor-details-dropdown',
-  templateUrl: './picture-editor-details-dropdown.component.html',
-  styleUrls: ['./picture-editor-details-dropdown.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-picture-editor-details-dropdown',
+    templateUrl: './picture-editor-details-dropdown.component.html',
+    styleUrls: ['./picture-editor-details-dropdown.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PictureEditorDetailsDropdownComponent implements OnInit {
   @Input()

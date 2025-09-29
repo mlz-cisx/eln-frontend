@@ -4,10 +4,11 @@ import type { TableColumnChangedEvent } from '@joeseln/table';
 import type { TableColumn } from '@joeseln/table';
 
 @Component({
-  selector: 'mlzeln-table-manage-columns',
-  templateUrl: './table-columns.component.html',
-  styleUrls: ['./table-columns.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'mlzeln-table-manage-columns',
+    templateUrl: './table-columns.component.html',
+    styleUrls: ['./table-columns.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TableColumnComponent implements OnChanges {
   @Input()
