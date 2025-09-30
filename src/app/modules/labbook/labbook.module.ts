@@ -41,6 +41,7 @@ import {
 import {
   PlotlyEditorModule
 } from "../../../../libs/plotly-editor/lib/plotly-editor.module";
+import { MathjaxModule } from 'mathjax-angular';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import {
     PictureEditorModule,
     RecentChangesModule,
     PlotlyEditorModule,
+    MathjaxModule.forChild(),
   ],
   exports: [
     LabBookSidebarComponent,

@@ -173,7 +173,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
               this.preloaded_content = privilegesData.data.content
 
               if (this.preload) {
-                this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
+                // this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
               }
 
             });
@@ -183,7 +183,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     });
 
     if (this.preload) {
-      this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
+      // this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
     }
   }
 
@@ -262,7 +262,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
                 // this.toastrService.success(success);
                 this.preloaded_content = note.content;
                 if (this.preload) {
-                  this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
+                  // this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
                 }
               });
           } else {

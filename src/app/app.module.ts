@@ -35,6 +35,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {InterceptorService} from "@app/services";
 import {ColorPickerService} from "ngx-color-picker"
+import { MathjaxModule } from "mathjax-angular";
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import {ColorPickerService} from "ngx-color-picker"
     }),
     ReactiveFormsModule,
     FormsModule,
+    MathjaxModule.forRoot(),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
