@@ -61,8 +61,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   public sortBy = 'created_at';
 
-  public initialLoading = true;
-
   public constructor(
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService
