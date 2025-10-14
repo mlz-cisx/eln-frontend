@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  NgZone,
 } from '@angular/core';
 import { LabbooksService, NotesService, WebSocketService } from '@app/services';
 import {environment} from '@environments/environment';
@@ -18,7 +19,7 @@ import type {
 import { DialogRef } from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type { GridsterConfig, GridsterItem } from 'angular-gridster2';
-import {of} from 'rxjs';
+import { of, catchError, tap, Subscription, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {gridsterConfig} from '../../../config/gridster-config';
 import {
@@ -49,6 +50,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public loading = true;
 
+  private updateSubscription: Subscription | null = null;
+
   public drawBoardElements: Array<GridsterItem> = [];
 
   public labbookElements: Array<any> = []
@@ -73,6 +76,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private readonly websocketService: WebSocketService,
     private readonly renderer: Renderer2,
+    private readonly ngZone: NgZone,
   ) {
   }
 
@@ -85,7 +89,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     });
 
   }
-  
+
   ngAfterViewInit() {
     this.websocketService.elements.pipe().subscribe((data: any) => {
       if (data.model_pk === this.id) {
@@ -97,7 +101,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         if (this.socketRefreshTimeout) {
           clearTimeout(this.socketRefreshTimeout);
         }
-        this.socketRefreshTimeout = setTimeout(() => this.softReload(), environment.labBookSocketRefreshInterval);
+        this.ngZone.runOutsideAngular(() => {
+          this.socketRefreshTimeout = setTimeout(() => {
+            this.softReload();
+          }, environment.labBookSocketRefreshInterval);
+        });
       }
     });
   }
@@ -109,17 +117,19 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public initDetails(): void {
     this.labBooksService
       .getElements(this.id)
-      .pipe(untilDestroyed(this))
+      .pipe(
+        untilDestroyed(this),
+        catchError(() => {
+          this.loading = false;
+          return of([]);
+        }),
+      )
       .subscribe(
         labBookElements => {
-          labBookElements.forEach(element => this.drawBoardElements.push(...this.convertToGridItems([element])));
+        this.drawBoardElements = this.convertToGridItems(labBookElements);
           this.loading = false;
           this.cdr.markForCheck();
         },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
       );
   }
 
@@ -216,7 +226,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
           //  preloaded content has to be rendered again if position is top
           if (event.position === 'top') {
-            this.specialupdateAllElements()
+            this.updateAllElements();
           }
 
         },
@@ -228,64 +238,33 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public updateAllElements(elements?: LabBookElementPayload[]): void {
-    // Delay the process for a tick or else gridster won't recognize the changes
-    setTimeout(() => {
-      if (this.loading) {
-        return;
-      }
-      this.loading = true;
 
-
-      const elementsPayload = elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
-
-      this.labBooksService
-        .updateAllElements(this.id, elementsPayload)
-        .pipe(untilDestroyed(this))
-        .subscribe(
-          () => {
-            this.loading = false;
-            this.cdr.markForCheck();
-            this.continue_search()
-          },
-          () => {
-            this.loading = false;
-            this.cdr.markForCheck();
-          }
-        );
-    }, 1);
-  }
-
-  public specialupdateAllElements(elements?: LabBookElementPayload[]): void {
-    if (!this.editable) {
-      return;
+    if (this.updateSubscription) {
+      // if there is a previous update, unsubscribe to cancel it
+      this.updateSubscription.unsubscribe();
     }
 
-    // Delay the process for a tick or else gridster won't recognize the changes
-    setTimeout(() => {
-      if (this.loading) {
-        return;
-      }
-      this.loading = true;
+    const elementsPayload =
+      elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
 
-
-      const elementsPayload = elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
-
-      this.labBooksService
-        .updateAllElements(this.id, elementsPayload)
-        .pipe(untilDestroyed(this))
-        .subscribe(
-          () => {
-            this.loading = false;
-            this.cdr.markForCheck();
-            // we need reload, because preloaded content has to be rendered again
-            this.reload()
-          },
-          () => {
-            this.loading = false;
-            this.cdr.markForCheck();
-          }
-        );
-    }, 1);
+    this.ngZone.runOutsideAngular(() => {
+      this.updateSubscription = timer(1000)
+        .pipe(
+          switchMap(() => {
+            return this.labBooksService
+              .updateAllElements(this.id, elementsPayload)
+              .pipe(
+                tap(() => {
+                  this.continue_search();
+                }),
+                catchError(() => {
+                  return of(null);
+                }),
+              );
+          }),
+        )
+        .subscribe();
+    });
   }
 
   public getMaxYPosition(elements?: LabBookElement<any>[]): number {
@@ -316,7 +295,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.initDetails();
   }
 
-  
+
   public softReload(): void {
     if (this.socketLoading) {
       this.queuedSocketRefreshes = true;
@@ -326,51 +305,17 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
     this.labBooksService
       .getElements(this.id)
-      .pipe(untilDestroyed(this))
-      .subscribe(labBookElements => {
-        const oldDrawBoardElements = [...this.drawBoardElements];
-        const newdrawBoardElements: GridsterItem[] = this.convertToGridItems(labBookElements);
-
-        // Remove deleted elements
-        const elementsToRemove = oldDrawBoardElements.filter(
-          (oldField: GridsterItem) => !newdrawBoardElements.some((newField: GridsterItem) => oldField['element'].pk === newField['element'].pk)
-        );
-        elementsToRemove.forEach(element => {
-          for (let index = this.drawBoardElements.length - 1; index >= 0; index--) {
-            const drawBoardElement = this.drawBoardElements[index];
-            if (drawBoardElement['element'].pk === element['element'].pk) {
-              this.drawBoardElements.splice(index, 1);
-            }
-          }
-        });
-
-        // Update existing elements
-        newdrawBoardElements
-          .filter((newField: GridsterItem) =>
-            oldDrawBoardElements.some((oldField: GridsterItem) => newField['element'].pk === oldField['element'].pk)
-          )
-          .forEach(element => {
-            this.drawBoardElements.forEach((drawBoardElement, index) => {
-              if (drawBoardElement['element'].pk === element['element'].pk) {
-                this.drawBoardElements[index].x = element.x;
-                this.drawBoardElements[index].y = element.y;
-                this.drawBoardElements[index].cols = element.cols;
-                this.drawBoardElements[index].rows = element.rows;
-              }
-            });
-          });
-
-        // We must tell the options that we changed them even though we didn't. This way Gridster will
-        // check the changed properties of items and visually apply them. This is important if we move
-        // or resize items. As long as Gridster won't implement better support we need this workaround.
-        this.options.api?.optionsChanged?.();
-
-        // Add new elements
-        const elementsToAdd = newdrawBoardElements.filter(
-          (newField: GridsterItem) => !oldDrawBoardElements.some((oldField: GridsterItem) => newField['element'].pk === oldField['element'].pk)
-        );
-        this.drawBoardElements = [...this.drawBoardElements, ...elementsToAdd];
-
+      .pipe(
+        tap((labBookElements) =>
+          this.handleSoftReloadElements(labBookElements),
+        ),
+        catchError(() => {
+          this.socketLoading = false;
+          this.cdr.markForCheck();
+          return of(null);
+        }),
+      )
+      .subscribe(() => {
         this.socketLoading = false;
         this.socketRefreshTimeout = undefined;
         this.cdr.markForCheck();
@@ -380,6 +325,32 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.softReload();
         }
       });
+  }
+
+  private handleSoftReloadElements(
+    labBookElements: LabBookElement<any>[],
+  ): void {
+    const oldDrawBoardElements = new Map(
+      this.drawBoardElements.map((item) => [item['element'].pk, item]),
+    );
+    const newDrawBoardElements = this.convertToGridItems(labBookElements);
+
+    const updatedDrawBoardElements: GridsterItem[] = [];
+
+    for (const newElem of newDrawBoardElements) {
+      const oldElem = oldDrawBoardElements.get(newElem['element'].pk);
+      if (oldElem) {
+        // update existing elements
+        updatedDrawBoardElements.push({ ...oldElem, ...newElem });
+        oldDrawBoardElements.delete(newElem['element'].pk);
+      } else {
+        // add new elements
+        updatedDrawBoardElements.push(newElem);
+      }
+    }
+
+    // remaining old elements are deleted
+    this.drawBoardElements = updatedDrawBoardElements;
   }
 
 
