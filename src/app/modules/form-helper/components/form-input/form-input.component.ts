@@ -63,11 +63,12 @@ export class FormInputComponent implements AfterViewInit {
       if ((this.ngControl?.name === 'note_subject' || this.ngControl?.name === 'note_content') &&
         Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue))) {
         this.labbookdrawboard_note.onSubmit()
+        this.reset();
       } else if ((this.ngControl?.name === 'file_title' || this.ngControl?.name === 'file_description') &&
         Boolean(this.ngControl?.dirty && !isEqual(this.ngControl.value, this.resetValue))) {
         this.labbookdrawboard_file.onSubmit()
+        this.reset();
       }
-      this.reset();
       return false
     })
 
