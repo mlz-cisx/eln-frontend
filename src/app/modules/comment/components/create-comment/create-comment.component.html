@@ -4,18 +4,6 @@
 <!--      <mlzeln-user-avatar class="avatar" [user]="currentUser" [scale]="5"></mlzeln-user-avatar>-->
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mlzeln-wysiwyg-editor class="mt-1" formControlName="content" style="min-width: 700px !important;"></mlzeln-wysiwyg-editor>
-        <div class="custom-control custom-checkbox inline-block mt-2">
-          <input
-            class="custom-control-input"
-            type="checkbox"
-            formControlName="private"
-            [id]="'private' + uniqueHash"
-            [name]="'private' + uniqueHash"
-          />
-          <label class="custom-control-label font-normal" [for]="'private' + uniqueHash">
-            {{ t('comments.newCommentModal.private.label') }}
-          </label>
-        </div>
 
         <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary  mt-2" [disabled]="loading || form.invalid" style="min-width: 200px !important;">
           {{ t('comments.newCommentModal.create') }}

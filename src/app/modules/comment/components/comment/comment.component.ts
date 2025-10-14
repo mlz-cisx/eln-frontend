@@ -55,28 +55,6 @@ export class CommentComponent implements OnInit {
     });
   }
 
-  public onChangePrivateState(): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-
-    this.comment.private = !this.comment.private;
-
-    this.service
-      .putRelation(this.comment.right_object_id, this.comment.pk, this.comment)
-      .pipe(untilDestroyed(this))
-      .subscribe((result: Relation) => {
-        const toastMsg = result.private
-          ? this.translocoService.translate('comments.private.toastr.success')
-          : this.translocoService.translate('comments.public.toastr.success');
-
-        this.loading = false;
-        this.cdr.markForCheck();
-        this.toastrService.success(toastMsg);
-      });
-  }
-
   public openUserModal(): void {
   }
 

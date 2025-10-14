@@ -2,7 +2,6 @@ import type {User} from './user.interface';
 
 export interface CommentPayload {
   content: string | null;
-  private?: boolean;
   relates_to_content_type_id?: number;
   relates_to_pk?: string;
 }

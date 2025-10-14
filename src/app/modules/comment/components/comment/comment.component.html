@@ -9,20 +9,6 @@
         </div>
       </div>
       <div class="self-center" *ngIf="currentUser?.pk === currentUser?.pk ">
-        <button type="button" class="btn mlzeln-button-small mr-2" (click)="onChangePrivateState()" [disabled]="loading">
-          <joeseln-icon
-            *ngIf="comment.private"
-            className="wb-locked"
-            [tooltip]="t('comments.privateComment.tooltip')"
-            containerClass="tooltip-sm"
-          ></joeseln-icon>
-          <joeseln-icon
-            *ngIf="!comment.private"
-            className="wb-unlock"
-            [tooltip]="t('comments.publicComment.tooltip')"
-            containerClass="tooltip-sm"
-          ></joeseln-icon>
-        </button>
         <button type="button" class="btn mlzeln-button-small" (click)="onOpenDeleteModal()" [disabled]="loading">
           <joeseln-icon
             className="wb-remove"

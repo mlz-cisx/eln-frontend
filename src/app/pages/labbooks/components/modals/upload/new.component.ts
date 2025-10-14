@@ -318,7 +318,6 @@ export class UploadLabBookModalComponent implements OnInit {
                 'relates_to_content_type_id': elem.child_object_content_type,
                 'relates_to_pk': elem.child_object_id,
                 'content': com,
-                'private': false,
               });
             });
           }

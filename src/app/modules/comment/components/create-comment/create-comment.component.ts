@@ -79,7 +79,6 @@ export class CreateCommentComponent implements OnInit {
       content: this.f.content.value ?? '',
       relates_to_content_type_id: this.contentType,
       relates_to_pk: this.id,
-      private: this.f.private.value ?? false,
     };
   }
 

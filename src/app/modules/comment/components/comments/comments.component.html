@@ -13,21 +13,6 @@
 <ng-container>
   <div class="flex justify-between pb-4">
     <div>
-      <label class="mr-2" for="comment-state">State</label>
-      <ng-select
-        class="btn mlzeln-select inline-block text-left pl-0 min-w-[150px]"
-        [formControl]="dropdownStateControl"
-        labelForId="comment-state"
-        name="comment-state"
-        [searchable]="false"
-        [clearable]="false"
-        bindValue="value"
-        [items]="dropdownStates"
-        (change)="onChangeState($event)"
-      ></ng-select>
-    </div>
-
-    <div>
       <label for="comment-sort">Sort per date</label>
       <ng-select
         class="btn mlzeln-select inline-block text-left pr-0 min-w-[160px]"

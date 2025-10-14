@@ -51,10 +51,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   public listColumns: TableColumn[] = [];
 
-  public dropdownStates: DropdownElement[] = [];
-
-  public dropdownStateControl = new FormControl(CommentsState.All);
-
   public dropdownSortControl = new FormControl(TableSortDirection.Descending);
 
   public sort = TableSortDirection.Descending;
@@ -89,51 +85,11 @@ export class CommentsComponent implements OnInit, OnDestroy {
           },
         ];
       });
-
-    this.translocoService
-      .selectTranslateObject('comments.state')
-      .pipe(untilDestroyed(this))
-      .subscribe(states => {
-        this.dropdownStates = [
-          {
-            value: CommentsState.All,
-            label: states.all,
-          },
-          {
-            value: CommentsState.Public,
-            label: states.public,
-          },
-          {
-            value: CommentsState.Private,
-            label: states.private,
-          },
-        ];
-      });
   }
 
 
   public loadComments(): void {
     this.tableView.loadData();
-  }
-
-  public onChangeState(element: DropdownElement): void {
-    switch (element.value) {
-      case CommentsState.Public:
-        this.params = this.params.set('private', false);
-        this.tableView.updateParams(this.params);
-        this.tableView.loadData();
-        break;
-      case CommentsState.Private:
-        this.params = this.params.set('private', true);
-        this.tableView.updateParams(this.params);
-        this.tableView.loadData();
-        break;
-      default:
-        this.params = this.params.delete('private');
-        this.tableView.updateParams(this.params);
-        this.tableView.loadData();
-        break;
-    }
   }
 
   public onChangeSort(element: number): void {
