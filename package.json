@@ -48,7 +48,7 @@
     "hammerjs": "2.0.8",
     "jszip": "^3.10.1",
     "lodash": "4.17.21",
-    "mathjax-angular": "file:node_modules/mathjax-angular.tar.gz",
+    "mathjax-angular": "file:assets/mathjax-angular.tar.gz",
     "mime": "3.0.0",
     "ngx-bootstrap": "20.0.2",
     "ngx-color-picker": "12.0.1",
