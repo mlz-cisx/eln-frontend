@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
-import {UntilDestroy} from '@ngneat/until-destroy';
-import {LogoutService} from "@app/services";
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { LogoutService, UserService } from '@app/services';
+import type { User } from '@joeseln/types';
 
 
 @UntilDestroy()
@@ -13,13 +14,21 @@ import {LogoutService} from "@app/services";
 
 
 export class NavbarComponent {
+  public currentUser: User | null = null;
+
   constructor(
-    private logoutService: LogoutService
-  ) {
+    private logoutService: LogoutService,
+    private userService: UserService,
+  ) {}
+
+  public ngOnInit(): void {
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((state) => {
+      this.currentUser = state.user;
+    });
   }
 
   public logout() {
-    this.logoutService.logout()
+    this.logoutService.logout();
   }
 
 }

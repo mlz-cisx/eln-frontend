@@ -42,14 +42,14 @@
         Files</a>
     </ng-container>
     <div class="line"></div>
-    <ng-container>
+    <ng-container *ngIf="currentUser?.admin">
       <a
         routerLink="/admin"
       >
         Admin</a>
     </ng-container>
     <div class="line"></div>
-    <ng-container>
+    <ng-container *ngIf="currentUser">
       <button type="button" class="btn mlzeln-button-regular" id="logout_button"
               (click)="logout()">
         Logout
