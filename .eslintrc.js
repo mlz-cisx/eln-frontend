@@ -10,6 +10,10 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:diff/diff",
   ],
+  rules: {
+    // suppress prettier error: prettier conflicts with eslint indentation
+    'prettier/prettier': 0,
+  },
   plugins: ["@html-eslint"],
   ignorePatterns: ["!.*.js", "dist", "node_modules"],
   overrides: [
@@ -41,6 +45,9 @@ module.exports = {
       files: ["**/*.html"],
       parser: "@html-eslint/parser",
       extends: ["plugin:@html-eslint/recommended"],
+      rules: {
+        "@html-eslint/indent": ["error", 2],
+      },
     },
   ],
 };
