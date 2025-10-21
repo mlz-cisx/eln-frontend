@@ -83,8 +83,12 @@
 
 <ng-template #titleCellTemplate let-row>
   <div ellipsis [tooltip]="row.title" containerClass="tooltip-sm" [delay]="500">
+    @if (!row.deleted) {
     <a
       [routerLink]="[showSidebar ? '.' : '' + '/labbooks', row.pk]">{{ row.title }}</a>
+    } @else {
+    <a>{{ row.title }}</a>
+    }
   </div>
 </ng-template>
 <ng-template #createdAtCellTemplate let-row>
