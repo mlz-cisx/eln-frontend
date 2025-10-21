@@ -72,7 +72,7 @@ import { MathjaxModule } from "mathjax-angular";
     }),
     ReactiveFormsModule,
     FormsModule,
-    MathjaxModule.forRoot(),
+    MathjaxModule.forRoot({ src: '/mathjax/startup.js' }),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},

@@ -47,6 +47,11 @@
               },
               {
                 "glob": "**/*.*",
+                "input": "node_modules/mathjax/es5",
+                "output": "/mathjax/"
+              },
+              {
+                "glob": "**/*.*",
                 "input": "src/assets/plugins",
                 "output": "/plugins/"
               }
