@@ -2,18 +2,13 @@
   display: block;
 }
 
-ngneat-dialog {
-  .ngneat-dialog-backdrop {
-    align-items: unset;
-    overflow: auto;
+ngneat-dialog .ngneat-dialog-backdrop #modal-qrcode.ngneat-dialog-content {
+  bottom: auto !important;
+  height: auto !important;
+  max-height: calc(100vh - 20px) !important;
+  overflow: auto;
+}
 
-    #modal-qrcode.ngneat-dialog-content {
-      height: fit-content;
-      max-height: unset;
-      min-height: unset !important;
-      border-radius: 0;
-      overflow: visible;
-      width: 400px !important;
-    }
-  }
+.token-label {
+  padding-left: 1vh;
 }

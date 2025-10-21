@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '@environments/environment';
-import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import type { User } from '@joeseln/types';
-import { AuthService, ErrorserviceService, LogoutService } from '@app/services';
+import {Observable} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import type {TokenWithValidity, User} from '@joeseln/types';
+import {AuthService, ErrorserviceService, LogoutService} from '@app/services';
 import {Router} from "@angular/router";
 import {UserState, UserStore} from "@app/services/user/user.store";
 import {UserQuery} from "@app/services/user/user.query";
@@ -28,8 +28,8 @@ export class UserService {
 
   public login(payload: any): void {
     var data = new FormData()
-    data.append('username', payload['username'])
-    data.append('password', payload['password'])
+    data.append('username', payload['username'].trim())
+    data.append('password', payload['password'].trim())
     this.httpClient.post(`${environment.apiUrl}/token`, data).pipe(catchError(err => this.errorservice.handleError(err, this.logout))).subscribe((res: any) => {
       if (res.access_token) {
         this._auth.setDataInLocalStorage('token', res.access_token)
@@ -40,6 +40,10 @@ export class UserService {
 
   public getUserMe(): Observable<User> {
     return this.httpClient.get<User>(`${environment.apiUrl}/users/me`).pipe(catchError(err => this.errorservice.handleError(err, this.logout)))
+  }
+
+  public getTransferToken(): Observable<TokenWithValidity> {
+    return this.httpClient.get<TokenWithValidity>(`${environment.apiUrl}/transfer`).pipe(catchError(err => this.errorservice.handleError(err, this.logout)))
   }
 
 

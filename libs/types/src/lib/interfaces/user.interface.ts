@@ -80,3 +80,9 @@ export interface UserPatchPayload {
 export interface PasswordPatchPayload {
   password_patch: string;
 }
+
+
+export interface TokenWithValidity {
+  access_token: string;
+  token_validity: number;
+}

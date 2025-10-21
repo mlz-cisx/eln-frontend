@@ -6,7 +6,9 @@
       </aside>
       <main style="padding: 0 1%  1% 1%">
 
-        <div style="text-align: center"><strong>{{detailsTitle}}</strong>
+        <div style="text-align: center; display: flex; flex-wrap: nowrap; justify-content: center;
+        align-items: center;white-space: nowrap;overflow: visible;">
+          <strong>{{detailsTitle}}</strong>
           <mlzeln-details-dropdown
                   [is_labbook]='true'
                   [service]="labBooksService"

@@ -42,8 +42,11 @@ export class LoginPageComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    if (this.keycloak_integration && this.route.snapshot.queryParams['token']) {
+    if (this.route.snapshot.queryParams['token']) {
       this.auth.setDataInLocalStorage('token', this.route.snapshot.queryParams['token'])
+      if (this.route.snapshot.queryParams['state_url']){
+        this.router.navigate([this.route.snapshot.queryParams['state_url']])
+      }else
       this.router.navigate(['/'])
     }
 
