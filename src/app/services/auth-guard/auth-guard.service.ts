@@ -13,8 +13,6 @@ import {AuthService} from '@app/services';
 
 class AuthGuardService {
 
-  public authenticated = false;
-
   constructor(private router: Router,
               private readonly authService: AuthService,
   ) {
@@ -22,15 +20,16 @@ class AuthGuardService {
 
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authService.getToken()) {
-      this.authenticated = true
+    let authenticated = false;
+    if (this.authService.getToken() != null) {
+      authenticated = true;
     }
     // Force the user to log in if currently unauthenticated
-    if (!this.authenticated) {
+    if (!authenticated) {
       localStorage.setItem('state_url', state.url);
       this.router.navigate(['/login'])
     }
-    return this.authenticated;
+    return authenticated;
   }
 
 }
