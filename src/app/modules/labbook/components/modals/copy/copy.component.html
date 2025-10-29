@@ -1,0 +1,33 @@
+<ng-container *transloco="let t">
+  <mlzeln-modal>
+    <div slot="header">
+      {{ t('labBook.copyElement.header') }}
+    </div>
+    <div slot="body" *ngIf="!loading">
+      <ng-select
+        [items]="labbooks"
+        bindLabel="title"
+        bindValue="pk"
+        [(ngModel)]="selectedLabook"
+        placeholder="Select an labbook"
+      >
+      </ng-select>
+    </div>
+    <div slot="footer">
+      <button
+        type="button"
+        class="btn mlzeln-button-big mlzeln-button-secondary"
+        (click)="modalRef.close()"
+      >
+        {{ t('labBook.copyElement.cancel') }}
+      </button>
+      <button
+        type="submit"
+class="btn mlzeln-button-big mlzeln-button-primary"
+(click)="onSubmit()"
+>
+        {{ t('labBook.copyElement.submit') }}
+      </button>
+    </div>
+  </mlzeln-modal>
+</ng-container>

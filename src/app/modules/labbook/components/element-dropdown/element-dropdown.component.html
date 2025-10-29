@@ -55,9 +55,17 @@
 </ng-container>
 
 <ng-template #dropdownUL let-t="t" let-menuClass="menuClass" let-itemClass="itemClass">
-  <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic && section && labBookEditable">
-    <button type="button" [class]="itemClass" (click)="onOpenMoveBackToLabBookModal()" [disabled]="loading">
-      <joeseln-icon className="wb-bars"></joeseln-icon> {{ t('labBook.elementDropdown.moveBackToLabBook') }}
+  <!-- copy modal for note and picture element -->
+  <!-- eslint-disable-next-line -->
+  <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic && (initialState.content_type == 30 || initialState.content_type == 40)">
+    <button
+      type="button"
+      [class]="itemClass"
+      (click)="onOpenCopyModal()"
+      [disabled]="loading"
+    >
+      <joeseln-icon className="wb-bars"></joeseln-icon>
+ {{ t('labBook.copyElement.toolbar') }}
     </button>
   </li>
   <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic">

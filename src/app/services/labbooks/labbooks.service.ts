@@ -1,7 +1,11 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import type {
+  Note,
+  File,
+  Picture,
   ExportLink,
   FinalizeVersion,
   Lab_Book,
@@ -87,6 +91,10 @@ export class LabbooksService {
 
   public addElement(id: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {
     return this.httpClient.post<LabBookElement<any>>(`${this.apiUrl}${id}/elements/`, element).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
+  }
+
+  public addElementBottom(id: string, element: LabBookElementPayload): Observable<LabBookElement<Note | File | Picture | null>> {
+    return this.httpClient.post<LabBookElement<null>>(`${this.apiUrl}${id}/elements/bottom`, element).pipe(catchError((err: HttpErrorResponse) => this.errorservice.handleError(err, this.logout)));
   }
 
   public patchElement(id: string, elementId: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {

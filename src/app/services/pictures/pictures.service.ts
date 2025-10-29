@@ -176,4 +176,7 @@ export class PicturesService
     return this.httpClient.get<any>(url, {params});
   }
 
+  public downloadImage(url: string): Observable<Blob> {
+    return this.httpClient.get(url, { responseType: 'blob' });
+  }
 }

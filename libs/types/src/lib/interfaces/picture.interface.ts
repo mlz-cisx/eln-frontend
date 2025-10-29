@@ -5,7 +5,7 @@ export interface PicturePayload {
   title: string;
   height: number;
   width: number;
-  aspectRatio: number;
+  aspectRatio?: number;
   background_image: globalThis.File | Blob | string | null;
 }
 

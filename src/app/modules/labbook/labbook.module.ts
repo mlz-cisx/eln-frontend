@@ -35,6 +35,7 @@ import { PictureModule } from '../picture/picture.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { RecentChangesModalComponent } from './components/modals/recent-changes/recent-changes.component';
+import { CopyElementModalComponent } from './components/modals/copy/copy.component';
 import {
   RecentChangesModule
 } from "@app/modules/recent-changes/recent-changes.module";
@@ -58,7 +59,8 @@ import { MathjaxModule } from 'mathjax-angular';
     NewLabBookFileElementModalComponent,
     NewLabBookPictureElementModalComponent,
     NewLabBookSketchModalComponent,
-    RecentChangesModalComponent
+    RecentChangesModalComponent,
+    CopyElementModalComponent,
   ],
   imports: [
     CommonModule,
@@ -110,7 +112,8 @@ import { MathjaxModule } from 'mathjax-angular';
     NewLabBookFileElementModalComponent,
     NewLabBookPictureElementModalComponent,
     NewLabBookSketchModalComponent,
-    RecentChangesModalComponent
+    RecentChangesModalComponent,
+    CopyElementModalComponent,
   ],
 })
 export class LabBookModule {}

@@ -12,6 +12,7 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
+import { CopyElementModalComponent  } from '@app/modules/labbook/components/modals/copy/copy.component'
 import {
   RecentChangesModalComponent
 } from '@app/modules/labbook/components/modals/recent-changes/recent-changes.component';
@@ -228,6 +229,16 @@ export class LabBookElementDropdownComponent implements OnInit {
   }
 
   public moveBackToLabBook(): void {
+  }
+
+  public onOpenCopyModal(): void {
+
+    this.modalService.open(CopyElementModalComponent , {
+      closeButton: false,
+      width: '800px',
+      // eslint-disable-next-line
+      data: {labBookId: this.labBookId, element: this.initialState},
+    });
   }
 
   public remove(): void {
