@@ -305,17 +305,51 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
     this.labBooksService
       .getElements(this.id)
-      .pipe(
-        tap((labBookElements) =>
-          this.handleSoftReloadElements(labBookElements),
-        ),
-        catchError(() => {
-          this.socketLoading = false;
-          this.cdr.markForCheck();
-          return of(null);
-        }),
-      )
-      .subscribe(() => {
+      .pipe(untilDestroyed(this))
+      .subscribe(labBookElements => {
+        const oldDrawBoardElements = [...this.drawBoardElements];
+        const newdrawBoardElements: GridsterItem[] = this.convertToGridItems(labBookElements);
+
+        // Remove deleted elements
+        const elementsToRemove = oldDrawBoardElements.filter(
+          (oldField: GridsterItem) => !newdrawBoardElements.some((newField: GridsterItem) => oldField['element'].pk === newField['element'].pk)
+        );
+        elementsToRemove.forEach(element => {
+          for (let index = this.drawBoardElements.length - 1; index >= 0; index--) {
+            const drawBoardElement = this.drawBoardElements[index];
+            if (drawBoardElement['element'].pk === element['element'].pk) {
+              this.drawBoardElements.splice(index, 1);
+            }
+          }
+        });
+
+        // Update existing elements
+        newdrawBoardElements
+          .filter((newField: GridsterItem) =>
+            oldDrawBoardElements.some((oldField: GridsterItem) => newField['element'].pk === oldField['element'].pk)
+          )
+          .forEach(element => {
+            this.drawBoardElements.forEach((drawBoardElement, index) => {
+              if (drawBoardElement['element'].pk === element['element'].pk) {
+                this.drawBoardElements[index].x = element.x;
+                this.drawBoardElements[index].y = element.y;
+                this.drawBoardElements[index].cols = element.cols;
+                this.drawBoardElements[index].rows = element.rows;
+              }
+            });
+          });
+
+        // We must tell the options that we changed them even though we didn't. This way Gridster will
+        // check the changed properties of items and visually apply them. This is important if we move
+        // or resize items. As long as Gridster won't implement better support we need this workaround.
+        this.options.api?.optionsChanged?.();
+
+        // Add new elements
+        const elementsToAdd = newdrawBoardElements.filter(
+          (newField: GridsterItem) => !oldDrawBoardElements.some((oldField: GridsterItem) => newField['element'].pk === oldField['element'].pk)
+        );
+        this.drawBoardElements = [...this.drawBoardElements, ...elementsToAdd];
+
         this.socketLoading = false;
         this.socketRefreshTimeout = undefined;
         this.cdr.markForCheck();
@@ -325,32 +359,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.softReload();
         }
       });
-  }
-
-  private handleSoftReloadElements(
-    labBookElements: LabBookElement<any>[],
-  ): void {
-    const oldDrawBoardElements = new Map(
-      this.drawBoardElements.map((item) => [item['element'].pk, item]),
-    );
-    const newDrawBoardElements = this.convertToGridItems(labBookElements);
-
-    const updatedDrawBoardElements: GridsterItem[] = [];
-
-    for (const newElem of newDrawBoardElements) {
-      const oldElem = oldDrawBoardElements.get(newElem['element'].pk);
-      if (oldElem) {
-        // update existing elements
-        updatedDrawBoardElements.push({ ...oldElem, ...newElem });
-        oldDrawBoardElements.delete(newElem['element'].pk);
-      } else {
-        // add new elements
-        updatedDrawBoardElements.push(newElem);
-      }
-    }
-
-    // remaining old elements are deleted
-    this.drawBoardElements = updatedDrawBoardElements;
   }
 
 
