@@ -434,6 +434,7 @@
   "comments.public.toastr.success": "Comment is now public",
   "comments.newCommentModal.toastr.success": "Comment created",
   "comments.deleteModal.toastr.success": "Comment deleted",
+  "comments.deleteModal.toastr.error": "Deletion not allowed",
   "trashElement.toastr.success": "Element trashed",
   "restoreElement.toastr.success": "Element restored",
   "detailsDropdown.privilegesModal.addUser.toastr.success": "User added",

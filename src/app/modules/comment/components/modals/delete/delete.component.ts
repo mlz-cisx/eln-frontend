@@ -45,7 +45,17 @@ export class DeleteCommentModalComponent {
       .deleteRelation(this.baseModelId, this.relationId)
       .pipe(untilDestroyed(this))
       .subscribe(
-        () => {
+        (msg: string) => {
+          if (msg == "nok") {
+            this.modalRef.close({state: this.state});
+            this.translocoService
+            .selectTranslate<string>('comments.deleteModal.toastr.error')
+            .pipe(untilDestroyed(this))
+            .subscribe(msg => {
+              this.toastrService.error(msg);
+            });
+            return;
+          }
           this.state = ModalState.Changed;
           this.modalRef.close({state: this.state});
           // for multiple deletions
