@@ -65,9 +65,9 @@
                 {{ !editor_loaded ? 'Open Editor' : 'Close Editor' }}
               </button>
               <button type="button" class="btn mlzeln-button-big"
-                      (click)="graph_loaded = !graph_loaded;"
-                      [disabled]="!graph_exists">
-                Load Plot
+            (click)="loadPlotFromFile()"
+            [disabled]="!graph.graph_type">
+            {{ !graph.graph_loaded ? "Load Plot": "Close Plot" }}
               </button>
               <button type="button"
                       class="btn mlzeln-button-big square-md mlzeln-button-none cursor-move drag-handle mr-2"
@@ -110,12 +110,12 @@
                                  [loading]="loading" [margin]="false"
           *ngIf="editable">
             <mlzeln-wysiwyg-editor
-              [id]="'description-' + uniqueHash"
-              [maxHeight]="undefined"
-              [actual_height]=height
-              [inline]=false
-              formControlName="file_description"
-              slot="input"
+                    [id]="'description-' + uniqueHash"
+                    [maxHeight]="undefined"
+                    [actual_height]=height
+                    [inline]=false
+                    formControlName="file_description"
+                    slot="input"
             ></mlzeln-wysiwyg-editor>
           </mlzeln-form-input>
         </ng-container>
@@ -123,12 +123,17 @@
           <div [id]="preloaded_id" #preload [hidden]=editor_loaded>
           </div>
         </ng-container>
-        <ng-container *ngIf="graph_exists && graph_loaded">
-          <ng-template ngFor let-i="index" [ngForOf]="graph_data">
-            <app-plotly-editor [data]="graph_data[i][1]"
-                               [layout]="graph_data[i][0]"
-                               [config]="config"></app-plotly-editor>
-          </ng-template>
+        <ng-container *ngIf="graph.graph_type=='csv' && graph.graph_loaded">
+
+        </ng-container>
+        <ng-container
+                *ngIf="allowedBioTypes.includes(graph.graph_type) && graph.graph_loaded">
+          <div class="viewer-wrapper">
+            <app-mol-viewer
+                    [plotContent]="graph.graph_data"
+                    [model]="graph.graph_type!">
+            </app-mol-viewer>
+          </div>
         </ng-container>
       </div>
     </form>

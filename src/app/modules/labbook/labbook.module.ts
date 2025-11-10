@@ -36,13 +36,10 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { RecentChangesModalComponent } from './components/modals/recent-changes/recent-changes.component';
 import { CopyElementModalComponent } from './components/modals/copy/copy.component';
-import {
-  RecentChangesModule
-} from "@app/modules/recent-changes/recent-changes.module";
-import {
-  PlotlyEditorModule
-} from "../../../../libs/plotly-editor/lib/plotly-editor.module";
+import { RecentChangesModule } from '@app/modules/recent-changes/recent-changes.module';
+import { PlotlyEditorModule } from '../../../../libs/plotly-editor/lib/plotly-editor.module';
 import { MathjaxModule } from 'mathjax-angular';
+import {MolViewerModule} from "../../../../libs/mol-viewer/mol-viewer.module";
 
 @NgModule({
   declarations: [
@@ -97,6 +94,7 @@ import { MathjaxModule } from 'mathjax-angular';
     RecentChangesModule,
     PlotlyEditorModule,
     MathjaxModule.forChild(),
+    MolViewerModule
   ],
   exports: [
     LabBookSidebarComponent,

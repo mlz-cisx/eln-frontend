@@ -63,7 +63,8 @@
             ],
             "scripts": [
               "node_modules/@crawl/canvas-helper/dist/canvas-helper.min.js",
-              "node_modules/tinymce/tinymce.min.js"
+              "node_modules/tinymce/tinymce.min.js",
+              "node_modules/3dmol/build/3Dmol.js"
             ],
             "browser": "src/main.ts",
             "stylePreprocessorOptions": {

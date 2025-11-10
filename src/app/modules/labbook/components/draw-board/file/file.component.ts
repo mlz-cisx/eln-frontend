@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnInit,
   Renderer2,
   RendererStyleFlags2,
-  ElementRef,
   ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
@@ -15,7 +15,8 @@ import {
 } from '@app/modules/comment/components/modals/comments/comments.component';
 import {
   FilesService,
-  LabbooksService, NotesService, UserService,
+  LabbooksService,
+  NotesService,
   WebSocketService
 } from '@app/services';
 import type {
@@ -33,11 +34,20 @@ import {
   admin_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
 import {environment} from "@environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 
 interface FormFile {
   file_title: FormControl<string | null>;
   file_description: string | null;
+}
+
+type GraphType = 'csv' | 'pdb' | 'xyz' | 'cif' | null;
+
+interface Graph {
+  graph_type: GraphType;
+  graph_loaded: boolean;
+  graph_data: string;
 }
 
 @UntilDestroy()
@@ -71,13 +81,13 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public toolbar_shown = false;
 
-  public graph_data: any
+  public graph: Graph = {
+    graph_type: null,
+    graph_loaded: false,
+    graph_data: ""
+  };
 
-  public graph_exists = false
-
-  public _graph_exists = false
-
-  public graph_loaded = false;
+  public allowedBioTypes: GraphType[] = ['pdb', 'cif', 'xyz'];
 
   public config = {displaylogo: false}
 
@@ -121,7 +131,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
     private readonly renderer: Renderer2,
-    private readonly elementRef: ElementRef
+    private readonly elementRef: ElementRef,
+    private http: HttpClient
   ) {
   }
 
@@ -160,7 +171,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
         if (data.model_name === 'comments') {
@@ -245,39 +255,11 @@ export class LabBookDrawBoardFileComponent implements OnInit {
         if (!this.privileges.edit) {
           this.form.disable({emitEvent: false});
         }
-        this.convertPlotData(privilegesData.data);
-
-        this.graph_exists = this._graph_exists
+        if (this.initialState?.original_filename) {
+          this.graph.graph_type = this.detectGraphType(this.initialState.original_filename);
+        }
         this.cdr.markForCheck();
       });
-  }
-
-  public convertPlotData(data: File): void {
-     try {
-      if (JSON.parse(data.plot_data).length > 0) {
-        let loc_graph_data: any = []
-        JSON.parse(data.plot_data).forEach((plot: any) => {
-          const new_data = [];
-          for (const [key, value] of Object.entries(plot[1])) {
-            new_data.push(
-              {
-                y: Object.values(value as JSON),
-                mode: 'lines+markers',
-                name: key
-              }
-            )
-          }
-          let layout = {
-            title: {text: plot[0]}
-          }
-          loc_graph_data.push([layout, new_data])
-        })
-        this.graph_data = loc_graph_data
-        this._graph_exists = true
-      }
-    } catch (e) {
-      console.log(e)
-    }
   }
 
 
@@ -401,11 +383,42 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   public toggle_editor(): void {
     if (this.privileges?.edit) {
       if (this.title && !this.editor_loaded) {
-          this.renderer.setStyle(this.title.nativeElement, 'border', '');
+        this.renderer.setStyle(this.title.nativeElement, 'border', '');
       }
       this.editor_loaded = !this.editor_loaded; // Toggle state
       this.cdr.detectChanges();
     }
+  }
+
+  public loadPlotFromFile(): void {
+    if (!this.initialState) return;
+
+    // toggle show plot
+    if (this.graph.graph_type && this.graph.graph_loaded) {
+      this.graph.graph_loaded = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (this.graph.graph_type) {
+      this.http.get(this.initialState.download, {responseType: 'text'})
+        .subscribe({
+          next: (data) => {
+            this.graph.graph_data = data;
+            this.graph.graph_loaded = true;
+            this.cdr.markForCheck();
+          },
+          error: (err) => console.error('Error loading file:', err)
+        });
+    }
+  }
+
+  private detectGraphType(filename: string): GraphType {
+    if (filename.endsWith('.pdb')) return 'pdb';
+    if (filename.endsWith('.cif')) return 'cif';
+    if (filename.endsWith('.xyz')) return 'xyz';
+    if (filename.endsWith('.csv')) return 'csv';
+    return null;
   }
 
 }

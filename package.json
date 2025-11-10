@@ -35,6 +35,7 @@
     "@ngx-loading-bar/router": "^7",
     "@nrwl/angular": "^16",
     "@tinymce/tinymce-angular": "^8.0.1",
+    "3dmol": "^2.5.3",
     "angular-gridster2": "^20.2.2",
     "angular-plotly.js": "^6.0.0",
     "angular-resizable-element": "^5",
