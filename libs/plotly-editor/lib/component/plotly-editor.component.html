@@ -1,1 +1,11 @@
-<plotly-plot [data]="data" [layout]="layout" [config]="config"></plotly-plot>
+<div>
+  <label for="x-axis-select" style="margin-right: 20px;">Select X-axis:</label>
+  <select
+    id="x-axis-select"
+    [(ngModel)]="selectedXasix"
+    (change)="onChangeXaxis()"
+  >
+    <option *ngFor="let header of headers" [value]="header">{{ header }}</option>
+  </select>
+</div>
+<plotly-plot [data]="plotData" [config]="{ displaylogo: false }"></plotly-plot>

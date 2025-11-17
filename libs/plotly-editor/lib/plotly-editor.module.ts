@@ -1,5 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import {PlotlyEditorComponent} from "./component/plotly-editor.component";
 
@@ -12,7 +13,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [PlotlyEditorComponent],
-  imports: [CommonModule, PlotlyModule],
+  imports: [CommonModule, PlotlyModule, FormsModule],
   exports: [PlotlyEditorComponent]
 })
 export class PlotlyEditorModule {

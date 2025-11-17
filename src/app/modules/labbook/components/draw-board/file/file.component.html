@@ -124,7 +124,9 @@
           </div>
         </ng-container>
         <ng-container *ngIf="graph.graph_type=='csv' && graph.graph_loaded">
-
+          <app-plotly-editor
+            [data]= "graph.graph_data">
+          </app-plotly-editor>
         </ng-container>
         <ng-container
                 *ngIf="allowedBioTypes.includes(graph.graph_type) && graph.graph_loaded">
