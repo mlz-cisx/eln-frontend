@@ -47,3 +47,12 @@
     }
   }
 }
+
+:host ::ng-deep .editable .upper-canvas {
+  cursor: pointer !important;
+}
+
+:host ::ng-deep .upper-canvas {
+  cursor: default !important;
+}
+

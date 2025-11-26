@@ -91,6 +91,8 @@ export class LabBookElementDropdownComponent implements OnInit {
   @Output()
   public moved = new EventEmitter<ElementRemoval>();
 
+  @Output() pngExportRequested = new EventEmitter<void>();
+
   public modalRef?: DialogRef;
 
   public loading = false;
@@ -153,6 +155,11 @@ export class LabBookElementDropdownComponent implements OnInit {
           this.cdr.markForCheck();
         }
       );
+  }
+
+
+  public onPngExport(): void {
+    this.pngExportRequested.emit();
   }
 
   public async onClick(export_link: string, filename: string): Promise<void> {

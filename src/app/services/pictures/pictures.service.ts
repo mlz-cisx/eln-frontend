@@ -9,7 +9,7 @@ import type {
   Pic_with_privileges,
   Picture,
   PictureClonePayload,
-  PictureEditorPayload,
+  PictureContent,
   PicturePayload,
   PrivilegesData,
   RecentChanges,
@@ -94,7 +94,6 @@ export class PicturesService
   }
 
 
-
   public delete(id: string, labbook_pk: string, params = new HttpParams()): Observable<Picture> {
     return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params});
   }
@@ -102,6 +101,15 @@ export class PicturesService
   public patch(id: string, task: Optional<PicturePayload>, params = new HttpParams()): Observable<Picture> {
     return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/title/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
+
+  public patch_content(id: string, task: Optional<PicturePayload>, params = new HttpParams()): Observable<Picture> {
+    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/canvas_content/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+  }
+
+  public get_content(id: string, params = new HttpParams()): Observable<PictureContent> {
+    return this.httpClient.get<PictureContent>(`${this.apiUrl}${id}/canvas_content/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+  }
+
 
   public restore(id: string, params = new HttpParams()): Observable<Picture> {
     return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params});
@@ -155,21 +163,6 @@ export class PicturesService
 
   public deleteRelation(id: string, relationId: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}${id}/relations/${relationId}/`);
-  }
-
-  public uploadImage(id: string, picture: PictureEditorPayload, params = new HttpParams()): Observable<Picture> {
-    const formData = new FormData();
-    for (const [key, val] of Object.entries(picture)) {
-      if (!val) continue;
-      if (val instanceof Blob) {
-        if (val.size) {
-          formData.append(key, val, (val as any).name);
-        }
-      } else {
-        formData.append(key, val);
-      }
-    }
-    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/`, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
   public downloadShapes(url: string, params = new HttpParams()): Observable<any> {

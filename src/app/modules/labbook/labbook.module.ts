@@ -6,7 +6,6 @@ import { TranslocoRootModule } from '@app/transloco-root.module';
 import { FormsModule } from '@joeseln/forms';
 import { IconsModule } from '@joeseln/icons';
 import { ModalsModule } from '@joeseln/modals';
-import { PictureEditorModule } from '@joeseln/picture-editor';
 import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
@@ -25,7 +24,6 @@ import { LabBookDrawBoardPictureComponent } from './components/draw-board/pictur
 import { LabBookElementDropdownComponent } from './components/element-dropdown/element-dropdown.component';
 import { NewLabBookFileElementModalComponent } from './components/modals/new/file/new.component';
 import { NewLabBookNoteElementModalComponent } from './components/modals/new/note/new.component';
-import { NewLabBookPictureElementModalComponent } from './components/modals/new/picture/new.component';
 import { NewLabBookSketchModalComponent } from './components/modals/new/sketch/new.component';
 import { LabBookSidebarComponent } from './components/sidebar/sidebar.component';
 import { CommentModule } from '../comment/comment.module';
@@ -40,6 +38,9 @@ import { RecentChangesModule } from '@app/modules/recent-changes/recent-changes.
 import { PlotlyEditorModule } from '../../../../libs/plotly-editor/lib/plotly-editor.module';
 import { MathjaxModule } from 'mathjax-angular';
 import {MolViewerModule} from "../../../../libs/mol-viewer/mol-viewer.module";
+import {
+  FabricCanvasModule
+} from "../../../../libs/fabric-canvas/fabric-canvas.module";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,6 @@ import {MolViewerModule} from "../../../../libs/mol-viewer/mol-viewer.module";
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardPictureComponent,
     NewLabBookFileElementModalComponent,
-    NewLabBookPictureElementModalComponent,
     NewLabBookSketchModalComponent,
     RecentChangesModalComponent,
     CopyElementModalComponent,
@@ -90,11 +90,11 @@ import {MolViewerModule} from "../../../../libs/mol-viewer/mol-viewer.module";
     AlertModule,
     PictureModule,
     CommentModule,
-    PictureEditorModule,
     RecentChangesModule,
     PlotlyEditorModule,
     MathjaxModule.forChild(),
-    MolViewerModule
+    MolViewerModule,
+    FabricCanvasModule
   ],
   exports: [
     LabBookSidebarComponent,
@@ -108,7 +108,6 @@ import {MolViewerModule} from "../../../../libs/mol-viewer/mol-viewer.module";
     LabBookDrawBoardFileComponent,
     LabBookDrawBoardPictureComponent,
     NewLabBookFileElementModalComponent,
-    NewLabBookPictureElementModalComponent,
     NewLabBookSketchModalComponent,
     RecentChangesModalComponent,
     CopyElementModalComponent,

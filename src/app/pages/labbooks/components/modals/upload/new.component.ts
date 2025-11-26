@@ -31,6 +31,7 @@ import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import JSZip from 'jszip';
+import * as pako from "pako";
 
 
 interface FormLabBook {
@@ -201,7 +202,7 @@ export class UploadLabBookModalComponent implements OnInit {
             // handle picture entries
             } else if (is_pic) {
 
-              if (!(['bi.png', 'ri.png', 'shapes.json', 'info.json'].includes(path[2]))) {
+              if (!(['bi.png', 'info.json'].includes(path[2]))) {
                 throw new Error(`Invalid ZIP entry: incorrect picture elememnt`)
               }
               const key = path[1];
@@ -272,11 +273,11 @@ export class UploadLabBookModalComponent implements OnInit {
     }
 
     this.picture_map.forEach((pic, key) => {
+      const infoText = pic.get('info.json') as string;
+      const compressedInfo = this.compressJson(infoText);
       this.clone_picture({
         background_image: pic.get('bi.png') as Blob,
-        shapes_image: pic.get('shapes.json') as Blob,
-        rendered_image: pic.get('ri.png') as Blob,
-        info: pic.get('info.json') as string
+        info: compressedInfo
       }, key)
     })
 
@@ -334,6 +335,11 @@ export class UploadLabBookModalComponent implements OnInit {
       this.loading = false;
       this.cdr.markForCheck();
     });
+  }
+
+  public compressJson(json: string): Blob {
+    const compressed = pako.gzip(json); // Uint8Array
+    return new Blob([compressed], {type: "application/gzip"});
   }
 
 

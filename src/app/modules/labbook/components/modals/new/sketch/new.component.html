@@ -41,7 +41,6 @@
                 bindValue="value"
               ></ng-select>
             </div>
-
             <div class="modal-footer p-0">
               <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary mr-2" [disabled]="loading" (click)="modalRef.close()">
                 {{ t('labBook.newSketchModal.cancel') }}
@@ -49,40 +48,6 @@
               <button type="submit" class="btn mlzeln-button-big mlzeln-button-primary" [disabled]="loading" (click)="create_new_sketch()">
                 {{ t('labBook.newSketchModal.nextStep') }}
               </button>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="step === 2">
-            <div class="mb-4">
-              <label for="title-modal">
-                {{ t('labBook.newSketchModal.title.label') }}
-                <mlzeln-form-asterisk class="inline-block"></mlzeln-form-asterisk>
-              </label>
-              <input
-                type="text"
-                class="form-control mlzeln-input"
-                formControlName="title"
-                id="title-modal"
-                name="title-modal"
-                [placeholder]="t('labBook.newSketchModal.title.placeholder')"
-              />
-            </div>
-
-            <div class="mb-4">
-              <mlzeln-picture-editor [sketch]="true" [editable]="true" (saveSketch)="onSubmit($event)"></mlzeln-picture-editor>
-            </div>
-
-            <div class="flex justify-between mt-5">
-              <div>
-                <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary" [disabled]="loading" (click)="onChangeStep(1)">
-                  <joeseln-icon className="wb-bold-chevron-left"></joeseln-icon>
-                  {{ t('labBook.newSketchModal.previousStep') }}
-                </button>
-              </div>
-              <div class="modal-footer p-0">
-                <button type="button" class="btn mlzeln-button-big mlzeln-button-secondary mr-2" [disabled]="loading" (click)="modalRef.close()">
-                  {{ t('labBook.newSketchModal.cancel') }}
-                </button>
-              </div>
             </div>
           </ng-container>
         </form>

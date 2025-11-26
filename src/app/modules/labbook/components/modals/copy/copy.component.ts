@@ -6,6 +6,7 @@ import { LabbooksService, NotesService, PicturesService } from '@app/services';
 import type { LabBook, LabBookElementPayload, NotePayload, PicturePayload } from '@joeseln/types';
 import {ToastrService} from 'ngx-toastr';
 import {TranslocoService} from '@jsverse/transloco';
+import * as pako from "pako";
 
 @Component({
     selector: 'mlzeln-copy-element-modal',
@@ -59,24 +60,33 @@ export class CopyElementModalComponent implements OnDestroy {
       const note: NotePayload = {subject: this.element.subject, content: this.element.content}
       this.copyNote(note)
     }
-    // copy picture element
+    // copy picture element and compress canvas_content
     else if (this.element.content_type == 40) {
-      this.picturesService.downloadImage(this.element.download_rendered_image)
+      this.picturesService.get_content(this.element.pk)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((data) => {
-          const pic: PicturePayload = {title: this.element.title, width: this.element.width, height: this.element.height, background_image: data};
+          const content_blob = this.compressContent(data.canvas_content);
+          const pic: PicturePayload = {
+            title: this.element.title,
+            canvas_content: content_blob,
+          };
           this.copyPicture(pic);
         });
     }
     /* eslint-enable */
   }
 
+  public compressContent(content: string): Blob {
+    const compressed = pako.gzip(content); // Uint8Array
+    return new Blob([compressed], {type: "application/gzip"});
+  }
+
   private copyNote(note: NotePayload) {
     this.notesService.add(note)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(note => {
-      this.createElement(30, note.pk);
-    });
+        this.createElement(30, note.pk);
+      });
   }
 
   private copyPicture(pic: PicturePayload) {

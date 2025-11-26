@@ -1,9 +1,13 @@
 import {
+  afterEveryRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnInit,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {
@@ -29,11 +33,14 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import {take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 import {
   admin_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
+import {
+  FabricCanvasComponent
+} from "../../../../../../../libs/fabric-canvas/component/fabric-canvas.component";
+import {HttpClient} from "@angular/common/http";
 
 
 interface FormPicture {
@@ -42,13 +49,17 @@ interface FormPicture {
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-labbook-draw-board-picture',
-    templateUrl: './picture.component.html',
-    styleUrls: ['./picture.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'mlzeln-labbook-draw-board-picture',
+  templateUrl: './picture.component.html',
+  styleUrls: ['./picture.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class LabBookDrawBoardPictureComponent implements OnInit {
+
+  @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('fabricCanvas', {static: false}) fabricCanvas!: FabricCanvasComponent;
+
   @Input()
   public id!: string;
 
@@ -60,6 +71,9 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   @Input()
   public editable? = false;
+
+  @ViewChild('title')
+  private title?: ElementRef;
 
   public initialState?: Picture;
 
@@ -84,6 +98,11 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   public modalRef?: DialogRef;
 
+  private lastWidth = 0;
+  private lastHeight = 0;
+
+  public editor_loaded = false;
+
   public form = this.fb.group<FormPicture>({
     pic_title: this.fb.control(null, Validators.required),
   });
@@ -91,14 +110,19 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   public constructor(
     public readonly picturesService: PicturesService,
     private readonly labBooksService: LabbooksService,
-    private readonly cdr: ChangeDetectorRef,
+    public readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly toastrService: ToastrService,
     private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
+    private http: HttpClient,
+    private readonly renderer: Renderer2,
   ) {
+    afterEveryRender(() => {
+      this.resizeChild()
+    });
   }
 
   public get f() {
@@ -111,6 +135,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     };
   }
 
+  public canvasJson: any;
+
   public ngOnInit(): void {
 
     this.initDetails();
@@ -121,13 +147,24 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     }
 
   }
-  
+
+
+  public trigger_export(): void {
+    this.fabricCanvas.exportAsImage(this.initialState?.title);
+  }
+
   ngAfterViewInit() {
+    // Initial sizing after first render
+    this.resizeChild()
+
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
         if (data.model_name === 'comments') {
           this.element.num_related_comments = data['comments_count']
           this.cdr.markForCheck();
+          return
+        }
+        if (data.model_name === 'picture_content') {
           return
         }
         this.picturesService
@@ -142,7 +179,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
               {emitEvent: false}
             );
             this.cdr.markForCheck();
-
           });
       }
     });
@@ -179,8 +215,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         }
         this.cdr.markForCheck();
       });
-
-    this.cdr.markForCheck();
   }
 
   public onSubmit(): void {
@@ -243,7 +277,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
       },
     } as DialogConfig);
 
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe(() => this.onModalClose());
   }
 
   public onModalClose(): void {
@@ -282,5 +315,48 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   public scroll_to_position(pos: number) {
     window.scrollTo({top: pos, behavior: 'smooth'});
+  }
+
+  public getBackgroundUrl(): string | null {
+    try {
+      const url = this.initialState?.download_background_image
+      if (!url) return null;
+      // Basic URL validation
+      const parsed = new URL(url); // throws if invalid
+      return parsed.toString();
+    } catch (err) {
+      console.error('Invalid background URL:', err);
+      return null;
+    }
+  }
+
+  private resizeChild(): void {
+    // Guard against undefined refs during early lifecycle frames
+    if (!this.containerRef?.nativeElement || !this.fabricCanvas) return;
+
+    const parentEl = this.containerRef.nativeElement;
+    const width = parentEl.clientWidth;
+    const height = parentEl.clientHeight;
+
+    // Only resize if dimensions actually changed
+    if (width !== this.lastWidth || height !== this.lastHeight) {
+      this.fabricCanvas.setCanvasSize(width);
+      this.lastWidth = width;
+      this.lastHeight = height;
+    }
+  }
+
+
+  public toggle_editor(): void {
+    if (this.privileges?.edit) {
+      if (this.title && !this.editor_loaded) {
+        this.renderer.setStyle(this.title.nativeElement, 'border', '');
+      }
+      this.editor_loaded = !this.editor_loaded; // Toggle state
+      this.cdr.detectChanges();
+      if (this.fabricCanvas) {
+        this.fabricCanvas.toggleViewerMode();
+      }
+    }
   }
 }

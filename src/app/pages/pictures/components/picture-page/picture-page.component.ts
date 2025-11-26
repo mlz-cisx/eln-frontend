@@ -1,5 +1,6 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {
+  afterEveryRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -18,34 +19,38 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-import { AuthService, PicturesService, UserService } from '@app/services';
-import type { Picture, Privileges, User } from '@joeseln/types';
+import {AuthService, PicturesService, UserService} from '@app/services';
+import type {Picture, Privileges, User} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import { Observable, of } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
+import {
+  FabricCanvasComponent
+} from "../../../../../../libs/fabric-canvas/component/fabric-canvas.component";
 
 
 interface FormPicture {
   title: FormControl<string | null>;
-  height: number | null;
-  width: number | null;
-  aspectRatio: number | null;
 }
 
 @UntilDestroy()
 @Component({
-    templateUrl: './picture-page.component.html',
-    styleUrls: ['./picture-page.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  templateUrl: './picture-page.component.html',
+  styleUrls: ['./picture-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PicturePageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)
   public comments!: CommentsComponent;
+
+  @ViewChild('fabric_container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('fabricCanvasComp', {static: false}) fabricCanvas!: FabricCanvasComponent;
+
 
   public detailsTitle?: string;
 
@@ -54,6 +59,10 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public currentUser: User | null = null;
 
   public initialState?: Picture;
+
+  private lastWidth = 0;
+  private lastHeight = 0;
+  public editor_loaded = false;
 
 
   // some initialization
@@ -93,10 +102,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public uploadInput!: ElementRef;
 
   public form = this.fb.group<FormPicture>({
-    title: this.fb.control(null, Validators.required),
-    height: null,
-    width: null,
-    aspectRatio: null,
+    title: this.fb.control(null, Validators.required)
   });
 
   public constructor(
@@ -113,6 +119,9 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     private readonly modalService: DialogService,
     private user_service: UserService,
   ) {
+    afterEveryRender(() => {
+      this.resizeChild()
+    });
   }
 
   public get f() {
@@ -120,15 +129,6 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
 
-
-  private get file(): any {
-    return {
-      title: this.f.title.value!,
-      height: this.f.height.value,
-      width: this.f.width.value,
-      aspectRatio: this.f.aspectRatio.value ?? 1.0,
-    };
-  }
 
   public ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -185,10 +185,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
           this.form.patchValue(
             {
-              title: picture.title,
-              height: picture.height,
-              width: picture.width,
-              aspectRatio: picture.width / picture.height,
+              title: picture.title
             },
             {emitEvent: false}
           );
@@ -248,6 +245,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     this.refreshVersions.next(true);
     this.refreshChanges.next(true);
     this.refreshLinkList.next(true);
+    this.fabricCanvas.restoreCanvasContent();
   }
 
   public onRefreshLinkList(): void {
@@ -268,5 +266,38 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
   public onUpdateMetadata(): void {
+  }
+
+  public trigger_export(): void {
+    this.fabricCanvas.exportAsImage(this.initialState?.title);
+  }
+
+  private resizeChild(): void {
+    // Guard against undefined refs during early lifecycle frames
+    if (!this.containerRef?.nativeElement || !this.fabricCanvas) return;
+
+    const parentEl = this.containerRef.nativeElement;
+    const width = parentEl.clientWidth;
+    const height = parentEl.clientHeight;
+
+    // Only resize if dimensions actually changed
+    if (width !== this.lastWidth || height !== this.lastHeight) {
+      this.fabricCanvas.setCanvasSize(width);
+      this.lastWidth = width;
+      this.lastHeight = height;
+    }
+  }
+
+  public getBackgroundUrl(): string | null {
+    try {
+      const url = this.initialState?.download_background_image
+      if (!url) return null;
+      // Basic URL validation
+      const parsed = new URL(url); // throws if invalid
+      return parsed.toString();
+    } catch (err) {
+      console.error('Invalid background URL:', err);
+      return null;
+    }
   }
 }

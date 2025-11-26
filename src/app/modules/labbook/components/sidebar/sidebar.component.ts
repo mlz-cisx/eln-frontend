@@ -24,9 +24,6 @@ import {
   NewLabBookNoteElementModalComponent
 } from '../modals/new/note/new.component';
 import {
-  NewLabBookPictureElementModalComponent
-} from '../modals/new/picture/new.component';
-import {
   NewLabBookSketchModalComponent
 } from '../modals/new/sketch/new.component';
 import {
@@ -150,14 +147,7 @@ export class LabBookSidebarComponent implements OnInit {
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
-  public onOpenNewPictureElementModal(): void {
-    this.modalRef = this.modalService.open(NewLabBookPictureElementModalComponent, {
-      closeButton: false,
-        data: { labBookId: this.id },
-    } as DialogConfig);
 
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
-  }
 
   public onOpenNewFileElementModal(): void {
     this.modalRef = this.modalService.open(NewLabBookFileElementModalComponent, {
@@ -168,14 +158,6 @@ export class LabBookSidebarComponent implements OnInit {
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
-  public onOpenNewPluginElementModal(): void {
-  }
-
-  public onOpenImportModal(): void {
-  }
-
-  public onOpenNewSectionModal(): void {
-  }
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.state === ModalState.Changed) {

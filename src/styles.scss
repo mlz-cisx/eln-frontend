@@ -541,3 +541,9 @@ mlzeln-dashboard-page {
 .navbar {
   justify-content: flex-start !important;
 }
+
+@media (min-width: 1200px) {
+  ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.canvas-wrapper) {
+    max-width: 70% !important;
+  }
+}

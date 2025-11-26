@@ -1,14 +1,14 @@
 <ng-container *transloco="let t">
   <div style="text-align: center"><strong>{{detailsTitle}}</strong>
     <mlzeln-details-dropdown
-      [service]="picturesService"
-      [id]="id"
-      [redirectDestination]="[showSidebar ? '.' : '' + '/pictures', id]"
-
-      [initialState]="initialState"
-      [privileges]="privileges"
-      [duplicateElement]="false"
-      *ngIf="privileges"
+            (pngExportRequested)=trigger_export()
+            *ngIf="privileges"
+            [duplicateElement]="false"
+            [id]="id"
+            [initialState]="initialState"
+            [privileges]="privileges"
+            [redirectDestination]="[showSidebar ? '.' : '' + '/pictures', id]"
+            [service]="picturesService"
     ></mlzeln-details-dropdown>
   </div>
 </ng-container>
@@ -47,16 +47,6 @@
                         readonly
                       />
                     </mlzeln-form-input>
-                  </div>
-                  <div class="mb-4">
-                    <label
-                      for="width">{{ t('picture.details.width.label') }}</label>
-                    <div id="width">{{ initialState.width }}px</div>
-                  </div>
-                  <div class="mb-4">
-                    <label
-                      for="height">{{ t('picture.details.height.label') }}</label>
-                    <div id="height">{{ initialState.height }}px</div>
                   </div>
                   <div class="mb-4">
                     <label
@@ -120,12 +110,12 @@
           </form>
         </mlzeln-overview-collapse-element>
 
-        <div class="border border-tum-border-gray p-4">
-          <mlzeln-picture-editor
-            [picture]="initialState"
-            [service]="picturesService"
-            [editable]="privileges.edit"
-          ></mlzeln-picture-editor>
+        <div class="canvas-wrapper fabric_container" #fabric_container>
+                    <app-fabric-canvas #fabricCanvasComp
+                             [uuid]="initialState!.pk"
+                             [editor_loaded]="privileges.edit"
+                             [backgroundUrl]="getBackgroundUrl()"
+                    ></app-fabric-canvas>
         </div>
       </main>
     </div>

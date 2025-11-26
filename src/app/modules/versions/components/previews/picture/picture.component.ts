@@ -68,7 +68,6 @@ export class PicturePreviewComponent implements OnInit {
       .subscribe(
         (picture: Picture) => {
           this.picture = {...picture};
-
           this.loading = false;
           this.cdr.markForCheck();
         },
@@ -100,8 +99,6 @@ export class PicturePreviewComponent implements OnInit {
               this.toastrService.success(versionRestored);
               this.cdr.markForCheck()
               this.cdr.detectChanges()
-              // TODO try to get rid of this
-              // location.reload()
             });
         },
         () => {

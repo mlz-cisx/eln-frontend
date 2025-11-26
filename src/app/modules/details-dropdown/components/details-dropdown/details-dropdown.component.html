@@ -56,15 +56,26 @@
 
 <ng-template #dropdownUL let-t="t" let-menuClass="menuClass" let-itemClass="itemClass">
 
-<!--  <li [class]="menuClass" role="menuitem" *ngIf="privilegesElement">-->
-<!--    <button type="button" [class]="itemClass" (click)="onOpenPrivilegesModal()" [disabled]="loading">-->
-<!--      <joeseln-icon className="wb-unlock"></joeseln-icon> {{ t('detailsDropdown.privileges') }}-->
-<!--    </button>-->
-<!--  </li>-->
+  <!--  <li [class]="menuClass" role="menuitem" *ngIf="privilegesElement">-->
+  <!--    <button type="button" [class]="itemClass" (click)="onOpenPrivilegesModal()" [disabled]="loading">-->
+  <!--      <joeseln-icon className="wb-unlock"></joeseln-icon> {{ t('detailsDropdown.privileges') }}-->
+  <!--    </button>-->
+  <!--  </li>-->
 
   <li [class]="menuClass" role="menuitem" *ngIf="exportElement">
-    <button type="button" [class]="itemClass" (click)="onExport()" [disabled]="loading">
-      <joeseln-icon className="wb-pdf-file"></joeseln-icon> {{ t('detailsDropdown.export') }}
+    <button (click)="onExport()" [class]="itemClass" [disabled]="loading"
+            type="button">
+      <joeseln-icon className="wb-pdf-file"></joeseln-icon>
+      {{ t('detailsDropdown.export') }}
+    </button>
+  </li>
+
+  <li *ngIf="initialState.content_type == 40" [class]="menuClass"
+      role="menuitem">
+    <button (click)="onPngExport()" [class]="itemClass" [disabled]="loading"
+            type="button">
+      <joeseln-icon className="wb-pdf-file"></joeseln-icon>
+      {{ t('detailsDropdown.export_png') }}
     </button>
   </li>
 
@@ -76,8 +87,8 @@
     </button>
   </li>
 
-<!--  <li [class]="menuClass" role="menuitem" *ngIf="privileges?.trash && !initialState?.deleted && trashElement">-->
-<!--    <button type="button" [class]="itemClass" (click)="onDelete()" [disabled]="loading">-->
+  <!--  <li [class]="menuClass" role="menuitem" *ngIf="privileges?.trash && !initialState?.deleted && trashElement">-->
+  <!--    <button type="button" [class]="itemClass" (click)="onDelete()" [disabled]="loading">-->
 <!--      <joeseln-icon className="wb-trash-1"></joeseln-icon> {{ t('detailsDropdown.trash') }}-->
 <!--    </button>-->
 <!--  </li>-->

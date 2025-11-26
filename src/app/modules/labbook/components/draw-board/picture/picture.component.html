@@ -2,25 +2,26 @@
   <ng-container *transloco="let t">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="element"
           errorTailor>
-      <div class="header flex justify-between header-container" [id]="title_id">
+      <div class="header flex justify-between header-container"
+           [id]="title_id">
         <div class="flex-fill">
           <mlzeln-form-input-pic
-            [for]="'title-' + uniqueHash"
-            [loading]="loading"
-            [margin]="false"
+                  [for]="'title-' + uniqueHash"
+                  [loading]="loading"
+                  [margin]="false"
           >
             <input
-              [style]="this.background_color"
-              type="text"
-                  class="form-control mlzeln-input"
-                  [id]="'title-' + uniqueHash"
-                  formControlName="pic_title"
-                  name="title"
-                  [placeholder]="t('labBook.drawBoardPicture.details.title.placeholder')"
-                  slot="input"
-                  [readOnly]=!this.title_editable
-                />
-              </mlzeln-form-input-pic>
+                    [style]="this.background_color"
+                    type="text"
+                    class="form-control mlzeln-input"
+                    [id]="'title-' + uniqueHash"
+                    formControlName="pic_title"
+                    name="title"
+                    [placeholder]="t('labBook.drawBoardPicture.details.title.placeholder')"
+                    slot="input"
+                    [readOnly]=!this.title_editable
+            />
+          </mlzeln-form-input-pic>
             </div>
             <div class="ml-2 self-center">
               <button type="button"
@@ -45,11 +46,11 @@
                   {{ t('labBook.drawBoard.element.footer.createComment') }}
                 </ng-container>
                 <ng-container
-                  *ngIf="element.num_related_comments && element.num_related_comments === 1">
+                        *ngIf="element.num_related_comments && element.num_related_comments === 1">
                   {{ t('labBook.drawBoard.element.footer.comment', {count: element.num_related_comments}) }}
                 </ng-container>
                 <ng-container
-                  *ngIf="element.num_related_comments && element.num_related_comments > 1">
+                        *ngIf="element.num_related_comments && element.num_related_comments > 1">
                   {{ t('labBook.drawBoard.element.footer.comments', {count: element.num_related_comments}) }}
                 </ng-container>
               </button>
@@ -59,25 +60,30 @@
                 <joeseln-icon className="wb-arrow-cross"></joeseln-icon>
               </button>
               <mlzeln-labbook-element-dropdown
-                *ngIf="editable"
-                [service]="picturesService"
-                [id]="initialState.pk"
-                [labBookId]="id"
-                [elementId]="element.pk"
-                [section]="section"
-                [initialState]="initialState"
-                routerBaseLink="/pictures"
-                [privileges]="privileges"
-                [labBookEditable]="editable"
+                      *ngIf="editable"
+                      [service]="picturesService"
+                      [id]="initialState.pk"
+                      [labBookId]="id"
+                      [elementId]="element.pk"
+                      [section]="section"
+                      [initialState]="initialState"
+                      routerBaseLink="/pictures"
+                      [privileges]="privileges"
+                      [labBookEditable]="editable"
+                      (pngExportRequested)=trigger_export()
               ></mlzeln-labbook-element-dropdown>
             </div>
-          </div>
-      <div class="body">
-        <a href (click)="onOpenPictureEditorModal($event)"
-        ><img class="max-w-full h-auto"
-              [src]="initialState.download_rendered_image"
-              [alt]="initialState.display"
-        /></a>
+      </div>
+      <div class="body" #container>
+        <div class="canvas-wrapper" [class.editable]="privileges.edit" (click)="privileges.edit && onOpenPictureEditorModal($event)">
+          <app-fabric-canvas #fabricCanvas
+                             (click)="privileges.edit && onOpenPictureEditorModal($event)"
+                             (touchend)="privileges.edit && onOpenPictureEditorModal($event)"
+                             [uuid]="initialState!.pk"
+                             [editor_loaded]="editor_loaded"
+                             [backgroundUrl]="getBackgroundUrl()"
+          ></app-fabric-canvas>
+        </div>
       </div>
     </form>
   </ng-container>

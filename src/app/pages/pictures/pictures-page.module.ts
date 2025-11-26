@@ -20,7 +20,6 @@ import {TranslocoRootModule} from '@app/transloco-root.module';
 import {FormsModule} from '@joeseln/forms';
 import {IconsModule} from '@joeseln/icons';
 import {ModalsModule} from '@joeseln/modals';
-import {PictureEditorModule} from '@joeseln/picture-editor';
 import {TableModule} from '@joeseln/table';
 import {WysiwygEditorModule} from '@joeseln/wysiwyg-editor';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
@@ -34,6 +33,9 @@ import {
   PicturesPageComponent
 } from './components/pictures-page/pictures-page.component';
 import {PicturesPageRoutingModule} from './pictures-page-routing.module';
+import {
+  FabricCanvasComponent
+} from "../../../../libs/fabric-canvas/component/fabric-canvas.component";
 
 
 @NgModule({
@@ -70,9 +72,9 @@ import {PicturesPageRoutingModule} from './pictures-page-routing.module';
     VersionsModule,
     BsDropdownModule.forRoot(),
     IconsModule,
-    PictureEditorModule,
     CommentModule,
     TooltipModule.forRoot(),
+    FabricCanvasComponent,
   ],
 })
 export class PicturesPageModule {

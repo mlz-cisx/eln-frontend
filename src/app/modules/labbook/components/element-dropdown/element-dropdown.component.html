@@ -73,9 +73,22 @@
       <joeseln-icon className="wb-pdf-file"></joeseln-icon> {{ t('labBook.elementDropdown.export') }}
     </button>
   </li>
-  <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic && labBookEditable && privileges?.trash && !initialState?.deleted">
-    <button type="button" [class]="itemClass" (click)="onDelete()" [disabled]="loading">
-      <joeseln-icon className="wb-trash-1"></joeseln-icon> {{ t('labBook.elementDropdown.trashElement') }}
+
+  <li [class]="menuClass" role="menuitem"
+      *ngIf="!minimalistic && initialState.content_type == 40">
+    <button type="button" [class]="itemClass" (click)="onPngExport()"
+            [disabled]="loading">
+      <joeseln-icon className="wb-pdf-file"></joeseln-icon>
+      {{ t('labBook.elementDropdown.export_png') }}
+    </button>
+  </li>
+
+  <li [class]="menuClass" role="menuitem"
+      *ngIf="!minimalistic && labBookEditable && privileges?.trash && !initialState?.deleted">
+    <button type="button" [class]="itemClass" (click)="onDelete()"
+            [disabled]="loading">
+      <joeseln-icon className="wb-trash-1"></joeseln-icon>
+      {{ t('labBook.elementDropdown.trashElement') }}
     </button>
   </li>
   <li [class]="menuClass" role="menuitem" *ngIf="!minimalistic">

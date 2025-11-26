@@ -42,11 +42,6 @@
               },
               {
                 "glob": "**/*.*",
-                "input": "node_modules/@crawl/canvas-helper/dist",
-                "output": "/canvas/"
-              },
-              {
-                "glob": "**/*.*",
                 "input": "node_modules/mathjax/es5",
                 "output": "/mathjax/"
               },
@@ -62,7 +57,6 @@
               "src/assets/styles/tinymce.css"
             ],
             "scripts": [
-              "node_modules/@crawl/canvas-helper/dist/canvas-helper.min.js",
               "node_modules/tinymce/tinymce.min.js",
               "node_modules/3dmol/build/3Dmol.js"
             ],

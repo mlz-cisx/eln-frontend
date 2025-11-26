@@ -3,38 +3,19 @@ import {Privileges} from "./privileges.interface";
 
 export interface PicturePayload {
   title: string;
-  height: number;
-  width: number;
-  aspectRatio?: number;
-  background_image: globalThis.File | Blob | string | null;
+  canvas_content?: Blob | string | null;
+  origin?: string;
 }
 
 export interface SketchPayload {
   title: string;
-  height: number;
-  width: number;
-  rendered_image: globalThis.File | Blob | string;
-  shapes_image?: globalThis.File | Blob | string | null;
+  canvas_content?: Blob | string | null;
 }
 
-export interface ConvertTiffPayload {
-  file: Blob;
-}
-
-export interface PictureEditorPayload {
-  background_image: Blob;
-  shapes_image: Blob;
-  width: number;
-  height: number;
-  rendered_image: Blob;
-  scale: number
-}
 
 export interface PictureClonePayload {
   background_image: Blob;
-  shapes_image: Blob;
-  rendered_image: Blob;
-  info: string | null;
+  info: Blob | null;
 }
 
 export interface Picture {
@@ -46,12 +27,8 @@ export interface Picture {
   deleted: boolean;
   description: string;
   display: string;
-  download_background_image: string;
-  download_rendered_image: string;
-  download_shapes: string;
-  height: number;
-  width: number;
-  scale: number;
+  download_background_image?: string;
+  canvas_content?: string;
   last_modified_at: string;
   last_modified_by: User;
   pk: string;
@@ -59,6 +36,10 @@ export interface Picture {
   url: string;
   version_number: number;
   is_favourite: boolean;
+}
+
+export interface PictureContent {
+  canvas_content: string;
 }
 
 export interface Pic_with_privileges {

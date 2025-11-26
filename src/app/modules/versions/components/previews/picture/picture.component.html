@@ -17,7 +17,10 @@
       <div class="mb-4">
       </div>
       <div class="mb-4">
-        <img [src]="picture.download_rendered_image" class="max-w-full h-auto" [alt]="picture.title" />
+        <app-fabric-canvas
+                [canvasContent]="this.picture.canvas_content"
+                [preview]="true">
+        </app-fabric-canvas>
       </div>
 
       <div class="modal-footer p-0 mt-5">

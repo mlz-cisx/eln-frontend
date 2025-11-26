@@ -20,6 +20,9 @@ import { VersionsComponent } from './components/versions/versions.component';
 import { LoadingModule } from '../loading/loading.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
+import {
+  FabricCanvasComponent
+} from "../../../../libs/fabric-canvas/component/fabric-canvas.component";
 
 @NgModule({
   declarations: [
@@ -54,6 +57,7 @@ import { UserModule } from '../user/user.module';
     WysiwygEditorModule,
     AlertModule.forRoot(),
     IconsModule,
+    FabricCanvasComponent,
   ],
   exports: [
     VersionsComponent,

@@ -3,22 +3,24 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
-  OnInit
+  OnInit,
+  Output
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
   DeleteModalComponent
 } from '@app/modules/trash/components/modals/delete/delete.component';
-import type { ExportLink, ModalCallback, Privileges } from '@joeseln/types';
+import type {ExportLink, ModalCallback, Privileges} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';
 import {lastValueFrom} from "rxjs";
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from "@environments/environment";
 
 @UntilDestroy()
@@ -68,6 +70,8 @@ export class DetailsDropdownComponent implements OnInit {
 
   @Input()
   public privileges?: Privileges;
+
+  @Output() pngExportRequested = new EventEmitter<void>();
 
   public modalRef?: DialogRef;
 
@@ -129,6 +133,10 @@ export class DetailsDropdownComponent implements OnInit {
           this.cdr.markForCheck();
         }
       );
+  }
+
+  public onPngExport(): void {
+    this.pngExportRequested.emit();
   }
 
   public async onExportZip(): Promise<void> {

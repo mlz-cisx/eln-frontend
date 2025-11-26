@@ -1,0 +1,226 @@
+<div class="toolbar" [class.viewer-active]="viewerMode" *ngIf="editor_loaded">
+
+
+
+  <input #galleryInput
+         type="file"
+         accept="image/*"
+         (change)="uploadBackground($event)"
+         hidden>
+  <button type="button"
+          [disabled]="viewerMode"
+          (click)="galleryInput.click()"
+          title="Upload from Gallery">
+    <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+  </button>
+
+  <input #cameraInput
+         type="file"
+         accept="image/*"
+         capture="environment"
+         (change)="uploadBackground($event)"
+         hidden>
+  <button type="button"
+          [disabled]="viewerMode"
+          (click)="cameraInput.click()"
+          title="Take Photo">
+    <fa-icon [icon]="['fas', 'camera']"></fa-icon>
+  </button>
+
+
+  <button type="button" (click)="loadBackgroundFromStorage()"
+          [disabled]="viewerMode"
+          title="Load from Instrument">
+    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+  </button>
+
+  <input #pdfInput
+         (change)="uploadPdf($event)" accept="application/pdf" hidden
+         type="file">
+  <button (click)="pdfInput.click()"
+          [disabled]="viewerMode"
+          title="Upload Pdf"
+          type="button">
+    <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+  </button>
+
+
+  <button type="button" (click)="toggleViewerMode()" title="Toggle Viewer Mode">
+    <fa-icon
+            [icon]="viewerMode ?  ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
+  </button>
+
+  <span class="separator"></span>
+
+  <button type="button" (click)="toggleDrawingMode('rectangle')"
+          [disabled]="viewerMode"
+          title="Draw Rectangle">
+    <fa-icon [icon]="['fas', 'square']"></fa-icon>
+  </button>
+
+  <button type="button" (click)="toggleDrawingMode('circle')"
+          [disabled]="viewerMode"
+          title="Draw Circle">
+    <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+  </button>
+
+  <span class="separator"></span>
+
+
+  <button type="button" (click)="startPointMode()" [disabled]="viewerMode"
+          [class.active]="isActive('point')" title="Start Shape">
+    <fa-icon [icon]="['fas', 'play']"></fa-icon>
+  </button>
+
+
+  <button type="button" (click)="toggleShapeType()" [disabled]="viewerMode"
+          [class.active]="isActive(shapeType)" title="Toggle Shape Type">
+    <fa-icon *ngIf="shapeType === 'polyline'"
+             [icon]="['fas', 'project-diagram']"></fa-icon>
+    <fa-icon *ngIf="shapeType === 'polygon'"
+             [icon]="['fas', 'draw-polygon']"></fa-icon>
+    <fa-icon *ngIf="shapeType === 'arrow'"
+             [icon]="['fas', 'arrow-right']"></fa-icon>
+  </button>
+
+
+  <button type="button" (click)="finishShape()" [disabled]="viewerMode"
+          [class.active]="isActive('finish')" title="Finish Shape">
+    <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+  </button>
+
+
+  <span class="separator"></span>
+  <button type="button" (click)="startDrawing()" [disabled]="viewerMode"
+          [class.active]="isDrawing"
+          title="Free Draw">
+    <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+  </button>
+
+  <button type="button" (click)="finishDrawing()" [disabled]="viewerMode"
+          [class.active]="!isDrawing"
+          title="Finish Drawing">
+    <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+  </button>
+
+
+  <label title="Pen Size">
+    <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+    <input type="range" min="1" max="50" [(ngModel)]="penSize"
+           (input)="updatePenSettings()" [disabled]="viewerMode">
+  </label>
+  <label title="Pen Color">
+    <fa-icon [icon]="['fas', 'palette']"></fa-icon>
+    <input type="color" [(ngModel)]="penColor" (input)="updatePenSettings()"
+           [disabled]="viewerMode">
+  </label>
+
+
+  <label title="Fill Color">
+    <fa-icon [icon]="['fas', 'fill-drip']"></fa-icon>
+    <input type="color" [(ngModel)]="fillColor" (input)="updateFill()"
+           [disabled]="viewerMode">
+    <button type="button" (click)="removeFill()" [disabled]="viewerMode"
+            title="Remove Fill">
+      <fa-icon [icon]="['fas', 'ban']"></fa-icon>
+    </button>
+  </label>
+
+  <label title="Stroke Color">
+    <fa-icon [icon]="['fas', 'paint-brush']"></fa-icon>
+    <input type="color" [(ngModel)]="strokeColor" (input)="updateStrokeColor()"
+           [disabled]="viewerMode">
+  </label>
+
+  <label title="Stroke Width">
+    <fa-icon [icon]="['fas', 'arrows-alt-h']"></fa-icon>
+    <input type="number" [(ngModel)]="strokeWidth" (input)="updateStrokeWidth()"
+           min="1" max="20" [disabled]="viewerMode">
+  </label>
+
+  <span class="separator"></span>
+
+  <button type="button" (click)="startTextMode()" [disabled]="viewerMode"
+          title="Add Text">
+    <fa-icon [icon]="['fas', 'font']"></fa-icon>
+  </button>
+
+  <label title="Font Size">
+    <fa-icon [icon]="['fas', 'text-height']"></fa-icon>
+    <input type="number" [(ngModel)]="fontSize" (input)="updateFontSize()"
+           min="8" max="72" [disabled]="viewerMode">
+  </label>
+
+  <label title="Font Family">
+    <fa-icon [icon]="['fas', 'heading']"></fa-icon>
+    <select [(ngModel)]="fontFamily" (change)="updateFontFamily()"
+            [disabled]="viewerMode">
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Tahoma">Tahoma</option>
+      <option value="Impact">Impact</option>
+    </select>
+  </label>
+
+  <button type="button" (click)="toggleBold()" [disabled]="viewerMode"
+          title="Bold">
+    <fa-icon [icon]="['fas', 'bold']"></fa-icon>
+  </button>
+  <button type="button" (click)="toggleItalic()" [disabled]="viewerMode"
+          title="Italic">
+    <fa-icon [icon]="['fas', 'italic']"></fa-icon>
+  </button>
+
+  <span class="separator"></span>
+
+
+  <button type="button" (click)="removeSelected()" [disabled]="viewerMode"
+          title="Remove Selected">
+    <fa-icon [icon]="['fas', 'times']"></fa-icon>
+  </button>
+
+
+  <div class="clear-wrapper">
+    <button type="button" (click)="toggleConfirm()" [disabled]="viewerMode"
+            title="Clear All">
+      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+    </button>
+
+    <div class="confirm-popover" *ngIf="showConfirm">
+      <button type="button" (click)="confirmClear()" title="Confirm">
+        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+      </button>
+      <button type="button" (click)="cancelClear()" title="Cancel">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+
+  <button (click)="bringToFrontAndSubmit()" [disabled]="viewerMode"
+          class="save-btn"
+          type="button">
+    <fa-icon [icon]="['fas','layer-group']"></fa-icon>
+    <span class="label">Bring to Front</span>
+  </button>
+
+
+  <button type="button" class="save-btn"
+          (click)="storeCanvas()"
+          [disabled]="viewerMode"
+          title="Save changes">
+    <fa-icon [icon]="['fas', 'save']"></fa-icon>
+    <span class="label">Save Changes</span>
+  </button>
+
+
+</div>
+
+<div [class.preview]="preview" class="canvas-wrapper">
+  <canvas #fabricCanvas>
+  </canvas>
+</div>
+
