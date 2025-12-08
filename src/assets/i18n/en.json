@@ -167,6 +167,7 @@
   "loading.loading": "Loading",
   "formInput.remove.tooltip": "Remove",
   "labBook.newModal.thousandsSeparator.label": "Thousands separator",
+  "molviewer.error": "Error formating file",
   "navbar.globalSearch.placeholder": "Global Search",
   "navbar.globalSearch.restrictSearch": "Restrict search for types",
   "navbar.globalSearch.createdBy": "Created by",

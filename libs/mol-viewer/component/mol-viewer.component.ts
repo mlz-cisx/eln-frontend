@@ -7,6 +7,8 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 declare var $3Dmol: any; // Declare global 3Dmol object
@@ -58,17 +60,23 @@ interface Viewer {
   selector: 'app-mol-viewer',
   templateUrl: './mol-viewer.component.html',
   styleUrls: ['./mol-viewer.component.css'],
-  standalone: true
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 
 export class MolViewerComponent implements AfterViewInit, OnChanges {
 
-  constructor(private elementRef: ElementRef) {
+  constructor(
+    private elementRef: ElementRef,
+    private readonly cdr: ChangeDetectorRef,
+  ) {
   }
 
   @Input() plotContent: string = '';
   @Input() model: string = '';
   @ViewChild('molCanvas', {static: false}) molCanvas!: ElementRef<HTMLDivElement>;
+
+  errorDisplay: boolean = false;
 
   private viewer: Viewer | null = null;
   private backgroundColor = '#fafaf7'
@@ -78,7 +86,12 @@ export class MolViewerComponent implements AfterViewInit, OnChanges {
     this.viewer = $3Dmol.createViewer(element, {backgroundColor: this.backgroundColor});
 
     if (this.plotContent && this.model) {
-      this.loadAndRenderModel(this.plotContent, this.model);
+      try {
+        this.loadAndRenderModel(this.plotContent, this.model);
+      } catch (error) {
+        this.errorDisplay = true;
+        this.cdr.detectChanges();
+      }
     }
   }
 

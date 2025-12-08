@@ -1,2 +1,10 @@
-<div #molCanvas class="mol-canvas"></div>
-
+@if (!errorDisplay) {
+    <div #molCanvas class="mol-canvas"></div>
+}
+@else {
+    <ng-container *transloco="let t">
+        <div class="warning-box">
+            <p>{{ t('molviewer.error') }}</p>
+        </div>
+    </ng-container>
+}
