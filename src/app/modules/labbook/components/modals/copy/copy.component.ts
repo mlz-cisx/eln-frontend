@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { LabbooksService, NotesService, PicturesService } from '@app/services';
 import type { LabBook, LabBookElementPayload, NotePayload, PicturePayload } from '@joeseln/types';
 import {ToastrService} from 'ngx-toastr';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 
 @Component({
     selector: 'mlzeln-copy-element-modal',

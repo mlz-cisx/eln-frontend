@@ -7,7 +7,7 @@ import {LoadingBarModule} from '@ngx-loading-bar/core';
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
 import {TranslocoRootModule} from './transloco-root.module';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
 import {NavbarModule} from "@app/modules/navbar/navbar.module";
 import {WysiwygEditorModule} from '@joeseln/wysiwyg-editor';

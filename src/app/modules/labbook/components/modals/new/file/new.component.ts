@@ -17,7 +17,7 @@ import type {
 } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from "@environments/environment";

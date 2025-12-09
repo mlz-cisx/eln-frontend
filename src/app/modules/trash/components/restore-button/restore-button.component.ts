@@ -7,7 +7,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import type { TableViewComponent } from '@joeseln/table';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 

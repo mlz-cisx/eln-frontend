@@ -7,7 +7,7 @@ import { TranslocoRootModule } from '@app/transloco-root.module';
 import { FormsModule } from '@joeseln/forms';
 import { IconsModule } from '@joeseln/icons';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ProfilePageComponent } from './components/profile-page/profile.component';

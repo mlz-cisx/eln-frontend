@@ -14,7 +14,7 @@ import type {
   RecentChangesChangeRecord,
   User
 } from '@joeseln/types';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {cloneDeep} from 'lodash';
 import { map } from 'rxjs/operators';

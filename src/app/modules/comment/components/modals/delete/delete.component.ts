@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {DialogRef} from '@ngneat/dialog';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 

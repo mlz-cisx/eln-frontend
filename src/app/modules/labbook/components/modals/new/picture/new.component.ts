@@ -24,17 +24,10 @@ import type {
 } from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import type * as pdfjs from 'pdfjs-dist';
 import { distinctUntilChanged } from 'rxjs/operators';
-
-declare global {
-  interface Window {
-    pdfjsLib: typeof pdfjs;
-  }
-}
 
 interface FormElement {
   parentElement: FormControl<string | null>;
@@ -216,14 +209,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
     if (files.length) {
       const reader = new FileReader();
       reader.onload = async () => {
-        if (files[0].type === 'application/pdf') {
-          const pdf = await window.pdfjsLib.getDocument(reader.result as Parameters<typeof pdfjs.getDocument>[0]).promise;
-          if (pdf.numPages === 1) {
-            const firstPage = await pdf.getPage(1);
-            const blob = await this.convertPDFtoCanvas(firstPage);
-            files = [new File([blob], `${files[0].name as string}.png`)];
-          }
-        }
         const image = URL.createObjectURL(files[0]);
         this.displayImage = this.domSanitizer.bypassSecurityTrustUrl(image);
         this.originalImage.src = image;
@@ -304,23 +289,6 @@ export class NewLabBookPictureElementModalComponent implements OnInit, AfterView
       );
   }
 
-  private async convertPDFtoCanvas(page: pdfjs.PDFPageProxy): Promise<any> {
-    const toBlob = (canvas: HTMLCanvasElement): Promise<unknown> => new Promise(resolve => canvas.toBlob(resolve));
-
-    const viewport = page.getViewport({scale: 1});
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-
-    await page.render({
-      canvasContext: ctx!,
-      viewport: viewport,
-    }).promise;
-
-    return toBlob(canvas);
-  }
 
   private async resizeImage(image: HTMLImageElement, width: number, height: number): Promise<any> {
     const toBlob = (canvas: HTMLCanvasElement): Promise<unknown> => new Promise(resolve => canvas.toBlob(resolve));

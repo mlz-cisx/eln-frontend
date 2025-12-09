@@ -39,7 +39,7 @@ import type {
 } from '@joeseln/types';
 import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import { Observable, of } from 'rxjs';
 import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';

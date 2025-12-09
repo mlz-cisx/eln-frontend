@@ -25,7 +25,7 @@ import {
 import type { ModalCallback, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {keyBy, merge, values} from 'lodash';
 import { debounceTime, skip, take } from 'rxjs/operators';

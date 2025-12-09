@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import type { ModalCallback, Version } from '@joeseln/types';
 import { DialogRef } from '@ngneat/dialog';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'mlzeln-version-preview-modal',

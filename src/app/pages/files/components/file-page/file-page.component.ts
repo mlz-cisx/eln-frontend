@@ -22,7 +22,7 @@ import { AuthService, FilesService, UserService } from '@app/services';
 import type { File, FilePayload, Privileges, User } from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import { Observable, of } from 'rxjs';

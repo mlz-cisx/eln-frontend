@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import type {Note, Relation, User} from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs';

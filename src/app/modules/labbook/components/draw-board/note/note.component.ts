@@ -23,7 +23,7 @@ import type {
 } from '@joeseln/types';
 import {DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {v4 as uuidv4} from 'uuid';

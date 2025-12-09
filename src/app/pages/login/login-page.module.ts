@@ -7,7 +7,7 @@ import {
 import {TranslocoRootModule} from '@app/transloco-root.module';
 import {FormsModule} from '@joeseln/forms';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {LoginPageComponent} from './components/login-page/login-page.component';
 import {LoginPageRoutingModule} from './login-page-routing.module';
 

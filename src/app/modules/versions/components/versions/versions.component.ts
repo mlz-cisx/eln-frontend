@@ -3,7 +3,7 @@ import { ModalState } from '@app/enums/modal-state.enum';
 import { TableColumn, TableViewComponent } from '@joeseln/table';
 import type { ModalCallback, Version } from '@joeseln/types';
 import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { parseISO } from 'date-fns';
 import { take } from 'rxjs/operators';

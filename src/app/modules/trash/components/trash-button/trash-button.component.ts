@@ -9,7 +9,7 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import type { TableViewComponent } from '@joeseln/table';
 import type {ModalCallback} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';

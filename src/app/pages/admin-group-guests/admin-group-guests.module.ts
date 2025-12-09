@@ -23,7 +23,7 @@ import {ModalsModule} from '@joeseln/modals';
 import {TableModule} from '@joeseln/table';
 import {WysiwygEditorModule} from '@joeseln/wysiwyg-editor';
 import {ErrorTailorModule} from '@ngneat/error-tailor';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {

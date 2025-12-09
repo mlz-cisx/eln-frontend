@@ -8,7 +8,7 @@ import { ModalsModule } from '@joeseln/modals';
 import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { FinalizeVersionModalComponent } from './components/modals/finalize/finalize.component';
 import { VersionPreviewModalComponent } from './components/modals/preview/preview.component';

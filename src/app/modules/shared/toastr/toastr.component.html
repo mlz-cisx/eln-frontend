@@ -1,4 +1,4 @@
-<div class="grid" [style.display]="state.value === 'inactive' ? 'none' : ''">
+<div class="grid" [style.display]="_state.value === 'inactive' ? 'none' : ''">
   <div>
     <div *ngIf="title" [class]="options.titleClass" [attr.aria-label]="title">
       {{ title }}

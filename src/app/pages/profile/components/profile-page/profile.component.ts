@@ -4,7 +4,7 @@ import { User } from '@joeseln/types';
 import {UserStore} from "@app/services/user/user.store";
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {ToastrService} from 'ngx-toastr';
 
 @UntilDestroy()

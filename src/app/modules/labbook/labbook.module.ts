@@ -10,7 +10,7 @@ import { PictureEditorModule } from '@joeseln/picture-editor';
 import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { GridsterModule } from 'angular-gridster2';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';

@@ -17,7 +17,7 @@ import {
 } from '@joeseln/table';
 import type { DropdownElement } from '@joeseln/types';
 import {FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@ngneat/transloco';
+import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 
 @UntilDestroy()

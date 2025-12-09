@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, Self } from '@angula
 import { NgControl, Validators } from '@angular/forms';
 import type { DropdownElement, TimeGroup } from '@joeseln/types';
 import { FormBuilder } from '@ngneat/reactive-forms';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { skip } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
