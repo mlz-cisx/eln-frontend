@@ -37,10 +37,9 @@ import { CopyElementModalComponent } from './components/modals/copy/copy.compone
 import { RecentChangesModule } from '@app/modules/recent-changes/recent-changes.module';
 import { PlotlyEditorModule } from '../../../../libs/plotly-editor/lib/plotly-editor.module';
 import { MathjaxModule } from 'mathjax-angular';
-import {MolViewerModule} from "../../../../libs/mol-viewer/mol-viewer.module";
-import {
-  FabricCanvasModule
-} from "../../../../libs/fabric-canvas/fabric-canvas.module";
+import { MolViewerModule } from '../../../../libs/mol-viewer/mol-viewer.module';
+import { FabricCanvasModule } from '../../../../libs/fabric-canvas/fabric-canvas.module';
+import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.module';
 
 @NgModule({
   declarations: [
@@ -94,7 +93,8 @@ import {
     PlotlyEditorModule,
     MathjaxModule.forChild(),
     MolViewerModule,
-    FabricCanvasModule
+    FabricCanvasModule,
+    VideoJsPlayerModule,
   ],
   exports: [
     LabBookSidebarComponent,

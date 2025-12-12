@@ -137,6 +137,14 @@
             </app-mol-viewer>
           </div>
         </ng-container>
+        <ng-container *ngIf="initialState &&
+          allowedPlayerMimeTypes.includes(this.initialState.mime_type)">
+          <app-video-js-player
+            [src]="initialState.download"
+            [type]="initialState.mime_type"
+            [width]="this.elementRef.nativeElement.offsetWidth * 0.8">
+          </app-video-js-player>
+        </ng-container>
       </div>
     </form>
   </ng-container>

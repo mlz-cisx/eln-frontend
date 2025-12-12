@@ -89,6 +89,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public allowedBioTypes: GraphType[] = ['pdb', 'cif', 'xyz'];
 
+  public allowedPlayerMimeTypes: string[] = ['video/mp4', 'video/webm', 'audio/mpeg', 'audio/mp3', 'audio/aac', 'audio/mp4'];
+
   public config = {displaylogo: false}
 
   public editor_loaded = false;
@@ -131,7 +133,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly modalService: DialogService,
     public readonly notesService: NotesService,
     private readonly renderer: Renderer2,
-    private readonly elementRef: ElementRef,
+    readonly elementRef: ElementRef,
     private http: HttpClient
   ) {
   }
