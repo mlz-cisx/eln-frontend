@@ -21,9 +21,7 @@
               "base": "dist/joeselnfrontend13"
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
               "lodash",
@@ -33,8 +31,16 @@
               "filesize"
             ],
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets/",
+                "output": "assets/"
+              },
+              {
+                "glob": "manifest.webmanifest",
+                "input": "src/assets/",
+                "output": "/"
+              },
               {
                 "glob": "**/*.{js,css,woff}",
                 "input": "node_modules/tinymce",
@@ -70,9 +76,7 @@
                   "mixed-decls"
                 ]
               },
-              "includePaths": [
-                "."
-              ]
+              "includePaths": ["."]
             }
           },
           "configurations": {
@@ -134,13 +138,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }
