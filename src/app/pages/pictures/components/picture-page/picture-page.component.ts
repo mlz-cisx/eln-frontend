@@ -61,7 +61,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   public initialState?: Picture;
 
   private lastWidth = 0;
-  private lastHeight = 0;
+
   public editor_loaded = false;
 
 
@@ -278,13 +278,12 @@ export class PicturePageComponent implements OnInit, OnDestroy {
 
     const parentEl = this.containerRef.nativeElement;
     const width = parentEl.clientWidth;
-    const height = parentEl.clientHeight;
+
 
     // Only resize if dimensions actually changed
-    if (width !== this.lastWidth || height !== this.lastHeight) {
+    if (width !== this.lastWidth) {
       this.fabricCanvas.setCanvasSize(width);
       this.lastWidth = width;
-      this.lastHeight = height;
     }
   }
 

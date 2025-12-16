@@ -99,7 +99,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   public modalRef?: DialogRef;
 
   private lastWidth = 0;
-  private lastHeight = 0;
+
 
   public editor_loaded = false;
 
@@ -154,8 +154,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // Initial sizing after first render
-    this.resizeChild()
+
 
     this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
       if (data.model_pk === this.initialState!.pk) {
@@ -336,13 +335,11 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     const parentEl = this.containerRef.nativeElement;
     const width = parentEl.clientWidth;
-    const height = parentEl.clientHeight;
 
     // Only resize if dimensions actually changed
-    if (width !== this.lastWidth || height !== this.lastHeight) {
+    if (width !== this.lastWidth) {
       this.fabricCanvas.setCanvasSize(width);
       this.lastWidth = width;
-      this.lastHeight = height;
     }
   }
 

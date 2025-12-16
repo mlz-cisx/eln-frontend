@@ -72,9 +72,8 @@ export class PictureEditorModalComponent implements OnInit {
     if (!this.containerRef?.nativeElement || !this.fabricCanvas) return;
     const parentEl = this.containerRef.nativeElement;
     const width = parentEl.clientWidth;
-    // Only resize if dimensions actually changed
+
     if (width !== this.lastWidth) {
-      // heuristic value
       this.lastWidth = Math.min(width, this.fabricCanvas.BASE_WIDTH)
       this.fabricCanvas.setCanvasSize(this.lastWidth);
     }

@@ -148,7 +148,6 @@ export class FabricCanvasComponent implements AfterViewInit {
         this.canvas.selection = false;
 
         this.canvas.forEachObject(obj => {
-          console.log(obj)
           obj.selectable = false;
           obj.evented = false;
           obj.hasControls = false;
@@ -1250,16 +1249,6 @@ public bringToFrontAndSubmit(): void {
   }
 
 
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    console.log('dragover fired');
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    console.log('drop fired', event);
-  }
-
   private loadCanvasFromJson(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.picturesService
@@ -1270,7 +1259,7 @@ public bringToFrontAndSubmit(): void {
             try {
               if (!data || !data.canvas_content) {
                 console.warn('No canvas_content found in response');
-                resolve(); // or reject(new Error('No canvas_content'))
+                resolve();
                 return;
               }
 
@@ -1284,13 +1273,13 @@ public bringToFrontAndSubmit(): void {
                   this.canvas.backgroundColor = parsed.background;
                 }
                 this.canvas.renderAll();
-                console.log('Canvas loaded and rendered (empty)');
+                // console.log('Canvas loaded and rendered (empty)');
                 resolve();
               } else {
                 // Non-empty: let Fabric load objects, then callback fires
                 this.canvas.loadFromJSON(parsed, () => {
                   this.canvas.requestRenderAll();
-                  console.log('Canvas loaded and rendered');
+                  // console.log('Canvas loaded and rendered');
                   this.canvas.once('after:render', () => {
                     this.canvas.getObjects().forEach(obj => {
                       obj.set({
