@@ -15,7 +15,7 @@ import {ModalState} from "@app/enums/modal-state.enum";
 import {TableViewComponent} from "@joeseln/table";
 import {
   UploadLabBookModalComponent
-} from "@app/pages/labbooks/components/modals/upload/new.component";
+} from "@app/pages/admin/components/clone_labbook_modals/upload/new.component";
 
 
 @UntilDestroy()

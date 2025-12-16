@@ -48,11 +48,13 @@ import {
 import {
   NewGroupModalComponent
 } from "@app/pages/admin/components/group_modals/new/new.component";
-
+import {
+  UploadLabBookModalComponent
+} from "@app/pages/admin/components/clone_labbook_modals/upload/new.component";
 
 
 @NgModule({
-  declarations: [ AdminPageComponent, UsersPageComponent, ElnadminsPageComponent, GroupsPageComponent, UserPageComponent, NewUserModalComponent, NewGroupModalComponent],
+  declarations: [AdminPageComponent, UsersPageComponent, ElnadminsPageComponent, GroupsPageComponent, UserPageComponent, NewUserModalComponent, NewGroupModalComponent, UploadLabBookModalComponent],
   imports: [
     CommonModule,
     AdminPageRoutingModule,
