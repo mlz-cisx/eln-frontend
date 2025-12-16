@@ -23,23 +23,13 @@
                     autoFocus
             />
           </div>
-          <div class="mb-4">
-            <div class="custom-control custom-checkbox">
-              <input
-                      class="custom-control-input"
-                      type="checkbox"
-                      formControlName="isTemplate"
-                      id="isTemplate-modal"
-                      name="isTemplate-modal"
-              />
-              <label class="custom-control-label font-normal"
-                     for="isTemplate-modal">{{ t('labBook.newModal.isTemplate.label') }}</label>
-            </div>
+          <div class="mb-4" style="text-align: center; font-size: large">
+            Check the maximum permissible size of the elements!
           </div>
           <div class="mb-4">
             <label for="description-modal">{{ t('labBook.newModal.description.label') }}</label>
             <mlzeln-wysiwyg-editor [id]="'description-modal'"
-                                       formControlName="description"></mlzeln-wysiwyg-editor>
+                                   formControlName="description"></mlzeln-wysiwyg-editor>
           </div>
 
 
