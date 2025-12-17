@@ -8,37 +8,40 @@ import {
 } from '@angular/core';
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
-import { FilesService, LabbooksService } from '@app/services';
+import {FilesService, LabbooksService} from '@app/services';
 import type {
   DropdownElement,
   FilePayload,
-  LabBookElementEvent,
   ModalCallback,
 } from '@joeseln/types';
+import {LabBookElementPayload} from "@joeseln/types";
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from "@environments/environment";
+import {takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
+
+type NonNegativeInteger = number & { __nonNegativeIntegerBrand: never };
 
 interface FormElement {
   parentElement: FormControl<string | null>;
-  position: FormControl<'top' | 'bottom'>;
+  position: FormControl<'top' | 'bottom' | NonNegativeInteger>;
   title: FormControl<string | null>;
   name: string | null;
   file: FormControl<globalThis.File | string | null>;
-  storage: string | null;
   description: string | null;
 }
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-new-labbook-file-element-modal',
-    templateUrl: './new.component.html',
-    styleUrls: ['./new.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'mlzeln-new-labbook-file-element-modal',
+  templateUrl: './new.component.html',
+  styleUrls: ['./new.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class NewLabBookFileElementModalComponent implements OnInit {
   @Output()
@@ -46,6 +49,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
   public labBookId = this.modalRef.data.labBookId;
 
+  public position_option = this.modalRef.data.position;
 
   public loading = true;
 
@@ -59,18 +63,17 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
   public position: DropdownElement[] = [];
 
-
-  public filePlaceholder = this.translocoService.translate('file.newModal.file.placeholder');
-
   public form = this.fb.group<FormElement>({
     parentElement: this.fb.control('labBook', Validators.required),
-    position: this.fb.control('bottom', Validators.required),
+    position: this.fb.control(<'top' | 'bottom' | NonNegativeInteger>('bottom')),
     title: this.fb.control(null, Validators.required),
     name: null,
     file: this.fb.control(null, Validators.required),
-    storage: null,
     description: null,
   });
+
+  public filePlaceholder = this.translocoService.translate('file.newModal.file.placeholder');
+  private unsubscribe$ = new Subject<void>();
 
   public constructor(
     public readonly modalRef: DialogRef,
@@ -101,7 +104,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       title: this.f.title.value!,
       name: this.f.name.value!,
       path: this.f.file.value!,
-      directory_id: this.f.storage.value ?? undefined!,
       description: this.f.description.value ?? '',
       labbook_pk: this.labBookId
     };
@@ -115,6 +117,20 @@ export class NewLabBookFileElementModalComponent implements OnInit {
     this.loading = false;
     this.cdr.markForCheck();
     this.patchFormValues();
+  }
+
+  ngAfterViewInit(): void {
+    if (
+      this.position_option !== null && this.position_option !== undefined &&
+      !this.position.some(opt => opt.value === this.position_option)
+    ) {
+      this.position = [
+        ...this.position,
+        {value: this.position_option, label: this.position_option.toString()}
+      ];
+      this.form.patchValue({position: this.position_option});
+      this.cdr.detectChanges();
+    }
   }
 
   public initTranslations(): void {
@@ -205,20 +221,7 @@ export class NewLabBookFileElementModalComponent implements OnInit {
         file => {
           if (file) {
             this.state = ModalState.Changed;
-            const event: LabBookElementEvent = {
-              childObjectId: file.pk,
-              childObjectContentType: file.content_type,
-              childObjectContentTypeModel: file.content_type_model,
-              parentElement: this.element.parentElement,
-              position: this.element.position,
-            };
-            this.modalRef.close({state: this.state, data: event});
-            this.translocoService
-              .selectTranslate('labBook.newFileElementModal.toastr.success')
-              .pipe(untilDestroyed(this))
-              .subscribe(success => {
-                this.toastrService.success(success);
-              });
+            this.createElement(50, file.pk)
             if (this.file.name.endsWith('spc') &&  this.lb_elements_count > 0) {
               this.toastrService.warning('Plots from a .spc cannot be created on non-empty labbooks')
             }
@@ -231,8 +234,15 @@ export class NewLabBookFileElementModalComponent implements OnInit {
           this.cdr.markForCheck();
         }
       );
-
   }
+
+  public asNonNegativeInteger(n: number): NonNegativeInteger {
+    if (!Number.isInteger(n) || n < 0) {
+      throw new Error("Value must be an integer ≥ 0");
+    }
+    return n as NonNegativeInteger;
+  }
+
 
   public createTree(items: any[], id = null, level = 0): any[] {
     return items.filter(dir => dir.directory === id).map(d => ({
@@ -255,5 +265,37 @@ export class NewLabBookFileElementModalComponent implements OnInit {
 
   public onChangeStep(step: number): void {
     this.step = step;
+  }
+
+  public addNumberTag = (userInput: string) => {
+    const num = Number(userInput);
+    if (Number.isInteger(num) && num >= 0) {
+      return {value: this.asNonNegativeInteger(num), label: userInput};
+    }
+    return null;
+  };
+
+  private createElement(child_object_content_type: number, child_object_id: string, width: number = 10, height: number = 10) {
+    if (!this.labBookId) return;
+    const elem: LabBookElementPayload = {
+      child_object_content_type: child_object_content_type,
+      child_object_id: child_object_id,
+      width: width,
+      height: height,
+      position: this.element.position
+    }
+    this.labBooksService.addElementToRow(this.labBookId, elem).subscribe(() => {
+      this.modalRef.close();
+      this.translocoService
+        .selectTranslate('labBook.newFileElementModal.toastr.success')
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((success: string) => {
+          this.toastrService.success(success);
+        });
+    });
+  }
+
+  isNumeric(value: any): boolean {
+    return typeof value === 'number';
   }
 }

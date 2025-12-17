@@ -1,5 +1,5 @@
 <mlzeln-loading [loading]="loading">
-  <gridster #drawBoard [options]="options">
+  <gridster #drawBoard [options]="options" (dblclick)="onGridDoubleClick($event)" >
     <gridster-item
       [id]="'elem_' + item['element']['child_object_id']"
       [item]="item"

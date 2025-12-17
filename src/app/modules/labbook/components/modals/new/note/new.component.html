@@ -5,7 +5,7 @@
     </div>
     <div slot="body">
       <mlzeln-loading [loading]="loading">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor>
+        <form [formGroup]="form" (ngSubmit)="onSubmitWithPosition()" errorTailor>
           <div class="mb-4">
             <label for="parentElement-modal">
               {{ t('labBook.newNoteElementModal.parentElement.label') }}
@@ -38,7 +38,17 @@
               [clearable]="false"
               bindLabel="label"
               bindValue="value"
-            ></ng-select>
+              [addTag]="addNumberTag"
+            >
+                              <ng-template let-item="item" ng-option-tmp><span
+                        [ngClass]="{ 'numeric-option': isNumeric(item.value) }"> {{ item.label }} </span>
+                </ng-template>
+                <ng-template let-item="item" ng-label-tmp><span
+                        [ngClass]="{ 'numeric-option': isNumeric(item.value) }"> {{ item.label }} </span>
+                </ng-template>
+
+
+            </ng-select>
           </div>
 
           <div class="modal-footer p-0 mt-5">

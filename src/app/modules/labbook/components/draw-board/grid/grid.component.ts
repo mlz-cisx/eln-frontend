@@ -4,36 +4,42 @@ import {
   Component,
   EventEmitter,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
+  Output,
   Renderer2,
-  NgZone,
 } from '@angular/core';
-import { LabbooksService, NotesService, WebSocketService } from '@app/services';
+import {LabbooksService, NotesService, WebSocketService} from '@app/services';
 import {environment} from '@environments/environment';
 import type {
   LabBookElement,
   LabBookElementEvent,
   LabBookElementPayload,
 } from '@joeseln/types';
-import { DialogRef } from '@ngneat/dialog';
+import {ModalCallback} from "@joeseln/types";
+import {DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import type { GridsterConfig, GridsterItem } from 'angular-gridster2';
-import { of, catchError, tap, Subscription, timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import type {GridsterConfig, GridsterItem} from 'angular-gridster2';
+import {catchError, of, Subscription, tap, timer} from 'rxjs';
+import {switchMap, take} from 'rxjs/operators';
 import {gridsterConfig} from '../../../config/gridster-config';
 import {
   highlight_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
+import {ModalState} from "@app/enums/modal-state.enum";
+import {
+  AddElementModalComponent
+} from "@app/modules/labbook/components/modals/add_new/addelem.component";
 
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-labbook-draw-board-grid',
-    templateUrl: './grid.component.html',
-    styleUrls: ['./grid.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'mlzeln-labbook-draw-board-grid',
+  templateUrl: './grid.component.html',
+  styleUrls: ['./grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()
@@ -42,8 +48,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()
   public created?: EventEmitter<LabBookElementEvent>;
 
-  // @Input()
-  // public refresh?: EventEmitter<boolean>;
+  @Output()
+  public elem_created = new EventEmitter<LabBookElementEvent>();
 
   @Input()
   public editable? = false;
@@ -77,6 +83,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly websocketService: WebSocketService,
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
+    private readonly modalService: DialogService,
   ) {
   }
 
@@ -359,6 +366,44 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.softReload();
         }
       });
+  }
+
+  public onGridDoubleClick(event: MouseEvent) {
+    const gridElement = (event.currentTarget as HTMLElement);
+    const rect = gridElement.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    this.getRowFromCoordinates(y);
+  }
+
+  public getRowFromCoordinates(y: number) {
+    const rowHeight = this.options.fixedRowHeight || this.options['cellHeight'];
+    const margin = this.options.margin || 0;
+    const effectiveRowHeight = rowHeight + margin;
+    const row = Math.floor(y / effectiveRowHeight);
+    this.onOpenNewElemModal(row)
+  }
+
+
+  public onOpenNewElemModal(position: number): void {
+    this.modalRef = this.modalService.open(AddElementModalComponent, {
+      closeButton: false,
+      width: '652px',
+      data: {
+        labBookId: this.id,
+        position: position
+      },
+    });
+    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
+  }
+
+
+  public onModalClose(callback?: ModalCallback): void {
+    if (callback?.state === ModalState.Changed) {
+      this.elem_created.emit(callback.data);
+    }
   }
 
 

@@ -100,6 +100,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   private lastWidth = 0;
 
+  private clickTimeout: any;
 
   public editor_loaded = false;
 
@@ -344,16 +345,18 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
 
-  public toggle_editor(): void {
-    if (this.privileges?.edit) {
-      if (this.title && !this.editor_loaded) {
-        this.renderer.setStyle(this.title.nativeElement, 'border', '');
+  public onCanvasClick(event: MouseEvent): void {
+    clearTimeout(this.clickTimeout);
+    this.clickTimeout = setTimeout(() => {
+      if (this.privileges.edit) {
+        this.onOpenPictureEditorModal(event);
       }
-      this.editor_loaded = !this.editor_loaded; // Toggle state
-      this.cdr.detectChanges();
-      if (this.fabricCanvas) {
-        this.fabricCanvas.toggleViewerMode();
-      }
-    }
+    }, 250);
   }
+
+  public onCanvasDoubleClick(event: MouseEvent): void {
+    // cancel the single‑click
+    clearTimeout(this.clickTimeout);
+  }
+
 }

@@ -1,18 +1,17 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {HttpErrorResponse} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import type {
-  Note,
-  File,
-  Picture,
   ExportLink,
+  File,
   FinalizeVersion,
   Lab_Book,
   LabBook,
   LabBookElement,
   LabBookElementPayload,
   LabBookPayload,
+  Note,
+  Picture,
   Privileges,
   PrivilegesData,
   RecentChanges,
@@ -95,6 +94,10 @@ export class LabbooksService {
 
   public addElementBottom(id: string, element: LabBookElementPayload): Observable<LabBookElement<Note | File | Picture | null>> {
     return this.httpClient.post<LabBookElement<null>>(`${this.apiUrl}${id}/elements/bottom`, element).pipe(catchError((err: HttpErrorResponse) => this.errorservice.handleError(err, this.logout)));
+  }
+
+  public addElementToRow(id: string, element: LabBookElementPayload): Observable<LabBookElement<Note | File | Picture | null>> {
+    return this.httpClient.post<LabBookElement<null>>(`${this.apiUrl}${id}/elements/row`, element).pipe(catchError((err: HttpErrorResponse) => this.errorservice.handleError(err, this.logout)));
   }
 
   public patchElement(id: string, elementId: string, element: LabBookElementPayload): Observable<LabBookElement<any>> {

@@ -34,6 +34,7 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { RecentChangesModalComponent } from './components/modals/recent-changes/recent-changes.component';
 import { CopyElementModalComponent } from './components/modals/copy/copy.component';
+import { AddElementModalComponent } from './components/modals/add_new/addelem.component';
 import { RecentChangesModule } from '@app/modules/recent-changes/recent-changes.module';
 import { PlotlyEditorModule } from '../../../../libs/plotly-editor/lib/plotly-editor.module';
 import { MathjaxModule } from 'mathjax-angular';
@@ -57,6 +58,7 @@ import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.
     NewLabBookSketchModalComponent,
     RecentChangesModalComponent,
     CopyElementModalComponent,
+    AddElementModalComponent,
   ],
   imports: [
     CommonModule,
@@ -111,6 +113,7 @@ import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.
     NewLabBookSketchModalComponent,
     RecentChangesModalComponent,
     CopyElementModalComponent,
+    AddElementModalComponent
   ],
 })
 export class LabBookModule {}

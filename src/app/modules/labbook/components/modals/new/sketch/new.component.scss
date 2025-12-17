@@ -1,3 +1,8 @@
 :host {
   display: block;
 }
+
+.numeric-option {
+  font-weight: bold;
+  color: #0078d4; /* highlight numeric values */
+}

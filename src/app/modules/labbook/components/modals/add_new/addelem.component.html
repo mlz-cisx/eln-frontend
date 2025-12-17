@@ -1,0 +1,58 @@
+<ng-container *transloco="let t">
+  <mlzeln-modal>
+    <div slot="header">
+      {{ t('labBook.addElement.header') }}
+    </div>
+    <div class="add-elem" slot="body">
+      <p style="text-align: center; font-size: large">{{ t('labBook.addElement.position') }}
+        : {{ position }}</p>
+
+      <div class="mlzeln-radio-group">
+        <label>
+          <input
+                  [(ngModel)]="selectedType"
+                  name="elementType"
+                  type="radio"
+                  value="sketch"
+          />
+          {{ t('labBook.addElement.newSketch') }}
+        </label>
+        <label>
+          <input
+                  [(ngModel)]="selectedType"
+                  name="elementType"
+                  type="radio"
+                  value="file"
+          />
+          {{ t('labBook.addElement.newFile') }}
+        </label>
+        <label>
+          <input
+                  [(ngModel)]="selectedType"
+                  name="elementType"
+                  type="radio"
+                  value="note"
+          />
+          {{ t('labBook.addElement.newNote') }}
+        </label>
+      </div>
+    </div>
+
+    <div slot="footer">
+      <button
+              (click)="parentmodalRef.close()"
+              class="btn mlzeln-button-big mlzeln-button-secondary"
+              type="button"
+      >
+        {{ t('labBook.addElement.cancel') }}
+      </button>
+      <button
+              (click)="proceed()"
+              class="btn mlzeln-button-big mlzeln-button-primary"
+              type="submit"
+      >
+        {{ t('labBook.addElement.submit') }}
+      </button>
+    </div>
+  </mlzeln-modal>
+</ng-container>

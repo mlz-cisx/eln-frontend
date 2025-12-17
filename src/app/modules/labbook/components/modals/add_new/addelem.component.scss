@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.mlzeln-radio-group {
+  display: flex; /* arrange radio buttons horizontally */
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mlzeln-radio-group label {
+  display: flex;
+  align-items: center; /* vertically center radio + text */
+  font-size: 1rem;
+  cursor: pointer;
+  color: #333; /* text color */
+}
+
+.mlzeln-radio-group input[type="radio"] {
+  margin-right: 0.5rem; /* space between radio circle and label text */
+  accent-color: #0078d4; /* modern browsers: set radio color (MS blue here) */
+}
+
+

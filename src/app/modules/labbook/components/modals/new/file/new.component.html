@@ -39,7 +39,15 @@
                 [clearable]="false"
                 bindLabel="label"
                 bindValue="value"
-              ></ng-select>
+                [addTag] = "addNumberTag"
+              >
+                                <ng-template let-item="item" ng-option-tmp><span
+                        [ngClass]="{ 'numeric-option': isNumeric(item.value) }"> {{ item.label }} </span>
+                </ng-template>
+                <ng-template let-item="item" ng-label-tmp><span
+                        [ngClass]="{ 'numeric-option': isNumeric(item.value) }"> {{ item.label }} </span>
+                </ng-template>
+              </ng-select>
             </div>
 
             <div class="modal-footer p-0">

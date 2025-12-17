@@ -547,3 +547,7 @@ mlzeln-dashboard-page {
     max-width: 70% !important;
   }
 }
+
+ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.add-elem) {
+  max-height: 50% !important;
+}

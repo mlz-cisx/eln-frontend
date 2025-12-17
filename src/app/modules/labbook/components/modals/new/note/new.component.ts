@@ -9,30 +9,30 @@ import {
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {LabbooksService, NotesService} from '@app/services';
-import type {
-  DropdownElement,
-  LabBookElementEvent,
-  ModalCallback,
-  NotePayload
-} from '@joeseln/types';
+import type {DropdownElement, ModalCallback, NotePayload} from '@joeseln/types';
+import {LabBookElementPayload} from "@joeseln/types";
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
+import {takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
+
+type NonNegativeInteger = number & { __nonNegativeIntegerBrand: never };
 
 interface FormElement {
   parentElement: FormControl<string | null>;
-  position: FormControl<'top' | 'bottom'>;
+  position: FormControl<'top' | 'bottom' | NonNegativeInteger>;
 }
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-new-labbook-note-element-modal',
-    templateUrl: './new.component.html',
-    styleUrls: ['./new.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'mlzeln-new-labbook-note-element-modal',
+  templateUrl: './new.component.html',
+  styleUrls: ['./new.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class NewLabBookNoteElementModalComponent implements OnInit {
   @Output()
@@ -40,6 +40,12 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
 
   public labBookId = this.modalRef.data.labBookId;
 
+  public position_option = this.modalRef.data.position;
+
+  public form = this.fb.group<FormElement>({
+    parentElement: this.fb.control('labBook', Validators.required),
+    position: this.fb.control(<'top' | 'bottom' | NonNegativeInteger>('bottom')),
+  });
 
   public loading = true;
 
@@ -49,10 +55,7 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
 
   public position: DropdownElement[] = [];
 
-  public form = this.fb.group<FormElement>({
-    parentElement: this.fb.control('labBook', Validators.required),
-    position: this.fb.control('bottom', Validators.required),
-  });
+  private unsubscribe$ = new Subject<void>();
 
   public constructor(
     public readonly modalRef: DialogRef,
@@ -89,10 +92,23 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initTranslations();
-    //this.initDetails();
     this.parentElement = [...this.parentElement];
     this.loading = false;
     this.cdr.markForCheck();
+  }
+
+  ngAfterViewInit(): void {
+    if (
+      this.position_option !== null && this.position_option !== undefined &&
+      !this.position.some(opt => opt.value === this.position_option)
+    ) {
+      this.position = [
+        ...this.position,
+        {value: this.position_option, label: this.position_option.toString()}
+      ];
+      this.form.patchValue({position: this.position_option});
+      this.cdr.detectChanges();
+    }
   }
 
   public initTranslations(): void {
@@ -113,62 +129,21 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
       });
   }
 
-  public initDetails(): void {
-    this.labBooksService
-      .getElements(this.labBookId)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        labBookElements => {
-          const sections: DropdownElement[] = [];
-          labBookElements.map(element => {
-            if (element.child_object_content_type_model === 'labbooks.labbooksection') {
-              sections.push({
-                value: element.child_object.pk,
-                label: `${element.child_object.date as string}: ${element.child_object.title as string}`,
-              });
-            }
-          });
 
-          this.parentElement = [...this.parentElement, ...sections];
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
-  }
-
-  public onSubmit(): void {
+  public onSubmitWithPosition(): void {
     if (this.loading) {
       return;
     }
     this.loading = true;
-
     this.notesService
       .add(this.note)
-      .pipe(untilDestroyed(this))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         note => {
           if (note) {
             this.state = ModalState.Changed;
-            const event: LabBookElementEvent = {
-              childObjectId: note.pk,
-              childObjectContentType: note.content_type,
-              childObjectContentTypeModel: note.content_type_model,
-              parentElement: this.element.parentElement,
-              position: this.element.position,
-            };
-            this.modalRef.close({state: this.state, data: event});
-            this.translocoService
-              .selectTranslate('labBook.newNoteElementModal.toastr.success')
-              .pipe(untilDestroyed(this))
-              .subscribe(success => {
-                this.toastrService.success(success);
-              });
-          }
-          else {
+            this.createElement(30, note.pk)
+          } else {
             this.toastrService.error('Note Size exceeded.');
           }
         },
@@ -177,5 +152,44 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
           this.cdr.markForCheck();
         }
       );
+  }
+
+  public asNonNegativeInteger(n: number): NonNegativeInteger {
+    if (!Number.isInteger(n) || n < 0) {
+      throw new Error("Value must be an integer ≥ 0");
+    }
+    return n as NonNegativeInteger;
+  }
+
+  public addNumberTag = (userInput: string) => {
+    const num = Number(userInput);
+    if (Number.isInteger(num) && num >= 0) {
+      return {value: this.asNonNegativeInteger(num), label: userInput};
+    }
+    return null;
+  };
+
+  private createElement(child_object_content_type: number, child_object_id: string, width: number = 10, height: number = 10) {
+    if (!this.labBookId) return;
+    const elem: LabBookElementPayload = {
+      child_object_content_type: child_object_content_type,
+      child_object_id: child_object_id,
+      width: width,
+      height: height,
+      position: this.element.position
+    }
+    this.labBooksService.addElementToRow(this.labBookId, elem).subscribe(() => {
+      this.modalRef.close();
+      this.translocoService
+        .selectTranslate('labBook.newNoteElementModal.toastr.success')
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((success: string) => {
+          this.toastrService.success(success);
+        });
+    });
+  }
+
+  isNumeric(value: any): boolean {
+    return typeof value === 'number';
   }
 }
