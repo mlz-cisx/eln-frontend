@@ -35,6 +35,9 @@ import {
 } from "@app/modules/labbook/config/admin-element-background-color";
 import {environment} from "@environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 
 interface FormFile {
@@ -112,6 +115,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public preloaded_id = '';
 
+  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
+
   public height: any;
 
   public uniqueHash = uuidv4();
@@ -134,7 +139,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     public readonly notesService: NotesService,
     private readonly renderer: Renderer2,
     readonly elementRef: ElementRef,
-    private http: HttpClient
+    private http: HttpClient,
+    private gridComponent: LabBookDrawBoardGridComponent
   ) {
   }
 
@@ -230,7 +236,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.height = Math.max((this.element.height - 5) * 36, 100)
+    this.height = Math.max((this.element.height - 5) * this.row_height, 100)
     this.form.patchValue(
       {
         file_title: this.element.child_object.title,

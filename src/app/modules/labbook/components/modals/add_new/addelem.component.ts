@@ -55,10 +55,6 @@ export class AddElementModalComponent implements OnDestroy {
     if (this.loading) {
       return
     }
-    console.log(this.labBookId)
-    console.log('Position:', this.position);
-    console.log('Selected type:', this.selectedType);
-
     if (this.selectedType === 'sketch') {
       this.onOpenSketchModal(this.position);
     } else if (this.selectedType === 'file') {

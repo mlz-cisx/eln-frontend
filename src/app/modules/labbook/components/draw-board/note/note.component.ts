@@ -31,6 +31,9 @@ import {environment} from '@environments/environment';
 import {
   admin_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 
 interface FormNote {
@@ -74,6 +77,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public span_id = '';
 
+  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
+
   public height: any;
 
   public background_color = '';
@@ -109,6 +114,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
     private readonly renderer: Renderer2,
+    private gridComponent: LabBookDrawBoardGridComponent
   ) {
     afterEveryRender(() => {
       if (this.contentContainer) {
@@ -188,7 +194,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.height = Math.max((this.element.height - 2) * 36, 100)
+    this.height = Math.max((this.element.height - 2) * this.row_height, 100)
     this.form.patchValue(
       {
         note_subject: this.element.child_object.subject,

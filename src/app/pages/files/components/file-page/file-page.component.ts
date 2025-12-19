@@ -27,6 +27,9 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 
 interface FormFile {
@@ -50,6 +53,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public id = this.route.snapshot.paramMap.get('id')!;
 
+  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
 
   public currentUser: User | null = null;
 
@@ -103,6 +107,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
+    private gridComponent: LabBookDrawBoardGridComponent
   ) {
   }
 
@@ -281,7 +286,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
       .get(this.id)
       .pipe(untilDestroyed(this))
       .subscribe(d => {
-        localStorage.setItem('pageVerticalposition', String((d.data.position_y) * 36));
+        localStorage.setItem('pageVerticalposition', String((d.data.position_y) * this.row_height));
         localStorage.setItem('note_inserted', String(1)); // indicating jump action
         localStorage.setItem('element_pk', String(this.id));
         void this.router.navigate([`/labbooks/${d.data.labbook_id}`]);

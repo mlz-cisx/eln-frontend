@@ -17,6 +17,9 @@ import {FormBuilder} from '@ngneat/reactive-forms';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 import {debounceTime, skip} from 'rxjs/operators';
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 interface FromSearch {
   search: string | null;
@@ -49,6 +52,8 @@ export class GlobalSearchComponent implements OnInit {
 
   public results: any[] = [];
 
+  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
+
   public form = this.fb.group<FromSearch>({
     search: null,
     note: false,
@@ -63,6 +68,7 @@ export class GlobalSearchComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly labbooksService: LabbooksService,
+    private gridComponent: LabBookDrawBoardGridComponent
   ) {
   }
 
@@ -144,7 +150,7 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   public hideDropdown(labbook_pos_y: any, element_pk: any, content_type:any): void {
-    localStorage.setItem('pageVerticalposition', String((labbook_pos_y) * 36))
+    localStorage.setItem('pageVerticalposition', String((labbook_pos_y) * this.row_height))
     localStorage.setItem('element_pk', String(element_pk))
     localStorage.setItem('content_type', String(content_type))
     localStorage.setItem('search_text', String(this.searchText))
