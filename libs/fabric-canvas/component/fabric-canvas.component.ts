@@ -1333,6 +1333,9 @@ public bringToFrontAndSubmit(): void {
       textbox.enterEditing();
       textbox.hiddenTextarea?.focus();
 
+      // select all so input overwrite placeholader
+      textbox.selectAll();
+
       // Custom key handling
       textbox.hiddenTextarea?.addEventListener('keydown', (e: KeyboardEvent) => {
         // Ignore control keys that shouldn't expand width
