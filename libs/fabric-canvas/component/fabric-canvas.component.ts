@@ -216,6 +216,13 @@ export class FabricCanvasComponent implements AfterViewInit {
       })
     }
 
+    window.addEventListener('keydown', (event) => this.onKeyDown(event));
+  }
+
+  private onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Backspace' && this.drawingMode != 'text') {
+      this.removeSelected();
+    }
   }
 
   /** Public method to resize canvas based on zoom scale */
@@ -604,6 +611,12 @@ public bringToFrontAndSubmit(): void {
       }
     });
 
+    this.canvas.on('mouse:down', (evt) => {
+      const obj = this.canvas.getActiveObject();
+      if (obj && obj.type === 'textbox') {
+        this.drawingMode = 'text';
+      }
+    });
   }
 
 
@@ -1365,10 +1378,9 @@ public bringToFrontAndSubmit(): void {
         if (target !== textbox) {
           textbox.exitEditing();
           this.canvas.off('mouse:down'); // remove this temporary listener
+          this.drawingMode = null;
         }
       });
-
-      this.drawingMode = null; // reset mode
     });
   }
 
