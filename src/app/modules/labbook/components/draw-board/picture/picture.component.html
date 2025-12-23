@@ -75,13 +75,11 @@
             </div>
       </div>
       <div class="body" #container>
-        <div class="canvas-wrapper" [class.editable]="privileges.edit"
-             (click)="privileges.edit && onCanvasClick($event)"
-             (dblclick)="onCanvasDoubleClick($event)">
+        <div class="canvas-wrapper" [class.editable]="privileges.edit">
           <app-fabric-canvas #fabricCanvas
                              (click)="privileges.edit && onCanvasClick($event)"
                              (dblclick)="onCanvasDoubleClick($event)"
-                             (touchend)="privileges.edit && onOpenPictureEditorModal($event)"
+                             (touchend)="privileges.edit && onCanvasClick($event)"
                              [uuid]="initialState!.pk"
                              [editor_loaded]="editor_loaded"
                              [backgroundUrl]="getBackgroundUrl()"

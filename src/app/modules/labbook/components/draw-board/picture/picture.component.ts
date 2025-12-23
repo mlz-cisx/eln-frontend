@@ -100,6 +100,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
   private lastWidth = 0;
 
+  private lastTapTime = 0;
+
   private clickTimeout: any;
 
   public editor_loaded = false;
@@ -345,8 +347,23 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
 
-  public onCanvasClick(event: MouseEvent): void {
+  public onCanvasClick(event: MouseEvent | TouchEvent): void {
     clearTimeout(this.clickTimeout);
+
+    const now = Date.now();
+    const timeSinceLastTap = now - this.lastTapTime;
+    this.lastTapTime = now;
+
+    const isTouch = 'changedTouches' in event;
+    // Detect double‑tap on touch devices
+    if (isTouch && timeSinceLastTap < 300) {
+      clearTimeout(this.clickTimeout);
+      const target = event.target as HTMLElement;
+      target.dispatchEvent(new MouseEvent('dblclick', {bubbles: true}));
+      return;
+    }
+
+    // Otherwise treat as single click
     this.clickTimeout = setTimeout(() => {
       if (this.privileges.edit) {
         this.onOpenPictureEditorModal(event);
@@ -354,9 +371,9 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
     }, 250);
   }
 
-  public onCanvasDoubleClick(event: MouseEvent): void {
-    // cancel the single‑click
+  public onCanvasDoubleClick(event: MouseEvent | TouchEvent): void {
     clearTimeout(this.clickTimeout);
   }
+
 
 }
