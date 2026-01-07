@@ -216,6 +216,14 @@
     <span class="label">Save Changes</span>
   </button>
 
+    <button type="button" class="save-btn redo-btn"
+            (click)="reloadCanvas()"
+          [disabled]="viewerMode"
+          title="Reload">
+    <fa-icon [icon]="['fas', 'redo']"></fa-icon>
+    <span class="label">Reload</span>
+  </button>
+
 
 </div>
 

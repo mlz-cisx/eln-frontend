@@ -261,6 +261,30 @@ export class FabricCanvasComponent implements AfterViewInit {
     });
   }
 
+  public async reloadCanvas(): Promise<void> {
+    await this.loadCanvasFromJson();
+
+    const objs = this.canvas.getObjects();
+    objs.forEach(obj => {
+      obj.set({
+        selectable: this.allowSelection,
+        evented: this.allowSelection,
+        hasControls: this.allowSelection
+      });
+
+      if ((obj as any).alwaysOnTop) {
+        const idx = this.canvas._objects.indexOf(obj);
+        if (idx > -1) {
+          this.canvas._objects.splice(idx, 1);
+          this.canvas._objects.push(obj); // put at end (top of stack)
+        }
+      }
+    });
+    this.canvas.selection = false;
+    this.canvas.discardActiveObject();
+    this.canvas.renderAll();
+  }
+
   exportAsImage(title: any): void {
     const exportWidth = this.BASE_WIDTH;
     const exportHeight = this.BASE_HEIGHT;
