@@ -177,6 +177,23 @@
   <span class="separator"></span>
 
 
+  <button (click)="startCropMode()"
+          [disabled]="viewerMode"
+          title="Crop Selected Image"
+          type="button">
+    <fa-icon [icon]="['fas', 'crop']"></fa-icon>
+  </button>
+  <div *ngIf="cropMode" class="crop-wrapper">
+    <button (click)="applyCrop()" title="Apply Crop" type="button">
+      <fa-icon [icon]="['fas', 'check']"></fa-icon>
+    </button>
+    <button (click)="cancelCrop()" title="Cancel Crop" type="button">
+      <fa-icon [icon]="['fas', 'times']"></fa-icon>
+    </button>
+  </div>
+
+  <span class="separator"></span>
+
   <button type="button" (click)="removeSelected()" [disabled]="viewerMode"
           title="Remove Selected">
     <fa-icon [icon]="['fas', 'times']"></fa-icon>

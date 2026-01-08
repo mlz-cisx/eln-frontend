@@ -440,150 +440,8 @@ public bringToFrontAndSubmit(): void {
     this.showConfirm = false;
   }
 
-  uploadBackground(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
-
-    const file = input.files[0];
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      // timeout for camera
-      setTimeout(
-        async () => {
-          try {
-            const originalDataUrl = reader.result as string;
-            // create offscreen canvas
-
-            const imgEl = new Image();
-            imgEl.src = originalDataUrl;
-
-            imgEl.onload = async () => {
-              const canvasW = this.canvas.getWidth();
-              const canvasH = this.canvas.getHeight();
-
-              // original image dimensions
-              const imgW = imgEl.width;
-              const imgH = imgEl.height;
-
-              // scale factor to fit inside canvas while preserving ratio
-              const scale = Math.min(canvasW / imgW, canvasH / imgH);
-
-              const drawW = imgW * scale;
-              const drawH = imgH * scale;
-
-              // center the image
-              const offsetX = (canvasW - drawW) / 2;
-              const offsetY = (canvasH - drawH) / 2;
-
-              // offscreen canvas
-              const offCanvas = document.createElement('canvas');
-              const ctx = offCanvas.getContext('2d')!;
-              offCanvas.width = canvasW;
-              offCanvas.height = canvasH;
-
-              ctx.clearRect(0, 0, canvasW, canvasH);
-              ctx.drawImage(imgEl, offsetX, offsetY, drawW, drawH);
-
-              const compressedDataUrl = offCanvas.toDataURL('image/png');
-
-              const fabricImg = await this.loadImage(compressedDataUrl);
 
 
-              // center in Fabric canvas
-              fabricImg.set({
-                left: offsetX,
-                top: offsetY,
-                originX: 'left',
-                originY: 'top',
-                selectable: false,
-                evented: false,
-                hasControls: false
-              });
-
-              this.backgroundImages.push(fabricImg);
-              this.canvas.add(fabricImg);
-              this.canvas.sendObjectBackwards(fabricImg, true);
-              this.setBackgroundEditMode(this.backgroundEditable);
-              this.canvas.renderAll();
-            };
-          } catch (err) {
-            console.error(err);
-          }
-        }, 50
-      )
-    };
-    reader.readAsDataURL(file);
-  }
-
-
-  public async uploadPdf(event: Event): Promise<void> {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
-
-    const file = input.files[0];
-    const reader = new FileReader();
-
-    // Wrap FileReader in a Promise so we can await it
-    const arrayBuffer: ArrayBuffer = await new Promise((resolve, reject) => {
-      reader.onload = () => resolve(reader.result as ArrayBuffer);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
-
-    try {
-      const pdfData = new Uint8Array(arrayBuffer);
-
-      // Load PDF
-      const pdf = await pdfjsLib.getDocument({data: pdfData}).promise;
-
-      // Render first page
-      const page = await pdf.getPage(1);
-      const viewport = page.getViewport({scale: 1.5});
-
-      // Offscreen canvas for pdf.js rendering
-      const offCanvas = document.createElement("canvas");
-      const ctx = offCanvas.getContext("2d")!;
-      offCanvas.width = viewport.width;
-      offCanvas.height = viewport.height;
-
-      await page.render({canvasContext: ctx, viewport}).promise;
-
-      // Convert to DataURL
-      const dataUrl = offCanvas.toDataURL("image/jpeg", 0.7);
-
-      // Await Fabric.js image creation (Promise-based API in v5+)
-      const fabricImg: fabric.Image = await fabric.Image.fromURL(dataUrl);
-
-      const canvasW = this.canvas.getWidth();
-      const canvasH = this.canvas.getHeight();
-
-      const imgW = fabricImg.width!;
-      const imgH = fabricImg.height!;
-
-      // Scale to fit
-      const scale = Math.min(canvasW / imgW, canvasH / imgH);
-      fabricImg.scale(scale);
-
-      // Center
-      fabricImg.set({
-        left: (canvasW - imgW * scale) / 2,
-        top: (canvasH - imgH * scale) / 2,
-        originX: "left",
-        originY: "top",
-        selectable: true,
-        evented: true,
-        hasControls: true,
-      });
-
-      this.canvas.add(fabricImg);
-      this.canvas.sendObjectBackwards(fabricImg, true);
-      this.canvas.renderAll();
-
-    } catch (err) {
-      console.error("PDF render error:", err);
-    }
-  }
 
   public storeCanvas(): void {
     const json = JSON.stringify(this.canvas.toJSON());
@@ -1154,65 +1012,7 @@ public bringToFrontAndSubmit(): void {
     this.enableTextInsertion();
   }
 
-  loadBackgroundFromStorage(): void {
-    if (!this.backgroundUrl) return;
-    fetch(this.backgroundUrl, {method: 'GET'})
-      .then(response => response.blob())
-      .then(blob => this.blobToBase64(blob))   // convert blob → base64
-      .then(base64 => {
-        const imgEl = new Image();
-        imgEl.crossOrigin = 'anonymous';
-        imgEl.src = base64;
-        imgEl.onload = () => {
-          const canvasW = this.canvas.getWidth();
-          const canvasH = this.canvas.getHeight();
 
-          const imgW = imgEl.width;
-          const imgH = imgEl.height;
-
-          // scale factor to fit inside canvas while preserving ratio
-          const scale = Math.min(canvasW / imgW, canvasH / imgH);
-          const drawW = imgW * scale;
-          const drawH = imgH * scale;
-          // center the image
-          const offsetX = (canvasW - drawW) / 2;
-          const offsetY = (canvasH - drawH) / 2;
-          // offscreen canvas
-          const offCanvas = document.createElement('canvas');
-          const ctx = offCanvas.getContext('2d')!;
-          offCanvas.width = canvasW;
-          offCanvas.height = canvasH;
-          ctx.clearRect(0, 0, canvasW, canvasH);
-          ctx.drawImage(imgEl, offsetX, offsetY, drawW, drawH);
-          const compressedDataUrl = offCanvas.toDataURL('image/png');
-
-          fabric.Image.fromURL(compressedDataUrl, {crossOrigin: 'anonymous'})
-            .then((img: fabric.Image) => {
-              // no need to scale again — already resized in offscreen canvas
-              img.set({
-                left: 0,
-                top: 0,
-                originX: 'left',
-                originY: 'top',
-                selectable: false,
-                evented: false,
-                hasControls: false
-              });
-
-              this.backgroundImages.push(img);
-              this.canvas.add(img);
-              (this.canvas as any).sendObjectBackwards(img, true);
-              this.setBackgroundEditMode(true);
-              this.canvas.renderAll();
-            }).catch(err => {
-            console.info('No background image');
-          });
-        };
-      })
-      .catch(err => {
-        console.error('Failed to fetch background image:', err);
-      });
-  }
 
 
   updateFontFamily(): void {
@@ -1451,6 +1251,430 @@ public bringToFrontAndSubmit(): void {
       );
   }
 
+  // CROP FIELDS
+  public cropRect: fabric.Rect | null = null;
+  public cropMode = false;
+  public cropOverlays: fabric.Rect[] = [];
+  private cropTarget: fabric.Image | null = null;
+
+  loadBackgroundFromStorage(): void {
+    if (!this.backgroundUrl) return;
+    fetch(this.backgroundUrl, {method: 'GET'})
+      .then(response => response.blob())
+      .then(blob => this.blobToBase64(blob))   // convert blob → base64
+      .then(base64 => {
+        const imgEl = new Image();
+        imgEl.crossOrigin = 'anonymous';
+        imgEl.src = base64;
+        imgEl.onload = () => {
+          const canvasW = this.canvas.getWidth();
+          const canvasH = this.canvas.getHeight();
+
+          const imgW = imgEl.width;
+          const imgH = imgEl.height;
+
+          // scale factor to fit inside canvas while preserving ratio
+          const scale = Math.min(canvasW / imgW, canvasH / imgH);
+          const drawW = imgW * scale;
+          const drawH = imgH * scale;
+          // center the image
+          const offsetX = (canvasW - drawW) / 2;
+          const offsetY = (canvasH - drawH) / 2;
+          // offscreen canvas
+          const offCanvas = document.createElement('canvas');
+          const ctx = offCanvas.getContext('2d')!;
+          offCanvas.width = canvasW;
+          offCanvas.height = canvasH;
+          ctx.clearRect(0, 0, canvasW, canvasH);
+          ctx.drawImage(imgEl, offsetX, offsetY, drawW, drawH);
+          const compressedDataUrl = offCanvas.toDataURL('image/png');
+
+          fabric.Image.fromURL(compressedDataUrl, {crossOrigin: 'anonymous'})
+            .then((img: fabric.Image) => {
+              // no need to scale again — already resized in offscreen canvas
+              // Normalized Image for crop mode
+              img.set({
+                left: this.canvas.getWidth() / 2,
+                top: this.canvas.getHeight() / 2,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                evented: false,
+                hasControls: false
+              });
+
+              img.setCoords();
+
+              this.backgroundImages.push(img);
+              this.canvas.add(img);
+              (this.canvas as any).sendObjectBackwards(img, true);
+              this.setBackgroundEditMode(true);
+              this.canvas.renderAll();
+            }).catch(err => {
+            console.info('No background image');
+          });
+        };
+      })
+      .catch(err => {
+        console.error('Failed to fetch background image:', err);
+      });
+  }
+
+  public async uploadPdf(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    // Wrap FileReader in a Promise so we can await it
+    const arrayBuffer: ArrayBuffer = await new Promise((resolve, reject) => {
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+
+    try {
+      const pdfData = new Uint8Array(arrayBuffer);
+
+      // Load PDF
+      const pdf = await pdfjsLib.getDocument({data: pdfData}).promise;
+
+      // Render first page
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({scale: 1.5});
+
+      // Offscreen canvas for pdf.js rendering
+      const offCanvas = document.createElement("canvas");
+      const ctx = offCanvas.getContext("2d")!;
+      offCanvas.width = viewport.width;
+      offCanvas.height = viewport.height;
+
+      await page.render({canvasContext: ctx, viewport}).promise;
+
+      // Convert to DataURL
+      const dataUrl = offCanvas.toDataURL("image/jpeg", 0.7);
+
+      // Await Fabric.js image creation (Promise-based API in v5+)
+      const fabricImg: fabric.Image = await fabric.Image.fromURL(dataUrl);
+
+      const canvasW = this.canvas.getWidth();
+      const canvasH = this.canvas.getHeight();
+
+      const imgW = fabricImg.width!;
+      const imgH = fabricImg.height!;
+
+      // Scale to fit
+      const scale = Math.min(canvasW / imgW, canvasH / imgH);
+      fabricImg.scale(scale);
+
+      // Normalized Image for crop mode
+      fabricImg.set({
+        left: this.canvas.getWidth() / 2,
+        top: this.canvas.getHeight() / 2,
+        originX: "center",
+        originY: "center",
+        selectable: true,
+        evented: true,
+        hasControls: true,
+      });
+
+      // REQUIRED for rotation-aware cropping
+      fabricImg.setCoords();
+
+      this.canvas.add(fabricImg);
+      this.canvas.sendObjectBackwards(fabricImg, true);
+      this.canvas.renderAll();
+
+    } catch (err) {
+      console.error("PDF render error:", err);
+    }
+  }
+
+  uploadBackground(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      // timeout for camera
+      setTimeout(
+        async () => {
+          try {
+            const originalDataUrl = reader.result as string;
+            // create offscreen canvas
+
+            const imgEl = new Image();
+            imgEl.src = originalDataUrl;
+
+            imgEl.onload = async () => {
+              const canvasW = this.canvas.getWidth();
+              const canvasH = this.canvas.getHeight();
+
+              // original image dimensions
+              const imgW = imgEl.width;
+              const imgH = imgEl.height;
+
+              // scale factor to fit inside canvas while preserving ratio
+              const scale = Math.min(canvasW / imgW, canvasH / imgH);
+
+              const drawW = imgW * scale;
+              const drawH = imgH * scale;
+
+              // center the image
+              const offsetX = (canvasW - drawW) / 2;
+              const offsetY = (canvasH - drawH) / 2;
+
+              // offscreen canvas
+              const offCanvas = document.createElement('canvas');
+              const ctx = offCanvas.getContext('2d')!;
+              offCanvas.width = canvasW;
+              offCanvas.height = canvasH;
+
+              ctx.clearRect(0, 0, canvasW, canvasH);
+              ctx.drawImage(imgEl, offsetX, offsetY, drawW, drawH);
+
+              const compressedDataUrl = offCanvas.toDataURL('image/png');
+
+              const fabricImg = await this.loadImage(compressedDataUrl);
+
+              // after loading compressedDataUrl into fabricImg
+              // Normalized Image for crop mode
+              fabricImg.set({
+                // center the image on the Fabric canvas
+                left: this.canvas.getWidth() / 2,
+                top: this.canvas.getHeight() / 2,
+
+                // use centered origin so rotation math works
+                originX: 'center',
+                originY: 'center',
+
+                // background behavior
+                selectable: false,
+                evented: false,
+                hasControls: false
+              });
+              // REQUIRED for rotation-aware cropping
+              fabricImg.setCoords();
+              this.backgroundImages.push(fabricImg);
+              this.canvas.add(fabricImg);
+              this.canvas.sendObjectBackwards(fabricImg, true);
+              this.setBackgroundEditMode(this.backgroundEditable);
+              this.canvas.renderAll();
+            };
+          } catch (err) {
+            console.error(err);
+          }
+        }, 50
+      )
+    };
+    reader.readAsDataURL(file);
+  }
+
+  public startCropMode(): void {
+    const active = this.canvas.getActiveObject();
+    if (!active || !(active instanceof fabric.Image)) return;
+
+    this.cropTarget = active;
+    this.cropMode = true;
+
+    // ensure centered origin for consistent math
+    active.set({originX: 'center', originY: 'center'});
+    active.setCoords();
+
+    const bounds = active.getBoundingRect();
+
+    this.cropRect = new fabric.Rect({
+      left: bounds.left + bounds.width / 2,
+      top: bounds.top + bounds.height / 2,
+      width: bounds.width / 2,
+      height: bounds.height / 2,
+      originX: 'center',
+      originY: 'center',
+      fill: 'transparent',
+      stroke: 'red',
+      strokeWidth: 1,
+      hasBorders: false,
+      hasControls: true,
+      lockRotation: true,
+      selectable: true,
+      evented: true
+    });
+
+    this.canvas.add(this.cropRect);
+    this.canvas.setActiveObject(this.cropRect);
+
+    this.createCropOverlays();
+    this.attachCropListeners();
+    this.canvas.renderAll();
+  }
+
+
+  public async applyCrop(): Promise<void> {
+    if (!this.cropRect || !this.cropTarget) return;
+
+    const img = this.cropTarget;
+
+    // Ensure coords are fresh
+    this.cropRect.setCoords();
+    img.setCoords();
+
+    // 1. Crop bounds in canvas space (no args allowed)
+    const cropBounds = this.cropRect.getBoundingRect();
+
+    // 2. Temporary Fabric canvas for the crop
+    const tempCanvas = new fabric.StaticCanvas(undefined, {
+      width: cropBounds.width,
+      height: cropBounds.height
+    });
+
+// 3. Clone the image (async in your Fabric build)
+    const cloned = await img.clone();
+
+// 4. Position clone so that the crop area aligns at (0,0)
+    cloned.set({
+      left: img.left! - cropBounds.left,
+      top: img.top! - cropBounds.top,
+      originX: 'center',
+      originY: 'center',
+      angle: img.angle,
+      scaleX: img.scaleX,
+      scaleY: img.scaleY
+    });
+
+    tempCanvas.add(cloned);
+    tempCanvas.renderAll();
+
+    // 5. Export cropped bitmap (multiplier required)
+    const croppedDataUrl = tempCanvas.toDataURL({
+      multiplier: 1,
+      format: 'png'
+    });
+
+    // 6. Load new Fabric image
+    const newImg = await this.loadFabricImage(croppedDataUrl);
+
+    // 7. Place new image at crop center (rotation baked into pixels)
+    newImg.set({
+      left: cropBounds.left + cropBounds.width / 2,
+      top: cropBounds.top + cropBounds.height / 2,
+      originX: 'center',
+      originY: 'center',
+      angle: 0,
+      selectable: img.selectable,
+      evented: img.evented
+    });
+
+    newImg.setCoords();
+
+    // 8. Replace original
+    this.canvas.remove(img);
+    this.canvas.add(newImg);
+    this.canvas.setActiveObject(newImg);
+
+    // 9. Cleanup
+    this.cancelCrop();
+    this.canvas.renderAll();
+  }
+
+
+  public cancelCrop(): void {
+    if (this.cropRect) {
+      this.canvas.remove(this.cropRect);
+      this.cropRect = null;
+    }
+
+    this.cropOverlays.forEach(o => this.canvas.remove(o));
+    this.cropOverlays = [];
+    this.cropMode = false;
+    this.cropTarget = null;
+
+    this.canvas.discardActiveObject();
+    this.canvas.renderAll();
+  }
+
+
+  private async loadFabricImage(url: string): Promise<fabric.Image> {
+    const img = await fabric.Image.fromURL(url, {crossOrigin: 'anonymous'} as any);
+    return img as fabric.Image;
+  }
+
+
+  private createCropOverlays(): void {
+    this.cropOverlays.forEach(o => this.canvas.remove(o));
+    this.cropOverlays = [];
+
+    const overlayProps = {
+      fill: 'rgba(0,0,0,0.5)',
+      selectable: false,
+      evented: false
+    };
+
+    this.cropOverlays = [
+      new fabric.Rect(overlayProps),
+      new fabric.Rect(overlayProps),
+      new fabric.Rect(overlayProps),
+      new fabric.Rect(overlayProps)
+    ];
+
+    this.cropOverlays.forEach(o => this.canvas.add(o));
+    this.updateOverlayPositions();
+  }
+
+
+  private updateOverlayPositions(): void {
+    if (!this.cropRect) return;
+
+    const crop = this.cropRect.getBoundingRect();
+    const canvasW = this.canvas.getWidth();
+    const canvasH = this.canvas.getHeight();
+
+    const [top, bottom, left, right] = this.cropOverlays;
+
+    top.set({
+      left: 0,
+      top: 0,
+      width: canvasW,
+      height: crop.top
+    });
+
+    bottom.set({
+      left: 0,
+      top: crop.top + crop.height,
+      width: canvasW,
+      height: canvasH - (crop.top + crop.height)
+    });
+
+    left.set({
+      left: 0,
+      top: crop.top,
+      width: crop.left,
+      height: crop.height
+    });
+
+    right.set({
+      left: crop.left + crop.width,
+      top: crop.top,
+      width: canvasW - (crop.left + crop.width),
+      height: crop.height
+    });
+  }
+
+
+  private attachCropListeners(): void {
+    if (!this.cropRect) return;
+
+    const sync = () => {
+      this.updateOverlayPositions();
+      this.canvas.renderAll();
+    };
+
+    this.cropRect.on('moving', sync);
+    this.cropRect.on('scaling', sync);
+    this.cropRect.on('modified', sync);
+  }
 
 }
 
