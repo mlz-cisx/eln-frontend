@@ -185,6 +185,7 @@ export class MolViewerComponent implements AfterViewInit, OnChanges {
       default:
         break;
     }
+    this.viewer.removeAllLabels();
     this.viewer.render();
   }
 
