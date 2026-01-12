@@ -7,6 +7,17 @@
   margin: 1%;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+select {
+  max-width: 8em;
+  z-index: 1;
+}
+
 .mol-canvas {
   width: 100%;
   height: 100%;

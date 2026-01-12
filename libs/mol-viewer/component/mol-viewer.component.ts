@@ -81,6 +81,9 @@ export class MolViewerComponent implements AfterViewInit, OnChanges {
   private viewer: Viewer | null = null;
   private backgroundColor = '#fafaf7'
 
+  viewerStyles = ['Stick', 'Line', 'Cross', 'Sphere'];
+  viewerStylesSelected = 'Stick';
+
   async ngAfterViewInit(): Promise<void> {
     const element = this.molCanvas.nativeElement;
     this.viewer = $3Dmol.createViewer(element, {backgroundColor: this.backgroundColor});
@@ -111,7 +114,7 @@ export class MolViewerComponent implements AfterViewInit, OnChanges {
     if (format === 'pdb' || format === 'cif') {
       this.viewer.setStyle({}, {
         cartoon: {color: 'spectrum'},
-        stick: {radius: 0.2}
+        stick: {}
       });
     } else if (format === 'xyz') {
       this.viewer.setStyle({}, {sphere: {radius: 0.3}, stick: {radius: 0.2}});
@@ -147,6 +150,42 @@ export class MolViewerComponent implements AfterViewInit, OnChanges {
       this.viewer.removeAllLabels();
       this.viewer.render();
     }
+  }
+
+  onChangeStyle() {
+    if (!this.viewer) return;
+
+    switch(this.viewerStylesSelected) {
+      case "Stick":
+        this.viewer.setStyle({}, {
+          stick: {}
+        });
+        break;
+
+      case "Line":
+        this.viewer.setStyle({}, {
+          line: {}
+        });
+        break;
+
+      case "Cross":
+        this.viewer.setStyle({}, {
+          cross: {
+            linewidth: 2
+          }
+        });
+        break;
+
+      case "Sphere":
+        this.viewer.setStyle({}, {
+          sphere: {}
+        });
+        break;
+
+      default:
+        break;
+    }
+    this.viewer.render();
   }
 
 }

@@ -1,5 +1,14 @@
 @if (!errorDisplay) {
+<div class="grid-container">
+  <select
+    id="mol-style-select"
+    [(ngModel)]="viewerStylesSelected"
+    (change)="onChangeStyle()"
+  >
+    <option *ngFor="let style of viewerStyles" [value]="style">{{ style }}</option>
+  </select>
     <div #molCanvas class="mol-canvas"></div>
+</div>
 }
 @else {
     <ng-container *transloco="let t">
