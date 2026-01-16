@@ -215,7 +215,7 @@ export class FabricCanvasComponent implements AfterViewInit {
         }
       })
     }
-
+    this.drawingMode = null;
     window.addEventListener('keydown', (event) => this.onKeyDown(event));
   }
 
@@ -386,6 +386,9 @@ public bringToFrontAndSubmit(): void {
         hasControls: true,
         hasBorders: true
       });
+
+      (group as any).customStroke = paths[0].stroke;
+      (group as any).customStrokeWidth = paths[0].strokeWidth;
 
       // Remove individual paths and add the group
       paths.forEach(p => this.canvas.remove(p));
@@ -974,6 +977,8 @@ public bringToFrontAndSubmit(): void {
           child.set({stroke: this.strokeColor});
         } else if (child.type === 'triangle') {
           child.set({fill: this.strokeColor});
+        } else if (child.type === 'path') {
+          child.set({stroke: this.strokeColor});
         }
       });
     } else {
@@ -998,6 +1003,9 @@ public bringToFrontAndSubmit(): void {
             width: this.strokeWidth * 5,
             height: this.strokeWidth * 7
           });
+        }
+        if (child.type === 'path') {
+          child.set({strokeWidth: this.strokeWidth});
         }
       });
     } else {
