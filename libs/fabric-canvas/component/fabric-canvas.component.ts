@@ -1286,8 +1286,10 @@ public bringToFrontAndSubmit(): void {
         picture => {
           this.translocoService
             .selectTranslate('picture.details.toastr.success')
-            .subscribe(success => {
-              this.toastrService.success(success);
+            .subscribe((success: string) => {
+              this.toastrService.success(success, "", {
+                positionClass: 'toast-top-left'
+              });
             });
         },
         () => {
