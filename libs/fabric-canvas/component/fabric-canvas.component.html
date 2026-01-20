@@ -50,6 +50,16 @@
             [icon]="viewerMode ?  ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
   </button>
 
+  <button
+    type="button"
+    [disabled]="viewerMode"
+    (click)="onUndo()"
+    title="Undo"
+  >
+    <fa-icon
+      [icon]="['fas', 'rotate-left']"></fa-icon>
+  </button>
+
   <span class="separator"></span>
 
   <button type="button" (click)="toggleDrawingMode('rectangle')"

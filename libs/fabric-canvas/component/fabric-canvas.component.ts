@@ -109,8 +109,8 @@ export class FabricCanvasComponent implements AfterViewInit {
   shapeType: 'polyline' | 'polygon' | 'arrow' = 'polyline';
   vertexCircles: fabric.Circle[] = [];
 
-
-
+  private history: string[] = [];
+  private undoSubject: Subject<void> = new Subject();
 
   fillColor: string = '#ffffff';   // default white
   strokeColor: string = '#000000'; // default black
@@ -214,14 +214,51 @@ export class FabricCanvasComponent implements AfterViewInit {
           this.canvas.renderAll();
         }
       })
+      // debounce ctrl+z undo
+      this.undoSubject.pipe(
+        debounceTime(300)
+      ).subscribe(() => this.onUndo());
+      // init history and set listeners to record history
+      this.history.push(JSON.stringify(this.canvas.toJSON()));
+      this.canvas.on('object:modified', () => { JSON.stringify(this.canvas.toJSON()); });
+      this.canvas.on('object:added', () => { JSON.stringify(this.canvas.toJSON()); });
+      // keyboard listeners
+      window.addEventListener('keyup', (event) => this.onKeyDown(event));
     }
-    this.drawingMode = null;
-    window.addEventListener('keydown', (event) => this.onKeyDown(event));
+  }
+
+  onUndo() {
+    const currentState = JSON.stringify(this.canvas.toJSON());
+    let lastState = this.history.pop();
+    while (lastState == currentState) {
+      lastState = this.history.pop();
+    }
+    if (lastState) {
+      // eslint-disable-next-line
+      this.canvas.loadFromJSON(JSON.parse(lastState), () => {
+        this.canvas.requestRenderAll();
+        this.canvas.once('after:render', () => {
+          this.canvas.getObjects().forEach(obj => {
+            obj.set({
+              selectable: this.allowSelection,
+              evented: this.allowSelection,
+              hasControls: this.allowSelection
+            });
+          });
+          this.canvas.selection = false;
+          this.canvas.discardActiveObject();
+          this.history.push(JSON.stringify(this.canvas.toJSON()));
+        });
+      });
+    }
   }
 
   private onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Backspace' && this.drawingMode != 'text') {
       this.removeSelected();
+    }
+    if (event.ctrlKey && event.key === 'z') {
+      this.undoSubject.next();
     }
   }
 
