@@ -86,6 +86,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public title_id = '';
 
+  public isCollapsed = true;
+
   public submitted = false;
 
   public modalRef?: DialogRef;

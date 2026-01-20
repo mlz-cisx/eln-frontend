@@ -31,6 +31,10 @@ import {ModalState} from "@app/enums/modal-state.enum";
 import {
   AddElementModalComponent
 } from "@app/modules/labbook/components/modals/add_new/addelem.component";
+import {
+  LabBookPageComponent
+} from "@app/pages/labbooks/components/labbook-page/labbook-page.component";
+
 
 
 @UntilDestroy()
@@ -84,6 +88,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     private readonly modalService: DialogService,
+    private readonly labbookPageComponent: LabBookPageComponent,
   ) {
   }
 
@@ -559,6 +564,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
       }
 
+      if (content_type == 'labbooks.labbook') {
+        this.open_details()
+      }
+
     }, 1000);  // end set timeout
 
 
@@ -566,5 +575,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   trackByElementId(index: number, item: any): string {
     return item['element']['child_object_id'];
+  }
+
+  open_details() {
+    this.labbookPageComponent.isCollapsed = false;
   }
 }

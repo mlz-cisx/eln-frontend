@@ -22,8 +22,10 @@
           ></mlzeln-details-dropdown>
         </div>
 
-        <mlzeln-overview-collapse-element class="mb-4" [collapsed]="true"
-                                              style="margin-bottom: 2px !important; background-color: rgba(0, 49, 97, 0.04); border-radius: 10px;">
+        <mlzeln-overview-collapse-element
+                id="labbook-collapse-elem"
+                class="mb-4" [collapsed]="isCollapsed"
+                style="margin-bottom: 2px !important; background-color: rgba(0, 49, 97, 0.04); border-radius: 10px;">
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="labbook"
                 errorTailor>
             <div>
