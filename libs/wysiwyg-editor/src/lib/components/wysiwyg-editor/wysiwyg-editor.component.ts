@@ -7,16 +7,18 @@ import {
   Self,
   ViewChild
 } from '@angular/core';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
 
+type ToolbarMode = 'floating' | 'sliding' | 'scrolling' | 'wrap';
+
 
 @Component({
-    selector: 'mlzeln-wysiwyg-editor',
-    templateUrl: './wysiwyg-editor.component.html',
-    styleUrls: ['./wysiwyg-editor.component.scss'],
-    standalone: false
+  selector: 'mlzeln-wysiwyg-editor',
+  templateUrl: './wysiwyg-editor.component.html',
+  styleUrls: ['./wysiwyg-editor.component.scss'],
+  standalone: false
 })
 export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, AfterViewInit {
   @Input()
@@ -38,6 +40,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     plugins: 'preview importcss searchreplace autolink autosave  directionality code visualblocks visualchars image link  codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap emoticons accordion',
     menubar: 'file edit view insert format tools table help',
     toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code  preview | print | pagebreak anchor codesample | ltr rtl",
+    toolbar_mode: 'sliding' as ToolbarMode,
     quickbars_selection_toolbar: false,
     contextmenu: '',
     content_css: '/assets/styles/tinymce.css',
