@@ -545,13 +545,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       if (content_type == 'pictures.picture') {
         // @ts-ignore
         const title = document.getElementById(element_pk + '_title_id')
-        // @ts-ignore
-        const title_content = title.querySelector('input').value
-        // @ts-ignore
-        if (title_content.includes(search_text)) {
-          // @ts-ignore
-          this.renderer.setStyle(title, 'border', 'thick solid red');
-        }
+        this.renderer.setStyle(title, 'border', 'thick solid red');
       }
 
       if (note_inserted !== 0) {
