@@ -3,3 +3,10 @@
   max-width: 100%;
   height: auto;
 }
+
+/*Keeps TinyMCE happy but prevents the overlay from blocking the UI.*/
+.ephox-dragster-blocker {
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
