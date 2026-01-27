@@ -1283,12 +1283,13 @@ public bringToFrontAndSubmit(): void {
       })
       .pipe()
       .subscribe(
-        picture => {
+        () => {
           this.translocoService
             .selectTranslate('picture.details.toastr.success')
             .subscribe((success: string) => {
               this.toastrService.success(success, "", {
-                positionClass: 'toast-top-left'
+                positionClass: 'toast-top-left',
+                timeOut: 1000
               });
             });
         },
