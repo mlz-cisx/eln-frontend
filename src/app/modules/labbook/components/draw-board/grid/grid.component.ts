@@ -10,7 +10,12 @@ import {
   Output,
   Renderer2,
 } from '@angular/core';
-import {LabbooksService, NotesService, WebSocketService} from '@app/services';
+import {
+  LabbookCollapseService,
+  LabbooksService,
+  NotesService,
+  WebSocketService
+} from '@app/services';
 import {environment} from '@environments/environment';
 import type {
   LabBookElement,
@@ -31,7 +36,6 @@ import {ModalState} from "@app/enums/modal-state.enum";
 import {
   AddElementModalComponent
 } from "@app/modules/labbook/components/modals/add_new/addelem.component";
-
 
 
 @UntilDestroy()
@@ -85,6 +89,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     private readonly modalService: DialogService,
+    private collapseService: LabbookCollapseService
   ) {
   }
 
@@ -568,5 +573,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   open_details() {
+    this.collapseService.setCollapsed(false);
   }
 }

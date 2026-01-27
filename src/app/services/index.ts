@@ -1,5 +1,6 @@
 export * from './errorservice/errorservice.service'
 export * from './labbooks/labbooks.service'
+export * from './labbooks/labbook_collapse.service'
 export * from './pictures/pictures.service'
 export * from './notes/notes.service'
 export * from './files/files.service'

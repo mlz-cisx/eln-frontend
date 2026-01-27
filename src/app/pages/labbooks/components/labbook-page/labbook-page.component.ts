@@ -7,7 +7,6 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  Renderer2,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
@@ -26,7 +25,11 @@ import type {
 import {
   DescriptionModalComponent
 } from '@app/modules/shared/modals/description/description.component';
-import { LabbooksService, WebSocketService } from '@joeseln/services';
+import {
+  LabbookCollapseService,
+  LabbooksService,
+  WebSocketService
+} from '@joeseln/services';
 import {UserService} from "@app/services";
 import type {
   LabBook,
@@ -37,12 +40,12 @@ import type {
   Privileges,
   User,
 } from '@joeseln/types';
-import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import { Observable, of } from 'rxjs';
-import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 
 interface FormLabBook {
@@ -52,11 +55,11 @@ interface FormLabBook {
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-labbook-page',
-    templateUrl: './labbook-page.component.html',
-    styleUrls: ['./labbook-page.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'mlzeln-labbook-page',
+  templateUrl: './labbook-page.component.html',
+  styleUrls: ['./labbook-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class LabBookPageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)
@@ -121,7 +124,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     private readonly websocketService: WebSocketService,
     private readonly modalService: DialogService,
     private user_service: UserService,
-    private renderer2: Renderer2
+    private collapseService: LabbookCollapseService,
   ) {
   }
 
@@ -144,6 +147,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
+    this.collapseService.setCollapsed(true);
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
 
@@ -166,6 +170,12 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     this.initDetails();
     this.initPageTitle();
 
+    this.collapseService.collapsed$
+      .pipe(untilDestroyed(this))
+      .subscribe(value => {
+        this.isCollapsed = value;
+        this.cdr.markForCheck(); // because OnPush
+      });
   }
 
 
