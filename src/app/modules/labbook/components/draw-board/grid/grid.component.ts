@@ -31,9 +31,6 @@ import {ModalState} from "@app/enums/modal-state.enum";
 import {
   AddElementModalComponent
 } from "@app/modules/labbook/components/modals/add_new/addelem.component";
-import {
-  LabBookPageComponent
-} from "@app/pages/labbooks/components/labbook-page/labbook-page.component";
 
 
 
@@ -88,7 +85,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     private readonly modalService: DialogService,
-    private readonly labbookPageComponent: LabBookPageComponent,
   ) {
   }
 
@@ -572,6 +568,5 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   open_details() {
-    this.labbookPageComponent.isCollapsed = false;
   }
 }
