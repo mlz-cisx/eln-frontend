@@ -1,0 +1,70 @@
+<ng-container *transloco="let t">
+  <mlzeln-modal #modal>
+    <div slot="header">
+      {{ t('labBook.exportSelect.header') }}
+    </div>
+
+    <div class="lb-export" slot="body">
+      <div *ngIf="isUnfiltered" class="full-export-banner">
+        <ng-container *ngIf="isOnlyComments; else fullExport">
+          Exporting all content with comments
+        </ng-container>
+        <ng-template #fullExport> No filters applied — exporting all content
+          without comments
+        </ng-template>
+      </div>
+
+      <form [formGroup]="form" class="export-select">
+
+        <!-- ContainTypes -->
+        <div class="section">
+          <label class="section-title">
+            {{ t('labBook.exportSelect.containTypes') }}
+          </label>
+
+          <div class="checkbox-list">
+            <label *ngFor="let ct of containTypeOptions">
+              <input
+                      (change)="toggleContainType(ct)"
+                      [checked]="form.controls['containTypes'].value.includes(ct)"
+                      type="checkbox"
+              />
+              {{ containTypeLabels[ct] }}
+            </label>
+          </div>
+        </div>
+
+        <!-- Date Filter -->
+        <div class="section">
+          <label class="section-title">
+            {{ t('labBook.exportSelect.dateRange') }}
+          </label>
+
+
+          <div class="date-range">
+            <label>
+              {{ t('labBook.exportSelect.start') }}
+              <input formControlName="startTime" type="date"/>
+            </label>
+
+            <label>
+              {{ t('labBook.exportSelect.end') }}
+              <input formControlName="endTime" type="date"/>
+            </label>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <div slot="footer">
+      <button
+              (click)="onApply()"
+              class="btn mlzeln-button-big mlzeln-button-primary"
+              type="submit">
+        {{ t('labBook.exportSelect.apply') }}
+      </button>
+    </div>
+  </mlzeln-modal>
+</ng-container>
+

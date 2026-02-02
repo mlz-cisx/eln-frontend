@@ -41,6 +41,9 @@ import { MathjaxModule } from 'mathjax-angular';
 import { MolViewerModule } from '../../../../libs/mol-viewer/mol-viewer.module';
 import { FabricCanvasModule } from '../../../../libs/fabric-canvas/fabric-canvas.module';
 import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.module';
+import {
+  ExportSelectModalComponent
+} from "./components/modals/export_select/export-select.component";
 
 @NgModule({
   declarations: [
@@ -59,6 +62,7 @@ import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.
     RecentChangesModalComponent,
     CopyElementModalComponent,
     AddElementModalComponent,
+    ExportSelectModalComponent
   ],
   imports: [
     CommonModule,
@@ -113,7 +117,8 @@ import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.
     NewLabBookSketchModalComponent,
     RecentChangesModalComponent,
     CopyElementModalComponent,
-    AddElementModalComponent
+    AddElementModalComponent,
+    ExportSelectModalComponent
   ],
 })
 export class LabBookModule {}

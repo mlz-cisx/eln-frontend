@@ -551,3 +551,7 @@ mlzeln-dashboard-page {
 ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.add-elem) {
   max-height: 50% !important;
 }
+
+ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.lb-export) {
+  max-height: 60% !important;
+}

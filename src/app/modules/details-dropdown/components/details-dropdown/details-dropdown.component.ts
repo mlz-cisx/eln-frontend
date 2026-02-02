@@ -22,6 +22,10 @@ import {take} from 'rxjs/operators';
 import {lastValueFrom} from "rxjs";
 import {HttpClient} from '@angular/common/http';
 import {environment} from "@environments/environment";
+import {
+  ExportFilter,
+  ExportSelectModalComponent
+} from "@app/modules/labbook/components/modals/export_select/export-select.component";
 
 @UntilDestroy()
 @Component({
@@ -113,26 +117,30 @@ export class DetailsDropdownComponent implements OnInit {
   }
 
   public onExport(): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
+    if (this.initialState.content_type === 10) {
+      this.onSelectExportModal()
+    } else {
+      if (this.loading) {
+        return;
+      }
+      this.loading = true;
 
-    this.service
-      .export(this.id)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (exportLink: ExportLink) => {
-          //window.open(exportLink.url, '_blank');
-          this.onClick(exportLink.url, exportLink.filename)
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
+      this.service
+        .export(this.id)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (exportLink: ExportLink) => {
+            //window.open(exportLink.url, '_blank');
+            this.onClick(exportLink.url, exportLink.filename)
+            this.loading = false;
+            this.cdr.markForCheck();
+          },
+          () => {
+            this.loading = false;
+            this.cdr.markForCheck();
+          }
+        );
+    }
   }
 
   public onPngExport(): void {
@@ -165,8 +173,44 @@ export class DetailsDropdownComponent implements OnInit {
     a.href = URL.createObjectURL(file);
     a.setAttribute('download', filename)
     a.click();
-    document.body.removeChild(a);
   }
+
+  public async onExportLabbookPdf(
+    export_link: string,
+    filename: string,
+    filter: ExportFilter
+  ): Promise<void> {
+
+    const params: any = {};
+
+    if (filter.containTypes?.length) {
+      params.containTypes = filter.containTypes;
+    }
+
+    if (filter.startTime) {
+      params.startTime = filter.startTime.toISOString();
+    }
+
+    if (filter.endTime) {
+      params.endTime = filter.endTime.toISOString();
+    }
+
+
+    const response = await lastValueFrom(
+      this.httpClient.get(export_link, {
+        params,
+        responseType: 'blob',
+        observe: 'response',
+      })
+    );
+
+    const file = new Blob([response.body!], {type: 'application/pdf'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
+  }
+
 
   public onDelete(): void {
     const userSetting = 'SkipDialog-Trash';
@@ -248,6 +292,50 @@ export class DetailsDropdownComponent implements OnInit {
 
   public onOpenShareModal(): void {
   }
+
+  public onSelectExportModal(): void {
+    this.modalRef = this.modalService.open(ExportSelectModalComponent, {
+      closeButton: false
+    });
+    this.modalRef.afterClosed$
+      .pipe(untilDestroyed(this), take(1))
+      .subscribe((filter: ExportFilter | null) => {
+        if (filter) {
+          this.onExportFilterSelected(filter);
+        }
+      });
+
+  }
+
+  onExportFilterSelected(filter: ExportFilter): void {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+    const normalized: ExportFilter = {
+      ...filter,
+      startTime: filter.startTime ? new Date(filter.startTime) : null,
+      endTime: filter.endTime ? new Date(filter.endTime) : null,
+    };
+
+    this.service
+      .export(this.id, filter)   // PASS FILTER HERE
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (exportLink: ExportLink) => {
+          this.onExportLabbookPdf(exportLink.url, exportLink.filename, normalized);
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      );
+
+  }
+
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.navigate) {
