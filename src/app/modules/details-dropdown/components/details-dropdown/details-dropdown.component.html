@@ -80,7 +80,7 @@
   </li>
 
   <li [class]="menuClass" role="menuitem" *ngIf="is_labbook">
-    <button type="button" [class]="itemClass" (click)="onExportZip()"
+    <button type="button" [class]="itemClass" (click)="onZipSelectExportModal()"
             [disabled]="loading">
       <joeseln-icon className="wb-pdf-file"></joeseln-icon>
       {{ ('Export as Zip') }}

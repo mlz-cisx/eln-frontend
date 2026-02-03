@@ -147,10 +147,22 @@ export class DetailsDropdownComponent implements OnInit {
     this.pngExportRequested.emit();
   }
 
-  public async onExportZip(): Promise<void> {
+  public async onExportZip(filter: ExportFilter): Promise<void> {
+    const params: any = {};
+    if (filter.containTypes?.length) {
+      params.containTypes = filter.containTypes;
+    }
+    if (filter.startTime) {
+      params.startTime = filter.startTime.toISOString();
+    }
+    if (filter.endTime) {
+      params.endTime = filter.endTime.toISOString();
+    }
+
     const apiUrl = `${environment.apiUrl}/labbooks/`;
     const url = (`${apiUrl}${this.id}/export_as_zip/`)
     const response = await lastValueFrom(this.httpClient.get(url, {
+      params,
       responseType: 'blob',
       observe: 'response'
     }));
@@ -304,8 +316,36 @@ export class DetailsDropdownComponent implements OnInit {
           this.onExportFilterSelected(filter);
         }
       });
-
   }
+
+
+  public onZipSelectExportModal(): void {
+    this.modalRef = this.modalService.open(ExportSelectModalComponent, {
+      closeButton: false
+    });
+    this.modalRef.afterClosed$
+      .pipe(untilDestroyed(this), take(1))
+      .subscribe((filter: ExportFilter | null) => {
+        if (filter) {
+          this.onZipExportFilterSelected(filter);
+        }
+      });
+  }
+
+  onZipExportFilterSelected(filter: ExportFilter): void {
+    if (this.loading) {
+      return;
+    }
+    this.loading = true;
+    const normalized: ExportFilter = {
+      ...filter,
+      startTime: filter.startTime ? new Date(filter.startTime) : null,
+      endTime: filter.endTime ? new Date(filter.endTime) : null,
+    };
+
+    this.onExportZip(normalized)
+  }
+
 
   onExportFilterSelected(filter: ExportFilter): void {
     if (this.loading) {
