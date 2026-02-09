@@ -14,7 +14,7 @@ import {Validators} from '@angular/forms';
 import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
-import { LabbooksService, NotesService, WebSocketService } from '@app/services';
+import {LabbooksService, NotesService, WebSocketService} from '@app/services';
 import type {
   LabBookElement,
   Note,
@@ -177,20 +177,13 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
                 {emitEvent: false}
               );
               this.preloaded_content = privilegesData.data.content
-
-              if (this.preload) {
-                this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
-              }
+              this.cdr.markForCheck()
 
             });
         }
         this.submitted = false
       }
     });
-
-    if (this.preload) {
-      // this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
-    }
   }
 
   public initDetails(): void {
