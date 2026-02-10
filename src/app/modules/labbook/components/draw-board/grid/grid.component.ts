@@ -26,7 +26,16 @@ import {ModalCallback} from "@joeseln/types";
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type {GridsterConfig, GridsterItem} from 'angular-gridster2';
-import {catchError, of, Subscription, tap, timer} from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  delay,
+  from,
+  of,
+  Subscription,
+  tap,
+  timer
+} from 'rxjs';
 import {switchMap, take} from 'rxjs/operators';
 import {gridsterConfig} from '../../../config/gridster-config';
 import {
@@ -69,6 +78,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public options: GridsterConfig = {
     ...gridsterConfig,
+    scrollToNewItems : false,
     itemChangeCallback: () => this.updateAllElements(),
     itemResizeCallback: () => this.updateAllElements(),
   };
@@ -128,6 +138,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
 
   public initDetails(): void {
+    this.disableScrollToNewItems()
     this.labBooksService
       .getElements(this.id)
       .pipe(
@@ -136,25 +147,58 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.loading = false;
           return of([]);
         }),
+        switchMap(elements => {
+          // If empty → no chunking
+          if (elements.length === 0) {
+            return of({elements, isEmpty: true});
+          }
+          // Otherwise → chunk normally
+          const chunks = this.chunk(elements, 200);
+          return from(chunks).pipe(
+            concatMap(chunk => of({
+              elements: chunk,
+              isEmpty: false
+            }).pipe(delay(50)))
+          );
+        })
       )
-      .subscribe(
-        labBookElements => {
-        this.drawBoardElements = this.convertToGridItems(labBookElements);
+      .subscribe(({elements, isEmpty}) => {
+        if (isEmpty) {
+          // Direct render, no chunking
+          this.drawBoardElements = [];
           this.loading = false;
           this.cdr.markForCheck();
-        },
-      );
+          return;
+        }
+
+        // Normal chunked append
+        const gridItems = this.convertToGridItems(elements);
+        this.drawBoardElements = [...this.drawBoardElements, ...gridItems];
+
+        this.loading = false;
+        this.cdr.markForCheck();
+      });
   }
 
-  public chunk(arr: any, len: any) {
-    var chunks = [],
-      i = 0,
-      n = arr.length;
 
-    while (i < n) {
-      chunks.push(arr.slice(i, i += len));
+  private chunk<T>(arr: T[], size: number): T[][] {
+    const chunks: T[][] = [];
+    for (let i = 0; i < arr.length; i += size) {
+      chunks.push(arr.slice(i, i + size));
     }
     return chunks;
+  }
+
+  private disableScrollToNewItems(): void {
+    this.options.scrollToNewItems = false;
+    // Tell Gridster to re-read the updated config
+    this.options.api?.optionsChanged?.call(this.options);
+  }
+
+  private enableScrollToNewItems(): void {
+    this.options.scrollToNewItems = true;
+    // Tell Gridster to re-read the updated config
+    this.options.api?.optionsChanged?.call(this.options);
   }
 
 
@@ -303,13 +347,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  public reload(): void {
-    this.drawBoardElements = [];
-    this.initDetails();
-  }
-
-
   public softReload(): void {
+    this.enableScrollToNewItems()
     if (this.socketLoading) {
       this.queuedSocketRefreshes = true;
       return;
