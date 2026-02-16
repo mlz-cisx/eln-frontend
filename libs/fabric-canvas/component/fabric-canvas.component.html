@@ -1,170 +1,165 @@
 <div class="toolbar" [class.viewer-active]="viewerMode" *ngIf="editor_loaded">
-
-
-
+  <!-- eslint-disable-next-line -->
   <input #galleryInput
          type="file"
          accept="image/*"
          (change)="uploadBackground($event)"
-         hidden>
+    class="d-none">
   <button type="button"
           [disabled]="viewerMode"
           (click)="galleryInput.click()"
+    class="btn btn-light"
           title="Upload from Gallery">
     <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
   </button>
 
   <input #cameraInput
-         type="file"
+    type="file"
          accept="image/*"
          capture="environment"
          (change)="uploadBackground($event)"
-         hidden>
+    class="d-none">
   <button type="button"
           [disabled]="viewerMode"
           (click)="cameraInput.click()"
+    class="btn btn-light"
           title="Take Photo">
     <fa-icon [icon]="['fas', 'camera']"></fa-icon>
   </button>
 
-
-  <button type="button" (click)="loadBackgroundFromStorage()"
-          [disabled]="viewerMode"
-          title="Load from Instrument">
+  <button
+    type="button"
+    (click)="loadBackgroundFromStorage()"
+    [disabled]="viewerMode"
+    class="btn btn-light"
+    title="Load from Instrument">
     <fa-icon [icon]="['fas', 'database']"></fa-icon>
   </button>
 
   <input #pdfInput
-         (change)="uploadPdf($event)" accept="application/pdf" hidden
-         type="file">
+    (change)="uploadPdf($event)" accept="application/pdf"
+    type="file"
+    class="d-none">
   <button (click)="pdfInput.click()"
-          [disabled]="viewerMode"
-          title="Upload Pdf"
-          type="button">
+    [disabled]="viewerMode"
+    class="btn btn-light"
+    title="Upload Pdf"
+    type="button">
     <fa-icon [icon]="['fas', 'upload']"></fa-icon>
   </button>
 
-
-  <button type="button" (click)="toggleViewerMode()" title="Toggle Viewer Mode">
+  <button type="button" (click)="toggleViewerMode()" class="btn btn-light" title="Toggle Viewer Mode">
     <fa-icon
             [icon]="viewerMode ?  ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
   </button>
 
   <button
     type="button"
-    [disabled]="viewerMode"
     (click)="onUndo()"
+    class="btn btn-light"
     title="Undo"
   >
     <fa-icon
       [icon]="['fas', 'rotate-left']"></fa-icon>
   </button>
 
-  <span class="separator"></span>
+  <span class="border-left mx-2"></span>
 
-  <button type="button" (click)="toggleDrawingMode('rectangle')"
-          [disabled]="viewerMode"
-          title="Draw Rectangle">
+  <button type="button" (click)="toggleDrawingMode('rectangle')" [disabled]="viewerMode" class="btn btn-light" title="Draw Rectangle">
     <fa-icon [icon]="['fas', 'square']"></fa-icon>
   </button>
 
   <button type="button" (click)="toggleDrawingMode('circle')"
-          [disabled]="viewerMode"
-          title="Draw Circle">
+    [disabled]="viewerMode"
+    class="btn btn-light"
+    title="Draw Circle">
     <fa-icon [icon]="['fas', 'circle']"></fa-icon>
   </button>
 
-  <span class="separator"></span>
-
+  <span class="border-left mx-2"></span>
 
   <button type="button" (click)="startPointMode()" [disabled]="viewerMode"
-          [class.active]="isActive('point')" title="Start Shape">
+    [class.active]="isActive('point')" class="btn btn-light" title="Start Shape">
     <fa-icon [icon]="['fas', 'play']"></fa-icon>
   </button>
 
-
   <button type="button" (click)="toggleShapeType()" [disabled]="viewerMode"
-          [class.active]="isActive(shapeType)" title="Toggle Shape Type">
+    [class.active]="isActive(shapeType)" class="btn btn-light" title="Toggle Shape Type">
     <fa-icon *ngIf="shapeType === 'polyline'"
-             [icon]="['fas', 'project-diagram']"></fa-icon>
+      [icon]="['fas', 'project-diagram']"></fa-icon>
     <fa-icon *ngIf="shapeType === 'polygon'"
              [icon]="['fas', 'draw-polygon']"></fa-icon>
     <fa-icon *ngIf="shapeType === 'arrow'"
              [icon]="['fas', 'arrow-right']"></fa-icon>
   </button>
 
-
   <button type="button" (click)="finishShape()" [disabled]="viewerMode"
-          [class.active]="isActive('finish')" title="Finish Shape">
+    [class.active]="isActive('finish')" class="btn btn-light" title="Finish Shape">
     <fa-icon [icon]="['fas', 'stop']"></fa-icon>
   </button>
 
-
-  <span class="separator"></span>
-  <button type="button" (click)="startDrawing()" [disabled]="viewerMode"
-          [class.active]="isDrawing"
-          title="Free Draw">
+  <span class="border-left mx-2"></span>
+  <button
+    type="button"
+        (click)="startDrawing()"
+    [disabled]="viewerMode"
+    [class.active]="isDrawing"
+        class="btn btn-light"
+    title="Free Draw"
+  >
     <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
   </button>
 
   <button type="button" (click)="finishDrawing()" [disabled]="viewerMode"
-          [class.active]="!isDrawing"
-          title="Finish Drawing">
+    [class.active]="!isDrawing"
+    class="btn btn-light"
+    title="Finish Drawing">
     <fa-icon [icon]="['fas', 'stop']"></fa-icon>
   </button>
 
-
-  <label title="Pen Size">
+  <label title="Pen Size" class="mr-2 my-1">
     <fa-icon [icon]="['fas', 'pen']"></fa-icon>
-    <input type="range" min="1" max="50" [(ngModel)]="penSize"
-           (input)="updatePenSettings()" [disabled]="viewerMode">
+    <input type="range" min="1" max="50" [(ngModel)]="penSize" (input)="updatePenSettings()" [disabled]="viewerMode" class="form-control-range">
   </label>
-  <label title="Pen Color">
+  <label title="Pen Color" class="mr-2 my-1 d-flex align-items-center">
     <fa-icon [icon]="['fas', 'palette']"></fa-icon>
-    <input type="color" [(ngModel)]="penColor" (input)="updatePenSettings()"
-           [disabled]="viewerMode">
+    <input type="color" [(ngModel)]="penColor" (input)="updatePenSettings()" [disabled]="viewerMode" class="form-control">
   </label>
 
-
-  <label title="Fill Color">
+  <label title="Fill Color" class="mr-2 my-1 d-flex align-items-center">
     <fa-icon [icon]="['fas', 'fill-drip']"></fa-icon>
-    <input type="color" [(ngModel)]="fillColor" (input)="updateFill()"
-           [disabled]="viewerMode">
-    <button type="button" (click)="removeFill()" [disabled]="viewerMode"
-            title="Remove Fill">
+    <input type="color" [(ngModel)]="fillColor" (input)="updateFill()" [disabled]="viewerMode" class="form-control">
+    <button type="button" (click)="removeFill()" [disabled]="viewerMode" title="Remove Fill" class="btn btn-light ml-1">
       <fa-icon [icon]="['fas', 'ban']"></fa-icon>
     </button>
   </label>
 
-  <label title="Stroke Color">
+  <label title="Stroke Color" class="mr-2 my-1 d-flex align-items-center">
     <fa-icon [icon]="['fas', 'paint-brush']"></fa-icon>
     <input type="color" [(ngModel)]="strokeColor" (input)="updateStrokeColor()"
-           [disabled]="viewerMode">
+      [disabled]="viewerMode" class="form-control">
   </label>
 
-  <label title="Stroke Width">
+  <label title="Stroke Width" class="mr-2 my-1 d-flex align-items-center">
     <fa-icon [icon]="['fas', 'arrows-alt-h']"></fa-icon>
-    <input type="number" [(ngModel)]="strokeWidth" (input)="updateStrokeWidth()"
-           min="1" max="20" [disabled]="viewerMode">
+    <input type="number" [(ngModel)]="strokeWidth" (input)="updateStrokeWidth()" min="1" max="20" [disabled]="viewerMode" class="form-control" style="width: 65px">
   </label>
 
-  <span class="separator"></span>
+  <span class="border-left mx-2"></span>
 
-  <button type="button" (click)="startTextMode()" [disabled]="viewerMode"
-          title="Add Text">
+  <button type="button" (click)="startTextMode()" [disabled]="viewerMode" class="btn btn-light" title="Add Text">
     <fa-icon [icon]="['fas', 'font']"></fa-icon>
   </button>
 
-  <label title="Font Size">
+  <label title="Font Size" class="mr-2 my-1 d-flex align-items-center">
     <fa-icon [icon]="['fas', 'text-height']"></fa-icon>
-    <input type="number" [(ngModel)]="fontSize" (input)="updateFontSize()"
-           min="8" max="72" [disabled]="viewerMode">
+    <input type="number" [(ngModel)]="fontSize" (input)="updateFontSize()" min="8" max="72" [disabled]="viewerMode" class="form-control" style="width: 65px">
   </label>
 
-  <label title="Font Family">
+  <label title="Font Family" class="mr-2 my-1 d-flex align-items-center">
     <fa-icon [icon]="['fas', 'heading']"></fa-icon>
     <select [(ngModel)]="fontFamily" (change)="updateFontFamily()"
-            [disabled]="viewerMode">
+      [disabled]="viewerMode" class="form-control">
       <option value="Arial">Arial</option>
       <option value="Times New Roman">Times New Roman</option>
       <option value="Courier New">Courier New</option>
@@ -176,86 +171,118 @@
   </label>
 
   <button type="button" (click)="toggleBold()" [disabled]="viewerMode"
-          title="Bold">
+    class="btn btn-light"
+    title="Bold">
     <fa-icon [icon]="['fas', 'bold']"></fa-icon>
   </button>
-  <button type="button" (click)="toggleItalic()" [disabled]="viewerMode"
-          title="Italic">
+  <button
+    type="button"
+    (click)="toggleItalic()"
+    [disabled]="viewerMode"
+    class="btn btn-light"
+    title="Italic"
+  >
     <fa-icon [icon]="['fas', 'italic']"></fa-icon>
   </button>
 
-  <span class="separator"></span>
+  <span class="border-left mx-2"></span>
 
-
-  <button (click)="startCropMode()"
-          [disabled]="viewerMode"
-          title="Crop Selected Image"
-          type="button">
+  <button
+  (click)="startCropMode()"
+  [disabled]="viewerMode"
+  class="btn btn-light"
+  title="Crop Selected Image"
+  type="button">
     <fa-icon [icon]="['fas', 'crop']"></fa-icon>
   </button>
-  <div *ngIf="cropMode" class="crop-wrapper">
-    <button (click)="applyCrop()" title="Apply Crop" type="button">
+  <div *ngIf="cropMode" class="d-inline-block">
+    <button
+    (click)="applyCrop()"
+          title="Apply Crop"
+    type="button"
+    class="btn btn-success">
       <fa-icon [icon]="['fas', 'check']"></fa-icon>
     </button>
-    <button (click)="cancelCrop()" title="Cancel Crop" type="button">
+    <button
+      (click)="cancelCrop()"
+      title="Cancel Crop"
+      type="button"
+      class="btn btn-danger">
       <fa-icon [icon]="['fas', 'times']"></fa-icon>
     </button>
   </div>
 
-  <span class="separator"></span>
+  <span class="border-left mx-2"></span>
 
   <button type="button" (click)="removeSelected()" [disabled]="viewerMode"
+    class="btn btn-light"
           title="Remove Selected">
     <fa-icon [icon]="['fas', 'times']"></fa-icon>
   </button>
 
-
-  <div class="clear-wrapper">
-    <button type="button" (click)="toggleConfirm()" [disabled]="viewerMode"
-            title="Clear All">
+  <div class="d-inline-block mx-2 position-relative">
+    <button type="button"
+      (click)="toggleConfirm()"
+      [disabled]="viewerMode"
+      class="btn btn-danger"
+      title="Clear All">
       <fa-icon [icon]="['fas', 'trash']"></fa-icon>
     </button>
 
-    <div class="confirm-popover" *ngIf="showConfirm">
-      <button type="button" (click)="confirmClear()" title="Confirm">
+    <div class="confirm-popover position-absolute ml-1" *ngIf="showConfirm">
+      <button
+      type="button"
+      (click)="confirmClear()"
+      title="Confirm"
+      class="btn btn-success"
+      >
         <fa-icon [icon]="['fas', 'check']"></fa-icon>
       </button>
-      <button type="button" (click)="cancelClear()" title="Cancel">
+      <button
+      type="button"
+      (click)="cancelClear()"
+      title="Cancel"
+      class="btn btn-secondary"
+      >
         <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </button>
     </div>
   </div>
-
-
   <button (click)="bringToFrontAndSubmit()" [disabled]="viewerMode"
-          class="save-btn"
-          type="button">
+    class="btn btn-secondary ml-2 w-100"
+    style="max-width: 150px;"
+    type="button">
     <fa-icon [icon]="['fas','layer-group']"></fa-icon>
-    <span class="label">Bring to Front</span>
+    <span>Bring to Front</span>
   </button>
 
-
-  <button type="button" class="save-btn"
-          (click)="storeCanvas()"
-          [disabled]="viewerMode"
-          title="Save changes">
+  <button
+  type="button"
+  class="btn btn-primary ml-2 w-100"
+  style="max-width: 150px;"
+  (click)="storeCanvas()"
+  [disabled]="viewerMode"
+  title="Save changes"
+  >
     <fa-icon [icon]="['fas', 'save']"></fa-icon>
-    <span class="label">Save Changes</span>
+    <span>Save Changes</span>
   </button>
 
-    <button type="button" class="save-btn redo-btn"
-            (click)="reloadCanvas()"
-          [disabled]="viewerMode"
-          title="Reload">
+  <button
+  type="button"
+  class="btn btn-warning ml-2 w-100"
+  style="max-width: 150px;"
+  (click)="reloadCanvas()"
+  [disabled]="viewerMode"
+  title="Reload"
+  >
     <fa-icon [icon]="['fas', 'redo']"></fa-icon>
-    <span class="label">Reload</span>
+    <span>Reload</span>
   </button>
-
-
 </div>
 
-<div [class.preview]="preview" class="canvas-wrapper">
-  <canvas #fabricCanvas>
+<div [class.preview]="preview" class="canvas-wrapper mx-auto mt-2">
+  <canvas #fabricCanvas class="w-100">
   </canvas>
 </div>
 
