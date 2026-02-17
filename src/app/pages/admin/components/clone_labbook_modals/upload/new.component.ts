@@ -186,8 +186,8 @@ export class UploadLabBookModalComponent implements OnInit {
                 // handle notes objects
                 const note_objs = zip_structure.filter(obj => obj.child_object_content_type_model === 'shared_elements.note');
                 note_objs.forEach(obj => {
-                  if (!obj.child_object_id || !obj.child_object?.subject || !obj.child_object?.content) {
-                      throw new Error(`Invalid note object: Missing required fields in ${JSON.stringify(obj)}`);
+                  if (!obj.child_object_id || !obj.child_object?.subject) {
+                    throw new Error(`Invalid note object: Missing required fields in ${JSON.stringify(obj)}`);
                   }
                   this.note_map.set(obj.child_object_id, [obj.child_object.subject, obj.child_object.content]);
                 });
