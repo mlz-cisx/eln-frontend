@@ -14,8 +14,8 @@ export interface SketchPayload {
 
 
 export interface PictureClonePayload {
-  background_image: Blob;
-  info: Blob | null;
+  background_image_b64: string;
+  info_gzip_b64: string;
 }
 
 export interface Picture {

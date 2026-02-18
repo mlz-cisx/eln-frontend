@@ -31,7 +31,7 @@ import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
 import JSZip from 'jszip';
-import * as pako from "pako";
+import {Gzip} from "fflate";
 
 
 interface FormLabBook {
@@ -263,23 +263,24 @@ export class UploadLabBookModalComponent implements OnInit {
       );
   }
 
-  public onZipProceed(): void {
+  public async onZipProceed(): Promise<void> {
 
     if (!this.elements.length) {
-      this.toastrService.error('Failed to upload Labbook');
+      this.toastrService.error('Labbook upload failed. Please try again — it may contain too many elements.');
       this.loading = false;
       this.cdr.markForCheck();
       return;
     }
 
-    this.picture_map.forEach((pic, key) => {
+    for (const [key, pic] of this.picture_map.entries()) {
       const infoText = pic.get('info.json') as string;
       const compressedInfo = this.compressJson(infoText);
-      this.clone_picture({
+
+      await this.clone_picture({
         background_image: pic.get('bi.png') as Blob,
         info: compressedInfo
-      }, key)
-    })
+      }, key);
+    }
 
 
     this.file_map.forEach((file, key) => {
@@ -338,12 +339,16 @@ export class UploadLabBookModalComponent implements OnInit {
   }
 
   public compressJson(json: string): Blob {
-    const compressed = pako.gzip(json); // Uint8Array
-    return new Blob([compressed], {type: "application/gzip"});
+    const encoder = new TextEncoder();
+    const chunks: Uint8Array[] = [];
+    const gzip = new Gzip((chunk) => {
+      chunks.push(chunk);
+    });
+    gzip.push(encoder.encode(json), true); // true = finalize
+    return new Blob(chunks, {type: "application/gzip"});
   }
 
-
-  public clone_picture(cloned_picture: PictureClonePayload, key: string): void {
+  public _clone_picture(cloned_picture: PictureClonePayload, key: string): void {
     this.first_run_promises.push(new Promise((resolve, reject) => {
       this.picturesService
         .clone(cloned_picture)
@@ -360,6 +365,44 @@ export class UploadLabBookModalComponent implements OnInit {
         );
 
     }))
+  }
+
+  public async clone_picture(cloned_picture: { background_image: Blob, info: Blob }, key: string): Promise<Picture> {
+    const background_image_b64 = await this.blobToBase64(cloned_picture.background_image);
+    const info_gzip_b64 = await this.blobToBase64(cloned_picture.info);
+
+    const payload = {
+      background_image_b64,
+      info_gzip_b64
+    };
+
+    const p = new Promise<Picture>((resolve, reject) => {
+      this.picturesService
+        .clone(payload)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          picture => {
+            this.old_uuid2new_uuid.set(key, picture.pk);
+            resolve(picture);
+          },
+          error => reject(error)
+        );
+    });
+
+    this.first_run_promises.push(p);
+    return p;
+  }
+
+  private blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   }
 
   public clone_file(cloned_file: FileClonePayload, key: string): void {

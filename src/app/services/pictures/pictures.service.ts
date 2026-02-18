@@ -72,11 +72,15 @@ export class PicturesService
   }
 
   public clone(picture: PictureClonePayload, params = new HttpParams()): Observable<Picture> {
-    const formData = new FormData();
-    for (const [key, val] of Object.entries(picture)) {
-      formData.append(key, val);
-    }
-    return this.httpClient.post<Picture>(`${this.apiUrl}clone/`, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+    return this.httpClient
+      .post<Picture>(`${this.apiUrl}clone/`, picture, {
+        params,
+        headers: {'Content-Type': 'application/json'}
+      })
+      .pipe(
+        catchError(err => this.errorservice.handleError(err, this.logout)),
+        map(data => data)
+      );
   }
 
 
