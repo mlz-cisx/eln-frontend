@@ -406,7 +406,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
 
   public softReload(): void {
-    this.enableScrollToNewItems()
+    // this.enableScrollToNewItems()
     if (this.socketLoading) {
       this.queuedSocketRefreshes = true;
       return;
