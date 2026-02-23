@@ -105,8 +105,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
 
-    this.initDetails();
-
     this.created?.subscribe((event: LabBookElementEvent) => {
       this.addElement(event);
     });
@@ -114,6 +112,12 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    // initial heavy load outside Angular
+    this.ngZone.runOutsideAngular(() => {
+      this.initDetails();   // chunked Gridster loading
+    });
+
+
     this.websocketService.elements.pipe().subscribe((data: any) => {
       if (data.model_pk === this.id) {
         // Sadly, we need a timeout here because the logic for the LabBook operations is
@@ -153,7 +157,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             return of({elements, isEmpty: true});
           }
           // Otherwise → chunk normally
-          const chunks = this.chunk(elements, 200);
+          const cleaned = this.cleanElements(elements);
+          const chunks = this.chunk(cleaned, 200);
           return from(chunks).pipe(
             concatMap(chunk => of({
               elements: chunk,
@@ -188,6 +193,59 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     }
     return chunks;
   }
+
+  cleanElements<T extends LabBookElement<any>>(elements: T[]): T[] {
+    // Sort by y then x for deterministic placement
+    const sorted = [...elements].sort((a, b) =>
+      a.position_y === b.position_y
+        ? a.position_x - b.position_x
+        : a.position_y - b.position_y
+    );
+
+    const occupied = new Set<string>();
+
+    const isFree = (x: number, y: number, w: number, h: number) => {
+      for (let yy = y; yy < y + h; yy++) {
+        for (let xx = x; xx < x + w; xx++) {
+          if (occupied.has(`${xx},${yy}`)) return false;
+        }
+      }
+      return true;
+    };
+
+    const mark = (x: number, y: number, w: number, h: number) => {
+      for (let yy = y; yy < y + h; yy++) {
+        for (let xx = x; xx < x + w; xx++) {
+          occupied.add(`${xx},${yy}`);
+        }
+      }
+    };
+
+    const cleaned: T[] = [];
+
+    for (const el of sorted) {
+      let x = Math.max(0, el.position_x);
+      let y = Math.max(0, el.position_y);
+      const w = el.width;
+      const h = el.height;
+
+      // Push down until free
+      while (!isFree(x, y, w, h)) {
+        y++;
+      }
+
+      mark(x, y, w, h);
+
+      cleaned.push({
+        ...el,
+        position_x: x,
+        position_y: y
+      });
+    }
+
+    return cleaned;
+  }
+
 
   private disableScrollToNewItems(): void {
     this.options.scrollToNewItems = false;
