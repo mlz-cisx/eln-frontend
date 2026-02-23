@@ -37,6 +37,7 @@ import {
   timer
 } from 'rxjs';
 import {switchMap, take} from 'rxjs/operators';
+import {ToastrService} from 'ngx-toastr';
 import {gridsterConfig} from '../../../config/gridster-config';
 import {
   highlight_element_background_color
@@ -96,6 +97,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     public readonly notesService: NotesService,
     private readonly cdr: ChangeDetectorRef,
     private readonly websocketService: WebSocketService,
+    private readonly toastrService: ToastrService,
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     private readonly modalService: DialogService,
@@ -468,7 +470,24 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           this.queuedSocketRefreshes = false;
           this.softReload();
         }
+
+        // offer jumping to new elements
+        if (elementsToAdd.length != 0 && !this.queuedSocketRefreshes) {
+          // eslint-disable-next-line
+          elementsToAdd.sort(((a, b) => a['element']['last_modified_at'] - b['element']['last_modified_at']))
+          const lastestElem = elementsToAdd[0];
+          this.toastrService.info('New element added, click to jump')
+            .onTap
+            .pipe(take(1))
+            .subscribe(() => this.toasterClickToJump(lastestElem.y));
+        }
       });
+  }
+
+  private toasterClickToJump(position_y: number) {
+    const row_height =  this.options.fixedRowHeight! + this.options.margin!;
+    const pos = position_y * row_height;
+    window.scrollTo({top: pos, behavior: 'smooth'});
   }
 
   public onGridDoubleClick(event: MouseEvent) {
