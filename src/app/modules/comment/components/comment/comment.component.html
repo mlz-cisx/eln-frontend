@@ -9,18 +9,20 @@
         </div>
       </div>
       <div class="self-center" *ngIf="currentUser?.pk === currentUser?.pk ">
-        <button type="button" class="btn mlzeln-button-small" (click)="onOpenDeleteModal()" [disabled]="loading">
+        <button (click)="onOpenDeleteModal()" [disabled]="loading"
+                class="btn mlzeln-button-small" type="button">
           <joeseln-icon
-            className="wb-remove"
-            [tooltip]="t('comments.deleteComment.tooltip')"
-            containerClass="tooltip-sm"
+                  [tooltip]="t('comments.deleteComment.tooltip')"
+                  className="wb-remove"
+                  containerClass="tooltip-sm"
           ></joeseln-icon>
         </button>
       </div>
     </div>
-    <div>
+    <div class="comment-content-wrapper">
       <div class="font-bold mb-2">{{ comment.left_content_object.subject }}</div>
-      <div [innerHTML]="comment.left_content_object.content "></div>
+      <div [innerHTML]="comment.left_content_object.content"></div>
     </div>
+
   </div>
 </ng-container>

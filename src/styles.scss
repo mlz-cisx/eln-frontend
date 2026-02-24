@@ -555,3 +555,15 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.add-elem) {
 ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.lb-export) {
   max-height: 60% !important;
 }
+
+.comment-content-wrapper * {
+  max-width: 700px;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  /* enforce line breaks in long text */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}

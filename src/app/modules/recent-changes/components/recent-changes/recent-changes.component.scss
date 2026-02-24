@@ -11,6 +11,16 @@
     margin-left: 2rem;
   }
 
+  .changes * {
+    max-width: 100%;
+    box-sizing: border-box;
+
+    /* text safety */
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+  }
+
   .field-name::first-letter {
     text-transform: uppercase;
   }

@@ -598,6 +598,9 @@ public bringToFrontAndSubmit(): void {
   }
 
   startPointMode(): void {
+    this.canvas.selection = false;
+    this.canvas.forEachObject(obj => obj.selectable = false);
+
     this.pointModeActive = true;
     // Clear any previous drawing mode
     this.drawingMode = null;
@@ -704,6 +707,10 @@ public bringToFrontAndSubmit(): void {
 
     }
 
+    // Re-enable selection for all objects
+    this.canvas.selection = true;
+    this.canvas.forEachObject(obj => obj.selectable = true);
+
     // Add final shape to canvas
     this.canvas.add(shape);
     this.canvas.sendObjectBackwards(shape, true);
@@ -801,6 +808,10 @@ public bringToFrontAndSubmit(): void {
     // Attach custom metadata
     (shape as any).customType = 'preview-shape';
 
+    // Re-enable selection for all objects
+    this.canvas.selection = true;
+    this.canvas.forEachObject(obj => obj.selectable = true);
+
     this.canvas.add(shape);
     this.canvas.sendObjectBackwards(shape, true);
     this.canvas.renderAll();
@@ -894,6 +905,9 @@ public bringToFrontAndSubmit(): void {
     this.canvas.off('mouse:move');
     this.canvas.off('mouse:up');
 
+    this.canvas.selection = false;
+    this.canvas.forEachObject(obj => obj.selectable = false);
+
     this.canvas.on('mouse:down', (opt) => {
       const pointer = this.canvas.getPointer(opt.e);
       this.startPoint = {x: pointer.x, y: pointer.y};
@@ -977,6 +991,10 @@ public bringToFrontAndSubmit(): void {
 
       this.startPoint = null;
       this.drawingMode = null;
+
+      // Re-enable selection for all objects
+      this.canvas.selection = true;
+      this.canvas.forEachObject(obj => obj.selectable = true);
 
       // Remove temporary listeners
       this.canvas.off('mouse:move');
