@@ -556,6 +556,10 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.lb-export) {
   max-height: 60% !important;
 }
 
+ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal) {
+  max-width: 800px !important;
+}
+
 .comment-content-wrapper * {
   max-width: 700px;
   width: 100%;

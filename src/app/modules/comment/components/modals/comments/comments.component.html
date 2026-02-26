@@ -1,14 +1,14 @@
 <ng-container *transloco="let t">
-  <mlzeln-modal>
+  <mlzeln-modal class="comments-modal">
     <div slot="header">
-      {{ t('comments.commentsModal.header', { name: element.display }) }}
+      {{ t('comments.commentsModal.header', {name: element.display || element.subject}) }}
     </div>
     <div slot="body">
       <mlzeln-comments
-        [service]="service"
-        [id]="element.pk"
-        [contentType]="element.content_type"
-        [create]="create"
+              [contentType]="element.content_type"
+              [create]="create"
+              [id]="element.pk"
+              [service]="service"
       ></mlzeln-comments>
     </div>
 
