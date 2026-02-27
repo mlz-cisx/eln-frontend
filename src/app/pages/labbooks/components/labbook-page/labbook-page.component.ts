@@ -47,6 +47,7 @@ import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {Observable, of} from 'rxjs';
 import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
+import {ToastrService} from 'ngx-toastr';
 
 interface FormLabBook {
   labbook_title: FormControl<string | null>;
@@ -125,6 +126,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     private readonly modalService: DialogService,
     private user_service: UserService,
     private collapseService: LabbookCollapseService,
+    private readonly toastrService: ToastrService,
   ) {
   }
 
@@ -252,7 +254,10 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           if (formChanges) {
             this.initFormChanges();
           }
-
+          if (labBook.strict_mode) {
+            this.toastrService.warning('Strict mode is on. ' +
+              'You can only edit elements you created yourself.')
+          }
           this.cdr.markForCheck();
         },
         (error: HttpErrorResponse) => {
