@@ -135,8 +135,6 @@ export class FabricCanvasComponent implements AfterViewInit {
         ? JSON.parse(this.canvasContent)
         : this.canvasContent;
       await this.canvas.loadFromJSON(json);
-      this.canvas.renderAll();
-      const objs = this.canvas.getObjects();
 
       if (this.preview) {
         const scale = 0.25; // shrink to 25%
@@ -182,7 +180,7 @@ export class FabricCanvasComponent implements AfterViewInit {
           }
         }
       });
-      this.canvas.selection = false;
+      this.canvas.selection = this.allowSelection;
       this.canvas.discardActiveObject();
       this.canvas.renderAll();
 
@@ -1742,5 +1740,30 @@ public bringToFrontAndSubmit(): void {
     this.cropRect.on('modified', sync);
   }
 
+  groupObjects(): void {
+    const sel = this.canvas.getActiveObject()
+    if (!sel) {
+        return;
+    }
+    if (sel.type !== 'activeSelection' && sel.type !== 'activeselection') {
+        return;
+    }
+    const group = new fabric.Group((sel as fabric.ActiveSelection).removeAll())
+    this.canvas.add(group);
+    this.canvas.setActiveObject(group);
+    this.canvas.requestRenderAll();
+  }
+
+  ungroupObjects(): void {
+    const group = this.canvas.getActiveObject();
+    if (group && group.type === 'group') {
+      this.canvas.remove(group);
+      const sel = new fabric.ActiveSelection((group as fabric.Group).removeAll(), {
+        canvas: this.canvas,
+      });
+      this.canvas.setActiveObject(sel);
+      this.canvas.requestRenderAll();
+    }
+  }
 }
 
