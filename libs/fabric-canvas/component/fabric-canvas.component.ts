@@ -220,6 +220,7 @@ export class FabricCanvasComponent implements AfterViewInit {
       this.history.push(JSON.stringify(this.canvas.toJSON()));
       this.canvas.on('object:modified', () => { JSON.stringify(this.canvas.toJSON()); });
       this.canvas.on('object:added', () => { JSON.stringify(this.canvas.toJSON()); });
+      this.canvas.on('object:removed', () => { JSON.stringify(this.canvas.toJSON()); });
       // keyboard listeners
       window.addEventListener('keyup', (event) => this.onKeyDown(event));
     }
