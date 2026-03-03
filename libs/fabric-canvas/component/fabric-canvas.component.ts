@@ -252,7 +252,7 @@ export class FabricCanvasComponent implements AfterViewInit {
   }
 
   private onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Backspace' && this.drawingMode != 'text') {
+    if ((event.key === 'Backspace' || event.key === "Delete") && this.drawingMode != 'text') {
       this.removeSelected();
     }
     if (event.ctrlKey && event.key === 'z') {
