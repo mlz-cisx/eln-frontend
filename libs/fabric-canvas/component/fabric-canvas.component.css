@@ -7,9 +7,15 @@
 
 .toolbar label,
 .toolbar button,
-.toolbar span {
+.toolbar span,
+.toolbar input,
+.toolbar select {
     display: flex;
     align-items: center; /* keep icon + input aligned inside */
+    height: min(32px, 5vw);
+    font-size: min(16px, 2.5vw);
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -17,14 +23,28 @@ canvas {
     border: 1px solid #ccc;
 }
 
+.toolbar span {
+  width: min(3px, 0.5vw);
+}
+
 .toolbar button {
-    width: 32px;
-    height: 32px;
-    margin: 2px;
+    width: min(32px, 5vw);
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
+}
+
+.toolbar input[type='range'] {
+  width: max(50px, 10vw);
+}
+
+.toolbar input[type='color'],
+.toolbar input[type='number'] {
+  min-width: 2em;
+  max-width: 5em;
+}
+
+.toolbar select {
+  min-width: 3em;
+  max-width: 6em;
 }
 
 .toolbar button:disabled {
@@ -32,14 +52,23 @@ canvas {
 }
 
 .toolbar label fa-icon {
-    font-size: 1.5rem; /* makes the icon bigger */
-    margin-right: 8px; /* adds spacing between icon and input */
-    vertical-align: middle; /* keeps icon aligned nicely with input */
+  font-size: min(1rem, 1.5vw);
+  margin-right: 8px;
 }
 
 .toolbar button fa-icon {
-    font-size: 1rem; /* slightly bigger than default */
-    margin-right: 0; /* spacing if button has text */
+  font-size: min(1rem, 1.5vw);
+  margin-right: 0;
+}
+
+.toolbar button.func {
+  width: min(8em, 10vw);
+  min-width: 6em;
+}
+
+.toolbar button.func fa-icon {
+  margin-right: 8px;
+  margin-left: 0px;
 }
 
 .separator {

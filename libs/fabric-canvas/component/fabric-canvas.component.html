@@ -249,35 +249,33 @@
     </div>
   </div>
   <button (click)="bringToFrontAndSubmit()" [disabled]="viewerMode"
-    class="btn btn-secondary ml-2 w-100"
-    style="max-width: 150px;"
-    type="button">
+    class="btn btn-secondary func"
+    type="button"
+    title="Bring to Front">
     <fa-icon [icon]="['fas','layer-group']"></fa-icon>
-    <span>Bring to Front</span>
+    to Front
   </button>
 
   <button
   type="button"
-  class="btn btn-primary ml-2 w-100"
-  style="max-width: 150px;"
+    class="btn btn-primary func"
   (click)="storeCanvas()"
   [disabled]="viewerMode"
   title="Save changes"
   >
     <fa-icon [icon]="['fas', 'save']"></fa-icon>
-    <span>Save Changes</span>
+    Save
   </button>
 
   <button
   type="button"
-  class="btn btn-warning ml-2 w-100"
-  style="max-width: 150px;"
+    class="btn btn-warning func"
   (click)="reloadCanvas()"
   [disabled]="viewerMode"
   title="Reload"
   >
     <fa-icon [icon]="['fas', 'redo']"></fa-icon>
-    <span>Reload</span>
+    Reload
   </button>
 </div>
 
