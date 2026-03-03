@@ -60,11 +60,15 @@ export class FilesService
   }
 
   public clone(file: FileClonePayload, params = new HttpParams()): Observable<File> {
-    const formData = new FormData();
-    for (const [key, val] of Object.entries(file)) {
-      formData.append(key, val);
-    }
-    return this.httpClient.post<File>(`${this.apiUrl}clone/`, formData, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+    return this.httpClient
+      .post<File>(`${this.apiUrl}clone/`, file, {
+        params,
+        headers: {'Content-Type': 'application/json'}
+      })
+      .pipe(
+        catchError(err => this.errorservice.handleError(err, this.logout)),
+        map(data => data)
+      );
   }
 
   public get(id: string, params = new HttpParams()): Observable<PrivilegesData<File>> {

@@ -16,14 +16,12 @@ import {
 import type {
   CommentPayload,
   File,
-  FileClonePayload,
   LabBook,
   LabBookElementClonePayload,
   LabBookElementPayload,
   Note,
   NotePayload,
   Picture,
-  PictureClonePayload,
 } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -151,6 +149,8 @@ export class UploadLabBookModalComponent implements OnInit {
 
   public filePlaceholder = this.translocoService.translate('file.newModal.file.placeholder');
 
+  file_zipPromises: Promise<void>[] = [];
+  pic_zipPromises: Promise<void>[] = [];
 
   public onUpload(event: Event): void {
     const files = (event.target as HTMLInputElement).files;
@@ -208,18 +208,20 @@ export class UploadLabBookModalComponent implements OnInit {
               const key = path[1];
               const mapEntry = this.picture_map.get(key) || new Map<string, string | Blob>;
               this.picture_map.set(key, mapEntry);
-              zipEntry.async(is_info ? 'string' : 'blob').then(data => {
+              const p = zipEntry.async(is_info ? 'string' : 'blob').then(data => {
                 mapEntry.set(path[2], data);
               });
+              this.pic_zipPromises.push(p);
 
-            // handle file entries
+              // handle file entries
             } else if (is_file) {
               const key = path[1];
-              const mapEntry = this.file_map.get(key) || new Map<string, string | Blob>;
+              const mapEntry = this.file_map.get(key) || new Map<string, string | Blob>();
               this.file_map.set(key, mapEntry);
-              zipEntry.async(is_info ? 'string' : 'blob').then(data => {
-                mapEntry.set(is_info ? "info" : "path", data);
+              const p = zipEntry.async(is_info ? 'string' : 'blob').then(data => {
+                mapEntry.set(is_info ? 'info' : 'path', data);
               });
+              this.file_zipPromises.push(p);
             }
           });
         },
@@ -265,12 +267,32 @@ export class UploadLabBookModalComponent implements OnInit {
 
   public async onZipProceed(): Promise<void> {
 
+    await Promise.all(this.file_zipPromises);
+    await Promise.all(this.pic_zipPromises);
+
     if (!this.elements.length) {
       this.toastrService.error('Labbook upload failed. Please try again — it may contain too many elements.');
       this.loading = false;
       this.cdr.markForCheck();
       return;
     }
+
+    const filePromises: Promise<any>[] = [];
+
+    for (const [key, file] of this.file_map.entries()) {
+      const infoText = file.get('info') as string;
+      const compressedInfo = this.compressJson(infoText);
+
+      filePromises.push(
+        this.clone_file({
+          path: file.get('path') as Blob,
+          info: compressedInfo
+        }, key)
+      );
+    }
+
+    await Promise.all(filePromises);
+
 
     for (const [key, pic] of this.picture_map.entries()) {
       const infoText = pic.get('info.json') as string;
@@ -281,14 +303,6 @@ export class UploadLabBookModalComponent implements OnInit {
         info: compressedInfo
       }, key);
     }
-
-
-    this.file_map.forEach((file, key) => {
-      this.clone_file({
-        path: file.get('path') as Blob,
-        info: file.get('info') as string,
-      }, key)
-    })
 
     this.note_map.forEach((note, key) => {
       this.clone_note({
@@ -340,7 +354,7 @@ export class UploadLabBookModalComponent implements OnInit {
 
   public compressJson(json: string): Blob {
     const encoder = new TextEncoder();
-    const chunks: Uint8Array[] = [];
+    const chunks: Uint8Array<any>[] = [];
     const gzip = new Gzip((chunk) => {
       chunks.push(chunk);
     });
@@ -348,24 +362,7 @@ export class UploadLabBookModalComponent implements OnInit {
     return new Blob(chunks, {type: "application/gzip"});
   }
 
-  public _clone_picture(cloned_picture: PictureClonePayload, key: string): void {
-    this.first_run_promises.push(new Promise((resolve, reject) => {
-      this.picturesService
-        .clone(cloned_picture)
-        .pipe(untilDestroyed(this))
-        .subscribe(
-          picture => {
-            resolve(picture)
-            if (picture) {
-              this.old_uuid2new_uuid.set(key, picture.pk)
-            }
-          },
-          () => {
-          }
-        );
 
-    }))
-  }
 
   public async clone_picture(cloned_picture: { background_image: Blob, info: Blob }, key: string): Promise<Picture> {
     const background_image_b64 = await this.blobToBase64(cloned_picture.background_image);
@@ -405,22 +402,31 @@ export class UploadLabBookModalComponent implements OnInit {
     });
   }
 
-  public clone_file(cloned_file: FileClonePayload, key: string): void {
-    this.first_run_promises.push(new Promise((resolve, reject) => {
+
+  public async clone_file(cloned_file: { path: Blob, info: Blob }, key: string): Promise<File> {
+    const path_b64 = await this.blobToBase64(cloned_file.path);
+    const info_gzip_b64 = await this.blobToBase64(cloned_file.info);
+
+    const payload = {
+      path_b64,
+      info_gzip_b64
+    };
+
+    const p = new Promise<File>((resolve, reject) => {
       this.filesService
-        .clone(cloned_file)
+        .clone(payload)
         .pipe(untilDestroyed(this))
         .subscribe(
           file => {
-            resolve(file)
-            if (file) {
-              this.old_uuid2new_uuid.set(key, file.pk)
-            }
+            this.old_uuid2new_uuid.set(key, file.pk);
+            resolve(file);
           },
-          () => {
-          }
+          error => reject(error)
         );
-    }))
+    });
+
+    this.first_run_promises.push(p);
+    return p;
   }
 
   public clone_note(cloned_note: NotePayload, key: string): void {

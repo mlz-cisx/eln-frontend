@@ -11,8 +11,8 @@ export interface FilePayload {
 }
 
 export interface FileClonePayload {
-  path: globalThis.File |Blob| string | null;
-  info: string | null;
+  path_b64: string;
+  info_gzip_b64: string;
 }
 
 export interface File {
