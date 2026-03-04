@@ -11,7 +11,8 @@ import {
   FilesService,
   LabbooksService,
   NotesService,
-  PicturesService
+  PicturesService,
+  UserService
 } from '@joeseln/services';
 import type {
   CommentPayload,
@@ -99,6 +100,7 @@ export class UploadLabBookModalComponent implements OnInit {
     private readonly filesService: FilesService,
     private readonly notesService: NotesService,
     private readonly commentService: CommentsService,
+    private _user: UserService,
   ) {
   }
 
@@ -266,6 +268,8 @@ export class UploadLabBookModalComponent implements OnInit {
   }
 
   public async onZipProceed(): Promise<void> {
+
+    await this._user.refreshTokenPromise()
 
     await Promise.all(this.file_zipPromises);
     await Promise.all(this.pic_zipPromises);

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '@environments/environment';
-import {Observable} from 'rxjs';
+import {firstValueFrom, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import type {TokenWithValidity, User} from '@joeseln/types';
 import {AuthService, ErrorserviceService, LogoutService} from '@app/services';
@@ -67,4 +67,21 @@ export class UserService {
       })
     );
   }
+
+  public async refreshTokenPromise(): Promise<string | undefined> {
+    return firstValueFrom(
+      this.httpClient.post<any>(`${environment.apiUrl}/refresh-token`, {
+        access_token: this._auth.getToken()
+      }).pipe(
+        map((res) => {
+          if (res.access_token) {
+            this._auth.setDataInLocalStorage('token', res.access_token);
+            return res.access_token;
+          }
+          return undefined;
+        })
+      )
+    );
+  }
+
 }
