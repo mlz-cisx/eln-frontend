@@ -122,19 +122,27 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
     this.websocketService.elements.pipe().subscribe((data: any) => {
       if (data.model_pk === this.id) {
-        // Sadly, we need a timeout here because the logic for the LabBook operations is
-        // mainly in the frontend and the backend sends a socket request when the first
-        // API request (in the browser of another user) resolved. But we really should wait
-        // for all API calls which we can't, because we don't know what's going on in another
-        // browser. If the logic moves to the backend, we can remove the timeout.
-        if (this.socketRefreshTimeout) {
-          clearTimeout(this.socketRefreshTimeout);
+        if (data.action === 'strict_mode_enabled') {
+          this.toastrService.warning(
+            'Strict mode is enabled. You can only edit elements you created yourself.',
+            '',
+            {positionClass: 'toast-top-center'}
+          )
+        } else {
+          // Sadly, we need a timeout here because the logic for the LabBook operations is
+          // mainly in the frontend and the backend sends a socket request when the first
+          // API request (in the browser of another user) resolved. But we really should wait
+          // for all API calls which we can't, because we don't know what's going on in another
+          // browser. If the logic moves to the backend, we can remove the timeout.
+          if (this.socketRefreshTimeout) {
+            clearTimeout(this.socketRefreshTimeout);
+          }
+          this.ngZone.runOutsideAngular(() => {
+            this.socketRefreshTimeout = setTimeout(() => {
+              this.softReload();
+            }, environment.labBookSocketRefreshInterval);
+          });
         }
-        this.ngZone.runOutsideAngular(() => {
-          this.socketRefreshTimeout = setTimeout(() => {
-            this.softReload();
-          }, environment.labBookSocketRefreshInterval);
-        });
       }
     });
   }
