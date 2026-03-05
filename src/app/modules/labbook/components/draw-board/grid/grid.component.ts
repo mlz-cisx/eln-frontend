@@ -86,6 +86,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public socketLoading = false;
 
+  private websocketSubscription: Subscription = new Subscription();
+
   public socketRefreshTimeout?: any;
 
   public queuedSocketRefreshes = false;
@@ -118,9 +120,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       this.initDetails();   // chunked Gridster loading
     });
-
-
-    this.websocketService.elements.pipe().subscribe((data: any) => {
+    // eslint-disable-next-line
+    this.websocketSubscription = this.websocketService.elements.pipe().subscribe((data: any) => {
       if (data.model_pk === this.id) {
         if (data.action === 'strict_mode_enabled') {
           this.toastrService.warning(
@@ -148,8 +149,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    if (this.websocketSubscription) {
+      this.websocketSubscription.unsubscribe();
+    }
   }
-
 
   public initDetails(): void {
     this.disableScrollToNewItems()
