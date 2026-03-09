@@ -83,6 +83,20 @@
           QR
         </button>
       </li>
+      <li style="height: 1px; background-color: white"></li>
+      <li>
+        <button
+                (click)="triggerSearch()"
+                [disabled]="!editable"
+                [tooltip]="'Search'"
+                class="btn mlzeln-button-regular text-white"
+                containerClass="tooltip-sm"
+                placement="bottom left"
+                type="button"
+        >
+          <joeseln-icon className="wb-search"></joeseln-icon>
+        </button>
+      </li>
     </ul>
   </div>
 </ng-container>

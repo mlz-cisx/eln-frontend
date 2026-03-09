@@ -1,4 +1,20 @@
 <ng-container>
+
+  <div *ngIf="searchOpen" class="search-box">
+    <input
+      #searchInput
+      (input)="onQueryChange()"
+      (keydown)="onSearchKey($event)"
+      [(ngModel)]="query"
+      placeholder="Find..."
+      type="text"
+    >
+    <span>{{ currentIndex + 1 }} / {{ results.length }}</span>
+    <button (click)="prev()">▲</button>
+    <button (click)="next()">▼</button>
+    <button (click)="close()">✕</button>
+  </div>
+
   <ng-container *transloco="let t">
     <div [class.with-sidebar]="showSidebar">
       <aside *ngIf="showSidebar">

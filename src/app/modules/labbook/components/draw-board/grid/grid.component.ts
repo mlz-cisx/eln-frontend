@@ -155,7 +155,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public initDetails(): void {
-    this.disableScrollToNewItems()
+
     this.labBooksService
       .getElements(this.id)
       .pipe(
@@ -419,7 +419,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
 
   public softReload(): void {
-    // this.enableScrollToNewItems()
     if (this.socketLoading) {
       this.queuedSocketRefreshes = true;
       return;
@@ -644,7 +643,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         const elem = document.getElementById(element_pk + '_preloaded_id')
         const title = document.getElementById(element_pk + '_title_id')
         // @ts-ignore
-        const content = elem.innerHTML
+        const content_with_images = elem.innerHTML
+        const content = content_with_images.replace(/<img[^>]*>/gi, '')
         // @ts-ignore
         if (content.includes(search_text)) {
           // @ts-ignore
@@ -674,16 +674,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         // @ts-ignore
         const title = document.getElementById(element_pk + '_title_id')
         this.renderer.setStyle(title, 'border', 'thick solid red');
-      }
-
-      if (note_inserted !== 0) {
-      }
-      const elem = document.getElementById(element_pk + '_preloaded_id')
-      const title = document.getElementById(element_pk + '_title_id')
-      // @ts-ignore
-      if (elem) {
-        this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
-        this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
       }
 
       if (content_type == 'labbooks.labbook') {

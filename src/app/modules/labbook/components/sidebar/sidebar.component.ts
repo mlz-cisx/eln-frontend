@@ -38,7 +38,7 @@ import {
 import {
   LabBookDrawBoardNoteComponent
 } from "@app/modules/labbook/components/draw-board/note/note.component";
-import {LabbooksService} from '@joeseln/services';
+import {LabbooksService, SearchService} from '@joeseln/services';
 
 @UntilDestroy()
 @Component({
@@ -82,7 +82,8 @@ export class LabBookSidebarComponent implements OnInit {
     public readonly labBooksService: LabbooksService,
     private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
     private readonly renderer: Renderer2,
-    private readonly el: ElementRef
+    private readonly el: ElementRef,
+    private searchService: SearchService
   ) {
   }
 
@@ -182,6 +183,10 @@ export class LabBookSidebarComponent implements OnInit {
     } as DialogConfig);
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
+  }
+
+  triggerSearch() {
+    this.searchService.triggerSearch();
   }
 
 

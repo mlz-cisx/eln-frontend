@@ -17,6 +17,7 @@ import type {
   RecentChanges,
   Version,
 } from '@joeseln/types';
+import {SearchResult} from "@joeseln/types";
 import {catchError, map} from 'rxjs/operators';
 import {Observable} from "rxjs";
 import {ErrorserviceService, LogoutService} from "@app/services";
@@ -142,6 +143,11 @@ export class LabbooksService {
 
   public export(id: string): Observable<ExportLink> {
     return this.httpClient.get<ExportLink>(`${this.apiUrl}${id}/get_export_link/`);
+  }
+
+  public search(id: string, search: string, params = new HttpParams()): Observable<SearchResult[]> {
+    const httpParams = params.set('search', search);
+    return this.httpClient.get<SearchResult[]>(`${this.apiUrl}${id}/search/`, {params: httpParams});
   }
 
 }

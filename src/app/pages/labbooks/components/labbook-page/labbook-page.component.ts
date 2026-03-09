@@ -3,10 +3,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
+  NgZone,
   OnDestroy,
   OnInit,
   QueryList,
+  Renderer2,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
@@ -28,6 +31,7 @@ import {
 import {
   LabbookCollapseService,
   LabbooksService,
+  SearchService,
   WebSocketService
 } from '@joeseln/services';
 import {UserService} from "@app/services";
@@ -44,10 +48,15 @@ import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {Observable, of} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 import {ToastrService} from 'ngx-toastr';
+import {gridsterConfig} from '@app/modules/labbook/config/gridster-config';
+import {GridsterConfig} from "angular-gridster2";
+import {
+  highlight_element_background_color
+} from "@app/modules/labbook/config/admin-element-background-color";
 
 interface FormLabBook {
   labbook_title: FormControl<string | null>;
@@ -65,6 +74,9 @@ interface FormLabBook {
 export class LabBookPageComponent implements OnInit, OnDestroy {
   @ViewChild(CommentsComponent)
   public comments!: CommentsComponent;
+
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
 
   @ViewChildren('drawBoard')
   public drawBoards?: QueryList<LabBookDrawBoardComponent>;
@@ -108,6 +120,18 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
   public newModalComponent = NewLabBookModalComponent;
 
 
+  results: any[] = [];
+  query = '';
+  currentIndex = 0;
+  searchOpen = false;
+
+  searchInput$ = new Subject<string>();
+
+  public gridster_options: GridsterConfig = {
+    ...gridsterConfig,
+  };
+
+  private row_height = this.gridster_options.fixedRowHeight! + this.gridster_options.margin!;
 
 
   public form = this.fb.group<FormLabBook>({
@@ -127,6 +151,9 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     private user_service: UserService,
     private collapseService: LabbookCollapseService,
     private readonly toastrService: ToastrService,
+    private ngZone: NgZone,
+    private readonly renderer: Renderer2,
+    private searchService: SearchService
   ) {
   }
 
@@ -149,6 +176,23 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
+    this.searchService.lb_search$.subscribe(() => {
+      this.openSearch();
+    });
+    document.addEventListener('keydown', this.onKeyDown, true);
+    this.searchInput$
+      .pipe(
+        map(q => q.toLowerCase()),
+        debounceTime(500),
+        switchMap(q => this.labBooksService.search(this.id, q)),
+        untilDestroyed(this)
+      )
+      .subscribe(results => {
+        this.results = results;
+        this.cdr.markForCheck()
+        this.scroll_to_elem()
+      });
+
     this.collapseService.setCollapsed(true);
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -182,7 +226,127 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
 
   public ngOnDestroy(): void {
+    document.removeEventListener('keydown', this.onKeyDown, true);
   }
+
+  onKeyDown = (event: KeyboardEvent) => {
+    if (event.ctrlKey && event.key === 'f') {
+      event.preventDefault();
+      this.openSearch()
+    }
+  };
+
+  openSearch() {
+    this.query = '';
+    this.results = [];
+    this.currentIndex = 0;
+
+    this.ngZone.runOutsideAngular(() => {
+      this.searchOpen = true;
+      requestAnimationFrame(() => {
+        this.searchInput?.nativeElement?.focus();
+        this.cdr.markForCheck();
+      });
+    });
+  }
+
+  close() {
+    this.searchOpen = false;
+    this.query = '';
+    this.results = [];
+  }
+
+  next() {
+    if (!this.results.length) return;
+    this.currentIndex = (this.currentIndex + 1) % this.results.length;
+    this.scroll_to_elem()
+  }
+
+  prev() {
+    if (!this.results.length) return;
+    this.currentIndex =
+      (this.currentIndex - 1 + this.results.length) % this.results.length;
+    this.scroll_to_elem()
+  }
+
+
+  onQueryChange() {
+    this.searchInput$.next(this.query.toLowerCase());
+  }
+
+  onSearchKey(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      // Shift+Enter = previous match
+      if (event.shiftKey) {
+        this.prev();
+        return;
+      }
+      // Enter = trigger debounced search
+      this.searchInput$.next(this.query.toLowerCase());
+    }
+    if (event.key === 'Escape') {
+      this.close();
+    }
+  }
+
+
+  public scroll_to_elem() {
+    if (this.results[this.currentIndex]) {
+      const labbook_pos_y = (this.results[this.currentIndex]).labbook_pos_y
+      const element_pk = (this.results[this.currentIndex]).element_pk
+      const content_type = (this.results[this.currentIndex]).content_type_model
+
+      window.scrollTo({
+        top: labbook_pos_y * this.row_height,
+        behavior: 'smooth'
+      });
+
+
+      setTimeout(() => {
+        if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file')) {
+          const search_text = this.query.toLowerCase()
+
+          // @ts-ignore
+          const elem = document.getElementById(element_pk + '_preloaded_id')
+          const title = document.getElementById(element_pk + '_title_id')
+          // @ts-ignore
+          const content_with_images = elem.innerHTML
+          const content = content_with_images.replace(/<img[^>]*>/gi, '')
+          // @ts-ignore
+          if (content.toLowerCase().includes(search_text)) {
+            // @ts-ignore
+            this.renderer.setStyle(elem, 'border', 'thick solid red');
+          }
+          // @ts-ignore
+          const title_content = title.querySelector('input').value
+          // @ts-ignore
+          if (title_content.toLowerCase().includes(search_text)) {
+            // @ts-ignore
+            this.renderer.setStyle(title, 'border', 'thick solid red');
+          }
+
+          const highlightedContent = content.replace(
+            new RegExp(search_text, 'gi'),
+            '<span style="background-color: yellow; font-weight: bold">$&</span>'
+          );
+          // @ts-ignore
+          this.renderer.setProperty(elem, 'innerHTML', highlightedContent);
+          if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
+            && !title_content.includes(search_text) && !content.includes(search_text)) {
+            this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
+            this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
+          }
+        }
+        if (content_type == 'pictures.picture') {
+          // @ts-ignore
+          const title = document.getElementById(element_pk + '_title_id')
+          this.renderer.setStyle(title, 'border', 'thick solid red');
+        }
+      }, 1000)
+    }
+  }
+
 
   public initFormChanges(): void {
     this.form.valueChanges
