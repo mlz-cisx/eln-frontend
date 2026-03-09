@@ -4,7 +4,9 @@
       <div class="flex space-x-1">
         <div>
           <div class="text-gray-600">
-            {{ comment.left_content_object.created_at | formatDate }}
+            {{ comment.left_content_object.created_at | formatDate }} created
+            by {{ comment.left_content_object.created_by.first_name }}
+            {{ comment.left_content_object.created_by.last_name }}
           </div>
         </div>
       </div>
