@@ -5,8 +5,7 @@
         <div>
           <div class="text-gray-600">
             {{ comment.left_content_object.created_at | formatDate }} created
-            by {{ comment.left_content_object.created_by.first_name }}
-            {{ comment.left_content_object.created_by.last_name }}
+            by {{ comment.left_content_object.created_by.username }}
           </div>
         </div>
       </div>
