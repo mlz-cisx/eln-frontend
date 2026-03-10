@@ -30,6 +30,7 @@
                       id="username"
                       formControlName="username"
                       name="username"
+                      [readonly]="(initialState.oidc_user) ? true : false"
                       [placeholder]="t('user.details.username.placeholder')"
                       slot="input"
                     />
@@ -50,6 +51,7 @@
                       id="first_name"
                       formControlName="first_name"
                       name="first_name"
+                      [readonly]="(initialState.oidc_user) ? true : false"
                       [placeholder]="t('user.details.first_name.placeholder')"
                       slot="input"
                     />
@@ -69,6 +71,7 @@
                       id="last_name"
                       formControlName="last_name"
                       name="last_name"
+                      [readonly]="(initialState.oidc_user) ? true : false"
                       [placeholder]="t('user.details.last_name.placeholder')"
                       slot="input"
                     />
@@ -89,6 +92,7 @@
                       id="user_email"
                       formControlName="user_email"
                       name="user_email"
+                      [readonly]="(initialState.oidc_user) ? true : false"
                       [placeholder]="t('user.details.email.placeholder')"
                       slot="input"
                     />
