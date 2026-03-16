@@ -105,11 +105,11 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   public search(): void {
-    if (this.searchText) {
+    if (this.searchText?.trim()) {
       this.loading = true;
       this.params = this.params.set('model', this.selectedContentTypes.join(','));
       this.searchService
-        .search(this.searchText, this.params)
+        .search(this.searchText?.trim(), this.params)
         .pipe(untilDestroyed(this))
         .subscribe(results => {
           this.results = [...results];
