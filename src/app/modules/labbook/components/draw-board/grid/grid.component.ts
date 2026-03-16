@@ -633,7 +633,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 
-    search_text = ('' + search_text).trim()
+    search_text = ('' + search_text).trim().toLowerCase()
 
 
     setTimeout(() => {
@@ -648,14 +648,14 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         const content_with_images = elem.innerHTML
         const content = content_with_images.replace(/<img[^>]*>/gi, '')
         // @ts-ignore
-        if (content.includes(search_text)) {
+        if (content.toLowerCase().includes(search_text)) {
           // @ts-ignore
           this.renderer.setStyle(elem, 'border', 'thick solid red');
         }
         // @ts-ignore
         const title_content = title.querySelector('input').value
         // @ts-ignore
-        if (title_content.includes(search_text)) {
+        if (title_content.toLowerCase().includes(search_text)) {
           // @ts-ignore
           this.renderer.setStyle(title, 'border', 'thick solid red');
         }
@@ -683,7 +683,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           // @ts-ignore
           const title_content = title.querySelector('input').value
           // @ts-ignore
-          if (title_content && title_content.includes(search_text)) {
+          if (title_content && title_content.toLowerCase().includes(search_text)) {
             // @ts-ignore
             this.renderer.setStyle(title, 'border', 'thick solid red');
           }
