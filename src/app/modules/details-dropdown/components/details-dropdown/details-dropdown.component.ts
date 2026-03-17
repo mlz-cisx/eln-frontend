@@ -109,6 +109,11 @@ export class DetailsDropdownComponent implements OnInit {
         this.dropdown = false;
         this.cdr.markForCheck();
       });
+
+    // close modal at router navigate
+    this.router.events.subscribe(() => {
+        this.modalService.closeAll();
+    });
   }
 
   public onOpenPrivilegesModal(): void {

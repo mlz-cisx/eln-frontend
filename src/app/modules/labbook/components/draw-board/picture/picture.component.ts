@@ -9,6 +9,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import {Router} from '@angular/router';
 import {Validators} from '@angular/forms';
 import {
   CommentsModalComponent
@@ -111,6 +112,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   });
 
   public constructor(
+    private readonly router: Router,
     public readonly picturesService: PicturesService,
     private readonly labBooksService: LabbooksService,
     public readonly cdr: ChangeDetectorRef,
@@ -144,6 +146,11 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.initDetails();
     this.initPrivileges();
+
+    // close modal at router navigate
+    this.router.events.subscribe(() => {
+        this.modalService.closeAll();
+    });
 
     if (this.element.child_object.created_by.admin) {
       this.background_color = 'background-color: ' + admin_element_background_color;

@@ -11,6 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
@@ -105,6 +106,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   });
 
   public constructor(
+    private readonly router: Router,
     public readonly notesService: NotesService,
     private readonly labBooksService: LabbooksService,
     private readonly cdr: ChangeDetectorRef,
@@ -149,7 +151,10 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       this.background_color = 'background-color: ' + admin_element_background_color;
     }
 
-
+    // close modal at router navigate
+    this.router.events.subscribe(() => {
+        this.modalService.closeAll();
+    });
   }
 
   ngAfterViewInit() {
