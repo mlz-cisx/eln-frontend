@@ -633,63 +633,66 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       window.scrollTo({top: pos, behavior: 'smooth'});
     }
 
-    search_text = ('' + search_text).trim().toLowerCase()
+    search_text = String(search_text).trim().toLowerCase()
 
 
     setTimeout(() => {
 
-      // get all possibilities for header and title also for file
-      if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file' ||
-        content_type == 'labbooks.labbook')) {
-        // @ts-ignore
-        const elem = document.getElementById(element_pk + '_preloaded_id')
-        const title = document.getElementById(element_pk + '_title_id')
-        // @ts-ignore
-        const content_with_images = elem.innerHTML
-        const content = content_with_images.replace(/<img[^>]*>/gi, '')
-        // @ts-ignore
-        if (content.toLowerCase().includes(search_text)) {
-          // @ts-ignore
-          this.renderer.setStyle(elem, 'border', 'thick solid red');
-        }
-        // @ts-ignore
-        const title_content = title.querySelector('input').value
-        // @ts-ignore
-        if (title_content.toLowerCase().includes(search_text)) {
-          // @ts-ignore
-          this.renderer.setStyle(title, 'border', 'thick solid red');
-        }
-        const highlightedContent = content.replace(
-          new RegExp('' + search_text, 'gi'),
-          '<span style="background-color: yellow; font-weight: bold">$&</span>'
-        );
-        // @ts-ignore
-        this.renderer.setProperty(elem, 'innerHTML', highlightedContent);
-        if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
-          && !title_content.includes(search_text) && !content.includes(search_text)) {
-          this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
-          this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
-        }
-      }
-      if (content_type == 'pictures.picture') {
-        // @ts-ignore
-        const title = document.getElementById(element_pk + '_title_id')
-        this.renderer.setStyle(title, 'border', 'thick solid red');
-      }
-      if (content_type == 'labbooks.labbook') {
-        const title = document.getElementById(element_pk + '_title_id')
-        // no labbook description but in title
-        if (!document.getElementById(element_pk + '_preloaded_id') && title) {
-          // @ts-ignore
-          const title_content = title.querySelector('input').value
-          // @ts-ignore
-          if (title_content && title_content.toLowerCase().includes(search_text)) {
-            // @ts-ignore
-            this.renderer.setStyle(title, 'border', 'thick solid red');
+
+      if (element_pk && (content_type === 'shared_elements.note' || content_type === 'shared_elements.file')) {
+
+        const elem = this.getElem(element_pk + '_preloaded_id');
+        const title = this.getElem(element_pk + '_title_id');
+
+        if (elem && title) {
+          const content = this.applyHighlighting(elem, search_text);
+          const title_content = this.getTitleContent(title).toLowerCase();
+          const content_lc = content.toLowerCase();
+
+          this.setBorderIfMatch(elem, content_lc, search_text);
+          this.setBorderIfMatch(title, title_content, search_text);
+
+          // highlight background if no matches
+          if (
+            content_type === 'shared_elements.note' &&
+            !title_content.includes(search_text) &&
+            !content_lc.includes(search_text)
+          ) {
+            this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
+            this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
           }
         }
-        this.open_details()
       }
+
+      if (element_pk && content_type === 'pictures.picture') {
+        const title = this.getElem(element_pk + '_title_id');
+        if (title) this.renderer.setStyle(title, 'border', 'thick solid red');
+      }
+
+      if (element_pk && content_type === 'labbooks.labbook') {
+
+        const elem = this.getElem(element_pk + '_preloaded_id');
+        if (elem) {
+          const content = this.applyHighlighting(elem, search_text);
+          const content_lc = content.toLowerCase();
+          this.setBorderIfMatch(elem, content_lc, search_text);
+          // highlight background if no matches
+          if (
+            !content_lc.includes(search_text)
+          ) {
+            this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
+          }
+        }
+
+        const title = this.getElem(element_pk + '_title_id');
+        if (title) {
+          const title_content = this.getTitleContent(title).toLowerCase();
+          this.setBorderIfMatch(title, title_content, search_text);
+        }
+
+        this.open_details();
+      }
+
 
     }, 1000);  // end set timeout
 
@@ -703,4 +706,37 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   open_details() {
     this.collapseService.setCollapsed(false);
   }
+
+
+  stripImages(html: string): string {
+    return html.replace(/<img[^>]*>/gi, '');
+  }
+
+  getElem(id: string) {
+    return document.getElementById(id);
+  }
+
+  getTitleContent(titleElem: HTMLElement | null): string {
+    if (!titleElem) return '';
+    const input = titleElem.querySelector('input');
+    return input ? input.value : '';
+  }
+
+  applyHighlighting(elem: HTMLElement, search_text: string) {
+    const content = this.stripImages(elem.innerHTML);
+    const highlighted = content.replace(
+      new RegExp(String(search_text), 'gi'),
+      '<span style="background-color: yellow; font-weight: bold">$&</span>'
+    );
+    this.renderer.setProperty(elem, 'innerHTML', highlighted);
+    return content;
+  }
+
+  setBorderIfMatch(elem: HTMLElement, text: string, search_text: string) {
+    if (text.includes(search_text)) {
+      this.renderer.setStyle(elem, 'border', 'thick solid red');
+    }
+  }
+
+
 }
