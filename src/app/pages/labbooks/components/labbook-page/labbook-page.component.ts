@@ -311,9 +311,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           const elem = document.getElementById(element_pk + '_preloaded_id')
           const title = document.getElementById(element_pk + '_title_id')
           // @ts-ignore
-          const content_with_images = elem.innerHTML
-          const content = content_with_images.replace(/<img[^>]*>/gi, '')
-          // @ts-ignore
+          const content = this.applyHighlighting(elem, search_text)
           if (content.toLowerCase().includes(search_text)) {
             // @ts-ignore
             this.renderer.setStyle(elem, 'border', 'thick solid red');
@@ -325,13 +323,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
             // @ts-ignore
             this.renderer.setStyle(title, 'border', 'thick solid red');
           }
-
-          const highlightedContent = content.replace(
-            new RegExp(search_text, 'gi'),
-            '<span style="background-color: yellow; font-weight: bold">$&</span>'
-          );
           // @ts-ignore
-          this.renderer.setProperty(elem, 'innerHTML', highlightedContent);
+          this.renderer.setProperty(elem, 'innerHTML', content);
           if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
             && !title_content.includes(search_text) && !content.includes(search_text)) {
             this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
@@ -345,6 +338,44 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         }
       }, 1000)
     }
+  }
+
+  stripImages(html: string): string {
+    return html.replace(/<img[^>]*>/gi, '');
+  }
+
+  applyHighlighting(elem: HTMLElement, search_text: string) {
+    const html = this.stripImages(elem.innerHTML);
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+    const regex = new RegExp(search_text, "gi");
+
+    let node;
+    while ((node = walker.nextNode())) {
+      const text = node.nodeValue;
+      if (!text) continue;
+
+      if (regex.test(text)) {
+        const wrapper = doc.createElement("span");
+        wrapper.innerHTML = text.replace(
+          regex,
+          '<span style="background-color: yellow; font-weight: bold">$&</span>'
+        );
+
+        const fragment = doc.createDocumentFragment();
+        fragment.append(...wrapper.childNodes);
+
+        node.parentNode?.replaceChild(fragment, node);
+      }
+    }
+
+    const finalHtml = doc.body.innerHTML;
+    this.renderer.setProperty(elem, "innerHTML", finalHtml);
+
+    return finalHtml;
   }
 
 

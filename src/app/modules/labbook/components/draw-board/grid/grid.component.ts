@@ -722,15 +722,40 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     return input ? input.value : '';
   }
 
-  applyHighlighting(elem: HTMLElement, search_text: string) {
-    const content = this.stripImages(elem.innerHTML);
-    const highlighted = content.replace(
-      new RegExp(String(search_text), 'gi'),
-      '<span style="background-color: yellow; font-weight: bold">$&</span>'
-    );
-    this.renderer.setProperty(elem, 'innerHTML', highlighted);
-    return content;
+applyHighlighting(elem: HTMLElement, search_text: string) {
+  const html = this.stripImages(elem.innerHTML);
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+  const regex = new RegExp(search_text, "gi");
+
+  let node;
+  while ((node = walker.nextNode())) {
+    const text = node.nodeValue;
+    if (!text) continue;
+
+    if (regex.test(text)) {
+      const wrapper = doc.createElement("span");
+      wrapper.innerHTML = text.replace(
+        regex,
+        '<span style="background-color: yellow; font-weight: bold">$&</span>'
+      );
+
+      const fragment = doc.createDocumentFragment();
+      fragment.append(...wrapper.childNodes);
+
+      node.parentNode?.replaceChild(fragment, node);
+    }
   }
+
+  const finalHtml = doc.body.innerHTML;
+  this.renderer.setProperty(elem, "innerHTML", finalHtml);
+
+  return finalHtml;
+}
+
 
   setBorderIfMatch(elem: HTMLElement, text: string, search_text: string) {
     if (text.includes(search_text)) {
