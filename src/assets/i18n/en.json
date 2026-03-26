@@ -461,6 +461,7 @@
   "file.details.toastr.success": "File updated",
   "note.details.toastr.success": "Note updated",
   "picture.details.toastr.success": "Picture updated",
+  "picture.details.toastr.success.ungrouped": "Successfully ungrouped",
   "labBook.elementDropdown.trashElement.toastr.success": "Element trashed",
   "labBook.moveElementToLabBookModal.toastr.success": "Element moved to LabBook",
   "labBook.elementDropdown.removeFromLabBook.toastr.success": "Element removed from LabBook",

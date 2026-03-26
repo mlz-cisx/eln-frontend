@@ -116,6 +116,8 @@ export class FabricCanvasComponent implements AfterViewInit {
   strokeColor: string = '#000000'; // default black
   strokeWidth: number = 1;
 
+  private selectedObjects: fabric.Object[] = [];
+
   public async restoreCanvasContent(): Promise<void> {
     await this.loadCanvasFromJson();
     this.viewerMode = true;
@@ -290,12 +292,6 @@ export class FabricCanvasComponent implements AfterViewInit {
   }
 
 
-  private loadContent(content: any): void {
-    const json = typeof content === 'string' ? JSON.parse(content) : content;
-    this.canvas.loadFromJSON(json, () => {
-      this.canvas.renderAll();
-    });
-  }
 
   public async reloadCanvas(): Promise<void> {
     await this.loadCanvasFromJson();
@@ -536,6 +532,29 @@ public bringToFrontAndSubmit(): void {
       const obj = this.canvas.getActiveObject();
       if (obj && obj.type === 'textbox') {
         this.drawingMode = 'text';
+      }
+    });
+
+    this.canvas.on('mouse:down', (e) => {
+
+      const target = e.target;
+      if (!target) {
+        this.selectedObjects = [];
+        this.updateFabricSelection();
+        return;
+      }
+      const isShift = e.e.shiftKey;
+      const isLeftClick =
+        typeof (e.e as any).button === 'number' &&
+        (e.e as any).button === 0;
+      if (isShift && isLeftClick) {
+        this.canvas.selection = true;
+        this.canvas.getObjects().forEach(obj => {
+          obj.selectable = true;
+          obj.evented = true;
+        });
+        this.handleShiftClick(target);
+        return;
       }
     });
   }
@@ -1742,29 +1761,150 @@ public bringToFrontAndSubmit(): void {
   }
 
   groupObjects(): void {
-    const sel = this.canvas.getActiveObject()
-    if (!sel) {
-        return;
-    }
+    const sel = this.canvas.getActiveObject();
+    if (!sel) return;
     if (sel.type !== 'activeSelection' && sel.type !== 'activeselection') {
-        return;
+      return;
     }
-    const group = new fabric.Group((sel as fabric.ActiveSelection).removeAll())
+    const activeSel = sel as fabric.ActiveSelection;
+    const objectsToGroup = activeSel._objects
+    if (objectsToGroup.length === 0) {
+      return;
+    }
+    // Remove objects from canvas (not just from selection)
+    objectsToGroup.forEach(obj => {
+      this.canvas.remove(obj);
+    });
+    // Create the group
+    const group = new fabric.Group(objectsToGroup);
     this.canvas.add(group);
     this.canvas.setActiveObject(group);
     this.canvas.requestRenderAll();
   }
 
   ungroupObjects(): void {
-    const group = this.canvas.getActiveObject();
-    if (group && group.type === 'group') {
-      this.canvas.remove(group);
-      const sel = new fabric.ActiveSelection((group as fabric.Group).removeAll(), {
-        canvas: this.canvas,
-      });
-      this.canvas.setActiveObject(sel);
-      this.canvas.requestRenderAll();
-    }
+    const activeObj = this.canvas.getActiveObject();
+    if (!activeObj || activeObj.type !== 'group') return;
+    const group = activeObj as fabric.Group;
+
+    // Extract children BEFORE removing group
+    const items = [...group._objects];
+    // Group's absolute transform matrix
+    const groupMatrix = group.calcTransformMatrix();
+    // Remove group from canvas
+    this.canvas.remove(group);
+    items.forEach(obj => {
+      // Child's LOCAL matrix (relative to group)
+      const localMatrix = obj.calcOwnMatrix();
+
+      // Combine group + local matrix → absolute matrix
+      const finalMatrix = fabric.util.multiplyTransformMatrices(
+        groupMatrix,
+        localMatrix
+      );
+
+      // Apply final matrix to object
+      fabric.util.applyTransformToObject(obj, finalMatrix);
+
+      // Remove group reference
+      obj.group = undefined;
+
+      obj.setCoords();
+      this.canvas.add(obj);
+    });
+
+    // Create ActiveSelection from ungrouped objects
+    const activeSel = new fabric.ActiveSelection(items, {
+      canvas: this.canvas
+    });
+    this.canvas.setActiveObject(activeSel);
+    this.canvas.requestRenderAll();
+    // make it really final
+    this.store_reload()
   }
+
+
+  private handleShiftClick(target: fabric.Object) {
+    // If user clicked an ActiveSelection, unwrap it
+    if (target.type === 'activeselection') {
+      const sel = target as fabric.ActiveSelection;
+      sel._objects.forEach(obj => this.addOrRemove(obj));
+      return;
+    }
+    // Normal object
+    this.addOrRemove(target);
+  }
+
+  private addOrRemove(obj: fabric.Object) {
+    // Ignore ActiveSelection objects completely
+    if (obj.type === 'activeselection') return;
+    const index = this.selectedObjects.indexOf(obj);
+    if (index === -1) {
+      this.selectedObjects.push(obj);
+    } else {
+      this.selectedObjects.splice(index, 1);
+    }
+    this.updateFabricSelection();
+  }
+
+
+  private updateFabricSelection() {
+    // Remove invalid entries (including ActiveSelection)
+    this.selectedObjects = this.selectedObjects.filter(o =>
+      o &&
+      o.type !== 'activeselection' &&
+      o.canvas === this.canvas &&
+      o.selectable &&
+      o.evented
+    );
+    if (this.selectedObjects.length === 0) {
+      this.canvas.discardActiveObject();
+      this.canvas.requestRenderAll();
+      return;
+    }
+    if (this.selectedObjects.length === 1) {
+      this.canvas.setActiveObject(this.selectedObjects[0]);
+      this.canvas.requestRenderAll();
+      return;
+    }
+    const sel = new fabric.ActiveSelection(this.selectedObjects, {
+      canvas: this.canvas
+    });
+    this.canvas.setActiveObject(sel);
+    this.canvas.requestRenderAll();
+  }
+
+
+  public store_reload(): void {
+    const byteSize = new Blob([this.picture.canvas_content as string]).size;
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (byteSize > (maxSize << 10)) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return;
+    }
+    this.picturesService
+      .patch_content(this.uuid!, {
+        ...this.picture,
+        origin: this.clientId   // attach origin
+      })
+      .pipe()
+      .subscribe(
+        () => {
+          this.translocoService
+            .selectTranslate('picture.details.toastr.success.ungrouped')
+            .subscribe((success: string) => {
+              this.toastrService.success(success, "", {
+                positionClass: 'toast-top-left',
+                timeOut: 1000
+              });
+            });
+          this.reloadCanvas()
+        },
+        () => {
+          this.cdr.markForCheck();
+        }
+      );
+  }
+
 }
 
