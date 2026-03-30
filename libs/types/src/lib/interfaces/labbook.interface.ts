@@ -18,6 +18,7 @@ export interface LabBookChildElement {
 
 export interface LabBook {
   title: string;
+  owner_group?: string;
   deleted: boolean;
   strict_mode: boolean;
   created_at: string;

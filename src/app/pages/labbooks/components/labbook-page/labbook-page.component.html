@@ -85,6 +85,18 @@
                     </mlzeln-form-input>
                   </div>
                   <div class="mb-4">
+                    <label>{{ t('labBook.details.owner_group.label') }}</label>
+                    <div class="flex items-center space-x-1">
+                      <input
+                              class="form-control mlzeln-input"
+                              id="owner_group"
+                              name="owner_group"
+                              [value]="initialState?.owner_group"
+                              readonly
+                      >
+                    </div>
+                  </div>
+                  <div class="mb-4">
                     <label
                       for="created-by">{{ t('labBook.details.createdBy.label') }}</label>
                     <div class="flex items-center space-x-1">

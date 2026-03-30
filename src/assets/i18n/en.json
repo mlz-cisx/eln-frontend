@@ -323,6 +323,7 @@
   "forgotPassword.cancel": "Cancel",
   "forgotPassword.confirm": "Reset password",
   "labBook.details.createdBy.label": "Created by",
+  "labBook.details.owner_group.label": "Owner Group",
   "labBook.details.lastModifiedBy.label": "Last modified by",
   "labBook.details.element.details": "Basic Information",
   "labBook.details.description.noDescription": "No description added",
