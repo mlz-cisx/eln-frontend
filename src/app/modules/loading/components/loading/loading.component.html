@@ -1,10 +1,25 @@
 <ng-container *transloco="let t">
   <div *ngIf="loading" class="flex justify-center items-center loading">
-    <div class="spinner-border m-6" role="status">
-      <span class="sr-only">{{ t('loading.loading') }}</span>
-    </div>
+
+    <!-- Export mode -->
+    <ng-container *ngIf="exportType; else defaultSpinner">
+      <div class="custom-spinner"></div>
+      <div class="loading-text">{{ exportText }}</div>
+    </ng-container>
+
+    <!-- Default Bootstrap spinner -->
+    <ng-template #defaultSpinner>
+      <div class="spinner-border m-6" role="status">
+        <span class="sr-only">{{ t('loading.loading') }}</span>
+      </div>
+    </ng-template>
+
   </div>
+
   <div class="grid-blowout" [class.loading-backdrop]="loading">
     <ng-content></ng-content>
   </div>
 </ng-container>
+
+
+
