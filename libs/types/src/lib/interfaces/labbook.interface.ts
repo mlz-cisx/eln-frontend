@@ -42,3 +42,7 @@ export interface Lab_Book {
   privileges: Privileges
 }
 
+export interface LabBookExport {
+  identifier: string;
+}
+

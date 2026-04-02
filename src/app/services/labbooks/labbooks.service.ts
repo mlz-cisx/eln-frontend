@@ -9,6 +9,7 @@ import type {
   LabBook,
   LabBookElement,
   LabBookElementPayload,
+  LabBookExport,
   LabBookPayload,
   Note,
   Picture,
@@ -21,6 +22,7 @@ import {SearchResult} from "@joeseln/types";
 import {catchError, map} from 'rxjs/operators';
 import {Observable} from "rxjs";
 import {ErrorserviceService, LogoutService} from "@app/services";
+import { ExportFilter } from '@app/modules/labbook/components/modals/export_select/export-select.component';
 
 
 @Injectable({
@@ -141,8 +143,32 @@ export class LabbooksService {
     return this.httpClient.post<LabBook>(`${this.apiUrl}${id}/versions/${version}/restore/`, {pk: id});
   }
 
-  public export(id: string): Observable<ExportLink> {
-    return this.httpClient.get<ExportLink>(`${this.apiUrl}${id}/get_export_link/`);
+  public exportPdf(id: string, filter: ExportFilter): Observable<LabBookExport> {
+    const params: Record<string, string | number[]> = {};
+    if (filter.containTypes?.length) {
+      params['containTypes'] = filter.containTypes;
+    }
+    if (filter.startTime) {
+      params['startTime'] = filter.startTime.toISOString();
+    }
+    if (filter.endTime) {
+      params['endTime'] = filter.endTime.toISOString();
+    }
+    return this.httpClient.get<LabBookExport>(`${this.apiUrl}${id}/add_pdf_export_task`, {params});
+  }
+
+  public exportZip(id: string, filter: ExportFilter): Observable<LabBookExport> {
+   const params: Record<string, string | number[]> = {};
+    if (filter.containTypes?.length) {
+      params['containTypes'] = filter.containTypes;
+    }
+    if (filter.startTime) {
+      params['startTime'] = filter.startTime.toISOString();
+    }
+    if (filter.endTime) {
+      params['endTime'] = filter.endTime.toISOString();
+    }
+    return this.httpClient.get<LabBookExport>(`${this.apiUrl}${id}/add_zip_export_task`, {params});
   }
 
   public search(id: string, search: string, params = new HttpParams()): Observable<SearchResult[]> {

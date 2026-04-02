@@ -147,32 +147,6 @@ export class DetailsDropdownComponent implements OnInit {
     this.pngExportRequested.emit();
   }
 
-  public async onExportZip(filter: ExportFilter): Promise<void> {
-    const params: any = {};
-    if (filter.containTypes?.length) {
-      params.containTypes = filter.containTypes;
-    }
-    if (filter.startTime) {
-      params.startTime = filter.startTime.toISOString();
-    }
-    if (filter.endTime) {
-      params.endTime = filter.endTime.toISOString();
-    }
-
-    const apiUrl = `${environment.apiUrl}/labbooks/`;
-    const url = (`${apiUrl}${this.id}/export_as_zip/`)
-    const response = await lastValueFrom(this.httpClient.get(url, {
-      params,
-      responseType: 'blob',
-      observe: 'response'
-    }));
-    const a = document.createElement("a");
-    const file = new Blob([response.body!], {type: 'application/zip'});
-    a.href = URL.createObjectURL(file);
-    a.setAttribute('download', this.initialState.title)
-    a.click();
-    URL.revokeObjectURL(url);
-  }
 
 
   public async onClick(export_link: string, filename: string): Promise<void> {
@@ -184,42 +158,6 @@ export class DetailsDropdownComponent implements OnInit {
     const file = new Blob([response.body!], {type: 'application/pdf'});
     a.href = URL.createObjectURL(file);
     a.setAttribute('download', filename)
-    a.click();
-  }
-
-  public async onExportLabbookPdf(
-    export_link: string,
-    filename: string,
-    filter: ExportFilter
-  ): Promise<void> {
-
-    const params: any = {};
-
-    if (filter.containTypes?.length) {
-      params.containTypes = filter.containTypes;
-    }
-
-    if (filter.startTime) {
-      params.startTime = filter.startTime.toISOString();
-    }
-
-    if (filter.endTime) {
-      params.endTime = filter.endTime.toISOString();
-    }
-
-
-    const response = await lastValueFrom(
-      this.httpClient.get(export_link, {
-        params,
-        responseType: 'blob',
-        observe: 'response',
-      })
-    );
-
-    const file = new Blob([response.body!], {type: 'application/pdf'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(file);
-    a.download = filename;
     a.click();
   }
 
@@ -307,75 +245,25 @@ export class DetailsDropdownComponent implements OnInit {
 
   public onSelectExportModal(): void {
     this.modalRef = this.modalService.open(ExportSelectModalComponent, {
-      closeButton: false
+      closeButton: false,
+      data: {
+        id: this.id,
+        service: this.service,
+        exportType: 'pdf',
+      }
     });
-    this.modalRef.afterClosed$
-      .pipe(untilDestroyed(this), take(1))
-      .subscribe((filter: ExportFilter | null) => {
-        if (filter) {
-          this.onExportFilterSelected(filter);
-        }
-      });
   }
 
-
-  public onZipSelectExportModal(): void {
+   public onZipSelectExportModal(): void {
     this.modalRef = this.modalService.open(ExportSelectModalComponent, {
-      closeButton: false
+      closeButton: false,
+      data: {
+        id: this.id,
+        service: this.service,
+        exportType: 'zip',
+      }
     });
-    this.modalRef.afterClosed$
-      .pipe(untilDestroyed(this), take(1))
-      .subscribe((filter: ExportFilter | null) => {
-        if (filter) {
-          this.onZipExportFilterSelected(filter);
-        }
-      });
   }
-
-  onZipExportFilterSelected(filter: ExportFilter): void {
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-    const normalized: ExportFilter = {
-      ...filter,
-      startTime: filter.startTime ? new Date(filter.startTime) : null,
-      endTime: filter.endTime ? new Date(filter.endTime) : null,
-    };
-
-    this.onExportZip(normalized)
-  }
-
-
-  onExportFilterSelected(filter: ExportFilter): void {
-    if (this.loading) {
-      return;
-    }
-
-    this.loading = true;
-    const normalized: ExportFilter = {
-      ...filter,
-      startTime: filter.startTime ? new Date(filter.startTime) : null,
-      endTime: filter.endTime ? new Date(filter.endTime) : null,
-    };
-
-    this.service
-      .export(this.id, filter)   // PASS FILTER HERE
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (exportLink: ExportLink) => {
-          this.onExportLabbookPdf(exportLink.url, exportLink.filename, normalized);
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
-
-  }
-
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.navigate) {

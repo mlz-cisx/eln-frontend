@@ -5,10 +5,16 @@ import {
   OnDestroy,
   Output
 } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {UntilDestroy} from "@ngneat/until-destroy";
-import {Subject} from "rxjs";
-import {DialogRef} from "@ngneat/dialog";
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { lastValueFrom, delay } from "rxjs";
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Subject } from "rxjs";
+import { DialogRef } from "@ngneat/dialog";
+import { LabBookExport } from '@joeseln/types';
+import { environment } from '@environments/environment';
+import { LabbooksService } from '@app/services';
+import { TranslocoService } from '@jsverse/transloco';
 
 export type ContainType = 30 | 40 | 50 | 70;
 
@@ -28,6 +34,15 @@ export interface ExportFilter {
 })
 export class ExportSelectModalComponent implements OnDestroy {
 
+  private id: string = this.modalRef.data.id;
+
+  private service: LabbooksService = this.modalRef.data.service;
+
+  // eslint-disable-next-line
+  public exportType: 'pdf' | 'zip' = this.modalRef.data.exportType;
+
+  public loading: boolean = false;
+
   @Output() apply = new EventEmitter<ExportFilter>();
 
   readonly containTypeLabels: Record<ContainType, string> = {
@@ -44,7 +59,11 @@ export class ExportSelectModalComponent implements OnDestroy {
   });
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, public readonly modalRef: DialogRef) {
+  constructor(private fb: FormBuilder,
+    public readonly modalRef: DialogRef,
+    private readonly httpClient: HttpClient,
+    private readonly translocoService: TranslocoService,
+  ) {
   }
 
   get isUnfiltered(): boolean {
@@ -69,7 +88,7 @@ export class ExportSelectModalComponent implements OnDestroy {
       }
 
       if (types.length === 0) {
-        this.form.get('containTypes')!.setValue([70], {emitEvent: false});
+        this.form.get('containTypes')!.setValue([70], { emitEvent: false });
       }
     });
   }
@@ -82,7 +101,48 @@ export class ExportSelectModalComponent implements OnDestroy {
       startTime: value.startTime ? new Date(value.startTime) : null,
       endTime: value.endTime ? new Date(value.endTime) : null,
     };
-    this.modalRef.close(filter);
+    this.loading = true;
+    if (this.exportType == 'pdf') {
+      this.service
+        .exportPdf(this.id, filter)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          async (d: LabBookExport) => {
+            await this.pollingExport(d.identifier, this.exportType)
+          }
+        )
+    }
+    if (this.exportType == 'zip') {
+      this.service
+        .exportZip(this.id, filter)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          async (d: LabBookExport) => {
+            await this.pollingExport(d.identifier, this.exportType)
+          }
+        )
+    }
+
+  }
+
+  async pollingExport(identifier: string, exportType: string) {
+    let response: HttpResponse<Blob>;
+    do {
+      response = await lastValueFrom(
+        this.httpClient.get(`${environment.apiUrl}/labbooks/get_export/${identifier}`, {
+          responseType: 'blob',
+          observe: 'response',
+        }).pipe(delay(3000))
+      );
+    } while (response && response.status === 204);
+    if (response && response.status === 200) {
+      const file = new Blob([response.body!], { type: `application/${exportType}` });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(file);
+      a.download = identifier + `.${exportType}`;
+      a.click();
+    }
+    this.modalRef.close();
   }
 
   toggleContainType(ct: ContainType) {
@@ -102,5 +162,16 @@ export class ExportSelectModalComponent implements OnDestroy {
     // unsubscribe everything at modal exit
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  public get headerText(): string {
+    switch (this.exportType) {
+      case 'pdf':
+        return this.translocoService.translate('labBook.exportSelect.headerPdf');
+      case 'zip':
+        return this.translocoService.translate('labBook.exportSelect.headerZip');
+      default:
+        return this.translocoService.translate('labBook.exportSelect.header');
+    }
   }
 }

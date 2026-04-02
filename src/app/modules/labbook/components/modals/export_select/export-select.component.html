@@ -1,7 +1,12 @@
 <ng-container *transloco="let t">
+  <mlzeln-loading
+class="loading"
+[loading]="loading"
+    [exportType]="exportType"
+>
   <mlzeln-modal #modal>
     <div slot="header">
-      {{ t('labBook.exportSelect.header') }}
+        {{ headerText }}
     </div>
 
     <div class="lb-export" slot="body">
@@ -66,5 +71,6 @@
       </button>
     </div>
   </mlzeln-modal>
+</mlzeln-loading>
 </ng-container>
 

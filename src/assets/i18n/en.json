@@ -595,6 +595,8 @@
   "labBook.newPictureElementModal.position.top": "On top",
   "labBook.newPictureElementModal.position.bottom": "Bottom",
   "labBook.exportSelect.header": "PDF export filter options",
+  "labBook.exportSelect.headerPdf": "PDF export filter options",
+  "labBook.exportSelect.headerZip": "ZIP export filter options",
   "labBook.exportSelect.containTypes": "Filter Element Types",
   "labBook.exportSelect.dateRange": "Filter Date",
   "labBook.exportSelect.noDate": "No Date",
