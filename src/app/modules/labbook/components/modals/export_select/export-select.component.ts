@@ -5,16 +5,17 @@ import {
   OnDestroy,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { lastValueFrom, delay } from "rxjs";
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Subject } from "rxjs";
-import { DialogRef } from "@ngneat/dialog";
-import { LabBookExport } from '@joeseln/types';
-import { environment } from '@environments/environment';
-import { LabbooksService } from '@app/services';
-import { TranslocoService } from '@jsverse/transloco';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
+import {lastValueFrom, delay} from "rxjs";
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Subject} from "rxjs";
+import {DialogRef} from "@ngneat/dialog";
+import {LabBookExport} from '@joeseln/types';
+import {environment} from '@environments/environment';
+import {LabbooksService} from '@app/services';
+import {TranslocoService} from '@jsverse/transloco';
+import {ToastrService} from 'ngx-toastr';
 
 export type ContainType = 30 | 40 | 50 | 70;
 
@@ -60,9 +61,10 @@ export class ExportSelectModalComponent implements OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(private fb: FormBuilder,
-    public readonly modalRef: DialogRef,
-    private readonly httpClient: HttpClient,
-    private readonly translocoService: TranslocoService,
+              public readonly modalRef: DialogRef,
+              private readonly httpClient: HttpClient,
+              private readonly translocoService: TranslocoService,
+              private readonly toastrService: ToastrService
   ) {
   }
 
@@ -106,21 +108,37 @@ export class ExportSelectModalComponent implements OnDestroy {
       this.service
         .exportPdf(this.id, filter)
         .pipe(untilDestroyed(this))
-        .subscribe(
-          async (d: LabBookExport) => {
-            await this.pollingExport(d.identifier, this.exportType)
+        .subscribe({
+          next: async (d: LabBookExport) => {
+            await this.pollingExport(d.identifier, this.exportType);
+          },
+          error: (err) => {
+            const e = err as { statusText?: string; message?: string };
+            const msg = e.statusText ?? e.message ?? 'Unknown error';
+            this.toastrService.error(`Pdf Export Error: ${msg}`);
+            this.loading = false;
+            this.modalRef.close();
           }
-        )
+        });
+
     }
     if (this.exportType == 'zip') {
       this.service
         .exportZip(this.id, filter)
         .pipe(untilDestroyed(this))
-        .subscribe(
-          async (d: LabBookExport) => {
-            await this.pollingExport(d.identifier, this.exportType)
+        .subscribe({
+          next: async (d: LabBookExport) => {
+            await this.pollingExport(d.identifier, this.exportType);
+          },
+          error: (err) => {
+            const e = err as { statusText?: string; message?: string };
+            const msg = e.statusText ?? e.message ?? 'Unknown error';
+            this.toastrService.error(`Zip Export Error: ${msg}`);
+            this.loading = false;
+            this.modalRef.close();
           }
-        )
+        });
+
     }
 
   }

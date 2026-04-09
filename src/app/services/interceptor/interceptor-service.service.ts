@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import {EMPTY, Observable, Subject} from 'rxjs';
+import {EMPTY, Observable, Subject, throwError} from 'rxjs';
 import {catchError, filter, switchMap, take} from 'rxjs/operators';
 import {AuthService, LogoutService, UserService} from "@app/services";
 
@@ -35,11 +35,20 @@ export class InterceptorService implements HttpInterceptor {
       request = this.appendToken(request, token);
     }
     return next.handle(request).pipe(catchError((error: HttpErrorResponse) => {
-      if (error.status == 401 && this._auth.getToken()) {
-        return this.handle401Error(request, next);
-      }
-      this._logout.logout();
-      return EMPTY;
+        const url = request.url;
+        // Skip refresh for export endpoints
+        const skipRefresh =
+          url.includes('/add_pdf_export_task') ||
+          url.includes('/add_zip_export_task')
+        if (!skipRefresh && error.status === 401 && this._auth.getToken()) {
+          return this.handle401Error(request, next);
+        }
+        if (skipRefresh && error.status > 400) {
+          this._logout.redirect_start_page();
+          return throwError(() => error);
+        }
+        this._logout.logout();
+        return EMPTY;
       })
     );
   }
