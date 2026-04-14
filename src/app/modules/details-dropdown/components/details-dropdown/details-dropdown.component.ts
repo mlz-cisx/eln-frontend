@@ -21,9 +21,7 @@ import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';
 import {lastValueFrom} from "rxjs";
 import {HttpClient} from '@angular/common/http';
-import {environment} from "@environments/environment";
 import {
-  ExportFilter,
   ExportSelectModalComponent
 } from "@app/modules/labbook/components/modals/export_select/export-select.component";
 
@@ -247,6 +245,7 @@ export class DetailsDropdownComponent implements OnInit {
     this.modalRef = this.modalService.open(ExportSelectModalComponent, {
       closeButton: false,
       data: {
+        title: this.initialState?.title ?? 'Labbook',
         id: this.id,
         service: this.service,
         exportType: 'pdf',
@@ -258,6 +257,7 @@ export class DetailsDropdownComponent implements OnInit {
     this.modalRef = this.modalService.open(ExportSelectModalComponent, {
       closeButton: false,
       data: {
+        title: this.initialState?.title ?? 'Labbook' ,
         id: this.id,
         service: this.service,
         exportType: 'zip',

@@ -37,6 +37,8 @@ export class ExportSelectModalComponent implements OnDestroy {
 
   private id: string = this.modalRef.data.id;
 
+  private title: string = this.modalRef.data.title;
+
   private service: LabbooksService = this.modalRef.data.service;
 
   // eslint-disable-next-line
@@ -157,7 +159,7 @@ export class ExportSelectModalComponent implements OnDestroy {
       const file = new Blob([response.body!], { type: `application/${exportType}` });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(file);
-      a.download = identifier + `.${exportType}`;
+      a.download = this.title + `.${exportType}`;
       a.click();
     }
     this.modalRef.close();
