@@ -146,23 +146,41 @@ export class ExportSelectModalComponent implements OnDestroy {
   }
 
   async pollingExport(identifier: string, exportType: string) {
-    let response: HttpResponse<Blob>;
-    do {
-      response = await lastValueFrom(
-        this.httpClient.get(`${environment.apiUrl}/labbooks/get_export/${identifier}`, {
-          responseType: 'blob',
-          observe: 'response',
-        }).pipe(delay(3000))
-      );
-    } while (response && response.status === 204);
-    if (response && response.status === 200) {
-      const file = new Blob([response.body!], { type: `application/${exportType}` });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(file);
-      a.download = this.title + `.${exportType}`;
-      a.click();
+    try {
+      let response: HttpResponse<Blob>;
+      do {
+        response = await lastValueFrom(
+          this.httpClient.get(`${environment.apiUrl}/labbooks/get_export/${identifier}`, {
+            responseType: 'blob',
+            observe: 'response',
+          }).pipe(delay(3000))
+        );
+        // If server returns an error status inside the loop
+        //  > 401:  allow refreshing the token for huge exports
+        if (response.status > 401) {
+          const msg = response.statusText || `HTTP ${response.status}`;
+          this.toastrService.error(`Export Error: ${msg}`);
+          this.loading = false;
+          this.modalRef.close();
+          return;
+        }
+      } while (response && response.status === 204);
+      if (response && response.status === 200) {
+        const file = new Blob([response.body!], {type: `application/${exportType}`});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(file);
+        a.download = this.title + `.${exportType}`;
+        a.click();
+      }
+    } catch (err) {
+      // Network errors, thrown errors, etc.
+      const e = err as { statusText?: string; message?: string };
+      const msg = e.statusText ?? e.message ?? 'Unknown error';
+      this.toastrService.error(`Export Error: ${msg}`);
+    } finally {
+      this.loading = false;
+      this.modalRef.close();
     }
-    this.modalRef.close();
   }
 
   toggleContainType(ct: ContainType) {
