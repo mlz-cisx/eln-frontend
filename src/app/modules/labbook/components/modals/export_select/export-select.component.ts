@@ -7,9 +7,8 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
-import {lastValueFrom, delay} from "rxjs";
+import {delay, lastValueFrom, Subject} from "rxjs";
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Subject} from "rxjs";
 import {DialogRef} from "@ngneat/dialog";
 import {LabBookExport} from '@joeseln/types';
 import {environment} from '@environments/environment';
@@ -42,7 +41,7 @@ export class ExportSelectModalComponent implements OnDestroy {
   private service: LabbooksService = this.modalRef.data.service;
 
   // eslint-disable-next-line
-  public exportType: 'pdf' | 'zip' = this.modalRef.data.exportType;
+  public exportType: 'pdf' | 'zip' | 'lxf' = this.modalRef.data.exportType;
 
   public loading: boolean = false;
 
@@ -136,6 +135,25 @@ export class ExportSelectModalComponent implements OnDestroy {
             const e = err as { statusText?: string; message?: string };
             const msg = e.statusText ?? e.message ?? 'Unknown error';
             this.toastrService.error(`Zip Export Error: ${msg}`);
+            this.loading = false;
+            this.modalRef.close();
+          }
+        });
+
+    }
+
+    if (this.exportType == 'lxf') {
+      this.service
+        .exportLxF(this.id, filter)
+        .pipe(untilDestroyed(this))
+        .subscribe({
+          next: async (d: LabBookExport) => {
+            await this.pollingExport(d.identifier, 'zip');
+          },
+          error: (err) => {
+            const e = err as { statusText?: string; message?: string };
+            const msg = e.statusText ?? e.message ?? 'Unknown error';
+            this.toastrService.error(`LxF Export Error: ${msg}`);
             this.loading = false;
             this.modalRef.close();
           }

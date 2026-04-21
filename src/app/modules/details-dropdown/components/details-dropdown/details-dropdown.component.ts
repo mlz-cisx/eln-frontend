@@ -253,6 +253,19 @@ export class DetailsDropdownComponent implements OnInit {
     });
   }
 
+  public onLxFSelectExportModal(): void {
+    this.modalRef = this.modalService.open(ExportSelectModalComponent, {
+      closeButton: false,
+      data: {
+        title: this.initialState?.title ?? 'Labbook',
+        id: this.id,
+        service: this.service,
+        exportType: 'lxf',
+      }
+    });
+  }
+
+
    public onZipSelectExportModal(): void {
     this.modalRef = this.modalService.open(ExportSelectModalComponent, {
       closeButton: false,

@@ -2,7 +2,6 @@ import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import type {
-  ExportLink,
   File,
   FinalizeVersion,
   Lab_Book,
@@ -169,6 +168,20 @@ export class LabbooksService {
       params['endTime'] = filter.endTime.toISOString();
     }
     return this.httpClient.get<LabBookExport>(`${this.apiUrl}${id}/add_zip_export_task`, {params});
+  }
+
+  public exportLxF(id: string, filter: ExportFilter): Observable<LabBookExport> {
+    const params: Record<string, string | number[]> = {};
+    if (filter.containTypes?.length) {
+      params['containTypes'] = filter.containTypes;
+    }
+    if (filter.startTime) {
+      params['startTime'] = filter.startTime.toISOString();
+    }
+    if (filter.endTime) {
+      params['endTime'] = filter.endTime.toISOString();
+    }
+    return this.httpClient.get<LabBookExport>(`${this.apiUrl}${id}/add_lxf_export_task`, {params});
   }
 
   public search(id: string, search: string, params = new HttpParams()): Observable<SearchResult[]> {

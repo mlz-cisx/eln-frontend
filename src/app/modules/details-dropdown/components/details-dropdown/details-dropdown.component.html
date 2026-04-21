@@ -87,6 +87,14 @@
     </button>
   </li>
 
+  <li [class]="menuClass" role="menuitem" *ngIf="is_labbook">
+    <button type="button" [class]="itemClass" (click)="onLxFSelectExportModal()"
+            [disabled]="loading">
+      <joeseln-icon className="wb-pdf-file"></joeseln-icon>
+      {{ ('Export as LxF') }}
+    </button>
+  </li>
+
   <!--  <li [class]="menuClass" role="menuitem" *ngIf="privileges?.trash && !initialState?.deleted && trashElement">-->
   <!--    <button type="button" [class]="itemClass" (click)="onDelete()" [disabled]="loading">-->
 <!--      <joeseln-icon className="wb-trash-1"></joeseln-icon> {{ t('detailsDropdown.trash') }}-->

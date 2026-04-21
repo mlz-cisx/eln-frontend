@@ -12,7 +12,7 @@ export class LoadingComponent {
   @Input() loading = false;
 
   // NEW: pdf | zip | null
-  @Input() exportType: 'pdf' | 'zip' | null = null;
+  @Input() exportType: 'pdf' | 'zip' | 'lxf' | null = null;
 
   constructor(public readonly translocoService: TranslocoService) {
   }
@@ -23,6 +23,8 @@ export class LoadingComponent {
         return 'PDF export is generated, wait!';
       case 'zip':
         return 'ZIP export is generated, wait!';
+      case 'lxf':
+        return 'LxF export is generated, wait!';
       default:
         return '';
     }
