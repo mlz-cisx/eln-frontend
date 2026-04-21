@@ -15,6 +15,11 @@ export interface FileClonePayload {
   info_gzip_b64: string;
 }
 
+export interface LxFileClonePayload {
+  path_b64: string;
+  info: string;
+}
+
 export interface File {
   container_id: string | null;
   content_type: number;

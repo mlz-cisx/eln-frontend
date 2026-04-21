@@ -51,10 +51,15 @@ import {
 import {
   UploadLabBookModalComponent
 } from "@app/pages/admin/components/clone_labbook_modals/upload/new.component";
+import {
+  UploadLabBookLxfModalComponent
+} from "@app/pages/admin/components/clone_labbook_modals/upload_lxf/new.component";
 
 
 @NgModule({
-  declarations: [AdminPageComponent, UsersPageComponent, ElnadminsPageComponent, GroupsPageComponent, UserPageComponent, NewUserModalComponent, NewGroupModalComponent, UploadLabBookModalComponent],
+  declarations: [AdminPageComponent, UsersPageComponent, ElnadminsPageComponent,
+    GroupsPageComponent, UserPageComponent, NewUserModalComponent,
+    NewGroupModalComponent, UploadLabBookModalComponent, UploadLabBookLxfModalComponent],
   imports: [
     CommonModule,
     AdminPageRoutingModule,

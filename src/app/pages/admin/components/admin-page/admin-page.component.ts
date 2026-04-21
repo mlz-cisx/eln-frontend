@@ -16,6 +16,9 @@ import {TableViewComponent} from "@joeseln/table";
 import {
   UploadLabBookModalComponent
 } from "@app/pages/admin/components/clone_labbook_modals/upload/new.component";
+import {
+  UploadLabBookLxfModalComponent
+} from "@app/pages/admin/components/clone_labbook_modals/upload_lxf/new.component";
 
 
 @UntilDestroy()
@@ -77,6 +80,16 @@ export class AdminPageComponent implements OnInit {
   public upload_labbook() {
 
     this.modalRef = this.modalService.open(UploadLabBookModalComponent, {
+      closeButton: false,
+      data: {withSidebar: this.showSidebar, initialState: null},
+    } as DialogConfig);
+
+    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
+  }
+
+    public upload_labbook_lxf() {
+
+    this.modalRef = this.modalService.open(UploadLabBookLxfModalComponent, {
       closeButton: false,
       data: {withSidebar: this.showSidebar, initialState: null},
     } as DialogConfig);

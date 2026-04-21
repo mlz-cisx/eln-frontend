@@ -339,6 +339,7 @@
   "labbooks.filter.createdBy.label": "Created by",
   "labbooks.filter.users.placeholder": "Filter by user",
   "labBook.newModal.header": "New LabBook",
+  "labBook.newModalLxF.header": "New LabBook from LxF",
   "labBook.newModal.title.label": "Title",
   "labBook.newModal.title.placeholder": "Title",
   "labBook.newModal.isTemplate.label": "Allow other users to copy from this labbook",

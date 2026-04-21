@@ -49,3 +49,14 @@ export interface LabBookElementClonePayload {
   height?: number;
   comments?: string[];
 }
+
+export interface PageList {
+  version: string;
+  pages: PageEntry[];
+}
+
+export interface PageEntry {
+  created_at?: string;  // ISO timestamp
+  title?: string;
+  uuid: string;
+}

@@ -10,6 +10,7 @@ import type {
   FileClonePayload,
   FilePayload,
   FinalizeVersion,
+  LxFileClonePayload,
   PrivilegesData,
   RecentChanges,
   RecentChangesService,
@@ -62,6 +63,18 @@ export class FilesService
   public clone(file: FileClonePayload, params = new HttpParams()): Observable<File> {
     return this.httpClient
       .post<File>(`${this.apiUrl}clone/`, file, {
+        params,
+        headers: {'Content-Type': 'application/json'}
+      })
+      .pipe(
+        catchError(err => this.errorservice.handleError(err, this.logout)),
+        map(data => data)
+      );
+  }
+
+  public lxf_clone(file: LxFileClonePayload, params = new HttpParams()): Observable<File> {
+    return this.httpClient
+      .post<File>(`${this.apiUrl}lxf_clone/`, file, {
         params,
         headers: {'Content-Type': 'application/json'}
       })

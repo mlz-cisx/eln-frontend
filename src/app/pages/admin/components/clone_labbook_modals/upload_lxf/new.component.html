@@ -1,0 +1,92 @@
+<ng-container *transloco="let t">
+  <mlzeln-modal [modalFooter]="false">
+    <div slot="header">
+      {{ t('labBook.newModalLxF.header') }}
+    </div>
+    <div slot="body">
+      <mlzeln-loading [loading]="loading">
+        <form (ngSubmit)="onSubmit()" [formGroup]="form" errorTailor>
+          <div class="mb-4">
+            <label for="title-modal">
+              {{ t('labBook.newModal.title.label') }}
+            </label>
+            <input
+                    [placeholder]="t('labBook.newModal.title.placeholder')"
+                    autoFocus
+                    class="form-control mlzeln-input"
+                    formControlName="title"
+                    id="title-modal"
+                    name="title-modal"
+                    type="text"
+            />
+          </div>
+          <div class="mb-4" style="text-align: center; font-size: large">
+            Check the maximum permissible size of the elements!
+          </div>
+          <div class="mb-4">
+            <label for="description-modal">{{ t('labBook.newModal.description.label') }}</label>
+            <mlzeln-wysiwyg-editor [id]="'description-modal'"
+                                   formControlName="description"></mlzeln-wysiwyg-editor>
+          </div>
+
+
+          <div *ngIf="new_labbook_pk">
+            <div class="custom-file">
+              <input (change)="onUpload($event)" class="custom-file-input"
+                     id="file-modal" multiple
+                     name="file-modal" type="file"/>
+              <label [class.custom-file-label-filled]="file_f.file.value"
+                     class="custom-file-label mlzeln-input-file"
+                     for="file-modal">{{
+                  filePlaceholder
+                }}</label>
+            </div>
+          </div>
+
+          <div class="modal-footer p-0 mt-5">
+            <button
+                    (click)="modalRef.close()"
+                    *ngIf="form.dirty || duplicate"
+                    [disabled]="loading"
+                    class="btn mlzeln-button-big mlzeln-button-secondary mr-2"
+                    type="button"
+            >
+              {{ t('labBook.newModal.cancel') }}
+            </button>
+            <button
+                    *ngIf="(form.dirty || duplicate) && !new_labbook_pk"
+                    [disabled]="loading || form.invalid"
+
+                    class="btn mlzeln-button-big mlzeln-button-primary"
+                    type="submit"
+            >
+              {{ duplicate ? t('labBook.newModal.duplicate') : 'Create Labbook and Select Zip File' }}
+            </button>
+
+            <button
+                    (click)="onZipProceed()"
+                    *ngIf="new_labbook_pk"
+                    [disabled]="loading"
+                    class="btn mlzeln-button-big mlzeln-button-primary"
+                    id='proceed_button'
+                    type="button"
+            >
+              {{ 'Proceed' }}
+            </button>
+
+            <button
+                    (click)="modalRef.close()"
+                    *ngIf="!form.dirty && !duplicate"
+                    [disabled]="loading"
+                    class="btn mlzeln-button-big mlzeln-button-primary"
+                    type="button"
+            >
+              {{ t('labBook.newModal.close') }}
+            </button>
+
+          </div>
+        </form>
+      </mlzeln-loading>
+    </div>
+  </mlzeln-modal>
+</ng-container>
