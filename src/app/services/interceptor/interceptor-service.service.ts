@@ -6,7 +6,8 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import {EMPTY, Observable, Subject, throwError} from 'rxjs';
+import {ToastrService} from 'ngx-toastr';
+import {EMPTY, Observable, Subject} from 'rxjs';
 import {catchError, filter, switchMap, take} from 'rxjs/operators';
 import {AuthService, LogoutService, UserService} from "@app/services";
 
@@ -23,6 +24,7 @@ export class InterceptorService implements HttpInterceptor {
     private _auth: AuthService,
     private _user: UserService,
     private _logout: LogoutService,
+    private readonly toastrService: ToastrService,
   ) {
   }
 
@@ -35,19 +37,11 @@ export class InterceptorService implements HttpInterceptor {
       request = this.appendToken(request, token);
     }
     return next.handle(request).pipe(catchError((error: HttpErrorResponse) => {
-        const url = request.url;
-        // Skip refresh for export endpoints
-        const skipRefresh =
-          url.includes('/add_pdf_export_task') ||
-          url.includes('/add_zip_export_task')
-        if (!skipRefresh && error.status === 401 && this._auth.getToken()) {
+        if (error.status === 401 && this._auth.getToken()) {
           return this.handle401Error(request, next);
         }
-        if (skipRefresh && error.status > 400) {
-          this._logout.redirect_start_page();
-          return throwError(() => error);
-        }
         this._logout.logout();
+        this.toastrService.error(error.message);
         return EMPTY;
       })
     );
