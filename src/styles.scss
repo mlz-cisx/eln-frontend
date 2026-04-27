@@ -571,3 +571,23 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal
   word-break: break-word;
   white-space: normal;
 }
+
+.parent-flex app-fabric-canvas .editor {
+    display: flex;
+    flex-direction: row;
+}
+
+.parent-flex app-fabric-canvas .toolbar {
+    margin-right: 2%;
+    max-width: 20%;
+}
+
+.parent-block app-fabric-canvas .editor {
+    display: block;
+}
+
+.parent-block app-fabric-canvas .toolbar {
+    margin-right: 0;
+    max-width: none;
+}
+

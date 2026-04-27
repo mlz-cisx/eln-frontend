@@ -329,7 +329,7 @@ export class FabricCanvasComponent implements AfterViewInit {
 
   /** Public method to resize canvas based on zoom scale */
   public setCanvasSize(width: number): void {
-    this.zoomScale = 0.95 * width / this.BASE_WIDTH;
+    this.zoomScale = (this.viewerMode ? 0.9 : 0.8) * width / this.BASE_WIDTH;
     this.applyZoom(this.zoomScale);
   }
 

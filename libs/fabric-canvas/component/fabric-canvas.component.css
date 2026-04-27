@@ -38,7 +38,7 @@ canvas {
 
 .toolbar input[type='color'],
 .toolbar input[type='number'] {
-  min-width: 2em;
+  min-width: 1.2em;
   max-width: 5em;
 }
 
@@ -118,6 +118,36 @@ canvas {
   height: 190px;  /* scaled height */
   overflow: hidden;
 }
+
+
+.editor-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.editor-flex .toolbar {
+  width: 250px;
+}
+
+.editor-flex .canvas {
+  flex: 1;
+}
+
+.editor-block {
+  display: block;
+}
+
+.editor-block .toolbar {
+  width: 100%;
+}
+
+.editor-block .canvas {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+
 
 
 

@@ -1,3 +1,4 @@
+<div class="editor">
 <div class="toolbar" [class.viewer-active]="viewerMode" *ngIf="editor_loaded">
   <!-- eslint-disable-next-line -->
   <input #galleryInput
@@ -302,5 +303,6 @@ title="Ungroup Objects"
 <div [class.preview]="preview" class="canvas-wrapper mx-auto mt-2">
   <canvas #fabricCanvas class="w-100">
   </canvas>
+</div>
 </div>
 

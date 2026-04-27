@@ -278,7 +278,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
 
     this.modalRef = this.modalService.open(PictureEditorModalComponent, {
       closeButton: false,
-      width: 'auto',
+      minWidth: '90%',
       data: {
         service: this.picturesService,
         initialState: this.initialState,
