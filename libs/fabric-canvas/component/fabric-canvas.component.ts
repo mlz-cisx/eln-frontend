@@ -79,6 +79,9 @@ export class FabricCanvasComponent implements AfterViewInit {
 
   private storeSubject = new Subject<string>();
 
+  private isRestoring = false;
+
+
   canvas!: fabric.Canvas;
   backgroundImages: fabric.Image[] = [];
   backgroundEditable = true;
@@ -218,39 +221,99 @@ export class FabricCanvasComponent implements AfterViewInit {
       this.undoSubject.pipe(
         debounceTime(300)
       ).subscribe(() => this.onUndo());
-      // init history and set listeners to record history
+
+      this.history = [];
+      this.isRestoring = true;   // prevent accidental pushes
       this.history.push(JSON.stringify(this.canvas.toJSON()));
-      this.canvas.on('object:modified', () => { JSON.stringify(this.canvas.toJSON()); });
-      this.canvas.on('object:added', () => { JSON.stringify(this.canvas.toJSON()); });
-      this.canvas.on('object:removed', () => { JSON.stringify(this.canvas.toJSON()); });
+      this.isRestoring = false;
+
+      this.attachHistoryListeners();
+
       // keyboard listeners
       window.addEventListener('keyup', (event) => this.onKeyDown(event));
     }
   }
 
-  onUndo() {
-    const currentState = JSON.stringify(this.canvas.toJSON());
-    let lastState = this.history.pop();
-    while (lastState == currentState) {
-      lastState = this.history.pop();
+  commitHistory() {
+    if (this.isRestoring) return;
+
+    const json = JSON.stringify(this.canvas.toJSON());
+    const last = this.history[this.history.length - 1];
+
+    if (json !== last) {
+      this.history.push(json);
     }
-    if (lastState) {
-      // eslint-disable-next-line
-      this.canvas.loadFromJSON(JSON.parse(lastState), () => {
-        this.canvas.requestRenderAll();
-        this.canvas.once('after:render', () => {
-          this.canvas.getObjects().forEach(obj => {
-            obj.set({
-              selectable: this.allowSelection,
-              evented: this.allowSelection,
-              hasControls: this.allowSelection
-            });
-          });
-          this.canvas.selection = false;
-          this.canvas.discardActiveObject();
-          this.history.push(JSON.stringify(this.canvas.toJSON()));
+  }
+
+  onUndo() {
+    if (this.history.length <= 1) return;
+
+    // Remove current state
+    this.history.pop();
+    const previous = this.history[this.history.length - 1];
+
+    this.isRestoring = true;
+
+    // Remove all listeners
+    this.canvas.off();
+
+    this.canvas.loadFromJSON(previous, () => {
+      this.canvas.renderAll();
+
+      // restore object properties
+      this.canvas.getObjects().forEach(obj => {
+        obj.set({
+          selectable: this.allowSelection,
+          evented: this.allowSelection,
+          hasControls: this.allowSelection
         });
       });
+
+      this.canvas.selection = false;
+      this.canvas.discardActiveObject();
+
+      // IMPORTANT: delay reattaching listeners
+      Promise.resolve().then(() => {
+        this.isRestoring = false;
+        this.attachHistoryListeners();
+      });
+    });
+  }
+
+  public async reloadCanvas(): Promise<void> {
+    this.isRestoring = true;
+
+    this.canvas.off(); // remove all listeners
+    await this.loadCanvasFromJson();
+
+    // reset history
+    this.history = [JSON.stringify(this.canvas.toJSON())];
+
+    // restore object properties
+    this.canvas.getObjects().forEach(obj => {
+      obj.set({
+        selectable: this.allowSelection,
+        evented: this.allowSelection,
+        hasControls: this.allowSelection
+      });
+    });
+
+    this.canvas.selection = false;
+    this.canvas.discardActiveObject();
+    this.canvas.renderAll();
+
+    this.isRestoring = false;
+
+    // reattach listeners ONCE
+    this.attachHistoryListeners();
+  }
+
+  private pushHistory() {
+    if (this.isRestoring) return; // prevent pollution
+    const json = JSON.stringify(this.canvas.toJSON());
+    const last = this.history[this.history.length - 1];
+    if (json !== last) {
+      this.history.push(json);
     }
   }
 
@@ -291,31 +354,12 @@ export class FabricCanvasComponent implements AfterViewInit {
     this.canvas.renderAll();
   }
 
-
-
-  public async reloadCanvas(): Promise<void> {
-    await this.loadCanvasFromJson();
-
-    const objs = this.canvas.getObjects();
-    objs.forEach(obj => {
-      obj.set({
-        selectable: this.allowSelection,
-        evented: this.allowSelection,
-        hasControls: this.allowSelection
-      });
-
-      if ((obj as any).alwaysOnTop) {
-        const idx = this.canvas._objects.indexOf(obj);
-        if (idx > -1) {
-          this.canvas._objects.splice(idx, 1);
-          this.canvas._objects.push(obj); // put at end (top of stack)
-        }
-      }
-    });
-    this.canvas.selection = false;
-    this.canvas.discardActiveObject();
-    this.canvas.renderAll();
+  private attachHistoryListeners() {
+    // Only commit history when user finishes an interaction
+    this.canvas.on('mouse:up', () => this.commitHistory());
   }
+
+
 
   exportAsImage(title: any): void {
     const exportWidth = this.BASE_WIDTH;
@@ -430,6 +474,7 @@ public bringToFrontAndSubmit(): void {
 
     this.canvas.selection = true;
     this.canvas.renderAll();
+    this.commitHistory();
   }
 
 
@@ -480,6 +525,8 @@ public bringToFrontAndSubmit(): void {
 
   public storeCanvas(): void {
     const json = JSON.stringify(this.canvas.toJSON());
+    this.history.splice(0, this.history.length);
+    this.history.push(json);
     this.storeSubject.next(json);
   }
 
@@ -733,6 +780,7 @@ public bringToFrontAndSubmit(): void {
     this.canvas.add(shape);
     this.canvas.sendObjectBackwards(shape, true);
     this.canvas.renderAll();
+    this.commitHistory();
 
     // Reset points for next shape
     this.points = [];
@@ -833,6 +881,7 @@ public bringToFrontAndSubmit(): void {
     this.canvas.add(shape);
     this.canvas.sendObjectBackwards(shape, true);
     this.canvas.renderAll();
+    this.commitHistory();
   }
 
   removeSelected(): void {
@@ -857,6 +906,7 @@ public bringToFrontAndSubmit(): void {
     }
 
     this.canvas.renderAll();
+    this.commitHistory();
   }
 
 
@@ -988,6 +1038,7 @@ public bringToFrontAndSubmit(): void {
       }
 
       this.canvas.renderAll();
+      this.commitHistory();
     });
 
     this.canvas.on('mouse:up', () => {
@@ -1019,6 +1070,7 @@ public bringToFrontAndSubmit(): void {
       this.canvas.off('mouse:up');
 
       this.canvas.renderAll();
+      this.commitHistory();
     });
 
   }
@@ -1661,6 +1713,7 @@ public bringToFrontAndSubmit(): void {
     // 9. Cleanup
     this.cancelCrop();
     this.canvas.renderAll();
+    this.commitHistory();
   }
 
 
@@ -1677,6 +1730,7 @@ public bringToFrontAndSubmit(): void {
 
     this.canvas.discardActiveObject();
     this.canvas.renderAll();
+    this.commitHistory();
   }
 
 
