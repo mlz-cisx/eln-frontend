@@ -248,34 +248,35 @@ export class FabricCanvasComponent implements AfterViewInit {
   onUndo() {
     if (this.history.length <= 1) return;
 
-    // Remove current state
     this.history.pop();
     const previous = this.history[this.history.length - 1];
 
     this.isRestoring = true;
-
-    // Remove all listeners
     this.canvas.off();
 
     this.canvas.loadFromJSON(previous, () => {
-      this.canvas.renderAll();
+      this.canvas.requestRenderAll();
 
-      // restore object properties
-      this.canvas.getObjects().forEach(obj => {
-        obj.set({
-          selectable: this.allowSelection,
-          evented: this.allowSelection,
-          hasControls: this.allowSelection
+      this.canvas.once('after:render', () => {
+
+        this.canvas.getObjects().forEach(obj => {
+          obj.set({
+            selectable: this.allowSelection,
+            evented: this.allowSelection,
+            hasControls: this.allowSelection
+          });
         });
-      });
 
-      this.canvas.selection = false;
-      this.canvas.discardActiveObject();
+        this.canvas.selection = false;
+        this.canvas.discardActiveObject();
 
-      // IMPORTANT: delay reattaching listeners
-      Promise.resolve().then(() => {
-        this.isRestoring = false;
-        this.attachHistoryListeners();
+        // SAFEST DELAY
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.isRestoring = false;
+            this.attachHistoryListeners();
+          });
+        });
       });
     });
   }
