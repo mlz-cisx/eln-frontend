@@ -20,15 +20,40 @@ export class PlotlyEditorComponent {
 
   ngOnInit(): void {
     try {
-      this.csvData = this.data.split('\n').map((row: string) => row.split(/\s+|,|;/).map((item: string) => item.trim()));
-      this.headers = this.csvData[0];
-      this.selectedXasix = this.headers[0]; // assuming first column is X
+      const rows = this.data
+        .split('\n')
+        .map(r => r.trim())
+        .filter(r => r.length > 0 && !r.startsWith('#'));  // ignore metadata
+
+      this.csvData = rows.map((row: string) =>
+        row.split(/,|;|\s+/).map((item: string) => item.trim())
+      );
+
+      // Repair duplicate headers
+      this.headers = this.repairHeaders(this.csvData[0]);
+
+      this.selectedXasix = this.headers[0];
       this.processData(this.csvData, 0);
-    }
-    catch {
-      console.warn(".csv data not plottable")
+    } catch {
+      console.warn(".csv data not plottable");
     }
   }
+
+
+  private repairHeaders(headers: string[]): string[] {
+    const seen: Record<string, number> = {};
+    return headers.map(h => {
+      if (!seen[h]) {
+        seen[h] = 1;
+        return h;
+      }
+      // Duplicate → rename
+      const newName = `${h}_${seen[h]}`;
+      seen[h] += 1;
+      return newName;
+    });
+  }
+
 
   processData(csvData: string[][], xIndex: number) {
     if (csvData.length === 0) return;
