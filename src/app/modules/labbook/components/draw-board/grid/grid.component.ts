@@ -9,6 +9,7 @@ import {
   OnInit,
   Output,
   Renderer2,
+  HostListener,
 } from '@angular/core';
 import {
   LabbookCollapseService,
@@ -38,6 +39,7 @@ import {
 } from 'rxjs';
 import {switchMap, take} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import {TranslocoService} from '@jsverse/transloco';
 import {gridsterConfig} from '../../../config/gridster-config';
 import {
   highlight_element_background_color
@@ -103,7 +105,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     private readonly modalService: DialogService,
-    private collapseService: LabbookCollapseService
+    private collapseService: LabbookCollapseService,
+    private readonly translocoService: TranslocoService,
   ) {
   }
 
@@ -764,4 +767,49 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
   }
 
 
+  @HostListener('dragover', ['$event'])
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  @HostListener('drop', ['$event'])
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+
+    // receive data of element to be restore
+    const rawData = event.dataTransfer?.getData('application/json');
+    if (!rawData) {
+      return;
+    }
+    const data: any = JSON.parse(rawData);
+    if (!data || !data['child_object_id'] || !data['child_object_content_type'] ) {
+      return;
+    }
+
+    // calculate target row number
+    const gridElement = (event.currentTarget as HTMLElement);
+    const rect = gridElement.getBoundingClientRect();
+    const y = event.clientY - rect.top;
+    const rowHeight = this.options.fixedRowHeight || this.options['cellHeight'];
+    const margin = this.options.margin || 0;
+    const effectiveRowHeight = rowHeight + margin;
+    const row = Math.floor(y / effectiveRowHeight);
+
+    // restore element into grid
+    const elem: LabBookElementPayload = {
+      child_object_content_type: data['child_object_content_type'],
+      child_object_id: data['child_object_id'],
+      width: 10,
+      height: 10,
+      position: row
+    }
+    this.labBooksService.addElementToRow(this.id, elem).subscribe(() => {
+      this.translocoService
+        .selectTranslate('restoreElement.toastr.success')
+        .subscribe((success: string) => {
+          this.toastrService.success(success);
+        });
+    });
+  }
 }
