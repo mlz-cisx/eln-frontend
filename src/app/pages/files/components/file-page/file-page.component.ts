@@ -30,7 +30,11 @@ import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 import {
   LabBookDrawBoardGridComponent
 } from "@app/modules/labbook/components/draw-board/grid/grid.component";
-
+import {
+  Graph,
+  detectGraphType,
+} from "@app/modules/labbook/components/draw-board/file/file.component"
+import { PlotModalComponent } from '@app/modules/labbook/components/modals/plot/plot-modal.component';
 
 interface FormFile {
   title: FormControl<string | null>;
@@ -59,6 +63,11 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public initialState?: File;
 
+  public graph: Graph = {
+    graph_type: null,
+    graph_loaded: false,
+    graph_data: ""
+  };
 
   public privileges?: Privileges;
 
@@ -216,7 +225,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
           this.initialState = {...file};
           this.privileges = {...privileges};
 
-
+          if (this.initialState?.original_filename) {
+            this.graph.graph_type = detectGraphType(this.initialState.original_filename);
+          }
 
           this.loading = false;
 
@@ -291,6 +302,21 @@ export class FilePageComponent implements OnInit, OnDestroy {
         localStorage.setItem('element_pk', String(this.id));
         void this.router.navigate([`/labbooks/${d.data.labbook_id}`]);
       })
+  }
+
+  public onOpenPlot(): void {
+    if (!this.initialState) return;
+
+    if (this.graph.graph_type) {
+      this.modalService.open(PlotModalComponent, {
+      closeButton: false,
+      width: '60%',
+      data: {
+        download: this.initialState.download,
+        graph: this.graph,
+      },
+    });
+    }
   }
 
 }

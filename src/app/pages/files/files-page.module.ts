@@ -23,6 +23,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FilePageComponent } from './components/file-page/file-page.component';
 import { FilesPageComponent } from './components/files-page/files-page.component';
 import { FilesPageRoutingModule } from './files-page-routing.module';
+import { PlotlyEditorModule } from 'libs/plotly-editor/lib/plotly-editor.module';
+import { MolViewerModule } from 'libs/mol-viewer/mol-viewer.module';
 
 @NgModule({
   declarations: [FilesPageComponent, FilePageComponent],
@@ -57,6 +59,8 @@ import { FilesPageRoutingModule } from './files-page-routing.module';
     IconsModule,
     CommentModule,
     TooltipModule.forRoot(),
+    PlotlyEditorModule,
+    MolViewerModule,
   ],
 })
 export class FilesPageModule {}

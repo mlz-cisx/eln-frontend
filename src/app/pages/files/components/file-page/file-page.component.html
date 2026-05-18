@@ -117,6 +117,16 @@
 
             <ng-container slot="actions" *transloco="let t">
               <button
+                *ngIf="graph.graph_type"
+                type="button"
+                class="btn mlzeln-button-regular mlzeln-button-outline"
+                (click)="onOpenPlot()"
+                [disabled]="loading"
+              >
+                {{ t('file.openPlot') }}
+              </button>
+
+              <button
                 *ngIf="!initialState.deleted"
                 type="button"
                 class="btn mlzeln-button-regular mlzeln-button-outline"
@@ -161,3 +171,5 @@
     </div>
   </ng-container>
 </ng-container>
+
+
