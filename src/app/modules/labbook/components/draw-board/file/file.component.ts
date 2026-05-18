@@ -39,20 +39,31 @@ import {HttpClient} from "@angular/common/http";
 import {
   LabBookDrawBoardGridComponent
 } from "@app/modules/labbook/components/draw-board/grid/grid.component";
-
+import { PlotModalComponent } from '../../modals/plot/plot-modal.component';
 
 interface FormFile {
   file_title: FormControl<string | null>;
   file_description: string | null;
 }
 
-type GraphType = 'csv' | 'pdb' | 'xyz' | 'cif' | null;
+export type GraphType = 'csv' | 'pdb' | 'xyz' | 'cif' | null;
 
-interface Graph {
+export interface Graph {
   graph_type: GraphType;
   graph_loaded: boolean;
   graph_data: string;
 }
+
+export function detectGraphType(filename: string): GraphType {
+    if (filename.endsWith('.pdb')) return 'pdb';
+    if (filename.endsWith('.cif')) return 'cif';
+    if (filename.endsWith('.xyz')) return 'xyz';
+    if (filename.endsWith('.csv')) return 'csv';
+    return null;
+  }
+
+// eslint-disable-next-line
+export var allowedBioTypes: GraphType[] = ['pdb', 'cif', 'xyz'];
 
 @UntilDestroy()
 @Component({
@@ -90,8 +101,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     graph_loaded: false,
     graph_data: ""
   };
-
-  public allowedBioTypes: GraphType[] = ['pdb', 'cif', 'xyz'];
 
   public allowedPlayerMimeTypes: string[] = ['video/mp4', 'video/webm', 'audio/mpeg', 'audio/mp3', 'audio/aac', 'audio/mp4'];
 
@@ -271,7 +280,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           this.form.disable({emitEvent: false});
         }
         if (this.initialState?.original_filename) {
-          this.graph.graph_type = this.detectGraphType(this.initialState.original_filename);
+          this.graph.graph_type = detectGraphType(this.initialState.original_filename);
         }
         this.cdr.markForCheck();
       });
@@ -405,35 +414,18 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     }
   }
 
-  public loadPlotFromFile(): void {
+  public onOpenPlot(): void {
     if (!this.initialState) return;
 
-    // toggle show plot
-    if (this.graph.graph_type && this.graph.graph_loaded) {
-      this.graph.graph_loaded = false;
-      this.cdr.markForCheck();
-      return;
-    }
-
     if (this.graph.graph_type) {
-      this.http.get(this.initialState.download, {responseType: 'text'})
-        .subscribe({
-          next: (data) => {
-            this.graph.graph_data = data;
-            this.graph.graph_loaded = true;
-            this.cdr.markForCheck();
-          },
-          error: (err) => console.error('Error loading file:', err)
-        });
+      this.modalService.open(PlotModalComponent, {
+      closeButton: false,
+      width: '60%',
+      data: {
+        download: this.initialState.download,
+        graph: this.graph,
+      },
+    });
     }
   }
-
-  private detectGraphType(filename: string): GraphType {
-    if (filename.endsWith('.pdb')) return 'pdb';
-    if (filename.endsWith('.cif')) return 'cif';
-    if (filename.endsWith('.xyz')) return 'xyz';
-    if (filename.endsWith('.csv')) return 'csv';
-    return null;
-  }
-
 }

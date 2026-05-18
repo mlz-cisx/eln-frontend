@@ -44,6 +44,7 @@ import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.
 import {
   ExportSelectModalComponent
 } from "./components/modals/export_select/export-select.component";
+import { PlotModalComponent } from './components/modals/plot/plot-modal.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import {
     RecentChangesModalComponent,
     CopyElementModalComponent,
     AddElementModalComponent,
-    ExportSelectModalComponent
+    ExportSelectModalComponent,
+    PlotModalComponent,
   ],
   imports: [
     CommonModule,
@@ -118,7 +120,8 @@ import {
     RecentChangesModalComponent,
     CopyElementModalComponent,
     AddElementModalComponent,
-    ExportSelectModalComponent
+    ExportSelectModalComponent,
+    PlotModalComponent,
   ],
 })
-export class LabBookModule {}
+export class LabBookModule { }

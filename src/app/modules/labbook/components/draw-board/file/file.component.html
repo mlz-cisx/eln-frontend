@@ -64,9 +64,9 @@
                 {{ !editor_loaded ? 'Open Editor' : 'Close Editor' }}
               </button>
               <button type="button" class="btn mlzeln-button-big"
-            (click)="loadPlotFromFile()"
+            (click)="onOpenPlot()"
             [disabled]="!graph.graph_type">
-            {{ !graph.graph_loaded ? "Load Plot": "Close Plot" }}
+            {{ t('file.openPlot') }}
               </button>
               <button type="button"
                       class="btn mlzeln-button-big square-md mlzeln-button-none cursor-move drag-handle mr-2"
@@ -120,20 +120,6 @@
         </ng-container>
         <ng-container>
           <div [id]="preloaded_id" #preload [hidden]=editor_loaded>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="graph.graph_type=='csv' && graph.graph_loaded">
-          <app-plotly-editor
-            [data]= "graph.graph_data">
-          </app-plotly-editor>
-        </ng-container>
-        <ng-container
-                *ngIf="allowedBioTypes.includes(graph.graph_type) && graph.graph_loaded">
-          <div class="viewer-wrapper">
-            <app-mol-viewer
-                    [plotContent]="graph.graph_data"
-                    [model]="graph.graph_type!">
-            </app-mol-viewer>
           </div>
         </ng-container>
         <ng-container *ngIf="initialState &&
