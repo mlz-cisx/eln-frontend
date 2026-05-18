@@ -614,3 +614,19 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal
     max-width: none;
 }
 
+/* Base rule */
+.grid-blowout .metadata-container {
+  white-space: normal !important;
+  display: block;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Override rule */
+.grid-blowout .metadata-container.nowrap-mode {
+  white-space: nowrap !important;
+}
+
+
+
+

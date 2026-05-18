@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
-import {Title} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml, Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   CommentsComponent
@@ -92,8 +92,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
 
   public refreshLinkList = new EventEmitter<boolean>();
 
+  safeContent!: SafeHtml;
 
-
+  public useNowrap = false;
 
 
   @ViewChild('uploadInput')
@@ -118,7 +119,8 @@ export class FilePageComponent implements OnInit, OnDestroy {
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
-    private gridComponent: LabBookDrawBoardGridComponent
+    private gridComponent: LabBookDrawBoardGridComponent,
+    private sanitizer: DomSanitizer
   ) {
   }
 
@@ -232,6 +234,17 @@ export class FilePageComponent implements OnInit, OnDestroy {
             this.graph.graph_type = detectGraphType(this.initialState.original_filename);
           }
 
+          if ("description" in this.initialState) {
+            const raw = this.initialState.description;
+            // sanitize for rendering
+            this.safeContent = this.sanitizer.bypassSecurityTrustHtml(raw);
+            // extract pure text
+            const textOnly = this.extractTextOnly(raw);
+            // measure longest line
+            const longest = this.getLongestTextLine(textOnly);
+            this.useNowrap = longest.length < 250;
+          }
+
           this.loading = false;
 
           if (formChanges) {
@@ -250,6 +263,22 @@ export class FilePageComponent implements OnInit, OnDestroy {
         }
       );
   }
+
+  private extractTextOnly(html: string): string {
+    // Convert <br> tags to newline characters
+    const normalized = html.replace(/<br\s*\/?>/gi, '\n');
+    // Strip all HTML tags
+    const tmp = document.createElement('div');
+    tmp.innerHTML = normalized;
+    return tmp.textContent || '';
+  }
+
+
+  private getLongestTextLine(text: string): string {
+    const lines = text.split('\n');
+    return lines.reduce((a, b) => (b.length > a.length ? b : a), '');
+  }
+
 
   public onUpload(event: Event): void {
   }
