@@ -40,6 +40,7 @@ interface FormFile {
   title: FormControl<string | null>;
   name: FormControl<string | null>;
   storage: string | null;
+  description: FormControl<string | null>;
 }
 
 @UntilDestroy()
@@ -102,6 +103,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
     title: this.fb.control(null, Validators.required),
     name: this.fb.control(null, Validators.required),
     storage: null,
+    description: this.fb.control(null, Validators.required),
   });
 
   public constructor(
@@ -199,6 +201,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
               title: file.title,
               name: file.name,
               storage: file.directory_id,
+              description: file.description
             },
             {emitEvent: false}
           );

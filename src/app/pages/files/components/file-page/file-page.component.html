@@ -139,7 +139,21 @@
           </div>
           <div>
             <mlzeln-details-collapse-element
-              [labelText]="t('file.details.element.recentChanges')">
+                    [labelText]="t('file.details.element.description')">
+              <ng-container slot="body">
+                <mlzeln-wysiwyg-editor
+                        [id]="'description'"
+                        [disabled]=true
+                        formControlName="description"
+                        slot="input"
+                        toolbar="---">
+                </mlzeln-wysiwyg-editor>
+              </ng-container>
+            </mlzeln-details-collapse-element>
+          </div>
+          <div>
+            <mlzeln-details-collapse-element
+                    [labelText]="t('file.details.element.recentChanges')">
               <ng-container slot="body">
                 <mlzeln-recent-changes
                   id="recent-changes"
