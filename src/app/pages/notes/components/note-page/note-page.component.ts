@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {Validators} from '@angular/forms';
-import {Title} from '@angular/platform-browser';
+import {DomSanitizer, Title, SafeHtml} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   CommentsComponent
@@ -82,6 +82,7 @@ export class NotePageComponent implements OnInit, OnDestroy {
 
   public refreshLinkList = new EventEmitter<boolean>();
 
+  safeContent!: SafeHtml;
 
   public form = this.fb.group<FormNote>({
     subject: this.fb.control(null, Validators.required),
@@ -101,7 +102,8 @@ export class NotePageComponent implements OnInit, OnDestroy {
     private readonly modalService: DialogService,
     private readonly labbooksService: LabbooksService,
     private user_service: UserService,
-    private gridComponent: LabBookDrawBoardGridComponent
+    private gridComponent: LabBookDrawBoardGridComponent,
+    private sanitizer: DomSanitizer
   ) {
   }
 
@@ -204,6 +206,12 @@ export class NotePageComponent implements OnInit, OnDestroy {
 
           if (formChanges) {
             this.initFormChanges();
+          }
+
+          if ("content" in this.initialState) {
+            this.safeContent = this.sanitizer.bypassSecurityTrustHtml(
+              this.initialState.content
+            );
           }
 
           this.cdr.markForCheck();

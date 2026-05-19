@@ -86,13 +86,9 @@
                     {{ t('note.details.gotoBottom') }}
                   </button>
                 </div>
-                <mlzeln-wysiwyg-editor
-                  [id]="'content'"
-                  [disabled]=true
-                  formControlName="content"
-                  slot="input"
-                  toolbar="---">
-                </mlzeln-wysiwyg-editor>
+                <label>{{ t('note.details.element.content') }}</label>
+                <div class="content-container"
+                     [innerHTML]='safeContent'></div>
               </ng-container>
             </mlzeln-details-collapse-element>
           </div>

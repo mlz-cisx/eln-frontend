@@ -376,6 +376,7 @@
   "note.details.element.versions": "Versions",
   "note.details.comments.newComment": "New comment",
   "note.details.element.comments": "Comments",
+  "note.details.element.content": "Content",
   "notes.header.search.placeholder": "Search",
   "notes.new": "Note",
   "picture.convertTiffModal.header": "TIFF files need to be converted",
