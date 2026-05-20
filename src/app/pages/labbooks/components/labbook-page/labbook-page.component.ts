@@ -57,6 +57,7 @@ import {GridsterConfig} from "angular-gridster2";
 import {
   highlight_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 interface FormLabBook {
   labbook_title: FormControl<string | null>;
@@ -119,6 +120,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public newModalComponent = NewLabBookModalComponent;
 
+  safeContent!: SafeHtml;
+
 
   results: any[] = [];
   query = '';
@@ -153,7 +156,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     private readonly toastrService: ToastrService,
     private ngZone: NgZone,
     private readonly renderer: Renderer2,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private sanitizer: DomSanitizer
   ) {
   }
 
@@ -452,6 +456,12 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           if (labBook.strict_mode) {
             this.toastrService.warning('Strict mode is on. ' +
               'You can only edit elements you created yourself.')
+          }
+
+          if ("description" in this.initialState) {
+            this.safeContent = this.sanitizer.bypassSecurityTrustHtml(
+              this.initialState.description
+            );
           }
           this.cdr.markForCheck();
         },

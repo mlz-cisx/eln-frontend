@@ -145,7 +145,7 @@
                     <div [id]="preloaded_id"
                          class="description-container"
                          *ngIf="initialState?.description; else noDescription"
-                         [innerHTML]="initialState?.description"
+                         [innerHTML]="safeContent"
                     ></div>
                     <ng-template #noDescription>
                       <span
