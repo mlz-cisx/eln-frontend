@@ -234,7 +234,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
   }
 
   onKeyDown = (event: KeyboardEvent) => {
-    if (event.ctrlKey && event.key === 'f') {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
       event.preventDefault();
       this.openSearch()
     }
