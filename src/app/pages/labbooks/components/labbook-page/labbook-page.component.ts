@@ -130,6 +130,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   searchInput$ = new Subject<string>();
 
+  highlighted = new Subject<void>;
+
   public gridster_options: GridsterConfig = {
     ...gridsterConfig,
   };
@@ -258,6 +260,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     this.searchOpen = false;
     this.query = '';
     this.results = [];
+    this.highlighted.next();
   }
 
   next() {
@@ -276,6 +279,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   onQueryChange() {
     this.searchInput$.next(this.query.toLowerCase());
+    this.highlighted.next();
   }
 
   onSearchKey(event: KeyboardEvent) {
@@ -319,6 +323,9 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           if (content.toLowerCase().includes(search_text)) {
             // @ts-ignore
             this.renderer.setStyle(elem, 'border', 'thick solid red');
+            this.highlighted.subscribe(() => {
+              this.renderer.setStyle(elem, 'border', '');
+            })
           }
           // @ts-ignore
           const title_content = title.querySelector('input').value
@@ -326,19 +333,35 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
           if (title_content.toLowerCase().includes(search_text)) {
             // @ts-ignore
             this.renderer.setStyle(title, 'border', 'thick solid red');
+            this.highlighted.subscribe(() => {
+              this.renderer.setStyle(title, 'border', '');
+            })
           }
           // @ts-ignore
           this.renderer.setProperty(elem, 'innerHTML', content);
+          this.highlighted.subscribe(() => {
+            if (elem) {
+              const reverseContent = this.removeHighlighting(elem);
+              this.renderer.setProperty(elem, 'innerHTML', reverseContent);
+            }
+          })
           if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
             && !title_content.includes(search_text) && !content.includes(search_text)) {
             this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
             this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
+            this.highlighted.subscribe(() => {
+              this.renderer.setStyle(title, 'background-color', '');
+              this.renderer.setStyle(elem, 'background-color', '');
+            })
           }
         }
         if (content_type == 'pictures.picture') {
           // @ts-ignore
           const title = document.getElementById(element_pk + '_title_id')
           this.renderer.setStyle(title, 'border', 'thick solid red');
+          this.highlighted.subscribe(() => {
+            this.renderer.setStyle(title, 'border', '');
+          })
         }
       }, 1000)
     }
@@ -377,11 +400,38 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     }
 
     const finalHtml = doc.body.innerHTML;
-    this.renderer.setProperty(elem, "innerHTML", finalHtml);
-
     return finalHtml;
   }
 
+  removeHighlighting(elem: HTMLElement) {
+    const html = elem.innerHTML;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_ELEMENT);
+
+    let node;
+    while ((node = walker.nextNode())) {
+      if (
+        node.nodeType === Node.ELEMENT_NODE &&
+        node.nodeName === 'SPAN' &&
+        (node as HTMLElement).style.backgroundColor === 'yellow' &&
+        (node as HTMLElement).style.fontWeight === 'bold'
+      ) {
+        const parent = node.parentNode;
+        if (parent) {
+          while (node.firstChild) {
+            parent.insertBefore(node.firstChild, node);
+          }
+          parent.removeChild(node);
+        }
+      }
+    }
+
+    const finalHtml = doc.body.innerHTML;
+    return finalHtml;
+  }
 
   public initFormChanges(): void {
     this.form.valueChanges
