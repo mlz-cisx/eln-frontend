@@ -21,7 +21,8 @@ import { TranslocoService } from '@jsverse/transloco';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NotePageComponent } from './components/note-page/note-page.component';
 import { NotesPageComponent } from './components/notes-page/notes-page.component';
-import { NotesPageRoutingModule } from './notes-page-routing.module';
+import {NotesPageRoutingModule} from './notes-page-routing.module';
+import {MathjaxModule} from 'mathjax-angular';
 
 @NgModule({
   declarations: [NotesPageComponent,  NotePageComponent],
@@ -55,6 +56,7 @@ import { NotesPageRoutingModule } from './notes-page-routing.module';
     IconsModule,
     CommentModule,
     TooltipModule.forRoot(),
+    MathjaxModule.forChild(),
   ],
 })
 export class NotesPageModule {}
