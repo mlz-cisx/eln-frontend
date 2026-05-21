@@ -8,4 +8,4 @@
     <option *ngFor="let header of headers" [value]="header">{{ header }}</option>
   </select>
 </div>
-<plotly-plot [data]="plotData" [config]="{ displaylogo: false }"></plotly-plot>
+<plotly-plot [data]="plotData" [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"></plotly-plot>
