@@ -49,7 +49,7 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {Observable, of, Subject} from 'rxjs';
-import {debounceTime, map, skip, switchMap, take} from 'rxjs/operators';
+import {debounceTime, map, skip, switchMap, take, filter} from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 import {ToastrService} from 'ngx-toastr';
 import {gridsterConfig} from '@app/modules/labbook/config/gridster-config';
@@ -188,6 +188,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     document.addEventListener('keydown', this.onKeyDown, true);
     this.searchInput$
       .pipe(
+        filter(p => p.trim().length > 0),
         map(q => q.toLowerCase()),
         debounceTime(500),
         switchMap(q => this.labBooksService.search(this.id, q)),
