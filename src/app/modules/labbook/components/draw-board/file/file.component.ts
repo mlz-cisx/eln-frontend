@@ -424,6 +424,9 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       data: {
         download: this.initialState.download,
         graph: this.graph,
+        isFromPlotModal: true,
+        element_pos_y: this.element.position_y,
+        labBookId: this.element.labbook_id
       },
     });
     }

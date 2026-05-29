@@ -49,7 +49,17 @@ export class PicturesService
     );
   }
 
-  public add(picture: PicturePayload | SketchPayload, params = new HttpParams()): Observable<Picture> {
+  public add(picture: PicturePayload | SketchPayload| FormData, params = new HttpParams()): Observable<Picture> {
+      // If already FormData → send directly
+  if (picture instanceof FormData) {
+    return this.httpClient
+      .post<Picture>(this.apiUrl, picture, { params })
+      .pipe(
+        catchError(err => this.errorservice.handleError(err, this.logout)),
+        map(data => data)
+      );
+  }
+
     const formData = new FormData();
     for (const [key, val] of Object.entries(picture)) {
       if (!val) continue;

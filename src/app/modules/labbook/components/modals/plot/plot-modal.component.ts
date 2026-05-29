@@ -12,6 +12,12 @@ import { Graph, allowedBioTypes } from '../../draw-board/file/file.component';
 })
 export class PlotModalComponent {
 
+  public isFromPlotModal: boolean = this.modalRef.data.isFromPlotModal;
+
+  public element_pos_y: number = this.modalRef.data.element_pos_y;
+
+  public labBookId: string = this.modalRef.data.labBookId;
+
   allowedBioTypes = allowedBioTypes;
 
   private download: string = this.modalRef.data.download; // eslint-disable-line

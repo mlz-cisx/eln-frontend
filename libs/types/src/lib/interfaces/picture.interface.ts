@@ -10,6 +10,7 @@ export interface PicturePayload {
 export interface SketchPayload {
   title: string;
   canvas_content?: Blob | string | null;
+  background_image?: Blob | string | null;
 }
 
 

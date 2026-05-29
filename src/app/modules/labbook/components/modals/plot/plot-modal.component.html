@@ -6,7 +6,11 @@
     <div slot="body" *ngIf="!loading">
       <ng-container *ngIf="graph.graph_type=='csv'">
         <app-plotly-editor
-          [data]= "graph.graph_data">
+          [data]= "graph.graph_data"
+          [showSketchButton]="isFromPlotModal"
+          [element_pos_y]="element_pos_y"
+          [labBookId]="labBookId"
+        >
         </app-plotly-editor>
       </ng-container>
       <ng-container *ngIf="allowedBioTypes.includes(graph.graph_type)">

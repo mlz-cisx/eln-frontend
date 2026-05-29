@@ -8,4 +8,12 @@
     <option *ngFor="let header of headers" [value]="header">{{ header }}</option>
   </select>
 </div>
-<plotly-plot [data]="plotData" [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"></plotly-plot>
+<plotly-plot #plot [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"
+             [data]="plotData"></plotly-plot>
+<div *ngIf="showSketchButton">
+  <button (click)="exportPlotAsImage()"
+          class="btn mlzeln-button-regular mlzeln-button-outline"
+          type="button">Sketch from Plot Image
+  </button>
+</div>
+
