@@ -1,0 +1,29 @@
+@import "../../../../../styles/colors";
+
+:host {
+  display: block;
+
+  .restore {
+    right: 5%;
+    text-align: center;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    display: inline;
+  }
+
+  ul li {
+    margin-top: 0;
+    font-size: 1.25rem;
+    display: inline;
+  }
+
+  ul {
+    display: inline;
+  }
+}

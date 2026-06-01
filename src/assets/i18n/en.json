@@ -186,6 +186,7 @@
   "navbar.orderedMenu.editMenu": "Edit menu",
   "navbar.orderedMenu.cancelEditMenu": "Cancel",
   "navbar.orderedMenu.saveMenu": "Save",
+  "navbar.restore.placeholder": "Search for restore",
   "picture.editorModal.header": "Edit picture",
   "picture.editorModal.close": "Close",
   "recentChanges.recentChangesModal.header": "Recent changes",

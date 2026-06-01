@@ -1,0 +1,139 @@
+<ng-container *transloco="let t">
+  <div #searchDropdown="bs-dropdown" dropdown container="body"
+       placement="bottom right" [insideClick]="true"
+       class="restore"
+       [style.position]="sidebarPosition"
+       [style.top.px]="offsetHeader + offsetMargin">
+    <form [formGroup]="form">
+      <div class="input-group search-input-group">
+        <input
+          #searchInput
+          type="text"
+          id="search-input"
+          aria-controls="results-list"
+          class="form-control mlzeln-input"
+          formControlName="search"
+          autocomplete="off"
+          [placeholder]="t('navbar.restore.placeholder')"
+          dropdownToggle
+        />
+      </div>
+      <ul
+        *dropdownMenu
+        id="results-list"
+        class="dropdown-menu dropdown-menu-right details-dropdown-menu search-dropdown-menu"
+        role="menu"
+        aria-labelledby="search-input"
+      >
+        <div class="flex">
+          <div
+            class="flex flex-col justify-between restrict-search-container pt-1">
+            <div>
+              <div
+                class="font-bold ml-2 mb-2">{{ t('navbar.globalSearch.restrictSearch') }}</div>
+              <div
+                class="btn mlzeln-button-regular font-normal w-full text-left menu-item-button">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="search-note"
+                    name="search-note"
+                    formControlName="note"
+                    (change)="onChangeFilter($event, 'shared_elements.note')"
+                  />
+                  <label class="custom-control-label w-full font-normal"
+                         for="search-note">
+                    <joeseln-icon
+                      [className]="'shared_elements.note' | formatContentTypeModel: 'icon'"></joeseln-icon>
+                    {{ 'shared_elements.note' | formatContentTypeModel: 'translation' }}
+                  </label>
+                </div>
+              </div>
+              <div
+                class="btn mlzeln-button-regular font-normal w-full text-left menu-item-button">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="search-file"
+                    name="search-file"
+                    formControlName="file"
+                    (change)="onChangeFilter($event, 'shared_elements.file')"
+                  />
+                  <label class="custom-control-label w-full font-normal"
+                         for="search-file">
+                    <joeseln-icon
+                      [className]="'shared_elements.file' | formatContentTypeModel: 'icon'"></joeseln-icon>
+                    {{ 'shared_elements.file' | formatContentTypeModel: 'translation' }}
+                  </label>
+                </div>
+              </div>
+              <div
+                class="btn mlzeln-button-regular font-normal w-full text-left menu-item-button">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="search-picture"
+                    name="search-picture"
+                    formControlName="picture"
+                    (change)="onChangeFilter($event, 'pictures.picture')"
+                  />
+                  <label class="custom-control-label w-full font-normal"
+                         for="search-picture">
+                    <joeseln-icon
+                      [className]="'pictures.picture' | formatContentTypeModel: 'icon'"></joeseln-icon>
+                    {{ 'pictures.picture' | formatContentTypeModel: 'translation' }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container>
+            <mlzeln-loading class="loading" [loading]="loading">
+              <div class="results-container">
+                <ng-container *ngFor="let result of results">
+                  <a>
+                    <li role="menuitem"
+                        class="btn mlzeln-button-regular text-left h-auto w-full pt-1 pb-1 border-b menu-item"
+                        [draggable]='true'
+                        (dragstart)="onDragStart($event, result)"
+                    >
+                      <div class="flex">
+                        <joeseln-icon
+                          [className]="result.content_type_model | formatContentTypeModel: 'icon'"
+                          class="result-icon self-center"
+                        ></joeseln-icon>
+                        <div class="ml-2">
+                          <div
+                                  class="result-name truncate">  {{
+                              result.content_type_model === 'pictures.picture'
+                                  ? result.title
+                                  : result.content_type_model === 'shared_elements.file'
+                                      ? result.title
+                                      : result.content_type_model === 'shared_elements.note'
+                                          ? result.subject
+                                          : ''
+                            }}
+
+                          </div>
+                          <div class="flex whitespace-nowrap font-normal">
+                            {{ t('navbar.globalSearch.createdBy') }}
+                            <mlzeln-user-details [user]="result.created_by"
+                                                     [modal]="false"
+                                                     class="ml-1"></mlzeln-user-details>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </a>
+                </ng-container>
+              </div>
+            </mlzeln-loading>
+          </ng-container>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-container>

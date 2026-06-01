@@ -45,6 +45,7 @@ import {
   ExportSelectModalComponent
 } from "./components/modals/export_select/export-select.component";
 import { PlotModalComponent } from './components/modals/plot/plot-modal.component';
+import { LabBookRestoreComponent } from './components/restore/restore.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { PlotModalComponent } from './components/modals/plot/plot-modal.componen
     AddElementModalComponent,
     ExportSelectModalComponent,
     PlotModalComponent,
+    LabBookRestoreComponent,
   ],
   imports: [
     CommonModule,
@@ -122,6 +124,7 @@ import { PlotModalComponent } from './components/modals/plot/plot-modal.componen
     AddElementModalComponent,
     ExportSelectModalComponent,
     PlotModalComponent,
+    LabBookRestoreComponent,
   ],
 })
 export class LabBookModule { }
