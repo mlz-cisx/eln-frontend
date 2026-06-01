@@ -109,10 +109,15 @@ export class FabricCanvasComponent implements AfterViewInit {
   pointModeActive = false;
 
   points: { x: number; y: number }[] = [];
-  shapeType: 'polyline' | 'polygon' | 'arrow' = 'polyline';
+  shapeType: 'polyline' | 'polygon' | 'arrow' | null = 'polyline';
   vertexCircles: fabric.Circle[] = [];
 
-  private history: string[] = [];
+  private history: {
+    json: string;
+    points: { x: number; y: number }[];
+    shapeType: 'polyline' | 'polygon' | 'arrow' | null;
+  }[] = [];
+
   private undoSubject: Subject<void> = new Subject();
 
   fillColor: string = '#ffffff';   // default white
@@ -224,10 +229,17 @@ export class FabricCanvasComponent implements AfterViewInit {
 
       this.history = [];
       this.isRestoring = true;   // prevent accidental pushes
-      this.history.push(JSON.stringify(this.canvas.toJSON()));
-      this.isRestoring = false;
 
-      this.attachHistoryListeners();
+      setTimeout(() => {
+        this.history.push({
+          json: JSON.stringify(this.canvas.toJSON()),
+          points: structuredClone(this.points),
+          shapeType: this.shapeType
+        });
+
+        this.isRestoring = false;
+        this.attachHistoryListeners();
+      }, 500);
 
       // keyboard listeners
       window.addEventListener('keyup', (event) => this.onKeyDown(event));
@@ -237,13 +249,19 @@ export class FabricCanvasComponent implements AfterViewInit {
   commitHistory() {
     if (this.isRestoring) return;
 
-    const json = JSON.stringify(this.canvas.toJSON());
+    const entry = {
+      json: JSON.stringify(this.canvas.toJSON()),
+      points: structuredClone(this.points),
+      shapeType: this.shapeType
+    };
+
     const last = this.history[this.history.length - 1];
 
-    if (json !== last) {
-      this.history.push(json);
+    if (!last || entry.json !== last.json) {
+      this.history.push(entry);
     }
   }
+
 
   onUndo() {
     if (this.history.length <= 1) return;
@@ -254,7 +272,7 @@ export class FabricCanvasComponent implements AfterViewInit {
     this.isRestoring = true;
     this.canvas.off();
 
-    this.canvas.loadFromJSON(previous, () => {
+    this.canvas.loadFromJSON(previous.json, () => {
       this.canvas.requestRenderAll();
 
       this.canvas.once('after:render', () => {
@@ -270,7 +288,10 @@ export class FabricCanvasComponent implements AfterViewInit {
         this.canvas.selection = false;
         this.canvas.discardActiveObject();
 
-        // SAFEST DELAY
+        // Restore editor state
+        this.points = structuredClone(previous.points || []);
+        this.shapeType = previous.shapeType || null;
+
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             this.isRestoring = false;
@@ -287,8 +308,12 @@ export class FabricCanvasComponent implements AfterViewInit {
     this.canvas.off(); // remove all listeners
     await this.loadCanvasFromJson();
 
-    // reset history
-    this.history = [JSON.stringify(this.canvas.toJSON())];
+    // reset history with structured entry
+    this.history = [{
+      json: JSON.stringify(this.canvas.toJSON()),
+      points: structuredClone(this.points),
+      shapeType: this.shapeType
+    }];
 
     // restore object properties
     this.canvas.getObjects().forEach(obj => {
@@ -309,13 +334,20 @@ export class FabricCanvasComponent implements AfterViewInit {
     this.attachHistoryListeners();
   }
 
-  private pushHistory() {
-    if (this.isRestoring) return; // prevent pollution
+  public storeCanvas(): void {
     const json = JSON.stringify(this.canvas.toJSON());
-    const last = this.history[this.history.length - 1];
-    if (json !== last) {
-      this.history.push(json);
-    }
+
+    // Reset history
+    this.history.splice(0, this.history.length);
+
+    // Push structured entry
+    this.history.push({
+      json,
+      points: structuredClone(this.points),
+      shapeType: this.shapeType
+    });
+
+    this.storeSubject.next(json);
   }
 
   private onKeyDown(event: KeyboardEvent) {
@@ -521,14 +553,61 @@ public bringToFrontAndSubmit(): void {
     this.showConfirm = false;
   }
 
+  startPointMode(): void {
+    this.canvas.selection = false;
 
+    // Disable interaction on all existing objects (background, shapes, images)
+    this.canvas.forEachObject(obj => {
+      obj.selectable = false;
+      obj.evented = false;
+    });
 
+    this.pointModeActive = true;
+    this.drawingMode = null;
+    this.canvas.isDrawingMode = false;
 
-  public storeCanvas(): void {
-    const json = JSON.stringify(this.canvas.toJSON());
-    this.history.splice(0, this.history.length);
-    this.history.push(json);
-    this.storeSubject.next(json);
+    // Remove old listeners
+    this.canvas.off('mouse:down');
+    this.canvas.off('mouse:move');
+    this.canvas.off('mouse:up');
+
+    this.points = [];
+    this.vertexCircles.forEach(c => this.canvas.remove(c));
+    this.vertexCircles = [];
+
+    this.canvas.on('mouse:down', (opt) => {
+      const pointer = this.canvas.getPointer(opt.e);
+      const point = {x: pointer.x, y: pointer.y};
+      this.points.push(point);
+
+      const circle = new fabric.Circle({
+        left: point.x,
+        top: point.y,
+        radius: 5,
+        fill: '#FF0000',
+        stroke: '#000000',
+        strokeWidth: 1,
+        originX: 'center',
+        originY: 'center',
+        hasControls: false,
+        hasBorders: false,
+        selectable: true,   // re-enable for circles
+        evented: true       // re-enable for circles
+      });
+
+      circle.on('moving', () => {
+        const idx = this.vertexCircles.indexOf(circle);
+        if (idx >= 0) {
+          this.points[idx] = {x: circle.left!, y: circle.top!};
+          this.redrawShapePreview();
+        }
+      });
+
+      this.vertexCircles.push(circle);
+      this.canvas.add(circle);
+      this.bringToFront(circle);
+      this.redrawShapePreview();
+    });
   }
 
   async loadImage(url: string, options?: any): Promise<fabric.Image> {
@@ -663,55 +742,6 @@ public bringToFrontAndSubmit(): void {
     }
   }
 
-  startPointMode(): void {
-    this.canvas.selection = false;
-    this.canvas.forEachObject(obj => obj.selectable = false);
-
-    this.pointModeActive = true;
-    // Clear any previous drawing mode
-    this.drawingMode = null;
-    this.canvas.isDrawingMode = false; // disable free-draw brush if active
-    this.canvas.off('mouse:down');
-    this.canvas.off('mouse:move');
-    this.canvas.off('mouse:up');
-
-    this.points = [];
-    this.vertexCircles.forEach(c => this.canvas.remove(c));
-    this.vertexCircles = [];
-
-    this.canvas.on('mouse:down', (opt) => {
-      const pointer = this.canvas.getPointer(opt.e);
-      const point = {x: pointer.x, y: pointer.y};
-      this.points.push(point);
-
-      // Draw a draggable circle at the vertex
-      const circle = new fabric.Circle({
-        left: point.x,
-        top: point.y,
-        radius: 5,
-        fill: '#FF0000',
-        stroke: '#000000',
-        strokeWidth: 1,
-        hasControls: false,
-        hasBorders: false,
-        originX: 'center',
-        originY: 'center'
-      });
-
-      circle.on('moving', () => {
-        const idx = this.vertexCircles.indexOf(circle);
-        if (idx >= 0) {
-          this.points[idx] = {x: circle.left!, y: circle.top!};
-          this.redrawShapePreview();
-        }
-      });
-
-      this.vertexCircles.push(circle);
-      this.canvas.add(circle);
-      this.redrawShapePreview();
-    });
-  }
-
   finishShape(): void {
     this.pointModeActive = false;
     // Stop adding new points
@@ -779,7 +809,16 @@ public bringToFrontAndSubmit(): void {
 
     // Add final shape to canvas
     this.canvas.add(shape);
-    this.canvas.sendObjectBackwards(shape, true);
+
+    // Fabric 6 safe "send backwards"
+    const objects = this.canvas.getObjects();
+    const index = objects.indexOf(shape);
+    if (index > 0) {
+      objects.splice(index, 1);
+      objects.splice(index - 1, 0, shape);
+    }
+
+
     this.canvas.renderAll();
     this.commitHistory();
 
@@ -787,7 +826,7 @@ public bringToFrontAndSubmit(): void {
     this.points = [];
   }
 
-  isActive(mode: 'polyline' | 'polygon' | 'arrow' | 'point' | 'finish'): boolean {
+  isActive(mode: 'polyline' | 'polygon' | 'arrow' | 'point' | 'finish' | null): boolean {
     if (mode === 'polyline' || mode === 'polygon' || mode === 'arrow') {
       return this.shapeType === mode;
     }
@@ -803,6 +842,32 @@ public bringToFrontAndSubmit(): void {
       );
     }
     return false;
+  }
+
+  private pushHistory() {
+    if (this.isRestoring) return;
+
+    const entry = {
+      json: JSON.stringify(this.canvas.toJSON()),
+      points: structuredClone(this.points),
+      shapeType: this.shapeType
+    };
+
+    const last = this.history[this.history.length - 1];
+
+    if (!last || entry.json !== last.json) {
+      this.history.push(entry);
+    }
+  }
+
+  private bringToFront(obj: fabric.Object) {
+    const objects = this.canvas.getObjects();
+    const index = objects.indexOf(obj);
+    if (index === -1) return;
+
+    objects.splice(index, 1);               // remove
+    objects.push(obj);                      // add at end (top)
+    this.canvas.requestRenderAll();
   }
 
 
