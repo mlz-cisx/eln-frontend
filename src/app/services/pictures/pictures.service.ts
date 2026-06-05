@@ -115,9 +115,22 @@ export class PicturesService
   }
 
 
-  public restore(id: string, params = new HttpParams()): Observable<Picture> {
-    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params});
+public restore(
+  id: string,
+  restoredRow?: number,
+  params = new HttpParams()
+): Observable<Picture> {
+
+  if (restoredRow !== undefined && restoredRow !== null) {
+    params = params.set('restored_row', restoredRow.toString());
   }
+  return this.httpClient.patch<Picture>(
+    `${this.apiUrl}${id}/restore/`,
+    { pk: id },
+    { params }
+  );
+}
+
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
     return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});

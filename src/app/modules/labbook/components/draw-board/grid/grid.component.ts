@@ -12,9 +12,10 @@ import {
   HostListener,
 } from '@angular/core';
 import {
+  FilesService,
   LabbookCollapseService,
   LabbooksService,
-  NotesService,
+  NotesService, PicturesService,
   WebSocketService
 } from '@app/services';
 import {environment} from '@environments/environment';
@@ -107,6 +108,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly modalService: DialogService,
     private collapseService: LabbookCollapseService,
     private readonly translocoService: TranslocoService,
+    public readonly picturesService: PicturesService,
+    public readonly filesService: FilesService,
   ) {
   }
 
@@ -796,20 +799,42 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
     const effectiveRowHeight = rowHeight + margin;
     const row = Math.floor(y / effectiveRowHeight);
 
-    // restore element into grid
-    const elem: LabBookElementPayload = {
-      child_object_content_type: data['child_object_content_type'],
-      child_object_id: data['child_object_id'],
-      width: 10,
-      height: 10,
-      position: row
-    }
-    this.labBooksService.addElementToRow(this.id, elem).subscribe(() => {
-      this.translocoService
-        .selectTranslate('restoreElement.toastr.success')
-        .subscribe((success: string) => {
-          this.toastrService.success(success);
+    const contentType = data['child_object_content_type'];
+    const id = data['child_object_id'];
+
+    switch (contentType) {
+      case 30:  // Note
+        this.notesService.restore(id, row).subscribe(() => {
+          this.translocoService
+            .selectTranslate('restoreElement.toastr.success')
+            .subscribe((success: string) => {
+              this.toastrService.success(success);
+            });
         });
-    });
+        break;
+
+      case 40:  // Picture
+        this.picturesService.restore(id, row).subscribe(() => {
+          this.translocoService
+            .selectTranslate('restoreElement.toastr.success')
+            .subscribe((success: string) => {
+              this.toastrService.success(success);
+            });
+        });
+        break;
+
+      case 50:  // File
+        this.filesService.restore(id, row).subscribe(() => {
+          this.translocoService
+            .selectTranslate('restoreElement.toastr.success')
+            .subscribe((success: string) => {
+              this.toastrService.success(success);
+            });
+        });
+        break;
+
+      default:
+        console.error('Unsupported content type:', contentType);
+    }
   }
 }

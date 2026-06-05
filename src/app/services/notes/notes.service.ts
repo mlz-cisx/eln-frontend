@@ -70,8 +70,19 @@ export class NotesService
     return this.httpClient.patch<Note>(`${this.apiUrl}${id}/`, note, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
-  public restore(id: string, params = new HttpParams()): Observable<Note> {
-    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/restore/`, {pk: id}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+  public restore(
+    id: string,
+    restoredRow?: number,
+    params = new HttpParams()
+  ): Observable<Note> {
+    if (restoredRow !== undefined && restoredRow !== null) {
+      params = params.set('restored_row', restoredRow.toString());
+    }
+    return this.httpClient.patch<Note>(
+      `${this.apiUrl}${id}/restore/`,
+      {pk: id},
+      {params}
+    );
   }
 
   public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
