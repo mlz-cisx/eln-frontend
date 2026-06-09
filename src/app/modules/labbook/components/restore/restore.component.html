@@ -2,6 +2,7 @@
   <div #searchDropdown="bs-dropdown" dropdown container="body"
        placement="bottom right" [insideClick]="true"
        class="restore"
+       (onHidden)="resetFilters()"
        [style.position]="sidebarPosition"
        [style.top.px]="offsetHeader + offsetMargin">
     <form [formGroup]="form">

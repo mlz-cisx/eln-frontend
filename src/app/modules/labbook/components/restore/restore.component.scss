@@ -8,6 +8,7 @@
     text-align: center;
     padding: 0;
     margin-bottom: 16px;
+    z-index: 1;
   }
 
   h1 {
@@ -26,4 +27,53 @@
   ul {
     display: inline;
   }
+}
+
+.results-container {
+  max-height: 60vh !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  padding-right: 4px !important;
+}
+
+
+.search-dropdown-menu .menu-item {
+  display: block !important;
+  width: 100% !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fafafa !important;
+  margin: 4px 0 !important;
+  padding: 6px 10px !important;
+  box-sizing: border-box;
+  overflow: hidden; /* prevents content from spilling out */
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.search-dropdown-menu .menu-item:hover {
+  background: #e9f2ff !important; /* soft blue highlight */
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  cursor: pointer;
+}
+
+.search-dropdown-menu a,
+.search-dropdown-menu a:hover,
+.search-dropdown-menu a:focus {
+  text-decoration: none !important;
+}
+
+.search-dropdown-menu .menu-item .flex {
+  flex-wrap: wrap !important; /* allow wrapping */
+  width: 100%; /* prevent horizontal overflow */
+}
+
+
+.search-dropdown-menu .menu-item .result-name {
+  white-space: normal !important; /* allow multi-line text */
+  word-break: break-word; /* break long filenames */
+  overflow-wrap: anywhere; /* modern browsers */
+}
+
+.search-dropdown-menu {
+  min-width: 10vw; /* 10% of browser width */
 }

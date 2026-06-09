@@ -15,7 +15,7 @@ import {
   FilesService,
   LabbookCollapseService,
   LabbooksService,
-  NotesService, PicturesService,
+  NotesService, PicturesService, RestoreEventsService,
   WebSocketService
 } from '@app/services';
 import {environment} from '@environments/environment';
@@ -110,6 +110,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     private readonly translocoService: TranslocoService,
     public readonly picturesService: PicturesService,
     public readonly filesService: FilesService,
+    private readonly restoreEvents: RestoreEventsService
   ) {
   }
 
@@ -793,18 +794,22 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
     // calculate target row number
     const gridElement = (event.currentTarget as HTMLElement);
     const rect = gridElement.getBoundingClientRect();
-    const y = event.clientY - rect.top;
+    // easiest way to apply a css transform to the mouse position of the restore
+    const vertical_offset = 20
+
+    const y = event.clientY - rect.top - vertical_offset;
     const rowHeight = this.options.fixedRowHeight || this.options['cellHeight'];
     const margin = this.options.margin || 0;
     const effectiveRowHeight = rowHeight + margin;
     const row = Math.floor(y / effectiveRowHeight);
-
+    const safeRow = Math.max(0, row);
     const contentType = data['child_object_content_type'];
     const id = data['child_object_id'];
 
     switch (contentType) {
       case 30:  // Note
-        this.notesService.restore(id, row).subscribe(() => {
+        this.notesService.restore(id, safeRow).subscribe(() => {
+          this.restoreEvents.notifyRestored(id);
           this.translocoService
             .selectTranslate('restoreElement.toastr.success')
             .subscribe((success: string) => {
@@ -814,7 +819,8 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
         break;
 
       case 40:  // Picture
-        this.picturesService.restore(id, row).subscribe(() => {
+        this.picturesService.restore(id, safeRow).subscribe(() => {
+          this.restoreEvents.notifyRestored(id);
           this.translocoService
             .selectTranslate('restoreElement.toastr.success')
             .subscribe((success: string) => {
@@ -824,7 +830,8 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
         break;
 
       case 50:  // File
-        this.filesService.restore(id, row).subscribe(() => {
+        this.filesService.restore(id, safeRow).subscribe(() => {
+          this.restoreEvents.notifyRestored(id);
           this.translocoService
             .selectTranslate('restoreElement.toastr.success')
             .subscribe((success: string) => {

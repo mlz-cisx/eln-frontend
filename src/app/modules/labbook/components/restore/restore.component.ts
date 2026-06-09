@@ -1,5 +1,5 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { HttpParams } from '@angular/common/http';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -11,7 +11,13 @@ import {
 } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { FormBuilder } from '@ngneat/reactive-forms';
-import { FilesService, NotesService, PicturesService, ContentTypeModelService } from '@app/services';
+import {
+  FilesService,
+  NotesService,
+  PicturesService,
+  ContentTypeModelService,
+  RestoreEventsService
+} from '@app/services';
 import type { Note, Picture, File, ContentTypeModels } from '@joeseln/types';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -67,6 +73,7 @@ export class LabBookRestoreComponent implements OnInit {
     private readonly notesService: NotesService,
     private readonly picturesService: PicturesService,
     private readonly contentTypeModelService: ContentTypeModelService,
+    private readonly restoreEvents: RestoreEventsService
   ) {
   }
 
@@ -74,7 +81,29 @@ export class LabBookRestoreComponent implements OnInit {
     return this.form.controls;
   }
 
+  resetFilters(): void {
+    const currentSearch = this.f.search.value;
+    this.form.reset({
+      search: currentSearch,
+      note: false,
+      file: false,
+      picture: false,
+    });
+
+    this.selectedContentTypes = [];
+    this.results = [];
+
+    this.cdr.markForCheck();
+  }
+
+
   public ngOnInit(): void {
+    this.restoreEvents.restored$
+      .pipe(untilDestroyed(this))
+      .subscribe(id => {
+        this.results = this.results.filter(r => r.pk !== id);
+        this.cdr.markForCheck();
+      });
     this.breakpointObserver
       .observe(['(max-width: 992px)'])
       .pipe(untilDestroyed(this))
