@@ -48,7 +48,7 @@
                     />
                   </mlzeln-form-input>
                 </div>
-                <div class="mb-4" *ngIf="!(initialState.created_by.username == 'instrument' && initialState.name.toLowerCase().endsWith('.csv'))">
+                <div class="mb-4">
                   <mlzeln-form-input
                     for="name"
                     [label]="t('file.details.name.label')"
@@ -69,7 +69,7 @@
                   </mlzeln-form-input>
                 </div>
 
-                <div class="mb-4" *ngIf="!(initialState.created_by.username == 'instrument' && initialState.name.toLowerCase().endsWith('.csv'))">
+                <div class="mb-4">
                   <label
                     for="download">{{ t('file.details.download.label') }}</label>
                   <div>
