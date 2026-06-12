@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, Input, ViewChild} from '@angular/core';
-import * as Plotly from 'plotly.js-dist-min';
 import {LabBookElementPayload} from "@joeseln/types";
 import {takeUntil} from "rxjs/operators";
 import {ModalState} from "@app/enums/modal-state.enum";
@@ -9,6 +8,9 @@ import {FormBuilder} from "@ngneat/reactive-forms";
 import {TranslocoService} from "@jsverse/transloco";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
+
+declare const Plotly: any;
+
 
 
 @Component({
