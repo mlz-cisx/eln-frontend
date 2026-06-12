@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, OnChanges, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import videojs from "video.js";
+declare const videojs: any;
 
 @Component({
   selector: "app-video-js-player",
@@ -14,7 +14,7 @@ import videojs from "video.js";
       [poster]="poster"
     ></video>
   `,
-  standalone: false,
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
   styleUrls: ["../../../node_modules/video.js/dist/video-js.css"],
 })
@@ -30,8 +30,9 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() fluid: boolean = false;
 
   ngOnInit() {
-    console.log(this.src)
-    this.initializePlayer();
+    this.loadVideoJsLibrary().then(() => {
+      this.initializePlayer();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -47,6 +48,16 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  private async loadVideoJsLibrary(): Promise<void> {
+    if (!(window as any)['videojs']) {
+      await new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = '/videojs/video.min.js';
+        script.onload = resolve;
+        document.body.appendChild(script);
+      });
+    }
+  }
   private initializePlayer() {
     this.player = videojs(this.target.nativeElement, {
       sources: [{ src: this.src, type: this.type }],

@@ -8,16 +8,18 @@ import {FormBuilder} from "@ngneat/reactive-forms";
 import {TranslocoService} from "@jsverse/transloco";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
-
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PlotlyViaCDNModule } from 'angular-plotly.js';
 declare const Plotly: any;
-
 
 
 @Component({
   selector: 'app-plotly-editor',
   templateUrl: './plotly-editor.component.html',
   styleUrl: './plotly-editor.component.css',
-  standalone: false
+  standalone: true,
+  imports: [CommonModule, FormsModule, PlotlyViaCDNModule]
 })
 export class PlotlyEditorComponent {
   public state = ModalState.Unchanged;
@@ -54,6 +56,7 @@ export class PlotlyEditorComponent {
   public selectedXasix: string = '';
 
   ngOnInit(): void {
+    PlotlyViaCDNModule.loadViaCDN('custom',  '/plotly/plotly.min.js');
     try {
       const rows = this.data
         .split('\n')

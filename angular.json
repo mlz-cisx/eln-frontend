@@ -52,6 +52,16 @@
                 "output": "/mathjax/"
               },
               {
+                "glob": "plotly.min.js",
+                "input": "node_modules/plotly.js-dist-min/",
+                "output": "/plotly/"
+              },
+              {
+                "glob": "video.min.js",
+                "input": "node_modules/video.js/dist",
+                "output": "/videojs/"
+              },
+              {
                 "glob": "**/*.*",
                 "input": "src/assets/plugins",
                 "output": "/plugins/"
