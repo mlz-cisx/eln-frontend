@@ -7,15 +7,52 @@ import {
   HostListener,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import * as fabric from 'fabric';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {debounceTime, Subject} from 'rxjs';
-import {FaIconComponent, FaIconLibrary} from '@fortawesome/angular-fontawesome';
-import {fas} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+
+import { faFolderOpen } from '@fortawesome/free-solid-svg-icons/faFolderOpen';
+import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
+import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase'
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload'
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye'
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash'
+import { faRotateLeft } from '@fortawesome/free-solid-svg-icons/faRotateLeft'
+import { faSquare } from '@fortawesome/free-solid-svg-icons/faSquare'
+import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle'
+import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay'
+import { faProjectDiagram } from '@fortawesome/free-solid-svg-icons/faProjectDiagram'
+import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons/faDrawPolygon'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight'
+import { faStop } from '@fortawesome/free-solid-svg-icons/faStop'
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt'
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen'
+import { faPalette } from '@fortawesome/free-solid-svg-icons/faPalette'
+import { faBan } from '@fortawesome/free-solid-svg-icons/faBan'
+import { faFillDrip } from '@fortawesome/free-solid-svg-icons/faFillDrip'
+import { faPaintbrush } from '@fortawesome/free-solid-svg-icons/faPaintbrush'
+import { faArrowsAltH } from '@fortawesome/free-solid-svg-icons/faArrowsAltH'
+import { faFont } from '@fortawesome/free-solid-svg-icons/faFont'
+import { faTextHeight } from '@fortawesome/free-solid-svg-icons/faTextHeight'
+import { faHeading } from '@fortawesome/free-solid-svg-icons/faHeading'
+import { faBold } from '@fortawesome/free-solid-svg-icons/faBold'
+import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic'
+import { faCrop } from '@fortawesome/free-solid-svg-icons/faCrop'
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes'
+import { faObjectGroup } from '@fortawesome/free-solid-svg-icons/faObjectGroup'
+import { faObjectUngroup } from '@fortawesome/free-solid-svg-icons/faObjectUngroup'
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash'
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons/faLayerGroup'
+import { faSave } from '@fortawesome/free-solid-svg-icons/faSave'
+import { faRedo } from '@fortawesome/free-solid-svg-icons/faRedo'
+
 import {PicturesService, WebSocketService} from "@app/services";
 import {PicturePayload} from "@joeseln/types";
 import {v4 as uuidv4} from 'uuid';
@@ -33,14 +70,13 @@ import {environment} from "@environments/environment";
   templateUrl: './fabric-canvas.component.html',
   styleUrls: ['./fabric-canvas.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, FaIconComponent]
+  imports: [CommonModule, FormsModule, FontAwesomeModule]
 })
 export class FabricCanvasComponent implements AfterViewInit {
 
 
   constructor(private cdr: ChangeDetectorRef,
               private http: HttpClient,
-              private library: FaIconLibrary,
               public readonly picturesService: PicturesService,
               private readonly websocketService: WebSocketService,
               private eRef: ElementRef,
@@ -50,7 +86,44 @@ export class FabricCanvasComponent implements AfterViewInit {
     this.storeSubject.pipe(debounceTime(10)).subscribe(() => {
       this.onSubmit()
     });
-    library.addIconPacks(fas);
+    const library = inject(FaIconLibrary);
+    library.addIcons(
+      faFolderOpen,
+      faCamera,
+      faDatabase,
+      faUpload,
+      faEye,
+      faEyeSlash,
+      faRotateLeft,
+      faSquare,
+      faCircle,
+      faPlay,
+      faProjectDiagram,
+      faDrawPolygon,
+      faArrowRight,
+      faStop,
+      faPencilAlt,
+      faPen,
+      faPalette,
+      faBan,
+      faFillDrip,
+      faPaintbrush,
+      faArrowsAltH,
+      faFont,
+      faTextHeight,
+      faHeading,
+      faBold,
+      faItalic,
+      faCrop,
+      faCheck,
+      faTimes,
+      faObjectGroup,
+      faObjectUngroup,
+      faTrash,
+      faLayerGroup,
+      faSave,
+      faRedo
+    );
   }
 
 
