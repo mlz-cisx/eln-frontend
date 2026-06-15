@@ -1,19 +1,126 @@
-<div>
+<div id="button-container">
+  <button
+          type="button"
+          class="btn mlzeln-button-regular mlzeln-button-outline"
+          (click)="showTable = !showTable">
+    {{ showTable ? 'Show Plot' : 'Show Table' }}
+  </button>
+</div>
+
+<div *ngIf="!showTable" class="plot-controls">
   <label for="x-axis-select" style="margin-right: 20px;">Select X-axis:</label>
   <select
-    id="x-axis-select"
-    [(ngModel)]="selectedXasix"
-    (change)="onChangeXaxis()"
+          id="x-axis-select"
+          [(ngModel)]="selectedXasix"
+          (change)="onChangeXaxis()"
   >
-    <option *ngFor="let header of headers" [value]="header">{{ header }}</option>
+    <option *ngFor="let header of headers"
+            [value]="header">{{ header }}</option>
   </select>
 </div>
-<plotly-plot #plot [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"
-             [data]="plotData"></plotly-plot>
-<div *ngIf="showSketchButton">
+
+<!-- Plot view -->
+<div *ngIf="!showTable">
+  <plotly-plot #plot
+               [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"
+               [data]="plotData">
+  </plotly-plot>
+</div>
+
+<div *ngIf="!showTable && showSketchButton">
   <button (click)="exportPlotAsImage()"
           class="btn mlzeln-button-regular mlzeln-button-outline"
-          type="button">Sketch from Plot Image
+          type="button">
+    Sketch from Plot Image
   </button>
+</div>
+
+<!-- Table view -->
+<div #dragScroll *ngIf="showTable" class="table-wrapper  drag-scroll">
+  <div class="scroll-inner">
+
+    <div style="margin-bottom: 10px;">
+      <button
+              (click)="exportSelectedAsCSV()"
+              class="btn mlzeln-button-regular mlzeln-button-outline"
+              type="button">
+        Export Selected CSV
+      </button>
+    </div>
+
+    <div class="selection-controls">
+      <label>
+        <input (change)="toggleSelectAllColumns()"
+               [(ngModel)]="selectAllColumns"
+               type="checkbox"/>
+        Select all columns
+      </label>
+
+      <label>
+        <input (change)="toggleSelectAllRows()"
+               [(ngModel)]="selectAllRows"
+               type="checkbox"/>
+        Select all rows
+      </label>
+    </div>
+
+    <table class="csv-table">
+      <thead>
+      <tr>
+        <!-- Checkbox column header (invisible checkbox to preserve width) -->
+        <th class="checkbox-col">
+          <input disabled style="visibility:hidden;" type="checkbox"/>
+        </th>
+
+        <th *ngFor="let h of tableHeaders; let i = index"
+            class="sortable-header">
+          <div class="header-cell">
+            <input [(ngModel)]="selectedColumns[i]" type="checkbox"/>
+            <span (click)="onSort(i)" class="header-label">{{ h }} </span>
+
+            <!-- Sort arrow -->
+            <span (click)="onSort(i)" *ngIf="sortColumn === i"
+                  class="sort-arrow">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
+          </div>
+        </th>
+
+
+      </tr>
+
+      <tr>
+        <th class="checkbox-col"></th>
+        <th *ngFor="let h of tableHeaders; let i = index">
+          <input (ngModelChange)="onFilter(i, $event)"
+                 [ngModel]="filters[i]"
+                 class="form-control"
+                 placeholder="filter…"
+                 type="text"/>
+        </th>
+      </tr>
+      </thead>
+
+
+      <tbody>
+      <tr *ngFor="let row of filteredAndSortedRows; let r = index"
+          [class.row-unselected]="!isRowActive(r)">
+
+        <!-- Row checkbox -->
+        <td class="checkbox-col">
+          <input [(ngModel)]="selectedRows[r]"
+                 type="checkbox"/>
+        </td>
+
+        <td *ngFor="let cell of row; let c = index"
+            [class.col-unselected]="!selectedColumns[c]">
+          {{ cell }}
+        </td>
+
+      </tr>
+      </tbody>
+
+    </table>
+  </div>
 </div>
 
