@@ -6,7 +6,7 @@
         (refresh)="onRefreshGrid($event)"
       ></mlzeln-labbook-sidebar>
     </aside>
-      <mlzeln-labbook-restore *ngIf="editable"
+      <mlzeln-labbook-restore *ngIf="restorable"
       [labook_id]="id"
       ></mlzeln-labbook-restore>
       <mlzeln-labbook-draw-board-grid

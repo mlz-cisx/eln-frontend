@@ -23,6 +23,9 @@ export class LabBookDrawBoardComponent {
   @Input()
   public editable? = false;
 
+  @Input()
+  public restorable? = false;
+
   public created = new EventEmitter<LabBookElementEvent>();
 
   public refresh = new EventEmitter<boolean>();

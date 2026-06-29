@@ -52,9 +52,9 @@ export class LabBookRestoreComponent implements OnInit {
 
   public form = this.fb.group<FromSearch>({
     search: null,
-    note: false,
-    file: false,
-    picture: false,
+    note: true,
+    file: true,
+    picture: true,
   });
 
   public selectedContentTypes: string[] = [];
@@ -85,15 +85,16 @@ export class LabBookRestoreComponent implements OnInit {
     const currentSearch = this.f.search.value;
     this.form.reset({
       search: currentSearch,
-      note: false,
-      file: false,
-      picture: false,
+      note: true,
+      file: true,
+      picture: true,
     });
 
     this.selectedContentTypes = [];
     this.results = [];
 
     this.cdr.markForCheck();
+    this.search()
   }
 
 
@@ -125,6 +126,16 @@ export class LabBookRestoreComponent implements OnInit {
     } else {
       this.offsetHeader = 40; // Fallback
     }
+
+    this.f.search.valueChanges
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.search();
+      });
+
+    this.search();
+
+
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -182,12 +193,17 @@ export class LabBookRestoreComponent implements OnInit {
       fetchObservables.push(this.filesService.getList(params));
     }
 
-    forkJoin(fetchObservables).subscribe((resultsArray: any) => {
-      resultsArray.forEach((d: any) => {
-        this.results = this.results.concat(d.data);
-      });
+    if (fetchObservables.length === 0) {
+      this.results = [];
+      this.cdr.markForCheck();
+      return;
+    }
+
+    forkJoin(fetchObservables).subscribe((resultsArray: { data: Element[] }[]) => {
+      this.results = resultsArray.flatMap(r => r.data);
       this.cdr.markForCheck();
     });
+
   }
 
   onDragStart(event: DragEvent, result: any) {

@@ -808,35 +808,41 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
 
     switch (contentType) {
       case 30:  // Note
-        this.notesService.restore(id, safeRow).subscribe(() => {
-          this.restoreEvents.notifyRestored(id);
-          this.translocoService
-            .selectTranslate('restoreElement.toastr.success')
-            .subscribe((success: string) => {
-              this.toastrService.success(success);
-            });
+        this.notesService.restore(id, safeRow).subscribe((note) => {
+          if (note) {
+            this.restoreEvents.notifyRestored(id);
+            this.translocoService
+              .selectTranslate('restoreElement.toastr.success')
+              .subscribe((success: string) => {
+                this.toastrService.success(success);
+              });
+          }
         });
         break;
 
       case 40:  // Picture
-        this.picturesService.restore(id, safeRow).subscribe(() => {
-          this.restoreEvents.notifyRestored(id);
-          this.translocoService
-            .selectTranslate('restoreElement.toastr.success')
-            .subscribe((success: string) => {
-              this.toastrService.success(success);
-            });
+        this.picturesService.restore(id, safeRow).subscribe((pic) => {
+          if (pic) {
+            this.restoreEvents.notifyRestored(id);
+            this.translocoService
+              .selectTranslate('restoreElement.toastr.success')
+              .subscribe((success: string) => {
+                this.toastrService.success(success);
+              });
+          }
         });
         break;
 
       case 50:  // File
-        this.filesService.restore(id, safeRow).subscribe(() => {
-          this.restoreEvents.notifyRestored(id);
-          this.translocoService
-            .selectTranslate('restoreElement.toastr.success')
-            .subscribe((success: string) => {
-              this.toastrService.success(success);
-            });
+        this.filesService.restore(id, safeRow).subscribe((file) => {
+          if (file) {
+            this.restoreEvents.notifyRestored(id);
+            this.translocoService
+              .selectTranslate('restoreElement.toastr.success')
+              .subscribe((success: string) => {
+                this.toastrService.success(success);
+              });
+          }
         });
         break;
 
