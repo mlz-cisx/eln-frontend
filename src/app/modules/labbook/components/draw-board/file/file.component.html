@@ -88,13 +88,15 @@
             </div>
           </div>
       <div class="body" [id]="'description-' + uniqueHash">
-        <div class="mb-3">
+        <div *ngIf="instr_csv_all || (currentUser && currentUser.admin) ||
+        !(initialState.created_by.username == 'instrument' && initialState.name.toLowerCase().endsWith('.csv'))"
+             class="mb-3">
           <alert type="info">
             <div class="text-center">
               <button
-                type="button"
-                class="btn btn-lg bg-transparent"
-                [authDownload]="{ url: initialState.download!, fileName: initialState.original_filename! }"
+                      [authDownload]="{ url: initialState.download!, fileName: initialState.original_filename! }"
+                      class="btn btn-lg bg-transparent"
+                      type="button"
               >
                 <joeseln-icon className="wb-download"
                               class="mr-1"></joeseln-icon>

@@ -34,7 +34,10 @@ import {
   Graph,
   detectGraphType,
 } from "@app/modules/labbook/components/draw-board/file/file.component"
-import { PlotModalComponent } from '@app/modules/labbook/components/modals/plot/plot-modal.component';
+import {
+  PlotModalComponent
+} from '@app/modules/labbook/components/modals/plot/plot-modal.component';
+import {environment} from "@environments/environment";
 
 interface FormFile {
   title: FormControl<string | null>;
@@ -51,6 +54,8 @@ interface FormFile {
     standalone: false
 })
 export class FilePageComponent implements OnInit, OnDestroy {
+  public readonly instr_csv_all =  environment.instr_csv_all;
+
   @ViewChild(CommentsComponent)
   public comments!: CommentsComponent;
 
@@ -339,6 +344,9 @@ export class FilePageComponent implements OnInit, OnDestroy {
   public onOpenPlot(): void {
     if (!this.initialState) return;
 
+    const table_integration = this.instr_csv_all || (this.currentUser && this.currentUser.admin)
+      || !(this.initialState.created_by.username == 'instrument' && this.initialState.name.toLowerCase().endsWith('.csv'))
+
     if (this.graph.graph_type) {
       this.modalService.open(PlotModalComponent, {
       closeButton: false,
@@ -346,6 +354,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
       data: {
         download: this.initialState.download,
         graph: this.graph,
+        table_integration: table_integration
       },
     });
     }

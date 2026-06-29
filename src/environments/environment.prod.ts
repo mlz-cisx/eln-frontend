@@ -12,5 +12,6 @@ export const environment = {
   wsUrl: window['env'].wsUrl.replace(/\/+$/, ''),
   labBookSocketRefreshInterval: window['env'].labBookSocketRefreshInterval,
   keycloak_integration: window['env'].keycloak_integration,
+  instr_csv_all: window['env'].instr_csv_all,
   noteMaximumSize: window['env'].noteMaximumSize
 };

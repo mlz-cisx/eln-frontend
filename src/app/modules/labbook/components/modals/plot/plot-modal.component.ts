@@ -18,6 +18,8 @@ export class PlotModalComponent {
 
   public labBookId: string = this.modalRef.data.labBookId;
 
+  public table_integration: boolean = this.modalRef.data.table_integration;
+
   allowedBioTypes = allowedBioTypes;
 
   private download: string = this.modalRef.data.download; // eslint-disable-line

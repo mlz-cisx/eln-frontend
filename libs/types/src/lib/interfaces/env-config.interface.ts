@@ -6,5 +6,6 @@ export interface EnvConfig {
   keycloak_realm: string;
   keycloak_clientId: string;
   keycloak_integration: boolean;
+  instr_csv_all: boolean;
   noteMaximumSize: number;
 }

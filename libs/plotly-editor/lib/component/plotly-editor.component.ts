@@ -37,6 +37,8 @@ export class PlotlyEditorComponent {
   @ViewChild('plot', {static: false}) plotComponent: any;
 
   @Input() showSketchButton: boolean = false;
+  @Input() table_integration: boolean = true;
+
   private unsubscribe$ = new Subject<void>();
 
   public constructor(

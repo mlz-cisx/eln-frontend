@@ -18,13 +18,15 @@ import {
   FilesService,
   LabbooksService,
   NotesService,
-  WebSocketService
+  WebSocketService,
+  UserService
 } from '@app/services';
 import type {
   File,
   FilePayload,
   LabBookElement,
   Privileges,
+  User
 } from '@joeseln/types';
 import {DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
@@ -74,6 +76,8 @@ export var allowedBioTypes: GraphType[] = ['pdb', 'cif', 'xyz'];
     standalone: false
 })
 export class LabBookDrawBoardFileComponent implements OnInit {
+  public readonly instr_csv_all =  environment.instr_csv_all;
+
   @Input()
   public id!: string;
 
@@ -109,6 +113,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   public editor_loaded = false;
 
   public preloaded_content: any
+
+  public currentUser: User | null = null;
 
   @ViewChild('title')
   private title?: ElementRef;
@@ -151,7 +157,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly renderer: Renderer2,
     readonly elementRef: ElementRef,
     private http: HttpClient,
-    private gridComponent: LabBookDrawBoardGridComponent
+    private gridComponent: LabBookDrawBoardGridComponent,
+    private user_service: UserService,
   ) {
   }
 
@@ -179,6 +186,12 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+
+
+    this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
+      this.currentUser = state.user;
+    });
+
 
     this.initDetails();
     this.initPrivileges();
@@ -417,6 +430,9 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   public onOpenPlot(): void {
     if (!this.initialState) return;
 
+    const table_integration = this.instr_csv_all || (this.currentUser && this.currentUser.admin) ||
+      !(this.initialState.created_by.username == 'instrument' && this.initialState.name.toLowerCase().endsWith('.csv'))
+
     if (this.graph.graph_type) {
       this.modalService.open(PlotModalComponent, {
       closeButton: false,
@@ -426,7 +442,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
         graph: this.graph,
         isFromPlotModal: true,
         element_pos_y: this.element.position_y,
-        labBookId: this.element.labbook_id
+        labBookId: this.element.labbook_id,
+        table_integration: table_integration
       },
     });
     }

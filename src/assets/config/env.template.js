@@ -7,5 +7,7 @@
   window['env'].keycloak_realm = '${KEYCLOAK_REALM}';
   window['env'].keycloak_clientId = '${KEYCLOAK_CLIENT_ID}';
   window['env'].keycloak_integration = '${KEYCLOAK_INTEGRATION}' === 'true';
+  const rawInstrCsvAll = '${INSTR_CSV_ALL}';
+  window['env'].instr_csv_all = rawInstrCsvAll ? rawInstrCsvAll === 'true' : true;
   window['env'].noteMaximumSize = '${NOTE_MAXIMUM_SIZE}' || 5000; // in kilobytes
 })(this);

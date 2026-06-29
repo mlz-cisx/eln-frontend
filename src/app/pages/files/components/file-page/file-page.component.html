@@ -48,7 +48,9 @@
                     />
                   </mlzeln-form-input>
                 </div>
-                <div class="mb-4">
+
+                <div *ngIf="instr_csv_all || (currentUser && currentUser.admin) || !(initialState.created_by.username == 'instrument' && initialState.name.toLowerCase().endsWith('.csv'))"
+                     class="mb-4">
                   <mlzeln-form-input
                     for="name"
                     [label]="t('file.details.name.label')"
@@ -69,14 +71,17 @@
                   </mlzeln-form-input>
                 </div>
 
-                <div class="mb-4">
+                <div *ngIf="instr_csv_all || (currentUser && currentUser.admin) ||
+                !(initialState.created_by.username == 'instrument' && initialState.name.toLowerCase().endsWith('.csv'))"
+                     class="mb-4">
                   <label
                     for="download">{{ t('file.details.download.label') }}</label>
                   <div>
                     <button
-                      type="button"
-                      class="btn btn-sm bg-transparent px-0 text-left"
-                      [authDownload]="{ url: initialState.download!, fileName: initialState.name! }"
+                            [authDownload]="{ url: initialState.download!, fileName: initialState.name! }"
+                            class="btn btn-sm bg-transparent px-0 text-left"
+                            type="button"
+
                     >
                       <joeseln-icon className="wb-download"
                                     class="mr-1"></joeseln-icon>
