@@ -76,6 +76,14 @@ export class PlotlyEditorComponent {
   // Filtering
   public filters: string[] = [];
 
+  public numericFilters: {
+    min: string;
+    max: string;
+  }[] = [];
+
+  public numericColumnFlags: boolean[] = [];
+
+
   public selectedColumns: boolean[] = [];
   public selectedRows: boolean[] = [];
   public selectAllColumns = true;
@@ -90,14 +98,30 @@ export class PlotlyEditorComponent {
   get filteredAndSortedRows(): string[][] {
     let rows = [...this.tableRows];
 
-    // filtering
     rows = rows.filter((row, i) => {
-      const match = row.every((cell, colIndex) =>
+      // text filters
+      const textMatch = row.every((cell, colIndex) =>
         !this.filters[colIndex] ||
         cell.toLowerCase().includes(this.filters[colIndex].toLowerCase())
       );
 
-      return match;
+      if (!textMatch) return false;
+
+      // numeric filters
+      return row.every((cell, colIndex) => {
+        if (!this.numericColumnFlags[colIndex]) return true;
+
+        const value = Number(cell);
+        const {min, max} = this.numericFilters[colIndex];
+
+        // Proper normalization: null, '', undefined → inactive
+        const minActive = min != null && min !== '' && !isNaN(+min);
+        const maxActive = max != null && max !== '' && !isNaN(+max);
+
+        if (minActive && value < +min) return false;
+        return !(maxActive && value > +max);
+      });
+
     });
 
     // ensure selectedRows matches filtered rows
@@ -262,7 +286,17 @@ export class PlotlyEditorComponent {
 
     this.sortColumn = 0;
     this.sortDirection = 'asc';
+    this.numericFilters = this.headers.map(() => ({min: '', max: ''}));
+    this.numericColumnFlags = this.headers.map((_, i) =>
+      this.tableRows.every(row => !isNaN(Number(row[i])))
+    );
+
   }
+
+  isNumericColumn(colIndex: number): boolean {
+    return this.numericColumnFlags[colIndex] ?? false;
+  }
+
 
   toggleSelectAllColumns() {
     this.selectedColumns = this.selectedColumns.map(() => this.selectAllColumns);

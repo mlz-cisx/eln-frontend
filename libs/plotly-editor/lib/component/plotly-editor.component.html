@@ -92,6 +92,27 @@
       <tr>
         <th class="checkbox-col"></th>
         <th *ngFor="let h of tableHeaders; let i = index">
+          <div *ngIf="isNumericColumn(i)" class="numeric-filter">
+            <input
+                    type="number"
+                    class="form-control"
+                    placeholder=">= min"
+                    [(ngModel)]="numericFilters[i].min"
+            />
+            <input
+                    type="number"
+                    class="form-control"
+                    placeholder="<= max"
+                    [(ngModel)]="numericFilters[i].max"
+            />
+          </div>
+        </th>
+      </tr>
+
+
+      <tr>
+        <th class="checkbox-col"></th>
+        <th *ngFor="let h of tableHeaders; let i = index">
           <input (ngModelChange)="onFilter(i, $event)"
                  [ngModel]="filters[i]"
                  class="form-control"
