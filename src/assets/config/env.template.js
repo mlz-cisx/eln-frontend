@@ -1,11 +1,8 @@
-(function(window) {
+(function (window) {
   window.env = window.env || {};
   window['env'].apiUrl = '${API_URL}';
   window['env'].wsUrl = '${WS_URL}';
   window['env'].labBookSocketRefreshInterval = '${LAB_BOOK_SOCKET_REFRESH_INTERVAL}' || 1000;
-  window['env'].keycloak_url = '${KEYCLOAK_URL}';
-  window['env'].keycloak_realm = '${KEYCLOAK_REALM}';
-  window['env'].keycloak_clientId = '${KEYCLOAK_CLIENT_ID}';
   window['env'].keycloak_integration = '${KEYCLOAK_INTEGRATION}' === 'true';
   const rawInstrCsvAll = '${INSTR_CSV_ALL}';
   window['env'].instr_csv_all = rawInstrCsvAll ? rawInstrCsvAll === 'true' : true;
