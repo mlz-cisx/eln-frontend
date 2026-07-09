@@ -23,7 +23,10 @@
 <div *ngIf="!showTable">
   <plotly-plot #plot
                [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"
-               [data]="plotData">
+               [data]="plotData"
+               [layout]="plotLayout"
+               (relayout)="onRelayout($event)"
+               (restyle)="onRestyle($event)">
   </plotly-plot>
 </div>
 

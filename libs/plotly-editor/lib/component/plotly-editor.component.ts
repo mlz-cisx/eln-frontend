@@ -60,6 +60,8 @@ export class PlotlyEditorComponent {
 
   public plotData: any; // eslint-disable-line
 
+  public plotLayout: any; // eslint-disable-line
+
   public headers: string[] = [];
 
   public selectedXasix: string = '';
@@ -94,6 +96,15 @@ export class PlotlyEditorComponent {
   dragScroll!: ElementRef<HTMLDivElement>;
 
   private dragScrollInitialized = false;
+
+  private fullTable: string[][] = [];
+
+  /** current x-axis range filter (set by zoom/pan) */
+  private xRangeFilter: {min: string | number, max: string | number} | null = null;
+
+  /** current columns visible in the table trace */
+  private visibleHeaders: string[] = [];
+
 
   get filteredAndSortedRows(): string[][] {
     let rows = [...this.tableRows];
@@ -273,7 +284,40 @@ export class PlotlyEditorComponent {
         name: header,
       };
     });
-    this.plotData = traces;
+
+    // build columns for the table trace
+    const columns = this.headers.map((_, colIdx) =>
+      csvData.slice(1).map(row => row[colIdx])
+    );
+    this.fullTable = columns;
+    this.visibleHeaders = [...this.headers];
+    this.xRangeFilter = null;
+
+    const tableTrace = {
+      type: 'table',
+      header: {
+        values: this.headers,
+        align: 'center',
+        line: {width: 1, color: '#ddd'},
+        fill: {color: '#f0f0f0'},
+        font: {size: 11, color: '#000'},
+      },
+      cells: {
+        values: columns,
+        align: 'center',
+        line: {width: 1, color: '#ddd'},
+        fill: {color: ['#ffffff', '#f7f7f7']},
+        font: {size: 10, color: '#333'},
+      },
+      domain: {x: [0, 1], y: [0, 0.3]},
+    };
+
+    this.plotData = [...traces, tableTrace];
+
+    this.plotLayout = {
+      yaxis: {domain: [0.4, 1], automargin: true},
+      margin: {t: 10, l: 50, r: 10, b: 10},
+    };
 
     this.tableHeaders = this.headers;
     this.tableRows = csvData.slice(1);
@@ -400,6 +444,119 @@ export class PlotlyEditorComponent {
     if (xIndex === -1) return;
 
     this.processData(this.csvData, xIndex)
+  }
+
+  /**
+   * Handles plotly_relayout (zoom, pan, reset).
+   * filters the table trace data
+   */
+  onRelayout(event: any) {
+    if (!this.csvData.length || !this.headers.length || !this.fullTable.length) return;
+
+    const xIndex = this.headers.indexOf(this.selectedXasix);
+    if (xIndex === -1) return;
+
+    let rangeMin: string | number | null = null;
+    let rangeMax: string | number | null = null;
+    let autorange = false;
+
+    if (event['xaxis.autorange'] === true) {
+      autorange = true;
+    } else {
+      const r0 = event['xaxis.range[0]'] ?? event.xaxis?.range?.[0] ?? null;
+      const r1 = event['xaxis.range[1]'] ?? event.xaxis?.range?.[1] ?? null;
+      if (r0 != null && r1 != null) {
+        rangeMin = r0;
+        rangeMax = r1;
+      }
+    }
+
+    // if no meaningful range
+    // null -> full range
+    this.xRangeFilter =  (!autorange && rangeMin != null && rangeMax != null)
+      ? {min: rangeMin, max: rangeMax}
+      : null;
+
+    this.rebuildTable();
+  }
+
+  /**
+   * Handles plotly_restyle (legend click toggling trace visibility).
+   * updates visible-headers
+   */
+  onRestyle(event: any) {
+    if (!this.fullTable.length || !this.headers.length) return;
+
+    const updates = event[0];
+    const traceIndexes = event[1];
+    if (!updates || !('visible' in updates) || !traceIndexes || !traceIndexes.length) return;
+
+    const visibleVal = updates.visible[0];
+    const traceIdx = traceIndexes[0];
+
+    if (traceIdx >= this.headers.length - 1) return;
+
+    const headerName = this.headers[traceIdx + 1]; // +1 because headers[0] is X
+
+    if (visibleVal === true) {
+      if (!this.visibleHeaders.includes(headerName)) {
+        const insertIdx = traceIdx + 1; // traceIdx 0 → headers position 1
+        this.visibleHeaders.splice(insertIdx, 0, headerName);
+      }
+    } else {
+      // 'legendonly' —> hide this column
+      this.visibleHeaders = this.visibleHeaders.filter(h => h !== headerName);
+    }
+
+    this.rebuildTable();
+  }
+
+  /**
+   * Rebuilds the table trace by applying both the range (zoom/pan) and
+   * visibility
+   */
+  private rebuildTable() {
+
+    // filter visible headers
+    const colIndexes = this.visibleHeaders
+      .map(h => this.headers.indexOf(h))
+      .filter(i => i !== -1);
+
+    if (!colIndexes.length) return;
+
+    // filter by range
+    let dataRows = this.csvData.slice(1);
+    if (this.xRangeFilter) {
+      const xIndex = this.headers.indexOf(this.selectedXasix);
+      if (xIndex !== -1) {
+        const {min: rangeMin, max: rangeMax} = this.xRangeFilter;
+        dataRows = dataRows.filter(row => {
+          const xVal = row[xIndex];
+          const xNum = Number(xVal);
+          const minNum = Number(rangeMin);
+          const maxNum = Number(rangeMax);
+          if (!isNaN(xNum) && !isNaN(minNum) && !isNaN(maxNum)) {
+            return xNum >= minNum && xNum <= maxNum;
+          }
+          return String(xVal) >= String(rangeMin) && String(xVal) <= String(rangeMax);
+        });
+      }
+    }
+
+    const newColumns = colIndexes.map(ci => dataRows.map(row => row[ci]));
+    const newHeaders = colIndexes.map(ci => this.headers[ci]);
+
+    // update table trace
+    this.plotData = this.plotData.map((trace: any) => {
+      if (trace.type === 'table') {
+        return {
+          ...trace,
+          header: {...trace.header, values: newHeaders},
+          cells: {...trace.cells, values: newColumns},
+        };
+      }
+      return trace;
+    });
   }
 
   public async exportPlotAsImage() {
