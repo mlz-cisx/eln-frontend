@@ -1781,7 +1781,7 @@ public bringToFrontAndSubmit(): void {
     this.canvas.add(this.cropRect);
     this.canvas.setActiveObject(this.cropRect);
 
-    this.createCropOverlays();
+    //this.createCropOverlays();
     this.attachCropListeners();
     this.canvas.renderAll();
   }
