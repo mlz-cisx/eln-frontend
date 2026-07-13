@@ -21,6 +21,13 @@
 
 <!-- Plot view -->
 <div *ngIf="!showTable">
+  <button
+          type="button"
+          class="btn mlzeln-button-regular mlzeln-button-outline"
+          [disabled]="isToggleDisabled"
+          (click)="toggleTable()">
+    {{ tableCollapsed ? 'Show Table Inside Plot' : 'Hide Table Inside Plot' }}
+  </button>
   <plotly-plot #plot
                [config]="{ displaylogo: false, modeBarButtonsToRemove: ['select2d','lasso2d'] }"
                [data]="plotData"

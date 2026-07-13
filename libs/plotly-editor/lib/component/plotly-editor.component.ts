@@ -100,10 +100,13 @@ export class PlotlyEditorComponent {
   private fullTable: string[][] = [];
 
   /** current x-axis range filter (set by zoom/pan) */
-  private xRangeFilter: {min: string | number, max: string | number} | null = null;
+  private xRangeFilter: { min: string | number, max: string | number } | null = null;
 
   /** current columns visible in the table trace */
   private visibleHeaders: string[] = [];
+
+  tableCollapsed = false;
+  isToggleDisabled = false;
 
 
   get filteredAndSortedRows(): string[][] {
@@ -287,30 +290,16 @@ export class PlotlyEditorComponent {
 
     // build columns for the table trace
     const columns = this.headers.map((_, colIdx) =>
-      csvData.slice(1).map(row => row[colIdx])
+      csvData.slice(1).map(row => {
+        const value = row[colIdx];
+        return value.length > 7 ? value.slice(0, 7) + '…' : value;
+      })
     );
     this.fullTable = columns;
     this.visibleHeaders = [...this.headers];
     this.xRangeFilter = null;
 
-    const tableTrace = {
-      type: 'table',
-      header: {
-        values: this.headers,
-        align: 'center',
-        line: {width: 1, color: '#ddd'},
-        fill: {color: '#f0f0f0'},
-        font: {size: 11, color: '#000'},
-      },
-      cells: {
-        values: columns,
-        align: 'center',
-        line: {width: 1, color: '#ddd'},
-        fill: {color: ['#ffffff', '#f7f7f7']},
-        font: {size: 10, color: '#333'},
-      },
-      domain: {x: [0, 1], y: [0, 0.3]},
-    };
+    const tableTrace = this.buildTableTrace(columns);
 
     this.plotData = [...traces, tableTrace];
 
@@ -446,6 +435,72 @@ export class PlotlyEditorComponent {
     this.processData(this.csvData, xIndex)
   }
 
+
+  async toggleTable() {
+    // disable button
+    this.isToggleDisabled = true;
+
+    this.tableCollapsed = !this.tableCollapsed;
+
+    this.plotData.forEach((t: any) => t.visible = true);
+
+    const hasTable = this.plotData.some((t: any) => t.type === 'table');
+
+    if (this.tableCollapsed && hasTable) {
+      // remove table trace
+      this.plotData = this.plotData.filter((t: any) => t.type !== 'table');
+
+      // scatter takes full height
+      this.plotLayout = {
+        ...this.plotLayout,
+        yaxis: {domain: [0, 1], autorange: true},
+        xaxis: {autorange: true},
+        margin: {...this.plotLayout.margin, b: 60}
+      };
+
+    } else if (!this.tableCollapsed && !hasTable) {
+      // rebuild table trace
+      const tableTrace = this.buildTableTrace(this.fullTable);
+      this.plotData = [...this.plotData, tableTrace];
+
+      // restore split domains
+      this.plotLayout = {
+        ...this.plotLayout,
+        yaxis: {domain: [0.4, 1], autorange: true},
+        xaxis: {autorange: true},
+        margin: {...this.plotLayout.margin, b: 10}
+      };
+    }
+
+    this.isToggleDisabled = false;
+    this.cdr.detectChanges();
+  }
+
+
+  private buildTableTrace(columns: string[][]) {
+    return {
+      type: 'table',
+      uuid: 'tableTrace',
+      columnwidth: this.headers.map(() => 60),
+      header: {
+        values: this.headers,
+        align: 'left',
+        line: {width: 1, color: '#ddd'},
+        fill: {color: '#f0f0f0'},
+        font: {size: 11, color: '#000'},
+      },
+      cells: {
+        values: columns,
+        align: 'left',
+        line: {width: 1, color: '#ddd'},
+        fill: {color: ['#ffffff', '#f7f7f7']},
+        font: {size: 10, color: '#333'},
+      },
+      domain: {x: [0, 1], y: [0, 0.3]},
+    };
+  }
+
+
   /**
    * Handles plotly_relayout (zoom, pan, reset).
    * filters the table trace data
@@ -543,7 +598,14 @@ export class PlotlyEditorComponent {
       }
     }
 
-    const newColumns = colIndexes.map(ci => dataRows.map(row => row[ci]));
+    // build truncated columns
+    const newColumns = colIndexes.map(ci =>
+      dataRows.map(row => {
+        const value = row[ci];
+        return value.length > 7 ? value.slice(0, 7) + '…' : value;
+      })
+    );
+
     const newHeaders = colIndexes.map(ci => this.headers[ci]);
 
     // update table trace
