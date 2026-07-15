@@ -546,21 +546,23 @@ export class PlotlyEditorComponent {
     const traceIndexes = event[1];
     if (!updates || !('visible' in updates) || !traceIndexes || !traceIndexes.length) return;
 
-    const visibleVal = updates.visible[0];
-    const traceIdx = traceIndexes[0];
+    // - single click: traceIndexes has 1 element, updates.visible has 1 element
+    // - double click: traceIndexes has N elements, updates.visible has N elements
+    for (let i = 0; i < traceIndexes.length; i++) {
+      const traceIdx = traceIndexes[i];
+      const visibleVal = updates.visible[i];
 
-    if (traceIdx >= this.headers.length - 1) return;
+      const headerName = this.headers[traceIdx + 1]; // +1 because headers[0] is X
 
-    const headerName = this.headers[traceIdx + 1]; // +1 because headers[0] is X
-
-    if (visibleVal === true) {
-      if (!this.visibleHeaders.includes(headerName)) {
-        const insertIdx = traceIdx + 1; // traceIdx 0 → headers position 1
-        this.visibleHeaders.splice(insertIdx, 0, headerName);
+      if (visibleVal === true) {
+        if (!this.visibleHeaders.includes(headerName)) {
+          const insertIdx = traceIdx + 1; // traceIdx 0 → headers position 1
+          this.visibleHeaders.splice(insertIdx, 0, headerName);
+        }
+      } else {
+        // 'legendonly' → hide this column
+        this.visibleHeaders = this.visibleHeaders.filter(h => h !== headerName);
       }
-    } else {
-      // 'legendonly' —> hide this column
-      this.visibleHeaders = this.visibleHeaders.filter(h => h !== headerName);
     }
 
     this.rebuildTable();
