@@ -25,7 +25,8 @@
           type="button"
           class="btn mlzeln-button-regular mlzeln-button-outline"
           [disabled]="isToggleDisabled"
-          (click)="toggleTable()">
+          (click)="toggleTable()"
+          *ngIf="plotReady">
     {{ tableCollapsed ? 'Show Table Inside Plot' : 'Hide Table Inside Plot' }}
   </button>
   <plotly-plot #plot
@@ -33,11 +34,12 @@
                [data]="plotData"
                [layout]="plotLayout"
                (relayout)="onRelayout($event)"
-               (restyle)="onRestyle($event)">
+               (restyle)="onRestyle($event)"
+               (initialized)="onAfterPlot()">
   </plotly-plot>
 </div>
 
-<div *ngIf="!showTable && showSketchButton">
+<div *ngIf="!showTable && showSketchButton && plotReady">
   <button (click)="exportPlotAsImage()"
           class="btn mlzeln-button-regular mlzeln-button-outline"
           type="button">

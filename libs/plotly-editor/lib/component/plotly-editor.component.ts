@@ -39,6 +39,8 @@ export class PlotlyEditorComponent {
   @Input() showSketchButton: boolean = false;
   @Input() table_integration: boolean = true;
 
+  public plotReady = false;
+
   private unsubscribe$ = new Subject<void>();
 
   public constructor(
@@ -621,6 +623,11 @@ export class PlotlyEditorComponent {
       }
       return trace;
     });
+  }
+
+  public onAfterPlot() {
+    this.plotReady = true;
+    this.cdr.detectChanges();
   }
 
   public async exportPlotAsImage() {
