@@ -17,6 +17,7 @@ import {Subject} from "rxjs";
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {PlotlyViaCDNModule} from 'angular-plotly.js';
+import * as fabric from 'fabric';
 
 declare const Plotly: any;
 
@@ -642,7 +643,7 @@ export class PlotlyEditorComponent {
         height: 800
       });
 
-      this.create_new_sketch(dataUrl)
+      await this.create_new_sketch(dataUrl)
 
     } catch (err) {
       console.error('Failed to export plot', err);
@@ -650,24 +651,81 @@ export class PlotlyEditorComponent {
   }
 
 
-  public create_new_sketch(base64Plot: any): void {
-    const file = this.base64ToFile(base64Plot, 'plot.png');
+  public async create_new_sketch(base64Plot: any): Promise<void> {
+    // compose the plot image on an offscreen Fabric.js canvas
+    const CANVAS_W = 1000;
+    const CANVAS_H = 750;
 
-    const formData = new FormData();
-    formData.append('title', 'NewSketch');
-    formData.append('background_image', file); // UploadFile
+    const staticCanvas = new fabric.StaticCanvas(undefined, {
+      width: CANVAS_W,
+      height: CANVAS_H,
+      backgroundColor: '#ffffff',
+    });
 
-    this.picturesService
-      .add(formData)
-      .subscribe(
-        picture => {
-          this.state = ModalState.Changed;
-          this.createElement(40, picture.pk)
-        },
-        () => {
-          this.cdr.markForCheck();
-        }
-      );
+    try {
+      const img = await fabric.Image.fromURL(base64Plot);
+
+      // scale the plot image to fit within 80% of the canvas
+      const imgW = img.width!;
+      const imgH = img.height!;
+      const scale = Math.min(CANVAS_W / imgW, CANVAS_H / imgH) * 0.8;
+
+      img.set({
+        left: CANVAS_W / 2,
+        top: CANVAS_H / 2,
+        originX: 'center',
+        originY: 'center',
+        scaleX: scale,
+        scaleY: scale,
+      });
+
+      staticCanvas.add(img);
+      staticCanvas.renderAll();
+
+      const composedDataUrl = staticCanvas.toDataURL({
+        format: 'jpeg',
+        quality: 0.75,
+        multiplier: 1,
+      });
+
+      const file = this.base64ToFile(composedDataUrl, 'plot.jpeg');
+
+      const formData = new FormData();
+      formData.append('title', 'NewSketch');
+      formData.append('background_image', file);
+
+      this.picturesService
+        .add(formData)
+        .subscribe(
+          picture => {
+            this.state = ModalState.Changed;
+            this.createElement(40, picture.pk);
+          },
+          () => {
+            this.cdr.markForCheck();
+          }
+        );
+    } catch (err) {
+      console.error('Failed to compose sketch image', err);
+      // fallback: upload the original image
+      const file = this.base64ToFile(base64Plot, 'plot.png');
+
+      const formData = new FormData();
+      formData.append('title', 'NewSketch');
+      formData.append('background_image', file);
+
+      this.picturesService
+        .add(formData)
+        .subscribe(
+          picture => {
+            this.state = ModalState.Changed;
+            this.createElement(40, picture.pk);
+          },
+          () => {
+            this.cdr.markForCheck();
+          }
+        );
+    }
   }
 
 
