@@ -12,14 +12,16 @@ import {ModalState} from '@app/enums/modal-state.enum';
 import {
   CommentsModalComponent
 } from '@app/modules/comment/components/modals/comments/comments.component';
-import { CopyElementModalComponent  } from '@app/modules/labbook/components/modals/copy/copy.component'
+import {
+  CopyElementModalComponent
+} from '@app/modules/labbook/components/modals/copy/copy.component'
 import {
   RecentChangesModalComponent
 } from '@app/modules/labbook/components/modals/recent-changes/recent-changes.component';
 import {
   DeleteModalComponent
 } from '@app/modules/trash/components/modals/delete/delete.component';
-import {LabbooksService} from '@app/services';
+import {LabbooksService, RestoreEventsService} from '@app/services';
 import type {
   ExportLink,
   LabBookElement,
@@ -111,7 +113,8 @@ export class LabBookElementDropdownComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly drawboardGridComponent: LabBookDrawBoardGridComponent,
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private restoreEventsService: RestoreEventsService,
   ) {
   }
 
@@ -221,6 +224,7 @@ export class LabBookElementDropdownComponent implements OnInit {
               this.drawboardGridComponent.updateAllElements()
               this.cdr.markForCheck()
               this.cdr.detectChanges()
+              this.restoreEventsService.notifyThrashed(id);
             });
         },
         () => {

@@ -9,17 +9,18 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { FormBuilder } from '@ngneat/reactive-forms';
+import {forkJoin} from 'rxjs';
+import {FormBuilder} from '@ngneat/reactive-forms';
 import {
+  ContentTypeModelService,
   FilesService,
   NotesService,
   PicturesService,
-  ContentTypeModelService,
   RestoreEventsService
 } from '@app/services';
-import type { Note, Picture, File, ContentTypeModels } from '@joeseln/types';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import type {ContentTypeModels, File, Note, Picture} from '@joeseln/types';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {environment} from "@environments/environment";
 
 interface FromSearch {
   search: string | null;
@@ -39,6 +40,8 @@ type Element = Note | Picture | File
   standalone: false
 })
 export class LabBookRestoreComponent implements OnInit {
+
+  public readonly apiUrl = `${environment.apiUrl}`;
 
   public isMobileMode = false;
 
@@ -104,6 +107,11 @@ export class LabBookRestoreComponent implements OnInit {
       .subscribe(id => {
         this.results = this.results.filter(r => r.pk !== id);
         this.cdr.markForCheck();
+      });
+    this.restoreEvents.thrashed$
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.resetFilters();
       });
     this.breakpointObserver
       .observe(['(max-width: 992px)'])
@@ -172,7 +180,8 @@ export class LabBookRestoreComponent implements OnInit {
 
     if (!this.labook_id) return;
     this.results = [];
-    let params = new HttpParams().set('deleted', 'true').set('labbook_id', String(this.labook_id));
+    let params = new HttpParams().set('deleted', 'true').set('labbook_id', String(this.labook_id)).set('hidden_deleted', 'false');
+
 
     // apply search keyword if exist
     if (this.f.search.value) {
@@ -210,4 +219,42 @@ export class LabBookRestoreComponent implements OnInit {
     const data = JSON.stringify({ child_object_id: result.pk, child_object_content_type: result.content_type });
     event.dataTransfer?.setData('application/json', data);
   }
+
+  hide_from_restore_list(element: HTMLElement, pk: any, model: any) {
+
+    if (model === 'shared_elements.file') {
+      this.filesService.toggle_hidden_delete(pk, true).subscribe((file)=>{
+        this.search();
+      })
+    }
+    if (model === 'pictures.picture') {
+      this.picturesService.toggle_hidden_delete(pk, true).subscribe((pic) => {
+        this.search()
+      })
+    }
+    if (model === 'shared_elements.note') {
+      this.notesService.toggle_hidden_delete(pk, true).subscribe((note) => {
+        this.search()
+      })
+    }
+  }
+
+  open_element_page(element: HTMLElement, pk: any, model: any) {
+    const baseUrl = window.location.origin;
+    let path = '';
+    switch (model) {
+      case 'shared_elements.file':
+        path = `/files/${pk}`;
+        break;
+      case 'pictures.picture':
+        path = `/pictures/${pk}`;
+        break;
+      case 'shared_elements.note':
+        path = `/notes/${pk}`;
+        break;
+    }
+    window.location.href = `${baseUrl}${path}`;
+  }
+
+
 }

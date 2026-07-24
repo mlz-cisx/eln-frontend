@@ -66,6 +66,10 @@ export class NotesService
     return this.httpClient.patch<Note>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
+  public toggle_hidden_delete(id: string, hidden_delete: boolean, params = new HttpParams()): Observable<Note> {
+    return this.httpClient.patch<Note>(`${this.apiUrl}${id}/hidden_delete/`, {hidden_delete: hidden_delete}, {params});
+  }
+
   public patch(id: string, note: NotePayload, params = new HttpParams()): Observable<Note> {
     return this.httpClient.patch<Note>(`${this.apiUrl}${id}/`, note, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }

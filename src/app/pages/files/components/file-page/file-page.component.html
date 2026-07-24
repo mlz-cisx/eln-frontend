@@ -140,6 +140,15 @@
               >
                 {{ t('file.gotoBottom') }}
               </button>
+              <button
+                      *ngIf="initialState.hidden_deleted"
+                      type="button"
+                      class="btn mlzeln-button-regular mlzeln-button-outline"
+                      (click)="toggle_hidden_deleted()"
+                      [disabled]="loading"
+              >
+                {{ t('file.reverse_hidden_delete') }}
+              </button>
             </ng-container>
           </div>
           <div>

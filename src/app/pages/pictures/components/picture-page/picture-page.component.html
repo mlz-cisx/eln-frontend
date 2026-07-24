@@ -77,6 +77,15 @@
                   </div>
                 </ng-container>
               </mlzeln-details-collapse-element>
+              <button
+                      *ngIf="initialState.hidden_deleted"
+                      type="button"
+                      class="btn mlzeln-button-regular mlzeln-button-outline"
+                      (click)="toggle_hidden_deleted()"
+                      [disabled]="loading"
+              >
+                {{ t('picture.details.reverse_hidden_delete') }}
+              </button>
             </div>
             <div>
               <mlzeln-details-collapse-element

@@ -112,6 +112,10 @@ export class PicturesService
     return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/soft_delete/`, {labbook_pk: labbook_pk}, {params});
   }
 
+  public toggle_hidden_delete(id: string, hidden_delete: boolean, params = new HttpParams()): Observable<Picture> {
+    return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/hidden_delete/`, {hidden_delete: hidden_delete}, {params});
+  }
+
   public patch(id: string, task: Optional<PicturePayload>, params = new HttpParams()): Observable<Picture> {
     return this.httpClient.patch<Picture>(`${this.apiUrl}${id}/title/`, {pk: id, ...task}, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }

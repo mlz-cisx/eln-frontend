@@ -85,6 +85,15 @@
                   >
                     {{ t('note.details.gotoBottom') }}
                   </button>
+                  <button
+                          *ngIf="initialState.hidden_deleted"
+                          type="button"
+                          class="btn mlzeln-button-regular mlzeln-button-outline"
+                          (click)="toggle_hidden_deleted()"
+                          [disabled]="loading"
+                  >
+                    {{ t('note.details.reverse_hidden_delete') }}
+                  </button>
                 </div>
                 <label>{{ t('note.details.element.content') }}</label>
                 <div class="content-container"

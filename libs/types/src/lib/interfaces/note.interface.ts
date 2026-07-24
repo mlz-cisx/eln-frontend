@@ -18,6 +18,7 @@ export interface Note {
   content: string;
   url: string;
   deleted: boolean;
+  hidden_deleted?: boolean;
   created_by: User;
   pk: string;
   is_favourite: boolean;

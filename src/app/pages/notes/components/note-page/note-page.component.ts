@@ -305,5 +305,14 @@ export class NotePageComponent implements OnInit, OnDestroy {
       })
   }
 
+  public toggle_hidden_deleted(): void {
+    this.notesService.toggle_hidden_delete(this.id, false).subscribe(() => {
+      if (this.initialState && "hidden_deleted" in this.initialState) {
+        this.initialState.hidden_deleted = false;
+      }
+      this.cdr.markForCheck();
+    })
+  }
+
 
 }

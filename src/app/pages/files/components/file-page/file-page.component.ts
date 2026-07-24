@@ -341,6 +341,15 @@ export class FilePageComponent implements OnInit, OnDestroy {
       })
   }
 
+  public toggle_hidden_deleted(): void {
+    this.filesService.toggle_hidden_delete(this.id, false).subscribe(() => {
+      if (this.initialState && "hidden_deleted" in this.initialState) {
+        this.initialState.hidden_deleted = false;
+      }
+      this.cdr.markForCheck();
+    })
+  }
+
   public onOpenPlot(): void {
     if (!this.initialState) return;
 

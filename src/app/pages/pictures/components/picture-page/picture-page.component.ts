@@ -299,4 +299,14 @@ export class PicturePageComponent implements OnInit, OnDestroy {
       return null;
     }
   }
+
+  public toggle_hidden_deleted(): void {
+    this.picturesService.toggle_hidden_delete(this.id, false).subscribe(() => {
+        if (this.initialState && "hidden_deleted" in this.initialState) {
+          this.initialState.hidden_deleted = false;
+        }
+        this.cdr.markForCheck();
+      }
+    )
+  }
 }

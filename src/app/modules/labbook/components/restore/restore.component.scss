@@ -75,5 +75,21 @@
 }
 
 .search-dropdown-menu {
-  min-width: 10vw; /* 10% of browser width */
+  min-width: 15vw; /* 10% of browser width */
 }
+
+.row-container {
+  display: flex;
+  width: 100%;
+}
+
+.row-container button {
+  margin-left: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  border-radius: 0.375rem;
+  height: 70%;
+}
+
+
+

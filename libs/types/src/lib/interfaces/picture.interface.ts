@@ -26,6 +26,7 @@ export interface Picture {
   created_at: string;
   created_by: User;
   deleted: boolean;
+  hidden_deleted?: boolean;
   description: string;
   display: string;
   download_background_image?: string;
