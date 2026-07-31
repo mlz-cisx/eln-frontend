@@ -48,7 +48,7 @@ interface FormFile {
   file_description: string | null;
 }
 
-export type GraphType = 'csv' | 'pdb' | 'xyz' | 'cif' | null;
+export type GraphType = 'csv' | 'pdb' | 'xyz' | 'cif' | 'h5' | null;
 
 export interface Graph {
   graph_type: GraphType;
@@ -61,6 +61,8 @@ export function detectGraphType(filename: string): GraphType {
     if (filename.endsWith('.cif')) return 'cif';
     if (filename.endsWith('.xyz')) return 'xyz';
     if (filename.endsWith('.csv')) return 'csv';
+    if (filename.endsWith('.h5')) return 'h5';
+    if (filename.endsWith('.nxs')) return 'h5';
     return null;
   }
 

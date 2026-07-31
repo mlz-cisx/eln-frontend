@@ -25,6 +25,7 @@ import { FilesPageComponent } from './components/files-page/files-page.component
 import { FilesPageRoutingModule } from './files-page-routing.module';
 import { PlotlyEditorModule } from 'libs/plotly-editor/lib/plotly-editor.module';
 import { MolViewerModule } from 'libs/mol-viewer/mol-viewer.module';
+import { H5webViewerModule } from 'libs/h5web-viewer/lib/h5web-viewer.module';
 
 @NgModule({
   declarations: [FilesPageComponent, FilePageComponent],
@@ -61,6 +62,7 @@ import { MolViewerModule } from 'libs/mol-viewer/mol-viewer.module';
     TooltipModule.forRoot(),
     PlotlyEditorModule,
     MolViewerModule,
+    H5webViewerModule,
   ],
 })
 export class FilesPageModule {}

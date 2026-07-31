@@ -39,6 +39,7 @@ import { RecentChangesModule } from '@app/modules/recent-changes/recent-changes.
 import { PlotlyEditorModule } from '../../../../libs/plotly-editor/lib/plotly-editor.module';
 import { MathjaxModule } from 'mathjax-angular';
 import { MolViewerModule } from '../../../../libs/mol-viewer/mol-viewer.module';
+import { H5webViewerModule } from '../../../../libs/h5web-viewer/lib/h5web-viewer.module';
 import { FabricCanvasModule } from '../../../../libs/fabric-canvas/fabric-canvas.module';
 import { VideoJsPlayerModule } from '../../../../libs/video-player/video-player.module';
 import {
@@ -103,6 +104,7 @@ import { LabBookRestoreComponent } from './components/restore/restore.component'
     PlotlyEditorModule,
     MathjaxModule.forChild(),
     MolViewerModule,
+    H5webViewerModule,
     FabricCanvasModule,
     VideoJsPlayerModule,
   ],

@@ -70,7 +70,8 @@
             "styles": [
               "src/styles.scss",
               "node_modules/tinymce/skins/ui/oxide/content.min.css",
-              "src/assets/styles/tinymce.css"
+              "src/assets/styles/tinymce.css",
+              "node_modules/@h5web/app/dist/styles.css"
             ],
             "scripts": [
               "node_modules/tinymce/tinymce.min.js",

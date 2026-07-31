@@ -22,6 +22,15 @@
           </app-mol-viewer>
         </div>
       </ng-container>
+      <ng-container *ngIf="graph.graph_type=='h5'">
+        <div class="h5-viewer-wrapper">
+          <app-h5web-viewer
+            *ngIf="h5Buffer"
+            [buffer]="h5Buffer"
+            [filename]="h5Filename">
+          </app-h5web-viewer>
+        </div>
+      </ng-container>
     </div>
         <div slot="footer">
     </div>
