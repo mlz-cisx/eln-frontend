@@ -35,6 +35,7 @@ export interface LabBookElementPayload {
   width?: number;
   height?: number;
   position?: 'top' | 'bottom' | number;
+  cloned?: boolean
 }
 
 

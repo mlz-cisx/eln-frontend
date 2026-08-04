@@ -452,6 +452,7 @@ export class UploadLabBookModalComponent implements OnInit {
   }
 
   public clone_element(cloned_element: LabBookElementPayload): void {
+    cloned_element.cloned = true
     this.second_run_promises.push(new Promise((resolve) => {
       this.labBooksService
         .addElement(this.new_labbook_pk, cloned_element)

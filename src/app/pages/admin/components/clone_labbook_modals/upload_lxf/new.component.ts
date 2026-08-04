@@ -294,6 +294,7 @@ export class UploadLabBookLxfModalComponent implements OnInit {
       child_object_id: child_object_id,
       width: width,
       height: height,
+      cloned: true
     }
     return new Promise((resolve, reject) => {
       this.labBooksService
