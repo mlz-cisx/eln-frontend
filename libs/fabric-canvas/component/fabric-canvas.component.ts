@@ -58,11 +58,7 @@ import {PicturePayload} from "@joeseln/types";
 import {v4 as uuidv4} from 'uuid';
 import {ToastrService} from "ngx-toastr";
 import {TranslocoService} from '@jsverse/transloco';
-import * as pdfjsLib from "pdfjs-dist";
 import {environment} from "@environments/environment";
-
-(pdfjsLib as any).GlobalWorkerOptions.workerSrc =
-  `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 
 @Component({
@@ -223,8 +219,7 @@ export class FabricCanvasComponent implements AfterViewInit {
         const scale = 0.25; // shrink to 25%
         this.canvas.setZoom(scale);
         // Optionally resize the canvas element itself
-        this.canvas.setWidth(this.BASE_WIDTH * scale);
-        this.canvas.setHeight(this.BASE_HEIGHT * scale);
+        this.canvas.setDimensions({width: this.BASE_WIDTH * scale, height: this.BASE_HEIGHT * scale});
         // disable all interactions
         this.canvas.selection = false;
 
@@ -336,7 +331,7 @@ export class FabricCanvasComponent implements AfterViewInit {
   }
 
 
-  onUndo() {
+  async onUndo() {
     if (this.history.length <= 1) return;
 
     this.history.pop();
@@ -345,10 +340,10 @@ export class FabricCanvasComponent implements AfterViewInit {
     this.isRestoring = true;
     this.canvas.off();
 
-    this.canvas.loadFromJSON(previous.json, () => {
-      this.canvas.requestRenderAll();
+    await this.canvas.loadFromJSON(previous.json);
+    this.canvas.requestRenderAll();
 
-      this.canvas.once('after:render', () => {
+    this.canvas.once('after:render', () => {
 
         this.canvas.getObjects().forEach(obj => {
           obj.set({
@@ -372,7 +367,6 @@ export class FabricCanvasComponent implements AfterViewInit {
           });
         });
       });
-    });
   }
 
   public async reloadCanvas(): Promise<void> {
@@ -440,8 +434,7 @@ export class FabricCanvasComponent implements AfterViewInit {
 
   private applyZoom(scale: number): void {
     // resize physical canvas
-    this.canvas.setWidth(this.BASE_WIDTH * scale);
-    this.canvas.setHeight(this.BASE_HEIGHT * scale);
+    this.canvas.setDimensions({width: this.BASE_WIDTH * scale, height: this.BASE_HEIGHT * scale});
 
     // zoom logical coordinate system
     this.canvas.setZoom(scale);
@@ -507,8 +500,7 @@ export class FabricCanvasComponent implements AfterViewInit {
       obj.setCoords();
     });
 
-    this.canvas.setWidth(canvasWidth);
-    this.canvas.setHeight(canvasHeight);
+    this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});
     this.canvas.renderAll();
 
     // Trigger download
@@ -649,7 +641,7 @@ public bringToFrontAndSubmit(): void {
     this.vertexCircles = [];
 
     this.canvas.on('mouse:down', (opt) => {
-      const pointer = this.canvas.getPointer(opt.e);
+      const pointer = this.canvas.getViewportPoint(opt.e);
       const point = {x: pointer.x, y: pointer.y};
       this.points.push(point);
 
@@ -884,7 +876,7 @@ public bringToFrontAndSubmit(): void {
     this.canvas.add(shape);
 
     // Fabric 6 safe "send backwards"
-    const objects = this.canvas.getObjects();
+    const objects = this.canvas._objects;
     const index = objects.indexOf(shape);
     if (index > 0) {
       objects.splice(index, 1);
@@ -934,7 +926,7 @@ public bringToFrontAndSubmit(): void {
   }
 
   private bringToFront(obj: fabric.Object) {
-    const objects = this.canvas.getObjects();
+    const objects = this.canvas._objects;
     const index = objects.indexOf(obj);
     if (index === -1) return;
 
@@ -1116,7 +1108,7 @@ public bringToFrontAndSubmit(): void {
     this.canvas.forEachObject(obj => obj.selectable = false);
 
     this.canvas.on('mouse:down', (opt) => {
-      const pointer = this.canvas.getPointer(opt.e);
+      const pointer = this.canvas.getViewportPoint(opt.e);
       this.startPoint = {x: pointer.x, y: pointer.y};
 
       if (this.drawingMode === 'rectangle') {
@@ -1153,7 +1145,7 @@ public bringToFrontAndSubmit(): void {
 
     this.canvas.on('mouse:move', (opt) => {
       if (!this.startPoint || !this.tempShape) return;
-      const pointer = this.canvas.getPointer(opt.e);
+      const pointer = this.canvas.getViewportPoint(opt.e);
 
       if (this.drawingMode === 'rectangle') {
         const rect = this.tempShape as fabric.Rect;
@@ -1364,7 +1356,7 @@ public bringToFrontAndSubmit(): void {
         .get_content(this.uuid)
         .pipe()
         .subscribe({
-          next: (data) => {
+          next: async (data) => {
             try {
               if (!data || !data.canvas_content) {
                 console.warn('No canvas_content found in response');
@@ -1385,22 +1377,21 @@ public bringToFrontAndSubmit(): void {
                 // console.log('Canvas loaded and rendered (empty)');
                 resolve();
               } else {
-                // Non-empty: let Fabric load objects, then callback fires
-                this.canvas.loadFromJSON(parsed, () => {
-                  this.canvas.requestRenderAll();
-                  // console.log('Canvas loaded and rendered');
-                  this.canvas.once('after:render', () => {
-                    this.canvas.getObjects().forEach(obj => {
-                      obj.set({
-                        selectable: this.allowSelection,
-                        evented: this.allowSelection,
-                        hasControls: this.allowSelection
-                      });
+                // Non-empty: let Fabric load objects, then render
+                await this.canvas.loadFromJSON(parsed);
+                this.canvas.requestRenderAll();
+                // console.log('Canvas loaded and rendered');
+                this.canvas.once('after:render', () => {
+                  this.canvas.getObjects().forEach(obj => {
+                    obj.set({
+                      selectable: this.allowSelection,
+                      evented: this.allowSelection,
+                      hasControls: this.allowSelection
                     });
-                    this.canvas.selection = false;
-                    this.canvas.discardActiveObject();
-                    resolve();
                   });
+                  this.canvas.selection = false;
+                  this.canvas.discardActiveObject();
+                  resolve();
                 });
               }
 
@@ -1422,7 +1413,7 @@ public bringToFrontAndSubmit(): void {
     this.canvas.on('mouse:down', (opt) => {
       if (this.drawingMode !== 'text') return;
 
-      const pointer = this.canvas.getPointer(opt.e);
+      const pointer = this.canvas.getViewportPoint(opt.e);
 
       const textbox = new fabric.Textbox('...', {
         left: pointer.x,
@@ -1470,7 +1461,7 @@ public bringToFrontAndSubmit(): void {
 
       // When clicking outside, commit text
       this.canvas.on('mouse:down', (evt) => {
-        const target = this.canvas.findTarget(evt.e);
+        const target = this.canvas.findTarget(evt.e).target;
         if (target !== textbox) {
           textbox.exitEditing();
           this.canvas.off('mouse:down'); // remove this temporary listener
@@ -1610,6 +1601,11 @@ public bringToFrontAndSubmit(): void {
     });
 
     try {
+      // lazy-load pdf.js only when a PDF is actually imported
+      const pdfjsLib = await import("pdfjs-dist");
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "/assets/pdfjs/pdf.worker.min.js";
+
+
       const pdfData = new Uint8Array(arrayBuffer);
 
       // Load PDF
@@ -1621,11 +1617,10 @@ public bringToFrontAndSubmit(): void {
 
       // Offscreen canvas for pdf.js rendering
       const offCanvas = document.createElement("canvas");
-      const ctx = offCanvas.getContext("2d")!;
       offCanvas.width = viewport.width;
       offCanvas.height = viewport.height;
 
-      await page.render({canvasContext: ctx, viewport}).promise;
+      await page.render({canvas: offCanvas, viewport}).promise;
 
       // Convert to DataURL
       const dataUrl = offCanvas.toDataURL("image/jpeg", 0.7);
