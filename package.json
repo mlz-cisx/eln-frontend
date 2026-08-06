@@ -53,6 +53,7 @@
     "d3": "^7.9.0",
     "date-fns": "2.28.0",
     "fabric": "^7.4.0",
+    "dom-to-image-more": "^3.10.2",
     "fflate": "^0.8.2",
     "filesize": "8.0.7",
     "flatpickr": "4.6.13",

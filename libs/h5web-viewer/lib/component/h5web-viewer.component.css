@@ -3,3 +3,12 @@
   height: 100%;
   width: 100%;
 }
+
+.button_container {
+  margin-top: auto;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
