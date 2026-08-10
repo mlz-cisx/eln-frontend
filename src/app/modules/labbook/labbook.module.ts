@@ -47,6 +47,7 @@ import {
 } from "./components/modals/export_select/export-select.component";
 import { PlotModalComponent } from './components/modals/plot/plot-modal.component';
 import { LabBookRestoreComponent } from './components/restore/restore.component';
+import {MetaTooltipComponent} from "./components/meta-tooltip/meta-tooltip.component";
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { LabBookRestoreComponent } from './components/restore/restore.component'
     ExportSelectModalComponent,
     PlotModalComponent,
     LabBookRestoreComponent,
+    MetaTooltipComponent
   ],
   imports: [
     CommonModule,
@@ -127,6 +129,7 @@ import { LabBookRestoreComponent } from './components/restore/restore.component'
     ExportSelectModalComponent,
     PlotModalComponent,
     LabBookRestoreComponent,
+    MetaTooltipComponent
   ],
 })
 export class LabBookModule { }

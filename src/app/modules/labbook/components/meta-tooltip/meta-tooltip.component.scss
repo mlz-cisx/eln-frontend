@@ -1,0 +1,59 @@
+.meta-tooltip {
+  max-height: none; /* do not clip tooltip */
+  overflow: visible !important;
+}
+
+.metadata-container {
+  max-width: 400px;
+  max-height: 300px; /* vertical limit */
+  overflow-y: auto; /* enable vertical scrolling */
+  overflow-x: hidden; /* no horizontal scroll */
+
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* Chrome / Edge / Safari */
+.metadata-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.metadata-container::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+}
+
+
+.nowrap-mode {
+  white-space: nowrap;
+  overflow-y: auto;
+  text-overflow: ellipsis;
+}
+
+.metadata-container img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 6px;
+}
+
+.canvas-tooltip {
+  max-width: 250px; /* small width */
+  max-height: 200px; /* small height */
+  overflow: hidden; /* prevent spill */
+  padding: 8px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.canvas-tooltip .metadata-container {
+  max-height: 180px; /* inner scroll area */
+  overflow-y: auto;
+}
+
+
+
+

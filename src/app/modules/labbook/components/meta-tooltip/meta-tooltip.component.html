@@ -1,0 +1,22 @@
+<div class="meta-tooltip"
+     [ngClass]="{ 'canvas-tooltip': canvasMode }"
+     (click)="$event.stopPropagation()"
+     (mouseenter)="hoverState.emit('enter')"
+     (mouseleave)="hoverState.emit('leave')">
+
+  <!-- Canvas mode -->
+  <div *ngIf="canvasMode" class="metadata-container">
+    <app-fabric-canvas
+            [uuid]="pic_uuid"
+            [restore_preview]="true">
+    </app-fabric-canvas>
+  </div>
+
+  <!-- HTML mode -->
+  <div *ngIf="htmlMode"
+       class="metadata-container"
+       [ngClass]="{ 'nowrap-mode': useNowrap }"
+       [innerHTML]="content">
+  </div>
+
+</div>

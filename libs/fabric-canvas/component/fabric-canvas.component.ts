@@ -138,6 +138,7 @@ export class FabricCanvasComponent implements AfterViewInit {
   @Input() allowSelection = false;
   @Input() canvasContent: any;   // JSON or stringified Fabric canvas
   @Input() preview = false;      // render small if true
+  @Input() restore_preview = false;      // render small if true
   @Input() viewerMode = true
 
   @Output() canvasStored = new EventEmitter<string>();
@@ -311,6 +312,28 @@ export class FabricCanvasComponent implements AfterViewInit {
 
       // keyboard listeners
       window.addEventListener('keyup', (event) => this.onKeyDown(event));
+
+      if (this.restore_preview) {
+        const scale = 0.25; // shrink to 25%
+        this.canvas.setZoom(scale);
+        // Optionally resize the canvas element itself
+        this.canvas.setDimensions({
+          width: this.BASE_WIDTH * scale,
+          height: this.BASE_HEIGHT * scale
+        });
+        // disable all interactions
+        this.canvas.selection = false;
+
+        this.canvas.forEachObject(obj => {
+          obj.selectable = false;
+          obj.evented = false;
+          obj.hasControls = false;
+        });
+        this.canvas.discardActiveObject();
+        this.canvas.renderAll();
+
+      }
+
     }
   }
 

@@ -21,6 +21,12 @@ import {
 import type {ContentTypeModels, File, Note, Picture} from '@joeseln/types';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {environment} from "@environments/environment";
+import {Overlay, OverlayRef} from '@angular/cdk/overlay';
+import {ComponentPortal} from '@angular/cdk/portal';
+import {
+  MetaTooltipComponent
+} from '@app/modules/labbook/components/meta-tooltip/meta-tooltip.component';
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 interface FromSearch {
   search: string | null;
@@ -53,6 +59,7 @@ export class LabBookRestoreComponent implements OnInit {
 
   public loading = false;
 
+
   public form = this.fb.group<FromSearch>({
     search: null,
     note: true,
@@ -67,6 +74,15 @@ export class LabBookRestoreComponent implements OnInit {
 
   results: any[] = [];
 
+  private overlayRef: OverlayRef | null = null;
+
+  safeContent!: SafeHtml;
+  useNowrap = false;
+  private hoverList = false;
+  private hoverTooltip = false;
+  private tooltipOpen = false;
+
+
   public constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly cdr: ChangeDetectorRef,
@@ -76,7 +92,9 @@ export class LabBookRestoreComponent implements OnInit {
     private readonly notesService: NotesService,
     private readonly picturesService: PicturesService,
     private readonly contentTypeModelService: ContentTypeModelService,
-    private readonly restoreEvents: RestoreEventsService
+    private readonly restoreEvents: RestoreEventsService,
+    private overlay: Overlay,
+    private sanitizer: DomSanitizer
   ) {
   }
 
@@ -256,5 +274,150 @@ export class LabBookRestoreComponent implements OnInit {
     window.location.href = `${baseUrl}${path}`;
   }
 
+
+  showMetaTooltip(origin: HTMLElement, result: any) {
+    if (!result || !result.pk) return;
+
+    this.tooltipOpen = true;
+    this.hoverTooltip = false;
+
+    const positionStrategy = this.overlay
+      .position()
+      .flexibleConnectedTo(origin)
+      .withPositions([
+        {
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -10 // tooltip LEFT of element
+        }
+      ]);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      hasBackdrop: false,
+      scrollStrategy: this.overlay.scrollStrategies.reposition()
+    });
+
+    const tooltipPortal = new ComponentPortal(MetaTooltipComponent);
+    const tooltipRef = this.overlayRef.attach(tooltipPortal);
+
+    let textOnly = ""
+
+    tooltipRef.instance.hoverState.subscribe(state => {
+      if (state === 'enter') {
+        this.hoverTooltip = true;
+
+        // Cancel pending close
+        if (this.closeTimer) {
+          clearTimeout(this.closeTimer);
+          this.closeTimer = null;
+        }
+
+      } else {
+        this.hoverTooltip = false;
+        this.evaluateTooltipClose();
+      }
+    });
+
+    if (result.content_type_model === 'shared_elements.file') {
+      this.safeContent = this.sanitizer.bypassSecurityTrustHtml(result.description);
+      textOnly = this.extractTextOnly(result.description);
+
+      tooltipRef.instance.htmlMode = true;
+      tooltipRef.instance.canvasMode = false;
+    }
+
+    if (result.content_type_model === 'pictures.picture') {
+      tooltipRef.instance.canvasMode = true;
+      tooltipRef.instance.htmlMode = false;
+      tooltipRef.instance.pic_uuid = result.pk
+      return;
+    }
+
+
+    if (result.content_type_model === 'shared_elements.note') {
+      this.safeContent = this.sanitizer.bypassSecurityTrustHtml(result.content);
+      textOnly = this.extractTextOnly(result.content);
+
+      tooltipRef.instance.htmlMode = true;
+      tooltipRef.instance.canvasMode = false;
+    }
+
+
+    // measure longest line
+    const longest = this.getLongestTextLine(textOnly);
+    this.useNowrap = longest.length < 250;
+
+    tooltipRef.instance.content = this.safeContent;
+    tooltipRef.instance.useNowrap = this.useNowrap;
+
+
+  }
+
+
+  hideMetaTooltip() {
+    this.tooltipOpen = false;
+
+
+    this.hoverList = false;
+    this.hoverTooltip = false;
+
+    if (this.closeTimer) {
+      clearTimeout(this.closeTimer);
+      this.closeTimer = null;
+    }
+
+    if (this.overlayRef) {
+      this.overlayRef.dispose();
+      this.overlayRef = null;
+    }
+  }
+
+
+  private extractTextOnly(html: string): string {
+    // Convert <br> tags to newline characters
+    const normalized = html.replace(/<br\s*\/?>/gi, '\n');
+    // Strip all HTML tags
+    const tmp = document.createElement('div');
+    tmp.innerHTML = normalized;
+    return tmp.textContent || '';
+  }
+
+
+  private getLongestTextLine(text: string): string {
+    const lines = text.split('\n');
+    return lines.reduce((a, b) => (b.length > a.length ? b : a), '');
+  }
+
+  onListEnter(origin: HTMLElement, result: any) {
+    if (!result || !result.pk) return;   // FIX
+
+    this.hoverList = true;
+
+    if (!this.tooltipOpen) {
+      this.tooltipOpen = true;
+      this.showMetaTooltip(origin, result);
+    }
+  }
+
+
+  private closeTimer: any = null;
+
+  onListLeave() {
+    this.hoverList = false;
+
+    // Start a short grace timer
+    this.closeTimer = setTimeout(() => {
+      this.evaluateTooltipClose();
+    }, 300);
+  }
+
+  evaluateTooltipClose() {
+    if (!this.hoverList && !this.hoverTooltip) {
+      this.hideMetaTooltip();
+    }
+  }
 
 }

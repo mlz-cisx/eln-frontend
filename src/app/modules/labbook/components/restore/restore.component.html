@@ -102,6 +102,7 @@
                         [draggable]='true'
                         (dragstart)="onDragStart($event, result)"
                     >
+                      <div class="hover-shield"></div>
                       <div class="flex">
                         <div class="row-container">
 
@@ -111,6 +112,8 @@
                                   class="result-icon self-center"
                           ></joeseln-icon>
                           <button type="button"
+                                  (mouseenter)="onListEnter(itemRef, result)"
+                                  (mouseleave)="onListLeave()"
                                   class="btn mlzeln-button-regular mlzeln-button-outline"
                                   (click)="open_element_page(itemRef, result.pk, result.content_type_model)">
                             <span>showMeta</span>
