@@ -24,11 +24,29 @@
             "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
-              "lodash",
+              "@messageformat/core",
+              "@visx/shape/lib/shapes/Arc",
+              "@visx/shape/lib/shapes/Line",
+              "classnames",
+              "dom-to-image-more",
+              "filesize",
               "flat",
-              "qrcode",
               "js-sha256",
-              "filesize"
+              "jszip",
+              "lodash",
+              "ndarray",
+              "ndarray-ops",
+              "prop-types",
+              "qrcode",
+              "react",
+              "react-dom",
+              "react-dom/client",
+              "react-is",
+              "react-reconciler",
+              "react-reconciler/constants",
+              "react/jsx-runtime",
+              "reduce-css-calc",
+              "scheduler"
             ],
             "assets": [
               {
@@ -71,7 +89,8 @@
               "src/styles.scss",
               "node_modules/tinymce/skins/ui/oxide/content.min.css",
               "src/assets/styles/tinymce.css",
-              "node_modules/@h5web/app/dist/styles.css"
+              "node_modules/@h5web/app/dist/styles.css",
+              "node_modules/video.js/dist/video-js.css"
             ],
             "scripts": [
               "node_modules/tinymce/tinymce.min.js",
@@ -83,8 +102,7 @@
                 "silenceDeprecations": [
                   "color-functions",
                   "global-builtin",
-                  "import",
-                  "mixed-decls"
+                  "import"
                 ]
               },
               "includePaths": ["."]

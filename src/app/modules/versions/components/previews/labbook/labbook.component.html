@@ -28,7 +28,7 @@
       </div>
       <div class="mb-4">
         <label>{{ t('labBook.details.elements.label') }}</label>
-        <ng-container *ngIf="labBook?.child_elements?.length">
+        <ng-container *ngIf="labBook.child_elements?.length">
           <div class="flex mb-1"
                *ngFor="let element of labBook!.child_elements!">
             <div class="flex-fill">
@@ -45,7 +45,7 @@
           </div>
         </ng-container>
         <div class="text-tum-disabled italic"
-             *ngIf="!labBook?.child_elements?.length">
+             *ngIf="!labBook.child_elements?.length">
           {{ t('formInput.notDefined.placeholder') }}
         </div>
       </div>

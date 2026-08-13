@@ -1,5 +1,5 @@
 # Step 1: Build the Angular application
-FROM node:22 AS build
+FROM node:24 AS build
 WORKDIR /app
 
 # install dependency

@@ -16,7 +16,6 @@ declare const videojs: any;
   `,
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ["../../../node_modules/video.js/dist/video-js.css"],
 })
 export class VideoJsPlayerComponent implements OnInit, OnDestroy, OnChanges {
   private player: any;

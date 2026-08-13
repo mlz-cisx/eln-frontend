@@ -28,7 +28,7 @@
           <label class="token-label">With Token</label>
         </form>
       </div>
-      <div *ngIf="form.get('withToken')?.value">
+      <div *ngIf="form.get('withToken').value">
         <p style="text-align: center; font-size: 1.5vw ; margin-top: 5%">
           Your QR code is now active for {{this.token_validity}} seconds and
           lets you log in without
