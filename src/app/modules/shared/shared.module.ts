@@ -56,7 +56,7 @@ import { PendingChangesModalComponent } from './modals/pending-changes/pending-c
   imports: [
     CommonModule,
     IconsModule,
-    CollapseModule.forRoot(),
+    CollapseModule,
     TranslocoRootModule,
     FormsModule,
     LoadingModule,

@@ -74,7 +74,7 @@ import {NavbarModule} from "@app/modules/navbar/navbar.module";
     }),
     IconsModule,
     CommentModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
     QRCodeModule,
     NavbarModule
   ],

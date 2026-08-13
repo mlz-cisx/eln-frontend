@@ -24,9 +24,9 @@ import { LoadingModule } from '../loading/loading.module';
     TableModule,
     TranslocoRootModule,
     LoadingModule,
-    AlertModule.forRoot(),
+    AlertModule,
     IconsModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
   ],
   exports: [TrashButtonComponent, RestoreButtonComponent, DeleteModalComponent, TrashNoticeComponent],
 })

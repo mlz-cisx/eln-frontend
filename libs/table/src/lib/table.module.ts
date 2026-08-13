@@ -20,7 +20,7 @@ import { TableViewComponent } from './components/table-view/table-view.component
     TableSortComponent,
     TableViewComponent,
   ],
-  imports: [CommonModule, CdkTableModule, DragDropModule, IconsModule, FormsModule, BsDropdownModule.forRoot(), TooltipModule.forRoot()],
+  imports: [CommonModule, CdkTableModule, DragDropModule, IconsModule, FormsModule, BsDropdownModule, TooltipModule],
   exports: [TableColumnComponent, TableColumnComponent, TableViewComponent],
 })
 export class TableModule {}

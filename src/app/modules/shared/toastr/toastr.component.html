@@ -1,19 +1,19 @@
-<div class="grid" [style.display]="_state.value === 'inactive' ? 'none' : ''">
+<div class="grid" [style.display]="state() === 'inactive' ? 'none' : ''">
   <div>
-    <div *ngIf="title" [class]="options.titleClass" [attr.aria-label]="title">
-      {{ title }}
+    <div *ngIf="title()" [class]="options().titleClass" [attr.aria-label]="title()">
+      {{ title() }}
     </div>
-    <div *ngIf="message && options.enableHtml" role="alert" aria-live="polite" [class]="options.messageClass" [innerHTML]="message"></div>
-    <div *ngIf="message && !options.enableHtml" role="alert" aria-live="polite" [class]="options.messageClass" [attr.aria-label]="message">
-      {{ message }}
+    <div *ngIf="message() && options().enableHtml" role="alert" aria-live="polite" [class]="options().messageClass" [innerHTML]="message()"></div>
+    <div *ngIf="message() && !options().enableHtml" role="alert" aria-live="polite" [class]="options().messageClass" [attr.aria-label]="message()">
+      {{ message() }}
     </div>
   </div>
   <div>
-    <button *ngIf="options.closeButton" class="btn mlzeln-button-big close-button" (click)="remove()">
+    <button *ngIf="options().closeButton" class="btn mlzeln-button-big close-button" (click)="remove()">
       <joeseln-icon className="wb-x-bold-close"></joeseln-icon>
     </button>
   </div>
 </div>
-<div *ngIf="options.progressBar">
-  <div class="toast-progress" [style.width]="width + '%'"></div>
+<div *ngIf="options().progressBar">
+  <div class="toast-progress" [style.width]="width() + '%'"></div>
 </div>

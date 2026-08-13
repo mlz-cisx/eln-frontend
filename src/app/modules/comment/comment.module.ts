@@ -38,7 +38,7 @@ import { SharedModule } from '../shared/shared.module';
     LoadingModule,
     IconsModule,
     TableModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
     ToastrModule,
   ],
   exports: [CommentComponent, CommentsComponent, CommentsModalComponent, NewCommentModalComponent, DeleteCommentModalComponent],

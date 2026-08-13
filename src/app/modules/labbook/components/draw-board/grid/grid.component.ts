@@ -27,7 +27,7 @@ import type {
 import {ModalCallback} from "@joeseln/types";
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import type {GridsterConfig, GridsterItem} from 'angular-gridster2';
+import type {GridsterConfig, GridsterItemConfig} from 'angular-gridster2';
 import {
   catchError,
   concatMap,
@@ -76,7 +76,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   private updateSubscription: Subscription | null = null;
 
-  public drawBoardElements: Array<GridsterItem> = [];
+  public drawBoardElements: Array<GridsterItemConfig> = [];
 
   public labbookElements: Array<any> = []
 
@@ -271,13 +271,13 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   private disableScrollToNewItems(): void {
     this.options.scrollToNewItems = false;
     // Tell Gridster to re-read the updated config
-    this.options.api?.optionsChanged?.call(this.options);
+    this.options['api']?.optionsChanged?.call(this.options);
   }
 
   private enableScrollToNewItems(): void {
     this.options.scrollToNewItems = true;
     // Tell Gridster to re-read the updated config
-    this.options.api?.optionsChanged?.call(this.options);
+    this.options['api']?.optionsChanged?.call(this.options);
   }
 
 
@@ -327,7 +327,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         labBookElement => {
-          const newGridElement: GridsterItem = {
+          const newGridElement: GridsterItemConfig = {
             label: labBookElement.display,
             x: labBookElement.position_x,
             y: labBookElement.position_y,
@@ -438,11 +438,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(labBookElements => {
         const oldDrawBoardElements = [...this.drawBoardElements];
-        const newdrawBoardElements: GridsterItem[] = this.convertToGridItems(labBookElements);
+        const newdrawBoardElements: GridsterItemConfig[] = this.convertToGridItems(labBookElements);
 
         // Remove deleted elements
         const elementsToRemove = oldDrawBoardElements.filter(
-          (oldField: GridsterItem) => !newdrawBoardElements.some((newField: GridsterItem) => oldField['element'].pk === newField['element'].pk)
+          (oldField: GridsterItemConfig) => !newdrawBoardElements.some((newField: GridsterItemConfig) => oldField['element'].pk === newField['element'].pk)
         );
         elementsToRemove.forEach(element => {
           for (let index = this.drawBoardElements.length - 1; index >= 0; index--) {
@@ -455,8 +455,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
         // Update existing elements
         newdrawBoardElements
-          .filter((newField: GridsterItem) =>
-            oldDrawBoardElements.some((oldField: GridsterItem) => newField['element'].pk === oldField['element'].pk)
+          .filter((newField: GridsterItemConfig) =>
+            oldDrawBoardElements.some((oldField: GridsterItemConfig) => newField['element'].pk === oldField['element'].pk)
           )
           .forEach(element => {
             this.drawBoardElements.forEach((drawBoardElement, index) => {
@@ -472,11 +472,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         // We must tell the options that we changed them even though we didn't. This way Gridster will
         // check the changed properties of items and visually apply them. This is important if we move
         // or resize items. As long as Gridster won't implement better support we need this workaround.
-        this.options.api?.optionsChanged?.();
+        this.options['api']?.optionsChanged?.();
 
         // Add new elements
         const elementsToAdd = newdrawBoardElements.filter(
-          (newField: GridsterItem) => !oldDrawBoardElements.some((oldField: GridsterItem) => newField['element'].pk === oldField['element'].pk)
+          (newField: GridsterItemConfig) => !oldDrawBoardElements.some((oldField: GridsterItemConfig) => newField['element'].pk === oldField['element'].pk)
         );
         this.drawBoardElements = [...this.drawBoardElements, ...elementsToAdd];
 
@@ -547,7 +547,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  public convertToGridItems(elements: LabBookElement<any>[]): GridsterItem[] {
+  public convertToGridItems(elements: LabBookElement<any>[]): GridsterItemConfig[] {
     return elements.map(element => ({
       label: element.display,
       x: element.position_x,
@@ -559,7 +559,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public convertToLabBookElementPayload(elements: GridsterItem[]): LabBookElementPayload[] {
+  public convertToLabBookElementPayload(elements: GridsterItemConfig[]): LabBookElementPayload[] {
     return elements.map(element => ({
       pk: element['element'].pk as string,
       width: element.cols,
@@ -573,10 +573,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     distance: number,
     direction: 'down' | 'up' = 'down',
     yStartPosition = 0,
-    elements?: GridsterItem[]
-  ): GridsterItem[] {
-    let currentElements: GridsterItem[] = [];
-    const movedElements: GridsterItem[] = [];
+    elements?: GridsterItemConfig[]
+  ): GridsterItemConfig[] {
+    let currentElements: GridsterItemConfig[] = [];
+    const movedElements: GridsterItemConfig[] = [];
 
     if (elements?.length) {
       currentElements = elements;

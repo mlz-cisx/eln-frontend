@@ -10,7 +10,7 @@ import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { TranslocoService } from '@jsverse/transloco';
-import { GridsterModule } from 'angular-gridster2';
+import { Gridster, GridsterItem } from 'angular-gridster2';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -90,14 +90,15 @@ import {MetaTooltipComponent} from "./components/meta-tooltip/meta-tooltip.compo
     UserModule,
     FormHelperModule,
     TableModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
     LoadingModule,
     SharedModule,
     RouterModule,
     WysiwygEditorModule,
-    GridsterModule,
-    CollapseModule.forRoot(),
-    BsDropdownModule.forRoot(),
+    Gridster,
+    GridsterItem,
+    CollapseModule,
+    BsDropdownModule,
     IconsModule,
     AlertModule,
     PictureModule,

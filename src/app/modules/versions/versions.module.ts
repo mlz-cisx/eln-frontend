@@ -55,7 +55,7 @@ import {
     LoadingModule,
     FormsModule,
     WysiwygEditorModule,
-    AlertModule.forRoot(),
+    AlertModule,
     IconsModule,
     FabricCanvasComponent,
   ],

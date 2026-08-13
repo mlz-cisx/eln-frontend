@@ -38,7 +38,7 @@ import { ProfilePageRoutingModule } from './profile-page-routing.module';
     AlertModule,
     IconsModule,
     UserModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
   ],
 })
 export class ProfilePageModule {}

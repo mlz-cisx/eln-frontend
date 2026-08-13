@@ -15,7 +15,7 @@ import {
 
 @NgModule({
   declarations: [FormInputComponent, FormAsteriskComponent, FormDateGroupComponent, FormDateInputComponent, FormTimeGroupComponent, FormInputComponentPic],
-  imports: [CommonModule, FormsModule, IconsModule, TooltipModule.forRoot(), TranslocoRootModule],
+  imports: [CommonModule, FormsModule, IconsModule, TooltipModule, TranslocoRootModule],
   exports: [FormInputComponent, FormAsteriskComponent, FormDateGroupComponent, FormDateInputComponent, FormTimeGroupComponent, FormInputComponentPic],
 })
 export class FormHelperModule {}

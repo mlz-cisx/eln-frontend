@@ -55,7 +55,7 @@ import {MathjaxModule} from 'mathjax-angular';
     WysiwygEditorModule,
     IconsModule,
     CommentModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
     MathjaxModule.forChild(),
   ],
 })

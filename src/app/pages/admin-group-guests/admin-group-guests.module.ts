@@ -63,10 +63,10 @@ import {
     WysiwygEditorModule,
     RecentChangesModule,
     VersionsModule,
-    BsDropdownModule.forRoot(),
+    BsDropdownModule,
     IconsModule,
     CommentModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
   ],
 })
 export class AdminGroupGuestsModule {}

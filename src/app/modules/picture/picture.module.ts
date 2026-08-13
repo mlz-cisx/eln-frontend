@@ -16,7 +16,7 @@ import {
   imports: [
     CommonModule,
     LoadingModule,
-    TooltipModule.forRoot(),
+    TooltipModule,
     SharedModule,
     IconsModule,
     TranslocoRootModule,
