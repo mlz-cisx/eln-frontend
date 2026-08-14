@@ -263,55 +263,59 @@ export class FabricCanvasComponent implements AfterViewInit {
       this.canvas.discardActiveObject();
       this.canvas.renderAll();
 
-      this.websocketService.elements.pipe().subscribe(async (data: any) => {
-        if (data.model_pk === this.uuid) {
-          if (data.model_name === 'picture_title' || data.model_name === 'comments') {
-            return
-          }
-          if (data.origin === this.clientId) return;
-          await this.loadCanvasFromJson()
-          const objs = this.canvas.getObjects();
-          objs.forEach(obj => {
-            obj.set({
-              selectable: false,
-              evented: false,
-              hasControls: false
-            });
+      if(!this.restore_preview) {
 
-            if ((obj as any).alwaysOnTop) {
-              const idx = this.canvas._objects.indexOf(obj);
-              if (idx > -1) {
-                this.canvas._objects.splice(idx, 1);
-                this.canvas._objects.push(obj); // put at end (top of stack)
-              }
+        this.websocketService.elements.pipe().subscribe(async (data: any) => {
+          if (data.model_pk === this.uuid) {
+            if (data.model_name === 'picture_title' || data.model_name === 'comments') {
+              return
             }
+            if (data.origin === this.clientId) return;
+            await this.loadCanvasFromJson()
+            const objs = this.canvas.getObjects();
+            objs.forEach(obj => {
+              obj.set({
+                selectable: false,
+                evented: false,
+                hasControls: false
+              });
+
+              if ((obj as any).alwaysOnTop) {
+                const idx = this.canvas._objects.indexOf(obj);
+                if (idx > -1) {
+                  this.canvas._objects.splice(idx, 1);
+                  this.canvas._objects.push(obj); // put at end (top of stack)
+                }
+              }
+            });
+            this.canvas.selection = false;
+            this.canvas.discardActiveObject();
+            this.canvas.renderAll();
+          }
+        })
+        // debounce ctrl+z undo
+        this.undoSubject.pipe(
+          debounceTime(300)
+        ).subscribe(() => this.onUndo());
+
+        this.history = [];
+        this.isRestoring = true;   // prevent accidental pushes
+
+        setTimeout(() => {
+          this.history.push({
+            json: JSON.stringify(this.canvas.toJSON()),
+            points: structuredClone(this.points),
+            shapeType: this.shapeType
           });
-          this.canvas.selection = false;
-          this.canvas.discardActiveObject();
-          this.canvas.renderAll();
-        }
-      })
-      // debounce ctrl+z undo
-      this.undoSubject.pipe(
-        debounceTime(300)
-      ).subscribe(() => this.onUndo());
 
-      this.history = [];
-      this.isRestoring = true;   // prevent accidental pushes
+          this.isRestoring = false;
+          this.attachHistoryListeners();
+        }, 500);
 
-      setTimeout(() => {
-        this.history.push({
-          json: JSON.stringify(this.canvas.toJSON()),
-          points: structuredClone(this.points),
-          shapeType: this.shapeType
-        });
+        // keyboard listeners
+        window.addEventListener('keyup', (event) => this.onKeyDown(event));
 
-        this.isRestoring = false;
-        this.attachHistoryListeners();
-      }, 500);
-
-      // keyboard listeners
-      window.addEventListener('keyup', (event) => this.onKeyDown(event));
+      }
 
       if (this.restore_preview) {
         const scale = 0.25; // shrink to 25%
