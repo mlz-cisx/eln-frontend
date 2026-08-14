@@ -87,7 +87,7 @@
               ></mlzeln-labbook-element-dropdown>
             </div>
           </div>
-      <div class="body" [id]="'description-' + uniqueHash">
+      <div class="body" [class.editor-open]="editor_loaded" [id]="'description-' + uniqueHash">
         <div *ngIf="instr_csv_all || (currentUser && currentUser.admin) ||
         !(initialState.created_by.username == 'instrument' && initialState.name.toLowerCase().endsWith('.csv'))"
              class="mb-3">
@@ -113,7 +113,6 @@
             <mlzeln-wysiwyg-editor
                     [id]="'description-' + uniqueHash"
                     [maxHeight]="undefined"
-                    [actual_height]=height
                     [inline]=false
                     formControlName="file_description"
                     slot="input"

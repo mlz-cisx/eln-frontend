@@ -81,7 +81,7 @@
               [labBookEditable]="editable"
             ></mlzeln-labbook-element-dropdown>
           </div>
-      <div class="body" [id]="'content-' + uniqueHash" #content>
+      <div class="body" [class.editor-open]="editor_loaded" [id]="'content-' + uniqueHash">
         <ng-container *ngIf="editor_loaded">
           <mlzeln-form-input
             [for]="'content-' + uniqueHash"
@@ -93,7 +93,6 @@
               [id]="'content-' + uniqueHash"
               [maxHeight]="undefined"
               [inline]=false
-              [actual_height]=height
               formControlName="note_content"
               slot="input"
             ></mlzeln-wysiwyg-editor>

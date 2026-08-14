@@ -1,5 +1,4 @@
 import {
-  afterEveryRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -7,7 +6,6 @@ import {
   Input,
   OnInit,
   Renderer2,
-  RendererStyleFlags2,
   ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
@@ -32,9 +30,6 @@ import {environment} from '@environments/environment';
 import {
   admin_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
-import {
-  LabBookDrawBoardGridComponent
-} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 
 interface FormNote {
@@ -78,10 +73,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   public span_id = '';
 
-  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
-
-  public height: any;
-
   public background_color = '';
 
   @ViewChild('title')
@@ -96,9 +87,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   public uniqueHash = uuidv4();
 
   public submitted = false;
-
-  @ViewChild('content', { static: false })
-  contentContainer?: ElementRef;
 
   public form = this.fb.group<FormNote>({
     note_subject: this.fb.control(null, Validators.required),
@@ -115,20 +103,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
     private readonly websocketService: WebSocketService,
     private readonly translocoService: TranslocoService,
     private readonly modalService: DialogService,
-    private readonly renderer: Renderer2,
-    private gridComponent: LabBookDrawBoardGridComponent
+    private readonly renderer: Renderer2
   ) {
-    afterEveryRender(() => {
-      if (this.contentContainer) {
-        const elements = this.contentContainer.nativeElement.getElementsByClassName('tox-tinymce');
-        if (elements[0]) {
-          this.renderer.setStyle(
-            elements[0],
-            'height',
-            `${this.contentContainer.nativeElement.clientHeight - 20}px`, RendererStyleFlags2.Important);
-        }
-      };
-    });
   }
 
   public get f() {
@@ -196,7 +172,6 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.height = Math.max((this.element.height - 2) * this.row_height, 100)
     this.form.patchValue(
       {
         note_subject: this.element.child_object.subject,

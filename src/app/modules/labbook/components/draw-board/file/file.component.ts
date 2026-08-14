@@ -6,7 +6,6 @@ import {
   Input,
   OnInit,
   Renderer2,
-  RendererStyleFlags2,
   ViewChild,
 } from '@angular/core';
 import {Router} from '@angular/router';
@@ -38,9 +37,6 @@ import {
 } from "@app/modules/labbook/config/admin-element-background-color";
 import {environment} from "@environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {
-  LabBookDrawBoardGridComponent
-} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 import { PlotModalComponent } from '../../modals/plot/plot-modal.component';
 
 interface FormFile {
@@ -133,10 +129,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
 
   public preloaded_id = '';
 
-  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
-
-  public height: any;
-
   public uniqueHash = uuidv4();
 
   public background_color = '';
@@ -159,7 +151,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
     private readonly renderer: Renderer2,
     readonly elementRef: ElementRef,
     private http: HttpClient,
-    private gridComponent: LabBookDrawBoardGridComponent,
     private user_service: UserService,
   ) {
   }
@@ -245,23 +236,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
     }
 
-    const descriptionElement = this.elementRef.nativeElement.querySelector(`#description-${this.uniqueHash}`);
-    if (descriptionElement) {
-      const observer = new ResizeObserver(
-        entries => {
-          for (const entry of entries) {
-            const container = this.elementRef.nativeElement.querySelector(`#description-${this.uniqueHash}`);
-            if (container) {
-              const elements = container.getElementsByClassName('tox-tinymce');
-              if (elements[0]) {
-                this.renderer.setStyle(elements[0], 'height', `${entry.contentRect.height - 100}px`, RendererStyleFlags2.Important);
-              }
-            }
-          }
-        }
-      );
-      observer.observe(descriptionElement);
-    }
   }
 
   public ngOnDestroy(): void {
@@ -271,7 +245,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.height = Math.max((this.element.height - 5) * this.row_height, 100)
     this.form.patchValue(
       {
         file_title: this.element.child_object.title,

@@ -28,6 +28,34 @@
       grid-area: body;
       padding: 8px;
       overflow-y: scroll;
+
+       // when the editor is open, let it fill the grid-item body
+      &.editor-open {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        overflow: hidden;
+        padding: 8px;
+        gap: 8px;
+
+        ::ng-deep {
+          mlzeln-form-input {
+            grid-row: 2;
+            position: relative;
+            min-height: 0;
+          }
+
+          // overwrite tinymce inline css
+          .tox-tinymce {
+            position: absolute;
+            inset: 0;
+            height: auto !important;
+          }
+
+          .tox .tox-edit-area__iframe {
+            height: 100% !important;
+          }
+        }
+      }
     }
 
     .footer {
