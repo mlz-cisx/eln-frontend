@@ -640,6 +640,48 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal
   height: auto;
   margin-top: 6px;
 }
+/* Root container: owns the viewport height */
+.hsds-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar: fixed width when open, collapsible when H5Web toggles */
+.hsds-container #h5w-sidebar {
+  flex: 0 0 15vw;   /* toggle will override this */
+  max-width: 15vw;
+  min-width: 0;     /* critical for collapse */
+  overflow: hidden;
+}
+
+/* Sidebar scrolls internally */
+.hsds-container #h5w-sidebar > div {
+  height: 100% !important;
+  overflow-y: auto !important;
+}
+
+/* Main area gets the remaining height */
+.hsds-container #h5w-main-area {
+  height: 85vh !important;
+  max-height: 85vh !important;
+  overflow: hidden !important;
+}
+
+/* Main area scrolls internally */
+.hsds-container #h5w-main-area > div {
+  height: 100% !important;
+  overflow: auto !important;
+}
+
+
+
+
+
+
+
+
+
 
 
 

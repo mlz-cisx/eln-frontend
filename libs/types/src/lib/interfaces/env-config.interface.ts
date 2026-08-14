@@ -8,4 +8,8 @@ export interface EnvConfig {
   keycloak_integration: boolean;
   instr_csv_all: boolean;
   noteMaximumSize: number;
+  hsds_url: string;
+  hsds_username: string;
+  hsds_password: string;
+  hsds_domain: string;
 }

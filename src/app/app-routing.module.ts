@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('@app/pages/profile/profile-page.module').then(m => m.ProfilePageModule),
   },
   {
+    path: 'hsds',
+    loadChildren: () => import('@app/pages/hsds/hsds-page.module').then(m => m.HsdsPageModule),
+  },
+  {
     path: 'notes',
     loadChildren: () => import('@app/pages/notes/notes-page.module').then(m => m.NotesPageModule),
   },

@@ -1,0 +1,39 @@
+<div class="hsds-form">
+
+  <div class="hsds-form-row">
+    <label>URL</label>
+    <input [(ngModel)]="url" type="text">
+  </div>
+
+  <div class="hsds-form-row">
+    <label>Username</label>
+    <input [(ngModel)]="username" type="text">
+  </div>
+
+  <div class="hsds-form-row">
+    <label>Password</label>
+    <input [(ngModel)]="password" type="password">
+  </div>
+
+  <div class="hsds-form-row">
+    <label>Domain</label>
+    <input [(ngModel)]="domain" type="text">
+  </div>
+
+  <div class="hsds-form-row">
+    <label>Filename</label>
+    <input [(ngModel)]="filename" type="text">
+  </div>
+
+  <button type="button"
+          class="btn mlzeln-button-regular mlzeln-button-outline"
+          (click)="renderReactComponent()">
+    Load
+  </button>
+</div>
+
+<div #hsdsContainer class="hsds-container"></div>
+
+
+
+
