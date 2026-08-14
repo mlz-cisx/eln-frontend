@@ -44,6 +44,12 @@ import {
   AddElementModalComponent
 } from "@app/modules/labbook/components/modals/add_new/addelem.component";
 
+/** Gridster item with rendering flag. */
+interface GridsterItemWithElement extends GridsterItemConfig {
+  element: LabBookElement<unknown>;
+  label?: string;
+}
+
 
 @UntilDestroy()
 @Component({
@@ -65,6 +71,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   private updateSubscription: Subscription | null = null;
 
+  /** pks of elements whose position/size changed locally and not yet synced */
+  private changedPks: Set<string> = new Set();
+
   public drawBoardElements: Array<GridsterItemConfig> = [];
 
   public labbookElements: Array<any> = []
@@ -72,8 +81,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public options: GridsterConfig = {
     ...gridsterConfig,
     scrollToNewItems : false,
-    itemChangeCallback: () => this.updateAllElements(),
-    itemResizeCallback: () => this.updateAllElements(),
+    itemChangeCallback: (item: GridsterItemConfig) => this.markElementChanged(item),
+    itemResizeCallback: (item: GridsterItemConfig) => this.markElementChanged(item),
   };
 
   public socketLoading = false;
@@ -253,24 +262,47 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  public updateAllElements(elements?: LabBookElementPayload[]): void {
+  public updateAllElements(): void {
+    this.scheduleSync();
+  }
 
+  /**
+   * drag/resize callback — mark the item as changed and schedule a debounced update
+   */
+  private markElementChanged(item: GridsterItemConfig): void {
+    const pk = (item as GridsterItemWithElement).element.pk;
+    if (pk) {
+      this.changedPks.add(pk);
+    }
+    this.scheduleSync();
+  }
+
+  /**
+   * One shared debounce for every grid change.
+  **/
+  private scheduleSync(): void {
     if (this.updateSubscription) {
-      // if there is a previous update, unsubscribe to cancel it
       this.updateSubscription.unsubscribe();
     }
-
-    const elementsPayload =
-      elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
-
     this.ngZone.runOutsideAngular(() => {
       this.updateSubscription = timer(1000)
         .pipe(
           switchMap(() => {
+            const payload = this.convertToLabBookElementPayload(
+              this.drawBoardElements.filter(element =>
+                this.changedPks.has((element as GridsterItemWithElement).element.pk)
+              )
+            );
+            if (payload.length === 0) {
+              this.changedPks.clear();
+              this.continue_search();
+              return of(null);
+            }
             return this.labBooksService
-              .updateAllElements(this.id, elementsPayload)
+              .updateAllElements(this.id, payload)
               .pipe(
                 tap(() => {
+                  this.changedPks.clear();
                   this.continue_search();
                 }),
                 catchError(() => {
@@ -316,41 +348,37 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.labBooksService.getElements(this.id)
       .pipe(untilDestroyed(this))
       .subscribe(labBookElements => {
+        const newdrawBoardElements: GridsterItemConfig[] = this.convertToGridItems(labBookElements);
 
-        const oldItems = this.drawBoardElements;
-        const newItems = this.convertToGridItems(labBookElements);
+        // index incoming items by pk so every pass below is O(n) instead of O(n*m).
+        const incomingByPk = new Map<string, GridsterItemConfig>();
+        for (const item of newdrawBoardElements) {
+          incomingByPk.set(item['element'].pk, item);
+        }
 
-        // 1. Updated existing items
-        const updatedExisting = newItems
-          .filter(newItem =>
-            oldItems.some(oldItem => oldItem['element'].pk === newItem['element'].pk)
-          )
-          .map(newItem => {
-            const oldItem = oldItems.find(i => i['element'].pk === newItem['element'].pk);
-            return {
-              ...oldItem,
-              x: newItem.x,
-              y: newItem.y,
-              cols: newItem.cols,
-              rows: newItem.rows
-            };
+        const updatedElements: GridsterItemConfig[] = [];
+        for (const drawBoardElement of this.drawBoardElements) {
+          const fresh = incomingByPk.get(drawBoardElement['element'].pk);
+          if (!fresh) {
+            // element no longer exists server-side → drop it
+            continue;
+          }
+          updatedElements.push({
+            ...drawBoardElement,
+            x: fresh.x,
+            y: fresh.y,
+            cols: fresh.cols,
+            rows: fresh.rows,
+            resizeEnabled: fresh.resizeEnabled,
+            element: (fresh as GridsterItemWithElement).element,
+            label: (fresh as GridsterItemWithElement).label,
           });
+          incomingByPk.delete((drawBoardElement as GridsterItemWithElement).element.pk);
+        }
 
-        // 2. New items
-        const addedItems = newItems.filter(newItem =>
-          !oldItems.some(oldItem => oldItem['element'].pk === newItem['element'].pk)
-        );
-
-        // 3. Final array (CRITICAL!)
-        this.drawBoardElements = [
-          ...updatedExisting,
-          ...addedItems
-        ];
-
-        // 4. Force Gridster to re-render
-        queueMicrotask(() => {
-          this.options['api']?.forceUpdate();
-        });
+        // remaining incoming items are new
+        const elementsToAdd = [...incomingByPk.values()];
+        this.drawBoardElements = [...updatedElements, ...elementsToAdd];
 
         this.socketLoading = false;
         this.cdr.markForCheck();
@@ -361,10 +389,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         }
 
         // offer jumping to new elements
-        if (addedItems.length != 0 && !this.queuedSocketRefreshes) {
+        if (elementsToAdd.length != 0 && !this.queuedSocketRefreshes) {
           // eslint-disable-next-line
-          addedItems.sort(((a, b) => a['element']['last_modified_at'] - b['element']['last_modified_at']))
-          const lastestElem = addedItems[0];
+          elementsToAdd.sort(((a, b) => a['element']['last_modified_at'] - b['element']['last_modified_at']))
+          const lastestElem = elementsToAdd[0];
           this.toastrService.info('New element added, click to jump')
             .onTap
             .pipe(take(1))
@@ -450,15 +478,12 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     }
 
     currentElements.forEach(drawBoardElement => {
-      let newY = drawBoardElement.y;
-
-      if (drawBoardElement.y >= yStartPosition) {
-        if (direction === 'down') {
-          newY = drawBoardElement.y + distance;
-        } else {
-          newY = drawBoardElement.y - distance;
-        }
-      }
+      const shift = drawBoardElement.y >= yStartPosition;
+      const newY = shift
+        ? direction === 'down'
+          ? drawBoardElement.y + distance
+          : drawBoardElement.y - distance
+        : drawBoardElement.y;
 
       movedElements.push({
         cols: drawBoardElement.cols,
@@ -468,6 +493,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         resizeEnabled: drawBoardElement.resizeEnabled!,
         element: drawBoardElement['element'],
       });
+
+      if (!elements?.length && shift) {
+        this.changedPks.add((drawBoardElement as GridsterItemWithElement).element.pk);
+      }
     });
 
     if (!elements?.length) {
