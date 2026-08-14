@@ -9,7 +9,6 @@ declare global {
 export const environment = {
   production: true,
   apiUrl: window['env'].apiUrl.replace(/\/+$/, ''),
-  wsUrl: window['env'].wsUrl.replace(/\/+$/, ''),
   labBookSocketRefreshInterval: window['env'].labBookSocketRefreshInterval,
   keycloak_integration: window['env'].keycloak_integration,
   instr_csv_all: window['env'].instr_csv_all,

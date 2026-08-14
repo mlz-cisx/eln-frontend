@@ -166,31 +166,35 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   ngAfterViewInit() {
 
 
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.model_pk === this.initialState!.pk) {
-        if (data.model_name === 'comments') {
-          this.element.num_related_comments = data['comments_count']
-          this.cdr.markForCheck();
-          return
-        }
-        if (data.model_name === 'picture_content') {
-          return
-        }
-        this.picturesService
-          .get(this.initialState!.pk)
-          .pipe(untilDestroyed(this))
-          .subscribe(privilegesData => {
-            this.initialState = {...privilegesData.data};
-            this.form.patchValue(
-              {
-                pic_title: privilegesData.data.title,
-              },
-              {emitEvent: false}
-            );
-            this.cdr.markForCheck();
-          });
+    this.websocketService.subscribeElement(this.initialState!.pk).pipe(untilDestroyed(this)).subscribe((data: any) => {
+      if (data.model_name === 'comments') {
+        this.element.num_related_comments = data['comments_count']
+        this.cdr.markForCheck();
+        return
       }
+      if (data.model_name === 'picture_content') {
+        return
+      }
+      this.picturesService
+        .get(this.initialState!.pk)
+        .pipe(untilDestroyed(this))
+        .subscribe(privilegesData => {
+          this.initialState = {...privilegesData.data};
+          this.form.patchValue(
+            {
+              pic_title: privilegesData.data.title,
+            },
+            {emitEvent: false}
+          );
+          this.cdr.markForCheck();
+        });
     });
+  }
+
+  public ngOnDestroy(): void {
+    if (this.initialState) {
+      this.websocketService.unsubscribeElement(this.initialState.pk);
+    }
   }
 
   public initDetails(): void {

@@ -128,7 +128,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       this.initDetails();   // chunked Gridster loading
     });
     // eslint-disable-next-line
-    this.websocketSubscription = this.websocketService.elements.pipe().subscribe((data: any) => {
+    this.websocketSubscription = this.websocketService.subscribeLabbook(this.id).subscribe((data: any) => {
       if (data.model_pk === this.id) {
         if (data.action === 'strict_mode_enabled') {
           this.toastrService.warning(
@@ -159,6 +159,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     if (this.websocketSubscription) {
       this.websocketSubscription.unsubscribe();
     }
+    this.websocketService.unsubscribeLabbook(this.id);
   }
 
   public initDetails(): void {

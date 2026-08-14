@@ -159,36 +159,40 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
   ngAfterViewInit() {
 
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.model_pk === this.initialState!.pk) {
-        if (data.model_name === 'comments') {
-          this.element.num_related_comments = data['comments_count']
-          this.cdr.markForCheck();
-          return
-        }
-        if (!this.submitted) {
-          this.notesService
-            .get(this.initialState!.pk)
-            .pipe(untilDestroyed(this))
-            .subscribe(privilegesData => {
-              if (this.f.note_content.value != privilegesData.data.content) {
-                this.blink();
-              }
-              this.form.patchValue(
-                {
-                  note_subject: privilegesData.data.subject,
-                  note_content: privilegesData.data.content,
-                },
-                {emitEvent: false}
-              );
-              this.preloaded_content = privilegesData.data.content
-              this.cdr.markForCheck()
-
-            });
-        }
-        this.submitted = false
+    this.websocketService.subscribeElement(this.initialState!.pk).pipe(untilDestroyed(this)).subscribe((data: any) => {
+      if (data.model_name === 'comments') {
+        this.element.num_related_comments = data['comments_count']
+        this.cdr.markForCheck();
+        return
       }
+      if (!this.submitted) {
+        this.notesService
+          .get(this.initialState!.pk)
+          .pipe(untilDestroyed(this))
+          .subscribe(privilegesData => {
+            if (this.f.note_content.value != privilegesData.data.content) {
+              this.blink();
+            }
+            this.form.patchValue(
+              {
+                note_subject: privilegesData.data.subject,
+                note_content: privilegesData.data.content,
+              },
+              {emitEvent: false}
+            );
+            this.preloaded_content = privilegesData.data.content
+            this.cdr.markForCheck()
+
+          });
+      }
+      this.submitted = false
     });
+  }
+
+  public ngOnDestroy(): void {
+    if (this.initialState) {
+      this.websocketService.unsubscribeElement(this.initialState.pk);
+    }
   }
 
   public initDetails(): void {

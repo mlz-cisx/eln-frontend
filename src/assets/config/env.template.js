@@ -1,7 +1,6 @@
 (function (window) {
   window.env = window.env || {};
   window['env'].apiUrl = '${API_URL}';
-  window['env'].wsUrl = '${WS_URL}';
   window['env'].labBookSocketRefreshInterval = '${LAB_BOOK_SOCKET_REFRESH_INTERVAL}' || 1000;
   window['env'].keycloak_integration = '${KEYCLOAK_INTEGRATION}' === 'true';
   const rawInstrCsvAll = '${INSTR_CSV_ALL}';

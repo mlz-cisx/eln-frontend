@@ -210,37 +210,35 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      if (data.model_pk === this.initialState!.pk) {
-        if (data.model_name === 'comments') {
-          this.element.num_related_comments = data['comments_count']
-          this.cdr.markForCheck();
-          return
-        }
-        if (!this.submitted) {
-          this.filesService
-            .get(this.initialState!.pk)
-            .pipe(untilDestroyed(this))
-            .subscribe(privilegesData => {
-              if (this.f.file_description.value != privilegesData.data.description) {
-                this.blink();
-              }
-              this.form.patchValue(
-                {
-                  file_title: privilegesData.data.title,
-                  file_description: privilegesData.data.description,
-                },
-                {emitEvent: false}
-              );
-              this.preloaded_content = privilegesData.data.description
-              if (this.preload) {
-                  this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
-              }
-
-            });
-        }
-        this.submitted = false
+    this.websocketService.subscribeElement(this.initialState!.pk).pipe(untilDestroyed(this)).subscribe((data: any) => {
+      if (data.model_name === 'comments') {
+        this.element.num_related_comments = data['comments_count']
+        this.cdr.markForCheck();
+        return
       }
+      if (!this.submitted) {
+        this.filesService
+          .get(this.initialState!.pk)
+          .pipe(untilDestroyed(this))
+          .subscribe(privilegesData => {
+            if (this.f.file_description.value != privilegesData.data.description) {
+              this.blink();
+            }
+            this.form.patchValue(
+              {
+                file_title: privilegesData.data.title,
+                file_description: privilegesData.data.description,
+              },
+              {emitEvent: false}
+            );
+            this.preloaded_content = privilegesData.data.description
+            if (this.preload) {
+                this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
+            }
+
+          });
+      }
+      this.submitted = false
     });
 
     if (this.preload) {
@@ -263,6 +261,12 @@ export class LabBookDrawBoardFileComponent implements OnInit {
         }
       );
       observer.observe(descriptionElement);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    if (this.initialState) {
+      this.websocketService.unsubscribeElement(this.initialState.pk);
     }
   }
 

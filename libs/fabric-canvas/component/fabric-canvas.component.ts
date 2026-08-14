@@ -6,6 +6,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnDestroy,
   Output,
   ViewChild,
   inject
@@ -14,7 +15,7 @@ import * as fabric from 'fabric';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {debounceTime, Subject} from 'rxjs';
+import {debounceTime, Subject, Subscription} from 'rxjs';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons/faFolderOpen';
@@ -68,7 +69,7 @@ import {environment} from "@environments/environment";
   standalone: true,
   imports: [CommonModule, FormsModule, FontAwesomeModule]
 })
-export class FabricCanvasComponent implements AfterViewInit {
+export class FabricCanvasComponent implements AfterViewInit, OnDestroy {
 
 
   constructor(private cdr: ChangeDetectorRef,
@@ -125,6 +126,11 @@ export class FabricCanvasComponent implements AfterViewInit {
 
   @ViewChild('fabricCanvas', {static: true}) canvasElement!: ElementRef<HTMLCanvasElement>;
 
+  public ngOnDestroy(): void {
+    this.elementSubscription?.unsubscribe();
+    this.websocketService.unsubscribeElement(this.uuid);
+  }
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.showConfirm && !this.eRef.nativeElement.contains(event.target)) {
@@ -148,6 +154,8 @@ export class FabricCanvasComponent implements AfterViewInit {
 
 
   private storeSubject = new Subject<string>();
+
+  private elementSubscription?: Subscription;
 
   private isRestoring = false;
 
@@ -264,9 +272,7 @@ export class FabricCanvasComponent implements AfterViewInit {
       this.canvas.renderAll();
 
       if(!this.restore_preview) {
-
-        this.websocketService.elements.pipe().subscribe(async (data: any) => {
-          if (data.model_pk === this.uuid) {
+        this.elementSubscription = this.websocketService.subscribeElement(this.uuid).pipe().subscribe(async (data: any) => {
             if (data.model_name === 'picture_title' || data.model_name === 'comments') {
               return
             }
@@ -291,7 +297,6 @@ export class FabricCanvasComponent implements AfterViewInit {
             this.canvas.selection = false;
             this.canvas.discardActiveObject();
             this.canvas.renderAll();
-          }
         })
         // debounce ctrl+z undo
         this.undoSubject.pipe(

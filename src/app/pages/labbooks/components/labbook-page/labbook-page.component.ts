@@ -209,13 +209,14 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     });
 
 
-    this.websocketService.elements.pipe(untilDestroyed(this)).subscribe((data: any) => {
-      this.cdr.detectChanges();
-      if (data.model_pk === this.id && !this.submitted) {
-        this.refreshChanges.next(true);
-        this.refreshVersions.next(true);
-        this.submitted = false
+    this.websocketService.subscribeLabbook(this.id).pipe(untilDestroyed(this)).subscribe(() => {
+      if (this.submitted) {
+        return;
       }
+      this.cdr.detectChanges();
+      this.refreshChanges.next(true);
+      this.refreshVersions.next(true);
+      this.submitted = false;
     });
 
     this.initSidebar();
@@ -234,6 +235,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     document.removeEventListener('keydown', this.onKeyDown, true);
+    this.websocketService.unsubscribeLabbook(this.id);
   }
 
   onKeyDown = (event: KeyboardEvent) => {
