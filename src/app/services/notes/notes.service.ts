@@ -7,7 +7,7 @@ import type {
   ExportService,
   FinalizeVersion,
   Note,
-  Note_with_privileges,
+  Note_with_privileges, NoteList,
   NotePayload,
   PrivilegesData,
   RecentChanges,
@@ -34,7 +34,7 @@ export class NotesService
                      private logout: LogoutService) {
   }
 
-  public getList(params = new HttpParams()): Observable<{ total: number; data: Note[] }> {
+  public getList(params = new HttpParams()): Observable<{ total: number; data: NoteList[] }> {
     return this.httpClient.get<Note[]>(this.apiUrl, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
       map(data => ({
         total: data.length,

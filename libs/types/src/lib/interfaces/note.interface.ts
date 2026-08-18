@@ -30,3 +30,8 @@ export interface Note_with_privileges {
   note: Note,
   privileges: Privileges
 }
+
+export interface NoteList extends Omit<Note, 'content'> {
+  content?: string;
+}
+

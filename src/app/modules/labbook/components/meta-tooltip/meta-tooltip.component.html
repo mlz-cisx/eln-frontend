@@ -7,16 +7,27 @@
   <!-- Canvas mode -->
   <div *ngIf="canvasMode" class="metadata-container">
     <app-fabric-canvas
-            [uuid]="pic_uuid"
+            [uuid]="elem_uuid"
             [restore_preview]="true">
     </app-fabric-canvas>
   </div>
 
   <!-- HTML mode -->
-  <div *ngIf="htmlMode"
-       class="metadata-container"
-       [ngClass]="{ 'nowrap-mode': useNowrap }"
+<div *ngIf="htmlMode"
+     class="metadata-container"
+     [ngClass]="{ 'nowrap-mode': useNowrap }"
+     [ngSwitch]="elem_type">
+
+  <!-- NOTE → MathJax -->
+  <div *ngSwitchCase="'shared_elements.note'"
+       [mathjax]="mathjax_content">
+  </div>
+
+  <!-- FILE → Raw HTML -->
+  <div *ngSwitchCase="'shared_elements.file'"
        [innerHTML]="content">
   </div>
+</div>
+
 
 </div>

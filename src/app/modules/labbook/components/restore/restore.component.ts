@@ -18,7 +18,7 @@ import {
   PicturesService,
   RestoreEventsService
 } from '@app/services';
-import type {ContentTypeModels, File, Note, Picture} from '@joeseln/types';
+import type {ContentTypeModels, File, NoteList, Picture} from '@joeseln/types';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {environment} from "@environments/environment";
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
@@ -26,7 +26,7 @@ import {ComponentPortal} from '@angular/cdk/portal';
 import {
   MetaTooltipComponent
 } from '@app/modules/labbook/components/meta-tooltip/meta-tooltip.component';
-import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {SafeHtml} from "@angular/platform-browser";
 
 interface FromSearch {
   search: string | null;
@@ -35,7 +35,7 @@ interface FromSearch {
   picture: boolean;
 }
 
-type Element = Note | Picture | File
+type Element = NoteList | Picture | File
 
 @UntilDestroy()
 @Component({
@@ -94,7 +94,6 @@ export class LabBookRestoreComponent implements OnInit {
     private readonly contentTypeModelService: ContentTypeModelService,
     private readonly restoreEvents: RestoreEventsService,
     private overlay: Overlay,
-    private sanitizer: DomSanitizer
   ) {
   }
 
@@ -303,7 +302,7 @@ export class LabBookRestoreComponent implements OnInit {
     const tooltipPortal = new ComponentPortal(MetaTooltipComponent);
     const tooltipRef = this.overlayRef.attach(tooltipPortal);
 
-    let textOnly = ""
+
 
     tooltipRef.instance.hoverState.subscribe(state => {
       if (state === 'enter') {
@@ -322,37 +321,29 @@ export class LabBookRestoreComponent implements OnInit {
     });
 
     if (result.content_type_model === 'shared_elements.file') {
-      this.safeContent = this.sanitizer.bypassSecurityTrustHtml(result.description);
-      textOnly = this.extractTextOnly(result.description);
 
       tooltipRef.instance.htmlMode = true;
       tooltipRef.instance.canvasMode = false;
+      tooltipRef.instance.elem_uuid = result.pk
+      tooltipRef.instance.elem_type = 'shared_elements.file'
     }
 
     if (result.content_type_model === 'pictures.picture') {
       tooltipRef.instance.canvasMode = true;
       tooltipRef.instance.htmlMode = false;
-      tooltipRef.instance.pic_uuid = result.pk
+      tooltipRef.instance.elem_uuid = result.pk
       return;
     }
 
 
     if (result.content_type_model === 'shared_elements.note') {
-      this.safeContent = this.sanitizer.bypassSecurityTrustHtml(result.content);
-      textOnly = this.extractTextOnly(result.content);
+
 
       tooltipRef.instance.htmlMode = true;
       tooltipRef.instance.canvasMode = false;
+      tooltipRef.instance.elem_uuid = result.pk
+      tooltipRef.instance.elem_type = 'shared_elements.note'
     }
-
-
-    // measure longest line
-    const longest = this.getLongestTextLine(textOnly);
-    this.useNowrap = longest.length < 250;
-
-    tooltipRef.instance.content = this.safeContent;
-    tooltipRef.instance.useNowrap = this.useNowrap;
-
 
   }
 
@@ -376,20 +367,6 @@ export class LabBookRestoreComponent implements OnInit {
   }
 
 
-  private extractTextOnly(html: string): string {
-    // Convert <br> tags to newline characters
-    const normalized = html.replace(/<br\s*\/?>/gi, '\n');
-    // Strip all HTML tags
-    const tmp = document.createElement('div');
-    tmp.innerHTML = normalized;
-    return tmp.textContent || '';
-  }
-
-
-  private getLongestTextLine(text: string): string {
-    const lines = text.split('\n');
-    return lines.reduce((a, b) => (b.length > a.length ? b : a), '');
-  }
 
   onListEnter(origin: HTMLElement, result: any) {
     if (!result || !result.pk) return;   // FIX
