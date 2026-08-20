@@ -4,10 +4,10 @@
 }
 
 .metadata-container {
-  max-width: 400px;
-  max-height: 300px; /* vertical limit */
+  max-width: 20.83vw;   /* 400px relative to 1920 */
+  max-height: 27.78vh;  /* 300px relative to 1080 */
   overflow-y: auto; /* enable vertical scrolling */
-  overflow-x: hidden; /* no horizontal scroll */
+  overflow-x: auto;
 
   background: #fff;
   color: #333;
@@ -40,8 +40,8 @@
 }
 
 .canvas-tooltip {
-  max-width: 250px; /* small width */
-  max-height: 200px; /* small height */
+  max-width: 20.83vw;   /* 400px */
+  max-height: 32.41vh;  /* 350px */
   overflow: hidden; /* prevent spill */
   padding: 8px;
   border-radius: 6px;
@@ -50,7 +50,7 @@
 }
 
 .canvas-tooltip .metadata-container {
-  max-height: 180px; /* inner scroll area */
+  max-height: 23.15vh;  /* 250px */
   overflow-y: auto;
 }
 
