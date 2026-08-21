@@ -643,7 +643,7 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal
 /* Root container: owns the viewport height */
 .hsds-container {
   display: flex;
-  height: 100vh;
+  height: 90vh !important;
   overflow: hidden;
 }
 

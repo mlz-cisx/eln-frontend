@@ -43,9 +43,6 @@ export class HSDSViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.root) {
-      this.renderReactComponent();
-    }
   }
 
   ngOnDestroy(): void {
