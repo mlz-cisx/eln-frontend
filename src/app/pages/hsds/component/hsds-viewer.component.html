@@ -2,27 +2,47 @@
 
   <div class="hsds-form-row">
     <label>URL</label>
-    <input [(ngModel)]="url" type="text">
+    <input [(ngModel)]="url"
+           type="text"
+           autocomplete="off"
+           autocapitalize="off"
+           spellcheck="false">
   </div>
 
   <div class="hsds-form-row">
     <label>Username</label>
-    <input [(ngModel)]="username" type="text">
+    <input [(ngModel)]="username"
+           type="text"
+           autocomplete="new-username"
+           autocapitalize="off"
+           spellcheck="false">
   </div>
 
   <div class="hsds-form-row">
     <label>Password</label>
-    <input [(ngModel)]="password" type="password">
+    <input [(ngModel)]="password"
+           type="password"
+           autocomplete="new-password"
+           autocapitalize="off"
+           spellcheck="false">
   </div>
 
   <div class="hsds-form-row">
     <label>Domain</label>
-    <input [(ngModel)]="domain" type="text">
+    <input [(ngModel)]="domain"
+           type="text"
+           autocomplete="off"
+           autocapitalize="off"
+           spellcheck="false">
   </div>
 
   <div class="hsds-form-row">
     <label>Filename</label>
-    <input [(ngModel)]="filename" type="text">
+    <input [(ngModel)]="filename"
+           type="text"
+           autocomplete="off"
+           autocapitalize="off"
+           spellcheck="false">
   </div>
 
   <button type="button"

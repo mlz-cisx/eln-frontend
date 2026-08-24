@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {createElement} from 'react';
 import {createRoot} from 'react-dom/client';
 import {ModalState} from "@app/enums/modal-state.enum";
@@ -19,7 +11,7 @@ import {environment} from "@environments/environment";
   styleUrl: './hsds-viewer.component.css',
   standalone: false,
 })
-export class HSDSViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class HSDSViewerComponent implements OnDestroy {
 
   @ViewChild('hsdsContainer', {static: true})
   private container!: ElementRef<HTMLDivElement>;
@@ -36,14 +28,12 @@ export class HSDSViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   public filename: string = ''
 
 
-
   private root: ReturnType<typeof createRoot> | null = null;
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.normalizeInputs();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-  }
 
   ngOnDestroy(): void {
     if (this.root) {
