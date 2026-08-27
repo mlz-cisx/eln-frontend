@@ -1,4 +1,9 @@
-import {CompactType, DisplayGrid, GridsterConfig, GridType} from 'angular-gridster2';
+import {
+  CompactType,
+  DisplayGrid,
+  GridsterConfig,
+  GridType
+} from 'angular-gridster2';
 
 export const gridsterConfig: GridsterConfig = {
   gridType: GridType.VerticalFixed,
@@ -71,4 +76,6 @@ export const gridsterConfig: GridsterConfig = {
   disableWindowResize: false,
   disableWarnings: false,
   scrollToNewItems: true,
+  enableBoundaryControl: false,
+  disableAutoPositionOnConflict: false,
 };

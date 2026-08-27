@@ -3,19 +3,21 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostListener,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
   Output,
   Renderer2,
-  HostListener,
 } from '@angular/core';
 import {
   FilesService,
   LabbookCollapseService,
   LabbooksService,
-  NotesService, PicturesService, RestoreEventsService,
+  NotesService,
+  PicturesService,
+  RestoreEventsService,
   WebSocketService
 } from '@app/services';
 import {environment} from '@environments/environment';
@@ -433,55 +435,46 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     }
     this.socketLoading = true;
 
-    this.labBooksService
-      .getElements(this.id)
+    this.labBooksService.getElements(this.id)
       .pipe(untilDestroyed(this))
       .subscribe(labBookElements => {
-        const oldDrawBoardElements = [...this.drawBoardElements];
-        const newdrawBoardElements: GridsterItemConfig[] = this.convertToGridItems(labBookElements);
 
-        // Remove deleted elements
-        const elementsToRemove = oldDrawBoardElements.filter(
-          (oldField: GridsterItemConfig) => !newdrawBoardElements.some((newField: GridsterItemConfig) => oldField['element'].pk === newField['element'].pk)
-        );
-        elementsToRemove.forEach(element => {
-          for (let index = this.drawBoardElements.length - 1; index >= 0; index--) {
-            const drawBoardElement = this.drawBoardElements[index];
-            if (drawBoardElement['element'].pk === element['element'].pk) {
-              this.drawBoardElements.splice(index, 1);
-            }
-          }
-        });
+        const oldItems = this.drawBoardElements;
+        const newItems = this.convertToGridItems(labBookElements);
 
-        // Update existing elements
-        newdrawBoardElements
-          .filter((newField: GridsterItemConfig) =>
-            oldDrawBoardElements.some((oldField: GridsterItemConfig) => newField['element'].pk === oldField['element'].pk)
+        // 1. Updated existing items
+        const updatedExisting = newItems
+          .filter(newItem =>
+            oldItems.some(oldItem => oldItem['element'].pk === newItem['element'].pk)
           )
-          .forEach(element => {
-            this.drawBoardElements.forEach((drawBoardElement, index) => {
-              if (drawBoardElement['element'].pk === element['element'].pk) {
-                this.drawBoardElements[index].x = element.x;
-                this.drawBoardElements[index].y = element.y;
-                this.drawBoardElements[index].cols = element.cols;
-                this.drawBoardElements[index].rows = element.rows;
-              }
-            });
+          .map(newItem => {
+            const oldItem = oldItems.find(i => i['element'].pk === newItem['element'].pk);
+            return {
+              ...oldItem,
+              x: newItem.x,
+              y: newItem.y,
+              cols: newItem.cols,
+              rows: newItem.rows
+            };
           });
 
-        // We must tell the options that we changed them even though we didn't. This way Gridster will
-        // check the changed properties of items and visually apply them. This is important if we move
-        // or resize items. As long as Gridster won't implement better support we need this workaround.
-        this.options['api']?.optionsChanged?.();
-
-        // Add new elements
-        const elementsToAdd = newdrawBoardElements.filter(
-          (newField: GridsterItemConfig) => !oldDrawBoardElements.some((oldField: GridsterItemConfig) => newField['element'].pk === oldField['element'].pk)
+        // 2. New items
+        const addedItems = newItems.filter(newItem =>
+          !oldItems.some(oldItem => oldItem['element'].pk === newItem['element'].pk)
         );
-        this.drawBoardElements = [...this.drawBoardElements, ...elementsToAdd];
+
+        // 3. Final array (CRITICAL!)
+        this.drawBoardElements = [
+          ...updatedExisting,
+          ...addedItems
+        ];
+
+        // 4. Force Gridster to re-render
+        queueMicrotask(() => {
+          this.options['api']?.forceUpdate();
+        });
 
         this.socketLoading = false;
-        this.socketRefreshTimeout = undefined;
         this.cdr.markForCheck();
 
         if (this.queuedSocketRefreshes) {
@@ -490,10 +483,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         }
 
         // offer jumping to new elements
-        if (elementsToAdd.length != 0 && !this.queuedSocketRefreshes) {
+        if (addedItems.length != 0 && !this.queuedSocketRefreshes) {
           // eslint-disable-next-line
-          elementsToAdd.sort(((a, b) => a['element']['last_modified_at'] - b['element']['last_modified_at']))
-          const lastestElem = elementsToAdd[0];
+          addedItems.sort(((a, b) => a['element']['last_modified_at'] - b['element']['last_modified_at']))
+          const lastestElem = addedItems[0];
           this.toastrService.info('New element added, click to jump')
             .onTap
             .pipe(take(1))
