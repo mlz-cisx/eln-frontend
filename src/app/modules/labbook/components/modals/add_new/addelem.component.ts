@@ -1,20 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   OnDestroy,
   Output
 } from '@angular/core';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {Subject} from 'rxjs';
 import type {LabBook} from '@joeseln/types';
-import {LabBookElementEvent, ModalCallback} from "@joeseln/types";
 import {
   NewLabBookSketchModalComponent
 } from "@app/modules/labbook/components/modals/new/sketch/new.component";
-import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
-import {take} from "rxjs/operators";
-import {ModalState} from "@app/enums/modal-state.enum";
+import {UntilDestroy} from "@ngneat/until-destroy";
 import {
   NewLabBookFileElementModalComponent
 } from "@app/modules/labbook/components/modals/new/file/new.component";
@@ -32,7 +28,6 @@ import {
 })
 export class AddElementModalComponent implements OnDestroy {
   @Output()
-  public elem_created = new EventEmitter<LabBookElementEvent>();
   public position: number = this.parentmodalRef.data.position;// eslint-disable-line
   public loading: boolean = false;
   public labbooks: LabBook[] = [];
@@ -78,9 +73,7 @@ export class AddElementModalComponent implements OnDestroy {
       },
     });
 
-    this.childmodalRef.afterClosed$
-      .pipe(untilDestroyed(this), take(1))
-      .subscribe((callback: ModalCallback) => this.onModalClose(callback));
+
   }
 
   public onOpenFileModal(position: number): void {
@@ -93,9 +86,7 @@ export class AddElementModalComponent implements OnDestroy {
       },
     });
 
-    this.childmodalRef.afterClosed$
-      .pipe(untilDestroyed(this), take(1))
-      .subscribe((callback: ModalCallback) => this.onModalClose(callback));
+
   }
 
   public onOpenNoteModal(position: number): void {
@@ -108,9 +99,6 @@ export class AddElementModalComponent implements OnDestroy {
       },
     });
 
-    this.childmodalRef.afterClosed$
-      .pipe(untilDestroyed(this), take(1))
-      .subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   ngOnDestroy() {
@@ -119,11 +107,6 @@ export class AddElementModalComponent implements OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  public onModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.elem_created.emit(callback.data);
-    }
-  }
 
 
 }

@@ -2,13 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   HostListener,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
-  Output,
   Renderer2,
 } from '@angular/core';
 import {
@@ -21,12 +19,7 @@ import {
   WebSocketService
 } from '@app/services';
 import {environment} from '@environments/environment';
-import type {
-  LabBookElement,
-  LabBookElementEvent,
-  LabBookElementPayload,
-} from '@joeseln/types';
-import {ModalCallback} from "@joeseln/types";
+import type {LabBookElement, LabBookElementPayload,} from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type {GridsterConfig, GridsterItemConfig} from 'angular-gridster2';
@@ -47,7 +40,6 @@ import {gridsterConfig} from '../../../config/gridster-config';
 import {
   highlight_element_background_color
 } from "@app/modules/labbook/config/admin-element-background-color";
-import {ModalState} from "@app/enums/modal-state.enum";
 import {
   AddElementModalComponent
 } from "@app/modules/labbook/components/modals/add_new/addelem.component";
@@ -65,11 +57,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()
   public id!: string;
 
-  @Input()
-  public created?: EventEmitter<LabBookElementEvent>;
-
-  @Output()
-  public elem_created = new EventEmitter<LabBookElementEvent>();
 
   @Input()
   public editable? = false;
@@ -117,10 +104,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-
-    this.created?.subscribe((event: LabBookElementEvent) => {
-      this.addElement(event);
-    });
 
   }
 
@@ -269,111 +252,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     return cleaned;
   }
 
-
-  private disableScrollToNewItems(): void {
-    this.options.scrollToNewItems = false;
-    // Tell Gridster to re-read the updated config
-    this.options['api']?.optionsChanged?.call(this.options);
-  }
-
-  private enableScrollToNewItems(): void {
-    this.options.scrollToNewItems = true;
-    // Tell Gridster to re-read the updated config
-    this.options['api']?.optionsChanged?.call(this.options);
-  }
-
-
-  public addElement(event: LabBookElementEvent): void {
-    // Basically it would be ideal to let all the grids (the main grid and all the section grids)
-    // handle the add logic themselves. However, this is not possible because this code only gets
-    // executed when the grid is initialized. This is only the case for the main grid as it is
-    // always visible and sections can be closed at any time (which means the grid may not be
-    // initialized at the time of adding an element to a section). That's why we must handle
-    // section logic in the main grid too.
-    // If logic for the LabBook moves to the backend this whole code can be deleted.
-
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-
-    const addToLabBook = event.parentElement === 'labBook';
-    const addToSection = !addToLabBook;
-
-    let getSectionElements$ = of([] as LabBookElement<any>[]);
-    let sectionElements: LabBookElement<any>[] | undefined;
-
-    if (addToSection) {
-      getSectionElements$ = this.labBooksService.getElements(this.id, event.parentElement).pipe(untilDestroyed(this));
-    }
-
-    getSectionElements$
-      .pipe(
-        untilDestroyed(this),
-        switchMap(elements => {
-          if (addToSection) {
-            sectionElements = [...elements];
-          }
-
-          const element: LabBookElementPayload = {
-            child_object_content_type: event.childObjectContentType,
-            child_object_id: event.childObjectId,
-            position_x: 0,
-            position_y: event.position === 'top' ? 0 : this.getMaxYPosition(sectionElements),
-            width: 13,
-            height: event.height ?? 10,
-          };
-
-          return this.labBooksService.addElement(this.id, element).pipe(untilDestroyed(this));
-        }),
-      )
-      .subscribe(
-        labBookElement => {
-          const newGridElement: GridsterItemConfig = {
-            label: labBookElement.display,
-            x: labBookElement.position_x,
-            y: labBookElement.position_y,
-            cols: labBookElement.width,
-            rows: labBookElement.height,
-            resizeEnabled: this.editable,
-            element: labBookElement,
-          };
-
-          if (addToLabBook) {
-            if (event.position === 'top') {
-              this.moveElementsVertically(labBookElement.height);
-            }
-
-            this.drawBoardElements.push(newGridElement);
-          } else if (addToSection) {
-            if (event.position === 'top') {
-              if (sectionElements?.length) {
-                const sectionGridElements = this.convertToGridItems(sectionElements);
-                const movedSectionGridElements = this.moveElementsVertically(labBookElement.height, 'down', 0, sectionGridElements);
-                this.updateAllElements([
-                  ...this.convertToLabBookElementPayload([newGridElement]),
-                  ...this.convertToLabBookElementPayload(movedSectionGridElements),
-                ]);
-              }
-            }
-
-            // emit section reload
-          }
-
-          this.loading = false;
-          this.cdr.markForCheck();
-          //  preloaded content has to be rendered again if position is top
-          if (event.position === 'top') {
-            this.updateAllElements();
-          }
-
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
-  }
 
   public updateAllElements(elements?: LabBookElementPayload[]): void {
 
@@ -529,15 +407,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         position: position
       },
     });
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
 
-  public onModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.elem_created.emit(callback.data);
-    }
-  }
 
 
   public convertToGridItems(elements: LabBookElement<any>[]): GridsterItemConfig[] {

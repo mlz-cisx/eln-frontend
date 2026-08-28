@@ -1,19 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-} from '@angular/core';
-import type { LabBookElementEvent } from '@joeseln/types';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import {ChangeDetectionStrategy, Component, Input,} from '@angular/core';
+import {UntilDestroy} from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-labbook-draw-board',
-    templateUrl: './draw-board.component.html',
-    styleUrls: ['./draw-board.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'mlzeln-labbook-draw-board',
+  templateUrl: './draw-board.component.html',
+  styleUrls: ['./draw-board.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class LabBookDrawBoardComponent {
   @Input()
@@ -26,15 +20,4 @@ export class LabBookDrawBoardComponent {
   @Input()
   public restorable? = false;
 
-  public created = new EventEmitter<LabBookElementEvent>();
-
-  public refresh = new EventEmitter<boolean>();
-
-  public onAddElement(event: LabBookElementEvent): void {
-    this.created.next(event);
-  }
-
-  public onRefreshGrid(event: boolean): void {
-    this.refresh.next(event);
-  }
 }

@@ -2,8 +2,6 @@
       <mlzeln-labbook-sidebar *ngIf="editable"
         [id]="id"
         [editable]="editable"
-        (created)="onAddElement($event)"
-        (refresh)="onRefreshGrid($event)"
       ></mlzeln-labbook-sidebar>
     </aside>
       <mlzeln-labbook-restore *ngIf="restorable"
@@ -13,6 +11,5 @@
         style="margin-bottom: 30px !important;"
         #drawBoardGrid
         [id]="id"
-        [created]="created"
         [editable]="editable"
       ></mlzeln-labbook-draw-board-grid>

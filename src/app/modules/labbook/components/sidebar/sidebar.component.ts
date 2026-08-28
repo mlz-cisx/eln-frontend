@@ -4,19 +4,14 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   HostListener,
   Input,
   OnInit,
-  Output,
   Renderer2,
 } from '@angular/core';
-import {ModalState} from '@app/enums/modal-state.enum';
-import type {LabBookElementEvent, ModalCallback} from '@joeseln/types';
 import {LabBookElement, LabBookElementPayload} from "@joeseln/types";
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {take} from 'rxjs/operators';
 import {
   NewLabBookFileElementModalComponent
 } from '../modals/new/file/new.component';
@@ -57,11 +52,6 @@ export class LabBookSidebarComponent implements OnInit {
   @Input()
   public editable? = false;
 
-  @Output()
-  public created = new EventEmitter<LabBookElementEvent>();
-
-  @Output()
-  public refresh = new EventEmitter<boolean>();
 
   public modalRef?: DialogRef;
 
@@ -134,8 +124,6 @@ export class LabBookSidebarComponent implements OnInit {
       closeButton: false,
         data: { labBookId: this.id },
     });
-
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   public onOpenSketchModal(): void {
@@ -144,8 +132,6 @@ export class LabBookSidebarComponent implements OnInit {
       width: '652px',
       data: { labBookId: this.id },
     });
-
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
 
@@ -156,21 +142,9 @@ export class LabBookSidebarComponent implements OnInit {
         data: { labBookId: this.id },
     });
 
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
 
-  public onModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.created.emit(callback.data);
-    }
-  }
-
-  public onImportModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.refresh.emit(true);
-    }
-  }
 
   public gotoTop() {
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -182,7 +156,6 @@ export class LabBookSidebarComponent implements OnInit {
       data: { labBookId: this.id },
     } as DialogConfig);
 
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
   triggerSearch() {
