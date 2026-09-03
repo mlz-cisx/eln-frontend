@@ -7,4 +7,6 @@ export interface Stat {
     total_pics: number;
     image_folder_size: number;
     files_folder_size: number;
+    git_commit_hash: string | null;
+    git_commit_msg: string | null;
 }

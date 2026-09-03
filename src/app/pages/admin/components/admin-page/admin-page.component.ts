@@ -19,6 +19,7 @@ import {
 import {
   UploadLabBookLxfModalComponent
 } from "@app/pages/admin/components/clone_labbook_modals/upload_lxf/new.component";
+import {buildInfo} from "@environments/version";
 
 
 @UntilDestroy()
@@ -34,6 +35,8 @@ export class AdminPageComponent implements OnInit {
 
   public currentUser: User | null = null;
   public stat: Stat | null = null;
+
+  public readonly buildInfo = buildInfo;
 
   public modalRef?: DialogRef;
 

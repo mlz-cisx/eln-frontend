@@ -70,5 +70,12 @@
     <div *ngIf="currentUser && !currentUser.admin">
       <h3>Admin Rights Required</h3>
     </div>
+    <div *ngIf="currentUser && currentUser.admin" class="build-info">
+      <div>Build: {{ buildInfo.hash }} · {{ buildInfo.subject }}</div>
+      <div *ngIf="stat?.git_commit_hash">
+        Backend: {{ stat?.git_commit_hash }}
+        <ng-container *ngIf="stat?.git_commit_msg"> · {{ stat?.git_commit_msg }}</ng-container>
+      </div>
+    </div>
   </main>
 </ng-container>

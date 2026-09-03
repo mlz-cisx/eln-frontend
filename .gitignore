@@ -39,6 +39,9 @@ yarn-error.log
 testem.log
 /typings
 
+# generated at build time
+/src/environments/version.ts
+
 # System files
 .DS_Store
 Thumbs.db

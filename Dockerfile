@@ -11,7 +11,7 @@ RUN npm ci
 COPY . .
 
 # build angular app
-RUN  npx ng build
+RUN  npm run build
 
 # Step 2: Serve the application using Nginx
 FROM docker.io/nginxinc/nginx-unprivileged:1.26.3
