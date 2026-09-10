@@ -5,6 +5,7 @@ export interface PicturePayload {
   title: string;
   canvas_content?: Blob | string | null;
   origin?: string;
+  labbook_pk?: string
 }
 
 export interface SketchPayload {

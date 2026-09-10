@@ -149,6 +149,7 @@ export class H5webViewerComponent implements AfterViewInit, OnChanges, OnDestroy
       const formData = new FormData();
       formData.append('title', 'NewSketch');
       formData.append('background_image', file);
+      formData.append('labbook_pk', this.labBookId)
 
       this.picturesService
         .add(formData)
@@ -169,6 +170,7 @@ export class H5webViewerComponent implements AfterViewInit, OnChanges, OnDestroy
       const formData = new FormData();
       formData.append('title', 'NewSketch');
       formData.append('background_image', file);
+      formData.append('labbook_pk', this.labBookId)
 
       this.picturesService
         .add(formData)

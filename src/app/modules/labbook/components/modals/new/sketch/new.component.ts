@@ -129,6 +129,7 @@ export class NewLabBookSketchModalComponent implements OnInit {
   public create_new_sketch(): void {
     const new_sketch = {
       title: 'NewSketch',
+      labbook_pk: this.labBookId
     };
     this.picturesService
       .add(new_sketch)

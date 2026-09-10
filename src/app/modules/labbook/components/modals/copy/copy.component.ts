@@ -73,6 +73,7 @@ export class CopyElementModalComponent implements OnDestroy {
           const pic: PicturePayload = {
             title: this.element.title,
             canvas_content: content_blob,
+            labbook_pk: this.labBookId
           };
           this.copyPicture(pic);
         });
