@@ -4,6 +4,7 @@ import {Privileges} from "./privileges.interface";
 export interface NotePayload {
   subject: string;
   content: string | null;
+  labbook_pk?: string
 }
 
 export interface Note {

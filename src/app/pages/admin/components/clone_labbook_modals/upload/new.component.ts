@@ -311,7 +311,8 @@ export class UploadLabBookModalComponent implements OnInit {
     this.note_map.forEach((note, key) => {
       this.clone_note({
         subject: note[0],
-        content: note[1]
+        content: note[1],
+        labbook_pk : this.new_labbook_pk
       }, key)
     })
 

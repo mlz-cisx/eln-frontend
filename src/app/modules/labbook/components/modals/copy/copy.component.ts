@@ -57,7 +57,11 @@ export class CopyElementModalComponent implements OnDestroy {
     /* eslint-disable */
     // copy note element
     if (this.element.content_type == 30) {
-      const note: NotePayload = {subject: this.element.subject, content: this.element.content}
+      const note: NotePayload = {
+        subject: this.element.subject,
+        content: this.element.content,
+        labbook_pk: this.labBookId
+      }
       this.copyNote(note)
     }
     // copy picture element and compress canvas_content

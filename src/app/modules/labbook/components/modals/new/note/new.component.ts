@@ -85,6 +85,7 @@ export class NewLabBookNoteElementModalComponent implements OnInit {
     const note = {
       subject: this.translocoService.translate('labBook.newNoteElementModal.subject.placeholder'),
       content: '<p></p>',
+      labbook_pk: this.labBookId
     };
 
     return note;
