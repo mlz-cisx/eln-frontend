@@ -19,7 +19,7 @@ import {
 import {
   UploadLabBookLxfModalComponent
 } from "@app/pages/admin/components/clone_labbook_modals/upload_lxf/new.component";
-import {buildInfo} from "@environments/version";
+import {buildInfo} from "./build-info";
 
 
 @UntilDestroy()
