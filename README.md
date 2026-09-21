@@ -18,6 +18,12 @@
 The **MLZ-ELN Frontend** is significantly influenced by the design and implementation of the eWorkbench Frontend (https://eworkbench.github.io/), and incorporates portions of its source code.
 
 
+## Documentation
+
+There is a documentation of the
+[current release](https://forge.frm2.tum.de/mlzeln/doc/mlzeln-master)  available.
+
+
 
 License: [AGPL 3](LICENSE)  
 
