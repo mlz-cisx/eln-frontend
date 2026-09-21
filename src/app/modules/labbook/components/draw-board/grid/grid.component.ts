@@ -24,10 +24,12 @@ import {DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import type {GridsterConfig, GridsterItemConfig} from 'angular-gridster2';
 import {
+  animationFrameScheduler,
   catchError,
   concatMap,
-  delay,
   from,
+  Observable,
+  observeOn,
   of,
   Subscription,
   tap,
@@ -50,6 +52,11 @@ interface GridsterItemWithElement extends GridsterItemConfig {
   label?: string;
 }
 
+interface ChunkResult {
+  elements: LabBookElement<any>[];
+  isEmpty: boolean;
+  isLastChunk: boolean;
+}
 
 @UntilDestroy()
 @Component({
@@ -67,6 +74,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()
   public editable? = false;
 
+  @Input()
   public loading = true;
 
   private updateSubscription: Subscription | null = null;
@@ -80,12 +88,19 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public options: GridsterConfig = {
     ...gridsterConfig,
-    scrollToNewItems : false,
+    scrollToNewItems: false,
     itemChangeCallback: (item: GridsterItemConfig) => this.markElementChanged(item),
     itemResizeCallback: (item: GridsterItemConfig) => this.markElementChanged(item),
   };
 
   public socketLoading = false;
+
+  private initialRendering = false;
+
+  /** Socket refresh received before the initial chunks finished rendering. */
+  private pendingInitialRenderRefresh = false;
+
+  private initialRenderFrame?: number;
 
   private websocketSubscription: Subscription = new Subscription();
 
@@ -150,6 +165,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.initialRendering = false;
+    if (this.initialRenderFrame !== undefined) {
+      cancelAnimationFrame(this.initialRenderFrame);
+    }
+    document.body.style.overflow = '';
     if (this.websocketSubscription) {
       this.websocketSubscription.unsubscribe();
     }
@@ -158,53 +178,144 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public initDetails(): void {
 
+    // Ensure page scrolling is enabled before starting.
+    // This prevents leaving the page locked if a previous render failed.
+    document.body.style.overflow = '';
+    this.initialRendering = true;
+
     this.labBooksService
       .getElements(this.id)
       .pipe(
         untilDestroyed(this),
+
+        // restore scrolling on error.
         catchError(() => {
           this.loading = false;
+          this.initialRendering = false;
+          document.body.style.overflow = '';
           return of([]);
         }),
-        switchMap(elements => {
-          // If empty → no chunking
+
+        switchMap((elements): Observable<ChunkResult> => {
+
+          // No elements to render.
+          // Return a single "empty" result and skip chunking logic entirely.
           if (elements.length === 0) {
-            return of({elements, isEmpty: true});
+            return of({
+              elements: [],
+              isEmpty: true,
+              isLastChunk: true
+            });
           }
-          // Otherwise → chunk normally
+
+          // Lock page scrolling while Gridster is progressively
+          // receiving chunks. This prevents users from scrolling
+          // through a partially rendered board.
+          document.body.style.overflow = 'hidden';
+          // blurred loading backdrop
+
+
+          // Clean layout collisions before rendering.
           const cleaned = this.cleanElements(elements);
-          const chunks = this.chunk(cleaned, 200);
+          // Split the dataset into smaller chunks to avoid
+          // freezing Angular/Gridster during initial render.
+          const chunks = this.chunk(cleaned);
+
           return from(chunks).pipe(
-            concatMap(chunk => of({
-              elements: chunk,
-              isEmpty: false
-            }).pipe(delay(50)))
+            concatMap((chunk, index) =>
+              of<ChunkResult>({
+                elements: chunk,
+                isEmpty: false,
+                // Mark the final chunk so we know when rendering
+                // is completely finished.
+                isLastChunk: index === chunks.length - 1
+              }).pipe(
+                observeOn(animationFrameScheduler)
+              )
+            )
           );
         })
       )
-      .subscribe(({elements, isEmpty}) => {
-        if (isEmpty) {
-          // Direct render, no chunking
-          this.drawBoardElements = [];
-          this.loading = false;
+      .subscribe({
+        next: ({elements, isEmpty, isLastChunk}) => {
+
+          // Empty board case.
+          if (isEmpty) {
+            this.drawBoardElements = [];
+            this.loading = false;
+            this.initialRendering = false;
+
+            // Re-enable scrolling immediately.
+            document.body.style.overflow = '';
+
+            this.cdr.markForCheck();
+            this.runPendingInitialRenderRefresh();
+            return;
+          }
+
+          // Convert only the current chunk.
+          const gridItems = this.convertToGridItems(elements);
+
+          // Append chunk to Gridster incrementally.
+          this.drawBoardElements.push(...gridItems);
+
+          if (isLastChunk) {
+            // Apply the final change detection pass for the last chunk.
+            this.cdr.markForCheck();
+            // Wait for Angular + Gridster to finish rendering.
+            this.initialRenderFrame = requestAnimationFrame(() => {
+              // Wait one additional frame to ensure browser paint/layout
+              // has completed before removing the loading state.
+              this.initialRenderFrame = requestAnimationFrame(() => {
+                this.loading = false;
+                this.initialRendering = false;
+                // Re-enable page scrolling only after the final render.
+                document.body.style.overflow = '';
+                this.cdr.markForCheck();
+                this.runPendingInitialRenderRefresh();
+              });
+            });
+            return;
+          }
           this.cdr.markForCheck();
-          return;
+        },
+
+        error: () => {
+          // Safety net: always restore scrolling on error.
+          this.loading = false;
+          this.initialRendering = false;
+          document.body.style.overflow = '';
+          this.cdr.markForCheck();
         }
-
-        // Normal chunked append
-        const gridItems = this.convertToGridItems(elements);
-        this.drawBoardElements = [...this.drawBoardElements, ...gridItems];
-
-        this.loading = false;
-        this.cdr.markForCheck();
       });
   }
 
 
-  private chunk<T>(arr: T[], size: number): T[][] {
+  private chunk<T>(arr: T[]): T[][] {
     const chunks: T[][] = [];
-    for (let i = 0; i < arr.length; i += size) {
-      chunks.push(arr.slice(i, i + size));
+    // Fast first paint, then aggressively ramp up
+    const sizes = [
+      100,   // immediate visual feedback
+      500,   // quickly populate screen
+      1500,  // reduce relayout count
+      3000,  // bulk render
+      5000   // finish remaining items
+    ];
+
+    let index = 0;
+    let sizeIndex = 0;
+    while (index < arr.length) {
+      const size =
+        sizeIndex < sizes.length
+          ? sizes[sizeIndex]
+          : 5000;
+
+      chunks.push(
+        arr.slice(index, index + size)
+      );
+
+      index += size;
+      sizeIndex++;
     }
     return chunks;
   }
@@ -270,6 +381,9 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
    * drag/resize callback — mark the item as changed and schedule a debounced update
    */
   private markElementChanged(item: GridsterItemConfig): void {
+    if (this.initialRendering) {
+      return;
+    }
     const pk = (item as GridsterItemWithElement).element.pk;
     if (pk) {
       this.changedPks.add(pk);
@@ -339,6 +453,12 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
 
   public softReload(): void {
+    // Ignore socket updates until initial chunk rendering finished.
+    if (this.initialRendering) {
+      this.pendingInitialRenderRefresh = true;
+      return;
+    }
+
     if (this.socketLoading) {
       this.queuedSocketRefreshes = true;
       return;
@@ -399,6 +519,14 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             .subscribe(() => this.toasterClickToJump(lastestElem.y));
         }
       });
+  }
+
+  private runPendingInitialRenderRefresh(): void {
+    if (!this.pendingInitialRenderRefresh) {
+      return;
+    }
+    this.pendingInitialRenderRefresh = false;
+    this.softReload();
   }
 
   private toasterClickToJump(position_y: number) {
