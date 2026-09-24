@@ -123,9 +123,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
     this.initDetails();
     this.initPrivileges();
-    if (this.element.child_object.created_by.admin) {
-      this.background_color = 'background-color: ' + admin_element_background_color;
-    }
+
 
     // close modal at router navigate
     this.router.events.subscribe(() => {
@@ -172,15 +170,8 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.form.patchValue(
-      {
-        note_subject: this.element.child_object.subject,
-        note_content: this.element.child_object.content,
-      },
-      {emitEvent: false}
-    );
-    this.preloaded_content = this.element.child_object.content
-    this.initialState = {...this.element.child_object};
+    this.initialState ??= {} as Note;
+    this.initialState.pk = this.element.child_object_id;
   }
 
 
@@ -195,6 +186,20 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
       .get(this.initialState!.pk)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
+        this.initialState = {...privilegesData.data}
+        this.form.patchValue(
+          {
+            note_subject: privilegesData.data.subject,
+            note_content: privilegesData.data.content,
+          },
+          {emitEvent: false}
+        );
+        this.preloaded_content = privilegesData.data.content
+
+        if (this.initialState.created_by.admin) {
+          this.background_color = 'background-color: ' + admin_element_background_color;
+        }
+
         const privileges = privilegesData.privileges;
         this.privileges = {...privileges};
         if (!this.privileges.edit) {

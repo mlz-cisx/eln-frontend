@@ -194,9 +194,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
         this.modalService.closeAll();
     });
 
-    if (this.element.child_object.created_by.admin) {
-      this.background_color = 'background-color: ' + admin_element_background_color;
-    }
+
 
   }
 
@@ -245,15 +243,8 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.form.patchValue(
-      {
-        file_title: this.element.child_object.title,
-        file_description: this.element.child_object.description,
-      },
-      {emitEvent: false}
-    );
-    this.preloaded_content = this.element.child_object.description
-    this.initialState = {...this.element.child_object};
+    this.initialState ??= {} as File;
+    this.initialState.pk = this.element.child_object_id;
   }
 
   public initPrivileges(): void {
@@ -266,6 +257,25 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       .get(this.initialState!.pk)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
+
+        this.initialState = {...privilegesData.data}
+        this.form.patchValue(
+          {
+            file_title: privilegesData.data.title,
+            file_description: privilegesData.data.description,
+          },
+          {emitEvent: false}
+        );
+        this.preloaded_content = privilegesData.data.description
+        if (this.preload) {
+          this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
+        }
+
+        if (this.initialState.created_by.admin) {
+          this.background_color = 'background-color: ' + admin_element_background_color;
+        }
+
+
         const privileges = privilegesData.privileges;
         this.privileges = {...privileges};
         if (!this.privileges.edit) {

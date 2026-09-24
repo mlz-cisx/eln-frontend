@@ -152,9 +152,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
         this.modalService.closeAll();
     });
 
-    if (this.element.child_object.created_by.admin) {
-      this.background_color = 'background-color: ' + admin_element_background_color;
-    }
 
   }
 
@@ -198,14 +195,8 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   }
 
   public initDetails(): void {
-    this.form.patchValue(
-      {
-        pic_title: this.element.child_object.title,
-      },
-      {emitEvent: false}
-    );
-
-    this.initialState = {...this.element.child_object};
+    this.initialState ??= {} as Picture;
+    this.initialState.pk = this.element.child_object_id;
     this.title_id = `${this.initialState!.pk}_title_id`;
   }
 
@@ -215,15 +206,27 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
       .get(this.initialState!.pk)
       .pipe(untilDestroyed(this))
       .subscribe(privilegesData => {
+        this.initialState = {...privilegesData.data};
+        this.form.patchValue(
+          {
+            pic_title: privilegesData.data.title,
+          },
+          {emitEvent: false}
+        );
+
+        if (this.initialState.created_by.admin) {
+          this.background_color = 'background-color: ' + admin_element_background_color;
+        }
+
         const privileges = privilegesData.privileges;
         this.privileges = {...privileges};
         if (!this.privileges.edit) {
           this.form.disable({emitEvent: false});
         }
-        if (this.element.child_object.created_by.admin && this.privileges.restore) {
+        if (this.initialState.created_by.admin && this.privileges.restore) {
           this.title_editable = true
         }
-        if (!this.element.child_object.created_by.admin && this.privileges.edit) {
+        if (!this.initialState.created_by.admin && this.privileges.edit) {
           this.title_editable = true
         }
         this.cdr.markForCheck();
