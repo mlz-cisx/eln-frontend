@@ -408,16 +408,14 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
               )
             );
             if (payload.length === 0) {
-              this.changedPks.clear();
-              this.continue_search();
+              this.changedPks.clear()
               return of(null);
             }
             return this.labBooksService
               .updateAllElements(this.id, payload)
               .pipe(
                 tap(() => {
-                  this.changedPks.clear();
-                  this.continue_search();
+                  this.changedPks.clear()
                 }),
                 catchError(() => {
                   return of(null);
@@ -452,17 +450,18 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  public softReload(): void {
-    // Ignore socket updates until initial chunk rendering finished.
-    if (this.initialRendering) {
-      this.pendingInitialRenderRefresh = true;
-      return;
-    }
+  public softReload(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      // Ignore socket updates until initial chunk rendering finished.
+      if (this.initialRendering) {
+        this.pendingInitialRenderRefresh = true;
+        return;
+      }
 
-    if (this.socketLoading) {
-      this.queuedSocketRefreshes = true;
-      return;
-    }
+      if (this.socketLoading) {
+        this.queuedSocketRefreshes = true;
+        return;
+      }
     this.socketLoading = true;
 
     this.labBooksService.getElements(this.id)
@@ -518,15 +517,19 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
             .pipe(take(1))
             .subscribe(() => this.toasterClickToJump(lastestElem.y));
         }
+        resolve();
       });
+    });
   }
 
-  private runPendingInitialRenderRefresh(): void {
+  private async runPendingInitialRenderRefresh(): Promise<void> {
     if (!this.pendingInitialRenderRefresh) {
+      this.continue_search()
       return;
     }
     this.pendingInitialRenderRefresh = false;
-    this.softReload();
+    await this.softReload();
+    this.continue_search()
   }
 
   private toasterClickToJump(position_y: number) {
