@@ -1,4 +1,4 @@
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -65,7 +65,6 @@ export class NotePageComponent implements OnInit, OnDestroy {
 
 
   public privileges?: Privileges;
-
 
   public showSidebar = false;
 
@@ -162,9 +161,10 @@ export class NotePageComponent implements OnInit, OnDestroy {
   }
 
   public initDetails(formChanges = true): void {
-
+    // force refresh to get accuration labbook position
+    const params = new HttpParams().set('ignore_etag', true);
     this.notesService
-      .get(this.id)
+      .get(this.id, params)
       .pipe(
         untilDestroyed(this),
         map(privilegesData => {
