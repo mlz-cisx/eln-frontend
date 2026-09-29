@@ -49,7 +49,7 @@ import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {Observable, of, Subject} from 'rxjs';
-import {debounceTime, map, skip, switchMap, take, filter} from 'rxjs/operators';
+import {debounceTime, filter, map, skip, switchMap, take} from 'rxjs/operators';
 import {NewLabBookModalComponent} from '../modals/new/new.component';
 import {ToastrService} from 'ngx-toastr';
 import {gridsterConfig} from '@app/modules/labbook/config/gridster-config';
@@ -308,9 +308,13 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
       const element_pk = (this.results[this.currentIndex]).element_pk
       const content_type = (this.results[this.currentIndex]).content_type_model
 
-      window.scrollTo({
-        top: labbook_pos_y * this.row_height,
-        behavior: 'smooth'
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({
+            top: labbook_pos_y * this.row_height,
+            behavior: 'auto'
+          });
+        });
       });
 
 

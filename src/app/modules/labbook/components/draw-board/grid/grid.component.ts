@@ -648,13 +648,29 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
 
     if (note_inserted !== 0) {
-      window.scrollTo({top: pos, behavior: 'smooth'});
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({top: pos, behavior: 'auto'});
+        });
+      });
     } else if (elem_deleted !== 0) {
-      window.scrollTo({top: pos, behavior: 'smooth'});
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({top: pos, behavior: 'auto'});
+        });
+      });
     } else if (comment_changed_pos !== 0) {
-      window.scrollTo({top: comment_changed_pos, behavior: 'smooth'});
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({top: comment_changed_pos, behavior: 'auto'});
+        });
+      });
     } else if (content_type !== 0) {
-      window.scrollTo({top: pos, behavior: 'smooth'});
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({top: pos, behavior: 'auto'});
+        });
+      });
     }
 
     search_text = String(search_text).trim().toLowerCase()
