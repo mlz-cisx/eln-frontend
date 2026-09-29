@@ -74,8 +74,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()
   public editable? = false;
 
-  @Input()
-  public loading = true;
+
 
   private updateSubscription: Subscription | null = null;
 
@@ -178,9 +177,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public initDetails(): void {
 
-    // Ensure page scrolling is enabled before starting.
-    // This prevents leaving the page locked if a previous render failed.
-    document.body.style.overflow = '';
+    // Lock page scrolling while Gridster is progressively
+    // receiving chunks. This prevents users from scrolling
+    // through a partially rendered board.
+    document.body.style.overflow = 'hidden';
+
     this.initialRendering = true;
 
     this.labBooksService
@@ -190,7 +191,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
         // restore scrolling on error.
         catchError(() => {
-          this.loading = false;
           this.initialRendering = false;
           document.body.style.overflow = '';
           return of([]);
@@ -207,12 +207,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
               isLastChunk: true
             });
           }
-
-          // Lock page scrolling while Gridster is progressively
-          // receiving chunks. This prevents users from scrolling
-          // through a partially rendered board.
-          document.body.style.overflow = 'hidden';
-          // blurred loading backdrop
 
 
           // Clean layout collisions before rendering.
@@ -242,7 +236,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           // Empty board case.
           if (isEmpty) {
             this.drawBoardElements = [];
-            this.loading = false;
             this.initialRendering = false;
 
             // Re-enable scrolling immediately.
@@ -267,7 +260,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
               // Wait one additional frame to ensure browser paint/layout
               // has completed before removing the loading state.
               this.initialRenderFrame = requestAnimationFrame(() => {
-                this.loading = false;
                 this.initialRendering = false;
                 // Re-enable page scrolling only after the final render.
                 document.body.style.overflow = '';
@@ -282,7 +274,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
         error: () => {
           // Safety net: always restore scrolling on error.
-          this.loading = false;
           this.initialRendering = false;
           document.body.style.overflow = '';
           this.cdr.markForCheck();
