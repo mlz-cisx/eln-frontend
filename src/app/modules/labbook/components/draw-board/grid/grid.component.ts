@@ -629,7 +629,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  public continue_search(): void {
+  public async continue_search(): Promise<void> {
     const pos = Number(localStorage.getItem('pageVerticalposition')) || 0;
     localStorage.removeItem('pageVerticalposition');
     const element_pk = localStorage.getItem('element_pk') || 0
@@ -675,68 +675,63 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
     search_text = String(search_text).trim().toLowerCase()
 
+    if (element_pk) {
 
-    setTimeout(() => {
+      const targetId =
+        content_type === 'pictures.picture'
+          ? `${element_pk}_title_id`
+          : `${element_pk}_preloaded_id`;
 
 
-      if (element_pk && (content_type === 'shared_elements.note' || content_type === 'shared_elements.file')) {
+      await this.waitForElement(targetId)
 
-        const elem = this.getElem(element_pk + '_preloaded_id');
-        const title = this.getElem(element_pk + '_title_id');
+      await this.highlightSearchResult(
+        String(element_pk),
+        String(content_type),
+        search_text
+      );
+    }
 
-        if (elem && title) {
-          const content = this.applyHighlighting(elem, search_text);
-          const title_content = this.getTitleContent(title).toLowerCase();
-          const content_lc = content.toLowerCase();
 
-          this.setBorderIfMatch(elem, content_lc, search_text);
-          this.setBorderIfMatch(title, title_content, search_text);
+  }
 
-          // highlight background if no matches
-          if (
-            content_type === 'shared_elements.note' &&
-            !title_content.includes(search_text) &&
-            !content_lc.includes(search_text)
-          ) {
-            this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
-            this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
-          }
-        }
+  setBorderIfMatch(elem: HTMLElement, text: string, search_text: string) {
+    if (text.toLowerCase().includes(search_text)) {
+      this.renderer.setStyle(elem, 'border', 'thick solid red');
+    }
+  }
+
+  private waitForElement(
+    id: string,
+    timeoutMs = 10000
+  ): Promise<HTMLElement | null> {
+    return new Promise(resolve => {
+      const existing = document.getElementById(id);
+
+      if (existing) {
+        resolve(existing);
+        return;
       }
 
-      if (element_pk && content_type === 'pictures.picture') {
-        const title = this.getElem(element_pk + '_title_id');
-        if (title) this.renderer.setStyle(title, 'border', 'thick solid red');
-      }
+      const observer = new MutationObserver(() => {
+        const elem = document.getElementById(id);
 
-      if (element_pk && content_type === 'labbooks.labbook') {
-
-        const elem = this.getElem(element_pk + '_preloaded_id');
         if (elem) {
-          const content = this.applyHighlighting(elem, search_text);
-          const content_lc = content.toLowerCase();
-          this.setBorderIfMatch(elem, content_lc, search_text);
-          // highlight background if no matches
-          if (
-            !content_lc.includes(search_text)
-          ) {
-            this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
-          }
+          observer.disconnect();
+          resolve(elem);
         }
+      });
 
-        const title = this.getElem(element_pk + '_title_id');
-        if (title) {
-          const title_content = this.getTitleContent(title).toLowerCase();
-          this.setBorderIfMatch(title, title_content, search_text);
-        }
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
 
-        this.open_details();
-      }
-
-
-    }, 1000);  // end set timeout
-
-
+      setTimeout(() => {
+        observer.disconnect();
+        resolve(null);
+      }, timeoutMs);
+    });
   }
 
   trackByElementId(index: number, item: any): string {
@@ -796,10 +791,103 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
   return finalHtml;
 }
 
+  private async highlightSearchResult(
+    element_pk: string,
+    content_type: string,
+    search_text: string
+  ): Promise<void> {
 
-  setBorderIfMatch(elem: HTMLElement, text: string, search_text: string) {
-    if (text.includes(search_text)) {
-      this.renderer.setStyle(elem, 'border', 'thick solid red');
+    if (
+      content_type === 'shared_elements.note' ||
+      content_type === 'shared_elements.file'
+    ) {
+      const elem = this.getElem(element_pk + '_preloaded_id');
+      const title = this.getElem(element_pk + '_title_id');
+
+      if (elem && title) {
+        const content = this.applyHighlighting(elem, search_text);
+        const title_content = this.getTitleContent(title)
+        const content_lc = content.toLowerCase();
+
+
+        this.setBorderIfMatch(elem, content_lc, search_text);
+        this.setBorderIfMatch(title, title_content, search_text);
+
+        if (
+          content_type === 'shared_elements.note' &&
+          !title_content.includes(search_text) &&
+          !content_lc.includes(search_text)
+        ) {
+          this.renderer.setStyle(
+            title,
+            'background-color',
+            highlight_element_background_color
+          );
+          this.renderer.setStyle(
+            elem,
+            'background-color',
+            highlight_element_background_color
+          );
+        }
+        if (
+          content_type === 'shared_elements.file' &&
+          !title_content.includes(search_text) &&
+          !content_lc.includes(search_text)
+        ) {
+          this.renderer.setStyle(
+            title,
+            'background-color',
+            highlight_element_background_color
+          );
+          this.renderer.setStyle(
+            elem,
+            'background-color',
+            highlight_element_background_color
+          );
+        }
+
+      }
+
+      return;
+    }
+
+    if (content_type === 'pictures.picture') {
+
+      const title = this.getElem(element_pk + '_title_id');
+
+      if (title) {
+        this.renderer.setStyle(title, 'border', 'thick solid red');
+      }
+      return;
+    }
+
+
+    if (content_type === 'labbooks.labbook') {
+      const elem = this.getElem(element_pk + '_preloaded_id');
+
+      if (elem) {
+        const content = this.applyHighlighting(elem, search_text);
+        const content_lc = content.toLowerCase();
+
+        this.setBorderIfMatch(elem, content_lc, search_text);
+
+        if (!content_lc.includes(search_text)) {
+          this.renderer.setStyle(
+            elem,
+            'background-color',
+            highlight_element_background_color
+          );
+        }
+      }
+
+      const title = this.getElem(element_pk + '_title_id');
+
+      if (title) {
+        const title_content = this.getTitleContent(title).toLowerCase();
+        this.setBorderIfMatch(title, title_content, search_text);
+      }
+
+      this.open_details();
     }
   }
 

@@ -302,76 +302,227 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
   }
 
 
-  public scroll_to_elem() {
-    if (this.results[this.currentIndex]) {
-      const labbook_pos_y = (this.results[this.currentIndex]).labbook_pos_y
-      const element_pk = (this.results[this.currentIndex]).element_pk
-      const content_type = (this.results[this.currentIndex]).content_type_model
+  public async scroll_to_elem(): Promise<void> {
+    if (!this.results[this.currentIndex]) {
+      return;
+    }
 
+    const labbook_pos_y =
+      this.results[this.currentIndex].labbook_pos_y;
+
+    const element_pk =
+      this.results[this.currentIndex].element_pk;
+
+    const content_type =
+      this.results[this.currentIndex].content_type_model;
+
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          window.scrollTo({
-            top: labbook_pos_y * this.row_height,
-            behavior: 'auto'
-          });
+        window.scrollTo({
+          top: labbook_pos_y * this.row_height,
+          behavior: 'auto'
         });
       });
+    });
 
+    const targetId =
+      content_type === 'pictures.picture'
+        ? `${element_pk}_title_id`
+        : `${element_pk}_preloaded_id`;
+
+    const target = await this.waitForElement(targetId);
+
+    if (!target) {
+      return;
+    }
+
+    if (
+      content_type === 'shared_elements.note' ||
+      content_type === 'shared_elements.file'
+    ) {
+      const search_text = this.query.toLowerCase();
+
+      const elem = document.getElementById(
+        `${element_pk}_preloaded_id`
+      );
+
+      const title = document.getElementById(
+        `${element_pk}_title_id`
+      );
+
+      if (!elem || !title) {
+        return;
+      }
+
+      const content = this.applyHighlighting(
+        elem,
+        search_text
+      );
+
+      const contentLc = content.toLowerCase();
+
+      if (contentLc.includes(search_text)) {
+        this.renderer.setStyle(
+          elem,
+          'border',
+          'thick solid red'
+        );
+
+        this.highlighted.subscribe(() => {
+          this.renderer.setStyle(elem, 'border', '');
+        });
+      }
+
+      const input = title.querySelector('input') as HTMLInputElement | null;
+      const titleContent = input?.value ?? '';
+
+
+      if (titleContent.toLowerCase().includes(search_text)) {
+        this.renderer.setStyle(
+          title,
+          'border',
+          'thick solid red'
+        );
+
+        this.highlighted.subscribe(() => {
+          this.renderer.setStyle(title, 'border', '');
+        });
+      }
+
+      this.renderer.setProperty(
+        elem,
+        'innerHTML',
+        content
+      );
+
+      this.highlighted.subscribe(() => {
+        const reverseContent =
+          this.removeHighlighting(elem);
+
+        this.renderer.setProperty(
+          elem,
+          'innerHTML',
+          reverseContent
+        );
+      });
+
+      if (
+        content_type === 'shared_elements.note' &&
+        !titleContent.toLowerCase().includes(search_text) &&
+        !contentLc.includes(search_text)
+      ) {
+        this.renderer.setStyle(
+          title,
+          'background-color',
+          highlight_element_background_color
+        );
+
+        this.renderer.setStyle(
+          elem,
+          'background-color',
+          highlight_element_background_color
+        );
+
+        this.highlighted.subscribe(() => {
+          this.renderer.setStyle(
+            title,
+            'background-color',
+            ''
+          );
+
+          this.renderer.setStyle(
+            elem,
+            'background-color',
+            ''
+          );
+        });
+      }
+
+      if (
+        content_type === 'shared_elements.file' &&
+        !titleContent.toLowerCase().includes(search_text) &&
+        !contentLc.includes(search_text)
+      ) {
+        this.renderer.setStyle(
+          title,
+          'background-color',
+          highlight_element_background_color
+        );
+
+        this.renderer.setStyle(
+          elem,
+          'background-color',
+          highlight_element_background_color
+        );
+
+        this.highlighted.subscribe(() => {
+          this.renderer.setStyle(
+            title,
+            'background-color',
+            ''
+          );
+
+          this.renderer.setStyle(
+            elem,
+            'background-color',
+            ''
+          );
+        });
+      }
+    }
+
+    if (content_type === 'pictures.picture') {
+      const title = document.getElementById(
+        `${element_pk}_title_id`
+      );
+
+      if (!title) {
+        return;
+      }
+
+      this.renderer.setStyle(
+        title,
+        'border',
+        'thick solid red'
+      );
+
+      this.highlighted.subscribe(() => {
+        this.renderer.setStyle(title, 'border', '');
+      });
+    }
+  }
+
+  private waitForElement(
+    id: string,
+    timeoutMs = 10000
+  ): Promise<HTMLElement | null> {
+    return new Promise(resolve => {
+      const existing = document.getElementById(id);
+
+      if (existing) {
+        resolve(existing);
+        return;
+      }
+
+      const observer = new MutationObserver(() => {
+        const elem = document.getElementById(id);
+
+        if (elem) {
+          observer.disconnect();
+          resolve(elem);
+        }
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
 
       setTimeout(() => {
-        if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note' || content_type == 'shared_elements.file')) {
-          const search_text = this.query.toLowerCase()
-
-          // @ts-ignore
-          const elem = document.getElementById(element_pk + '_preloaded_id')
-          const title = document.getElementById(element_pk + '_title_id')
-          // @ts-ignore
-          const content = this.applyHighlighting(elem, search_text)
-          if (content.toLowerCase().includes(search_text)) {
-            // @ts-ignore
-            this.renderer.setStyle(elem, 'border', 'thick solid red');
-            this.highlighted.subscribe(() => {
-              this.renderer.setStyle(elem, 'border', '');
-            })
-          }
-          // @ts-ignore
-          const title_content = title.querySelector('input').value
-          // @ts-ignore
-          if (title_content.toLowerCase().includes(search_text)) {
-            // @ts-ignore
-            this.renderer.setStyle(title, 'border', 'thick solid red');
-            this.highlighted.subscribe(() => {
-              this.renderer.setStyle(title, 'border', '');
-            })
-          }
-          // @ts-ignore
-          this.renderer.setProperty(elem, 'innerHTML', content);
-          this.highlighted.subscribe(() => {
-            if (elem) {
-              const reverseContent = this.removeHighlighting(elem);
-              this.renderer.setProperty(elem, 'innerHTML', reverseContent);
-            }
-          })
-          if (document.getElementById(element_pk + '_preloaded_id') && (content_type == 'shared_elements.note')
-            && !title_content.includes(search_text) && !content.includes(search_text)) {
-            this.renderer.setStyle(title, 'background-color', highlight_element_background_color);
-            this.renderer.setStyle(elem, 'background-color', highlight_element_background_color);
-            this.highlighted.subscribe(() => {
-              this.renderer.setStyle(title, 'background-color', '');
-              this.renderer.setStyle(elem, 'background-color', '');
-            })
-          }
-        }
-        if (content_type == 'pictures.picture') {
-          // @ts-ignore
-          const title = document.getElementById(element_pk + '_title_id')
-          this.renderer.setStyle(title, 'border', 'thick solid red');
-          this.highlighted.subscribe(() => {
-            this.renderer.setStyle(title, 'border', '');
-          })
-        }
-      }, 1000)
-    }
+        observer.disconnect();
+        resolve(null);
+      }, timeoutMs);
+    });
   }
 
   stripImages(html: string): string {
