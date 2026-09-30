@@ -354,6 +354,9 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         return;
       }
 
+      await this.waitForContent(title);
+      await this.waitForContent(elem);
+
       const content = this.applyHighlighting(
         elem,
         search_text
@@ -480,6 +483,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         return;
       }
 
+      await this.waitForContent(title);
+
       this.renderer.setStyle(
         title,
         'border',
@@ -521,6 +526,36 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         observer.disconnect();
         resolve(null);
+      }, timeoutMs);
+    });
+  }
+
+  private waitForContent(
+    elem: HTMLElement,
+    timeoutMs = 10000
+  ): Promise<void> {
+    return new Promise(resolve => {
+      if (elem.innerHTML.trim().length > 0) {
+        resolve();
+        return;
+      }
+
+      const observer = new MutationObserver(() => {
+        if (elem.innerHTML.trim().length > 0) {
+          observer.disconnect();
+          resolve();
+        }
+      });
+
+      observer.observe(elem, {
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
+
+      setTimeout(() => {
+        observer.disconnect();
+        resolve();
       }, timeoutMs);
     });
   }

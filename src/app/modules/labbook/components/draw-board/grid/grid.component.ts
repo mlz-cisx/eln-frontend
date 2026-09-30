@@ -676,14 +676,13 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     search_text = String(search_text).trim().toLowerCase()
 
     if (element_pk) {
-
-      const targetId =
-        content_type === 'pictures.picture'
-          ? `${element_pk}_title_id`
-          : `${element_pk}_preloaded_id`;
-
-
-      await this.waitForElement(targetId)
+      if (content_type !== 'labbooks.labbook') {
+        await this.waitForElement(
+          content_type === 'pictures.picture'
+            ? `${element_pk}_title_id`
+            : `${element_pk}_preloaded_id`
+        );
+      }
 
       await this.highlightSearchResult(
         String(element_pk),
@@ -757,39 +756,69 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     return input ? input.value : '';
   }
 
-applyHighlighting(elem: HTMLElement, search_text: string) {
-  const html = this.stripImages(elem.innerHTML);
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+  applyHighlighting(elem: HTMLElement, search_text: string) {
+    const html = this.stripImages(elem.innerHTML);
 
-  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-  const regex = new RegExp(search_text, "gi");
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
 
-  let node;
-  while ((node = walker.nextNode())) {
-    const text = node.nodeValue;
-    if (!text) continue;
+    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+    const regex = new RegExp(search_text, "gi");
 
-    if (regex.test(text)) {
-      const wrapper = doc.createElement("span");
-      wrapper.innerHTML = text.replace(
-        regex,
-        '<span style="background-color: yellow; font-weight: bold">$&</span>'
-      );
+    let node;
+    while ((node = walker.nextNode())) {
+      const text = node.nodeValue;
+      if (!text) continue;
 
-      const fragment = doc.createDocumentFragment();
-      fragment.append(...wrapper.childNodes);
+      if (regex.test(text)) {
+        const wrapper = doc.createElement("span");
+        wrapper.innerHTML = text.replace(
+          regex,
+          '<span style="background-color: yellow; font-weight: bold">$&</span>'
+        );
 
-      node.parentNode?.replaceChild(fragment, node);
+        const fragment = doc.createDocumentFragment();
+        fragment.append(...wrapper.childNodes);
+
+        node.parentNode?.replaceChild(fragment, node);
+      }
     }
+    const finalHtml = doc.body.innerHTML;
+    this.renderer.setProperty(elem, "innerHTML", finalHtml);
+
+    return finalHtml;
   }
 
-  const finalHtml = doc.body.innerHTML;
-  this.renderer.setProperty(elem, "innerHTML", finalHtml);
+  private waitForContent(
+    elem: HTMLElement,
+    timeoutMs = 10000
+  ): Promise<void> {
+    return new Promise(resolve => {
+      if (elem.innerHTML.trim().length > 0) {
+        resolve();
+        return;
+      }
 
-  return finalHtml;
-}
+      const observer = new MutationObserver(() => {
+        if (elem.innerHTML.trim().length > 0) {
+          observer.disconnect();
+          resolve();
+        }
+      });
+
+      observer.observe(elem, {
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
+
+      setTimeout(() => {
+        observer.disconnect();
+        resolve();
+      }, timeoutMs);
+    });
+  }
 
   private async highlightSearchResult(
     element_pk: string,
@@ -805,6 +834,9 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
       const title = this.getElem(element_pk + '_title_id');
 
       if (elem && title) {
+        await this.waitForContent(elem);
+        await this.waitForContent(title);
+
         const content = this.applyHighlighting(elem, search_text);
         const title_content = this.getTitleContent(title)
         const content_lc = content.toLowerCase();
@@ -856,6 +888,7 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
       const title = this.getElem(element_pk + '_title_id');
 
       if (title) {
+        await this.waitForContent(title);
         this.renderer.setStyle(title, 'border', 'thick solid red');
       }
       return;
@@ -866,23 +899,16 @@ applyHighlighting(elem: HTMLElement, search_text: string) {
       const elem = this.getElem(element_pk + '_preloaded_id');
 
       if (elem) {
+        await this.waitForContent(elem);
         const content = this.applyHighlighting(elem, search_text);
         const content_lc = content.toLowerCase();
-
         this.setBorderIfMatch(elem, content_lc, search_text);
-
-        if (!content_lc.includes(search_text)) {
-          this.renderer.setStyle(
-            elem,
-            'background-color',
-            highlight_element_background_color
-          );
-        }
       }
 
       const title = this.getElem(element_pk + '_title_id');
 
       if (title) {
+        await this.waitForContent(title);
         const title_content = this.getTitleContent(title).toLowerCase();
         this.setBorderIfMatch(title, title_content, search_text);
       }
