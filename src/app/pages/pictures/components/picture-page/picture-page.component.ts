@@ -1,4 +1,4 @@
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {
   afterEveryRender,
   ChangeDetectionStrategy,
@@ -31,6 +31,9 @@ import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 import {
   FabricCanvasComponent
 } from "../../../../../../libs/fabric-canvas/component/fabric-canvas.component";
+import {
+  LabBookDrawBoardGridComponent
+} from "@app/modules/labbook/components/draw-board/grid/grid.component";
 
 
 interface FormPicture {
@@ -63,6 +66,8 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   private lastWidth = 0;
 
   public editor_loaded = false;
+
+  private row_height = this.gridComponent!.options!.fixedRowHeight! + this.gridComponent!.options!.margin!;
 
 
   // some initialization
@@ -118,6 +123,7 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
+    private gridComponent: LabBookDrawBoardGridComponent,
   ) {
     afterEveryRender(() => {
       this.resizeChild()
@@ -174,9 +180,10 @@ export class PicturePageComponent implements OnInit, OnDestroy {
   }
 
   public initDetails(formChanges = true): void {
-
+    // force refresh to get accuration labbook position
+    const params = new HttpParams().set('ignore_etag', true);
     this.picturesService
-      .get(this.id)
+      .get(this.id, params)
       .pipe(
         untilDestroyed(this),
         map(privilegesData => {
@@ -299,6 +306,17 @@ export class PicturePageComponent implements OnInit, OnDestroy {
       return null;
     }
   }
+
+  public go_to_pic(): void {
+    if (!this.initialState) {
+      return;
+    }
+    localStorage.setItem('pageVerticalposition', String((this.initialState?.position_y) * this.row_height));
+    localStorage.setItem('page_jump', String(1)); // indicating jump action
+    localStorage.setItem('element_pk', String(this.id));
+    void this.router.navigate([`/labbooks/${this.initialState?.labbook_id}`]);
+  }
+
 
   public toggle_hidden_deleted(): void {
     this.picturesService.toggle_hidden_delete(this.id, false).subscribe(() => {

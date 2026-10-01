@@ -568,6 +568,7 @@
   "picture.details.recentChanges.label": "Recent changes",
   "picture.details.versions.label": "Versions",
   "picture.details.reverse_hidden_delete": "Reverse Hidden Delete",
+  "picture.gotoLabbook": "Jump to this picture",
   "file.details.createdAt.label": "Created at",
   "file.details.lastModifiedAt.label": "Last modified at",
   "file.details.recentChanges.label": "Recent changes",

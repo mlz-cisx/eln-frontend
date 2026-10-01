@@ -39,6 +39,8 @@ export interface Picture {
   url: string;
   version_number: number;
   is_favourite: boolean;
+  position_y: number;
+  labbook_id: string;
 }
 
 export interface PictureContent {
