@@ -58,10 +58,6 @@ export class DeleteCommentModalComponent {
           }
           this.state = ModalState.Changed;
           this.modalRef.close({state: this.state});
-          // for multiple deletions
-          if (!localStorage.getItem('comment_change')) {
-            localStorage.setItem('comment_change', String(window.scrollY))
-          }
 
           this.translocoService
             .selectTranslate('comments.deleteModal.toastr.success')

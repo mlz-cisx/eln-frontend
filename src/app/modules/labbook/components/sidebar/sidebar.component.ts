@@ -217,8 +217,6 @@ export class LabBookSidebarComponent implements OnInit {
               () => {
                 this.cdr.markForCheck();
                 location.reload();
-                localStorage.setItem('pageVerticalposition', String(bodyRect))
-                localStorage.setItem('elem_deleted', String(1))
               },
               () => {
                 this.cdr.markForCheck();

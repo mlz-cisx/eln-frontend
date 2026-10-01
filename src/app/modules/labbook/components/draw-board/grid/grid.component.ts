@@ -638,34 +638,21 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     localStorage.removeItem('content_type');
     let search_text = localStorage.getItem('search_text') || 0
     localStorage.removeItem('search_text');
-    let note_inserted = localStorage.getItem('note_inserted') || 0
-    localStorage.removeItem('note_inserted');
-    let elem_deleted = localStorage.getItem('elem_deleted') || 0
-    localStorage.removeItem('elem_deleted');
+    let page_jump = localStorage.getItem('page_jump') || 0
+    localStorage.removeItem('page_jump');
 
-    const comment_changed_pos = Number(localStorage.getItem('comment_change')) || 0;
-    localStorage.removeItem('comment_change');
-
-
-    if (note_inserted !== 0) {
+    // it is a jump from the element page
+    // without element_pk in local storage
+    if (page_jump !== 0) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           window.scrollTo({top: pos, behavior: 'auto'});
         });
       });
-    } else if (elem_deleted !== 0) {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          window.scrollTo({top: pos, behavior: 'auto'});
-        });
-      });
-    } else if (comment_changed_pos !== 0) {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          window.scrollTo({top: comment_changed_pos, behavior: 'auto'});
-        });
-      });
-    } else if (content_type !== 0) {
+    }
+    // it is a jump from global search
+    // with element_pk in local storage
+    else if (content_type !== 0) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           window.scrollTo({top: pos, behavior: 'auto'});

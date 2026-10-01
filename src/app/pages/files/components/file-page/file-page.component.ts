@@ -334,8 +334,7 @@ export class FilePageComponent implements OnInit, OnDestroy {
       return;
     }
     localStorage.setItem('pageVerticalposition', String((this.initialState?.position_y) * this.row_height));
-    localStorage.setItem('note_inserted', String(1)); // indicating jump action
-    localStorage.setItem('element_pk', String(this.id));
+    localStorage.setItem('page_jump', String(1)); // indicating jump action
     void this.router.navigate([`/labbooks/${this.initialState?.labbook_id}`]);
 
   }
