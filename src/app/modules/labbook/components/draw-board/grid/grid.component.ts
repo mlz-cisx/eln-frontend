@@ -641,7 +641,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     let page_jump = localStorage.getItem('page_jump') || 0
     localStorage.removeItem('page_jump');
 
-    // it is a jump from the element page
+    // it is a jump from the element page or after restucturing
     // without element_pk in local storage
     if (page_jump !== 0) {
       requestAnimationFrame(() => {

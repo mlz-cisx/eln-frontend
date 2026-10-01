@@ -217,6 +217,9 @@ export class LabBookSidebarComponent implements OnInit {
               () => {
                 this.cdr.markForCheck();
                 location.reload();
+                localStorage.setItem('pageVerticalposition', String(bodyRect))
+                // using the flag from the element page jump
+                localStorage.setItem('page_jump', String(1))
               },
               () => {
                 this.cdr.markForCheck();
