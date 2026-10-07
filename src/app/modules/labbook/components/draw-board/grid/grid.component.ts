@@ -638,11 +638,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     localStorage.removeItem('content_type');
     let search_text = localStorage.getItem('search_text') || 0
     localStorage.removeItem('search_text');
-    let page_jump = localStorage.getItem('page_jump') || 0
+    let page_jump = Number(localStorage.getItem('page_jump') ?? 0);
     localStorage.removeItem('page_jump');
 
     // it is a jump from the element page or after restucturing
-    // without element_pk in local storage
     if (page_jump !== 0) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -651,7 +650,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       });
     }
     // it is a jump from global search
-    // with element_pk in local storage
     else if (content_type !== 0) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -663,6 +661,16 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     search_text = String(search_text).trim().toLowerCase()
 
     if (element_pk) {
+      if (page_jump !== 0) {
+        await this.waitForElement(`${element_pk}_title_id`);
+        const title = this.getElem(element_pk + '_title_id');
+        if (title) {
+          await this.waitForContent(title);
+          this.renderer.setStyle(title, 'border', 'thick solid red');
+        }
+        return;
+      }
+
       if (content_type !== 'labbooks.labbook') {
         await this.waitForElement(
           content_type === 'pictures.picture'

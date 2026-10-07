@@ -299,6 +299,7 @@ export class NotePageComponent implements OnInit, OnDestroy {
     }
     localStorage.setItem('pageVerticalposition', String((this.initialState?.position_y) * this.row_height));
     localStorage.setItem('page_jump', String(1)); // indicating jump action
+    localStorage.setItem('element_pk', String(this.id));
     void this.router.navigate([`/labbooks/${this.initialState?.labbook_id}`]);
   }
 
