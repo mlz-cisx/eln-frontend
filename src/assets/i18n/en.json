@@ -655,6 +655,7 @@
   "relations.columns.setBy": "Set by",
   "relations.columns.setAt": "Set at",
   "files.columns.title": "Title",
+  "files.columns.entity_type": "Type",
   "files.columns.fileName": "File name",
   "files.columns.fileSize": "File size",
   "files.columns.mimeType": "Mime type",

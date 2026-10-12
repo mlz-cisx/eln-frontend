@@ -53,6 +53,10 @@ export class TableViewComponent implements OnInit, OnChanges, OnDestroy {
   public service: any;
 
   @Input()
+  public labbook_id?: string;
+
+
+  @Input()
   public customId?: string;
 
   @Input()
@@ -256,39 +260,34 @@ export class TableViewComponent implements OnInit, OnChanges, OnDestroy {
         params = params.set(this.orderByField, `${this.orderByDirection}${this.sortBy ?? 'pk'}`);
       }
 
+      const handleResponse = (event: any) => {
+        if (append) {
+          this.data = [...this.data, ...event.data];
+        } else {
+          this.data = event.data;
+        }
+
+        this.total = event.total;
+        this.loading = false;
+        this.loadingMore = false;
+        this.firstDataLoaded = true;
+        this.dataSource$.next(this.data);
+        this.rendered.emit(true);
+        this.cdr.markForCheck();
+      };
+
       if (this.relation) {
-        this.serviceSubscription = this.service.getRelations(this.customId, params).subscribe((event: any) => {
-          if (append) {
-            this.data = [...this.data, ...event.data];
-          } else {
-            this.data = event.data;
-          }
-          this.total = event.total;
-
-          this.loading = false;
-          this.loadingMore = false;
-          this.firstDataLoaded = true;
-          this.dataSource$.next(this.data);
-          this.rendered.emit(true);
-          this.cdr.markForCheck();
-        });
+        this.serviceSubscription = this.service
+          .getRelations(this.customId, params)
+          .subscribe(handleResponse);
+      } else if (this.labbook_id) {
+        this.serviceSubscription = this.service
+          .getList(this.labbook_id, params)
+          .subscribe(handleResponse);
       } else {
-        this.serviceSubscription = this.service.getList(params, this.customId).subscribe((event: any) => {
-          if (append) {
-            this.data = [...this.data, ...event.data];
-          } else {
-            this.data = event.data;
-          }
-
-          this.total = event.total;
-
-          this.loading = false;
-          this.loadingMore = false;
-          this.firstDataLoaded = true;
-          this.dataSource$.next(this.data);
-          this.rendered.emit(true);
-          this.cdr.markForCheck();
-        });
+        this.serviceSubscription = this.service
+          .getList(params, this.customId)
+          .subscribe(handleResponse);
       }
     }
   }

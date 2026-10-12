@@ -1,0 +1,19 @@
+@import "../../../../../styles/colors";
+
+.title-hover-container {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-shield {
+  position: absolute;
+  top: 0;
+  right: -80px;
+  width: 80px;
+  height: 100%;
+  pointer-events: none;
+}
+
+
+
+

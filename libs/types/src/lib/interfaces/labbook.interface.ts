@@ -46,3 +46,19 @@ export interface LabBookExport {
   identifier: string;
 }
 
+
+export interface LabbookchildelementTableView {
+  entity_id: string;
+  entity_type: 'file' | 'note' | 'picture';
+
+  title: string | null;
+
+  created_at: string;
+  last_modified_at: string | null;
+
+  created_by: string | null;
+  last_modified_by: string | null;
+
+  labbook_title: string;
+}
+

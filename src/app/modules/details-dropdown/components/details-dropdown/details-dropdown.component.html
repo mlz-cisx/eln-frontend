@@ -63,7 +63,8 @@
   <!--  </li>-->
 
   <li [class]="menuClass" role="menuitem" *ngIf="exportElement">
-    <button (click)="onExport()" [class]="itemClass" [disabled]="loading"
+    <button (click)="onExport()" [class]="itemClass"
+            [disabled]="loading || disabled"
             type="button">
       <joeseln-icon className="wb-pdf-file"></joeseln-icon>
       {{ t('detailsDropdown.export') }}
@@ -72,7 +73,7 @@
 
   <li *ngIf="initialState.content_type == 40" [class]="menuClass"
       role="menuitem">
-    <button (click)="onPngExport()" [class]="itemClass" [disabled]="loading"
+    <button (click)="onPngExport()" [class]="itemClass" [disabled]="loading "
             type="button">
       <joeseln-icon className="wb-pdf-file"></joeseln-icon>
       {{ t('detailsDropdown.export_png') }}
@@ -81,7 +82,7 @@
 
   <li [class]="menuClass" role="menuitem" *ngIf="is_labbook">
     <button type="button" [class]="itemClass" (click)="onZipSelectExportModal()"
-            [disabled]="loading">
+            [disabled]="loading || disabled">
       <joeseln-icon className="wb-pdf-file"></joeseln-icon>
       {{ ('Export as Zip') }}
     </button>
@@ -89,7 +90,7 @@
 
   <li [class]="menuClass" role="menuitem" *ngIf="is_labbook">
     <button type="button" [class]="itemClass" (click)="onLxFSelectExportModal()"
-            [disabled]="loading">
+            [disabled]="loading || disabled">
       <joeseln-icon className="wb-pdf-file"></joeseln-icon>
       {{ ('Export as LxF') }}
     </button>

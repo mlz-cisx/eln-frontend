@@ -23,7 +23,7 @@
       <main style="padding: 0 1%  1% 1%">
 
         <div style="text-align: center; display: flex; flex-wrap: nowrap; justify-content: center;
-        align-items: center;white-space: nowrap;overflow: visible;">
+        align-items: center;white-space: nowrap;overflow: visible; flex:1;">
           <strong>{{detailsTitle}}</strong>
           <mlzeln-details-dropdown
                   [is_labbook]='true'
@@ -35,7 +35,22 @@
                   [duplicateElement]="false"
                   [privileges]="privileges"
                   *ngIf="privileges"
+                  [disabled]="tableView"
           ></mlzeln-details-dropdown>
+
+          <div class="custom-control custom-switch ml-3">
+            <input
+                    id="view-switch"
+                    type="checkbox"
+                    class="custom-control-input"
+                    [(ngModel)]="tableView">
+            <label
+                    class="custom-control-label"
+                    for="view-switch">
+              Table View
+            </label>
+          </div>
+
         </div>
 
         <mlzeln-overview-collapse-element
@@ -204,12 +219,17 @@
         </mlzeln-overview-collapse-element>
         <!--        we allow all users with view privilege to shift around / resize  elements within draw-board --->
         <mlzeln-labbook-draw-board
-          #drawBoard
-          [id]="id"
-          [editable]="privileges?.view"
-          [restorable]="privileges?.restore"
-        >
+                *ngIf="!tableView"
+                #drawBoard
+                [id]="id"
+                [editable]="privileges?.view"
+                [restorable]="privileges?.restore">
         </mlzeln-labbook-draw-board>
+
+        <mlzeln-labbook-table-view
+                *ngIf="tableView"
+                [id]="id">
+        </mlzeln-labbook-table-view>
       </main>
     </div>
   </ng-container>

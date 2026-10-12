@@ -48,6 +48,7 @@ import {
 import { PlotModalComponent } from './components/modals/plot/plot-modal.component';
 import { LabBookRestoreComponent } from './components/restore/restore.component';
 import {MetaTooltipComponent} from "./components/meta-tooltip/meta-tooltip.component";
+import {LabBookTableViewComponent} from "@app/modules/labbook/components/table-view/table-view.component";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {MetaTooltipComponent} from "./components/meta-tooltip/meta-tooltip.compo
     ExportSelectModalComponent,
     PlotModalComponent,
     LabBookRestoreComponent,
-    MetaTooltipComponent
+    MetaTooltipComponent,
+    LabBookTableViewComponent
   ],
   imports: [
     CommonModule,
@@ -130,7 +132,8 @@ import {MetaTooltipComponent} from "./components/meta-tooltip/meta-tooltip.compo
     ExportSelectModalComponent,
     PlotModalComponent,
     LabBookRestoreComponent,
-    MetaTooltipComponent
+    MetaTooltipComponent,
+    LabBookTableViewComponent
   ],
 })
 export class LabBookModule { }

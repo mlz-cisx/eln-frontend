@@ -1,0 +1,76 @@
+<ng-container *transloco="let t">
+  <ng-container slot="search">
+    <div class="flex items-center"
+         style="display: flex; justify-content: center">
+      <div class="search-input">
+        <div class="input-group search-input-group">
+          <input
+                  [formControl]="searchControl"
+                  [placeholder]="t('files.header.search.placeholder')"
+                  class="form-control mlzeln-input"
+                  id="search-header"
+                  name="search-header"
+                  type="text"
+          />
+          <button *ngIf="!searchControl.value"
+                  class="btn btn-sm bg-transparent clear-input"
+                  type="button">
+            <joeseln-icon className="wb-search"></joeseln-icon>
+          </button>
+          <button
+                  (click)="searchControl.patchValue(null)"
+                  *ngIf="searchControl.value"
+                  class="btn btn-sm bg-transparent clear-input"
+                  type="button"
+          >
+            <joeseln-icon className="wb-remove"></joeseln-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container slot="elements">
+  </ng-container>
+</ng-container>
+
+
+<div>
+  <mlzeln-table-view
+      #tableView
+      [columns]="listColumns"
+      [labbook_id]="id"
+      [params]="params"
+      [service]="labbooktableservice"
+  ></mlzeln-table-view>
+</div>
+
+
+<ng-template #titleCellTemplate let-row>
+  <div class="title-hover-container">
+    <div class="hover-shield"></div>
+    <a
+        #linkRef
+        (mouseenter)="onTableRowEnter(linkRef, row)"
+        (mouseleave)="onListLeave()"
+        [routerLink]="['/' + row.entity_type + 's', row.entity_id]">
+      {{ row.title }}
+    </a>
+  </div>
+</ng-template>
+<ng-template #createdAtCellTemplate let-row>
+  {{ row.created_at | formatDate }}
+</ng-template>
+<ng-template #createdAtCellTemplate let-row>
+  {{ row.created_at | formatDate }}
+</ng-template>
+<ng-template #createdByCellTemplate let-row>
+  {{row.created_by  }}
+</ng-template>
+<ng-template #lastModifiedAtCellTemplate let-row>
+  {{ row.last_modified_at | formatDate }}
+</ng-template>
+<ng-template #lastModifiedByCellTemplate let-row>
+  {{row.last_modified_by}}
+</ng-template>
+
+

@@ -94,6 +94,8 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
   public privileges?: Privileges;
 
+  public tableView = false; // default = drawboard
+
 
   public showSidebar = false;
 
@@ -239,7 +241,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
   }
 
   onKeyDown = (event: KeyboardEvent) => {
-    if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+    if (!this.tableView && (event.ctrlKey || event.metaKey) && event.key === 'f') {
       event.preventDefault();
       this.openSearch()
     }

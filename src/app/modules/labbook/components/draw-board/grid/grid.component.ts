@@ -35,7 +35,7 @@ import {
   tap,
   timer
 } from 'rxjs';
-import {switchMap, take} from 'rxjs/operators';
+import {map, switchMap, take} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {TranslocoService} from '@jsverse/transloco';
 import {gridsterConfig} from '../../../config/gridster-config';
@@ -108,6 +108,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public queuedSocketRefreshes = false;
 
   public modalRef?: DialogRef;
+
+  private readonly chunkPauseMs = 10;
 
   public constructor(
     public readonly labBooksService: LabbooksService,
@@ -217,15 +219,17 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
           return from(chunks).pipe(
             concatMap((chunk, index) =>
-              of<ChunkResult>({
-                elements: chunk,
-                isEmpty: false,
-                // Mark the final chunk so we know when rendering
-                // is completely finished.
-                isLastChunk: index === chunks.length - 1
-              }).pipe(
-                observeOn(animationFrameScheduler)
-              )
+              timer(this.chunkPauseMs).pipe(
+                map((): ChunkResult => ({
+                    elements: chunk,
+                    isEmpty: false,
+                    // Mark the final chunk so we know when rendering
+                    // is completely finished.
+                    isLastChunk: index === chunks.length - 1
+                  })))
+                .pipe(
+                  observeOn(animationFrameScheduler)
+                )
             )
           );
         })

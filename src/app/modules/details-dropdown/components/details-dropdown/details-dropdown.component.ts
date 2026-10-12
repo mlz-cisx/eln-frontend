@@ -73,6 +73,9 @@ export class DetailsDropdownComponent implements OnInit {
   @Input()
   public privileges?: Privileges;
 
+  @Input()
+  public disabled?: boolean;
+
   @Output() pngExportRequested = new EventEmitter<void>();
 
   public modalRef?: DialogRef;
