@@ -18,26 +18,31 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-import { AuthService, FilesService, UserService } from '@app/services';
-import type { File, FilePayload, Privileges, User } from '@joeseln/types';
+import {AuthService, FilesService, UserService} from '@app/services';
+import type {File, FilePayload, Privileges, User} from '@joeseln/types';
+import {ModalCallback} from "@joeseln/types";
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import { Observable, of } from 'rxjs';
-import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {debounceTime, map, skip, switchMap, take,} from 'rxjs/operators';
 import {
   LabBookDrawBoardGridComponent
 } from "@app/modules/labbook/components/draw-board/grid/grid.component";
 import {
-  Graph,
   detectGraphType,
+  Graph,
 } from "@app/modules/labbook/components/draw-board/file/file.component"
 import {
   PlotModalComponent
 } from '@app/modules/labbook/components/modals/plot/plot-modal.component';
 import {environment} from "@environments/environment";
+import {
+  DescriptionModalComponent
+} from "@app/modules/shared/modals/description/description.component";
+import {ModalState} from "@app/enums/modal-state.enum";
 
 interface FormFile {
   title: FormControl<string | null>;
@@ -250,6 +255,10 @@ export class FilePageComponent implements OnInit, OnDestroy {
             this.useNowrap = longest.length < 250;
           }
 
+          if (!privileges.edit) {
+            this.form.disable({emitEvent: false});
+          }
+
           this.loading = false;
 
           if (formChanges) {
@@ -323,6 +332,24 @@ export class FilePageComponent implements OnInit, OnDestroy {
   }
 
   public onOpenDescriptionModal(): void {
+    this.modalRef = this.modalService.open(DescriptionModalComponent, {
+      closeButton: false,
+      width: '912px',
+      data: {
+        id: this.id,
+        description: this.initialState?.description ?? '',
+        descriptionKey: 'description',
+        service: this.filesService,
+        liveUpdates: true,
+      },
+    });
+
+    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback?: ModalCallback) => {
+        this.form.markAsPristine();
+        this.refreshChanges.next(true);
+        this.refreshResetValue.next(true);
+        this.initDetails();
+    });
   }
 
   public initDirectoryDetails(): void {

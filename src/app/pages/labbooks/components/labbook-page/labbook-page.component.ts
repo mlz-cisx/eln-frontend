@@ -844,6 +844,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         this.form.markAsPristine();
         this.refreshChanges.next(true);
         this.refreshResetValue.next(true);
+        this.initDetails();
       }
     });
   }
