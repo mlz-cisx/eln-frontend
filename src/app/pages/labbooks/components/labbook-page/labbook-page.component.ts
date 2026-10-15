@@ -184,6 +184,11 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
+
+    this.route.queryParamMap.subscribe(params => {
+      this.tableView = params.get('view') === 'table';
+    });
+
     this.searchService.lb_search$.subscribe(() => {
       this.openSearch();
     });
@@ -238,6 +243,16 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     document.removeEventListener('keydown', this.onKeyDown, true);
     this.websocketService.unsubscribeLabbook(this.id);
+  }
+
+  onViewChange(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        view: this.tableView ? 'table' : null,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 
   onKeyDown = (event: KeyboardEvent) => {

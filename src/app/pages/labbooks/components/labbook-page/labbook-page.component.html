@@ -43,7 +43,9 @@
                     id="view-switch"
                     type="checkbox"
                     class="custom-control-input"
-                    [(ngModel)]="tableView">
+                    [(ngModel)]="tableView"
+                    (ngModelChange)="onViewChange()"
+            >
             <label
                     class="custom-control-label"
                     for="view-switch">
