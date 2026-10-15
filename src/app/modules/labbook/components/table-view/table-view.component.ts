@@ -10,11 +10,12 @@ import {
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {TableColumn, TableViewComponent} from "@joeseln/table";
 import {HttpParams} from "@angular/common/http";
-import {LabbookTableService, UserService} from '@app/services';
+import {LabbookTableService, UserService, WebSocketService} from '@app/services';
 import {FormBuilder} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {User} from "@joeseln/types";
-import {debounceTime, skip} from "rxjs/operators";
+import {debounceTime, filter, skip} from "rxjs/operators";
+import {environment} from '@environments/environment';
 import {
   MetaTooltipComponent
 } from '@app/modules/labbook/components/meta-tooltip/meta-tooltip.component';
@@ -82,6 +83,7 @@ export class LabBookTableViewComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private user_service: UserService,
     private overlay: Overlay,
+    private readonly websocketService: WebSocketService,
   ) {
   }
 
@@ -92,10 +94,21 @@ export class LabBookTableViewComponent implements OnInit, OnDestroy {
 
     this.initTranslations();
     this.initSearch();
+
+    this.websocketService.subscribeLabbook(this.id)
+      .pipe(
+        filter(event => event.action !== 'strict_mode_enabled'),
+        debounceTime(environment.labBookSocketRefreshInterval),
+        untilDestroyed(this),
+      )
+      .subscribe(() => {
+        this.tableView.loadData(false, this.params);
+      });
   }
 
   public ngOnDestroy(): void {
-    this.hideMetaTooltip()
+    this.websocketService.unsubscribeLabbook(this.id);
+    this.hideMetaTooltip();
   }
 
 
