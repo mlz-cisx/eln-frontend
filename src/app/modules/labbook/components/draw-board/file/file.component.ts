@@ -82,8 +82,7 @@ export class LabBookDrawBoardFileComponent implements OnInit {
   @Input()
   public element!: LabBookElement<File>;
 
-  @Input()
-  public section?: string;
+
 
   @Input()
   public editable? = false;

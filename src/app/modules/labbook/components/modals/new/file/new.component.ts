@@ -160,7 +160,6 @@ export class NewLabBookFileElementModalComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         labBookElements => {
-          // const sections: DropdownElement[] = [];
 
           this.lb_elements_count = labBookElements.length
 

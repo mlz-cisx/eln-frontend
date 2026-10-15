@@ -10,9 +10,6 @@ import {
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {
-  CommentsModalComponent
-} from '@app/modules/comment/components/modals/comments/comments.component';
-import {
   CopyElementModalComponent
 } from '@app/modules/labbook/components/modals/copy/copy.component'
 import {
@@ -22,12 +19,7 @@ import {
   DeleteModalComponent
 } from '@app/modules/trash/components/modals/delete/delete.component';
 import {LabbooksService, RestoreEventsService} from '@app/services';
-import type {
-  ExportLink,
-  LabBookElement,
-  ModalCallback,
-  Privileges
-} from '@joeseln/types';
+import type {ExportLink, ModalCallback, Privileges} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
@@ -66,8 +58,6 @@ export class LabBookElementDropdownComponent implements OnInit {
   @Input()
   public elementId!: string;
 
-  @Input()
-  public section?: string;
 
   @Input()
   public initialState?: any;
@@ -135,8 +125,7 @@ export class LabBookElementDropdownComponent implements OnInit {
       });
   }
 
-  public onOpenPrivilegesModal(): void {
-  }
+
 
   public onExport(): void {
     if (this.loading) {
@@ -233,14 +222,6 @@ export class LabBookElementDropdownComponent implements OnInit {
       );
   }
 
-  public onOpenMoveToSectionModal(): void {
-  }
-
-  public onOpenMoveBackToLabBookModal(): void {
-  }
-
-  public moveBackToLabBook(): void {
-  }
 
   public onOpenCopyModal(): void {
 
@@ -284,16 +265,6 @@ export class LabBookElementDropdownComponent implements OnInit {
     });
   }
 
-  public onRemove(): void {
-  }
-
-  public onOpenCommentsModal(): void {
-    this.modalService.open(CommentsModalComponent, {
-      closeButton: false,
-      width: '800px',
-      data: {service: this.service, element: this.initialState, create: true},
-    });
-  }
 
   public onDeleteModalClose(callback?: ModalCallback): void {
     if (callback?.state === ModalState.Changed) {
@@ -301,29 +272,5 @@ export class LabBookElementDropdownComponent implements OnInit {
     }
   }
 
-  public onRemoveModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.remove();
-    }
-  }
 
-  public onMoveElementToSectionModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.moved.emit({id: this.elementId, gridReload: false});
-    }
-  }
-
-  public onMoveElementToLabBookModalClose(callback?: ModalCallback): void {
-    if (callback?.state === ModalState.Changed) {
-      this.moved.emit({id: this.elementId, gridReload: false});
-    }
-  }
-
-  public getMaxYPosition(elements: LabBookElement<any>[]): number {
-    if (!elements.length) {
-      return 0;
-    }
-
-    return Math.max(...elements.map(element => element.position_y + element.height));
-  }
 }

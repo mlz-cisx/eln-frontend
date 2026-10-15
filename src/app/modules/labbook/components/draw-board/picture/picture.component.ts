@@ -67,8 +67,6 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
   @Input()
   public element!: LabBookElement<Picture>;
 
-  @Input()
-  public section?: string;
 
   @Input()
   public editable? = false;

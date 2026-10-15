@@ -86,7 +86,7 @@ export class LabbooksService {
     return this.httpClient.patch<LabBook>(`${this.apiUrl}${id}/soft_delete/`, {}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
   }
 
-  public getElements(id: string, section?: string): Observable<LabBookElement<any>[]> {
+  public getElements(id: string): Observable<LabBookElement<any>[]> {
     return this.httpClient.get<LabBookElement<any>[]>(`${this.apiUrl}${id}/elements/`).pipe(catchError(err => this.errorservice.handleError(err, this.logout)))
   }
 
