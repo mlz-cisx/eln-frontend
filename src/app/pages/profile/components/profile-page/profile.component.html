@@ -34,6 +34,22 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" errorTailor
               *ngIf="!user.oidc_user">
           <div class="mb-4">
+            <label for="oldPassword">
+              {{ t('changePassword.oldPassword') }}
+              <mlzeln-form-asterisk
+                class="inline-block"></mlzeln-form-asterisk>
+            </label>
+            <input
+              type="password"
+              class="form-control mlzeln-input"
+              id="oldPassword"
+              formControlName="oldPassword"
+              name="oldPassword"
+              autocomplete="current-password"
+              [placeholder]="t('changePassword.oldPassword')"
+            />
+          </div>
+          <div class="mb-4">
             <label for="password">
               {{ t('changePassword.newPassword') }}
               <mlzeln-form-asterisk
@@ -44,6 +60,7 @@
               class="form-control mlzeln-input"
               id="password"
               formControlName="password"
+              autocomplete="new-password"
               name="password"
               [placeholder]="t('changePassword.newPassword')"
             />
@@ -59,6 +76,7 @@
               class="form-control mlzeln-input"
               id="passwordConfirm"
               formControlName="passwordConfirm"
+              autocomplete="new-password"
               name="passwordConfirm"
               [placeholder]="t('changePassword.confirmNewPassword')"
             />

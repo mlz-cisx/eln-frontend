@@ -415,6 +415,8 @@
   "pictures.new": "Picture",
   "pictures.filter.createdBy.label": "Created by",
   "pictures.filter.users.placeholder": "Filter by user",
+  "changePassword.oldPassword": "Current password",
+  "changePassword.incorrectOldPassword": "Current password is incorrect",
   "changePassword.newPassword": "New password",
   "changePassword.confirmNewPassword": "Confirm new password",
   "changePassword.confirm": "Change password",

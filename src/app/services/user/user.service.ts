@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '@environments/environment';
-import {firstValueFrom, Observable} from 'rxjs';
+import {firstValueFrom, Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import type {TokenWithValidity, User} from '@joeseln/types';
 import {AuthService, ErrorserviceService, LogoutService} from '@app/services';
@@ -47,8 +47,13 @@ export class UserService {
   }
 
 
-  public changePassword(password: string): Observable<any> {
-    return this.httpClient.put<any>(`${environment.apiUrl}/change_password`, {password}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
+  public changePassword(password: string, old_password: string): Observable<any> {
+    return this.httpClient.put<any>(`${environment.apiUrl}/change_password`, {password, old_password}).pipe(catchError(err => {
+      if (err.status === 400) {
+        return throwError(() => err);
+      }
+      return this.errorservice.handleError(err, this.logout);
+    }));
   }
 
   public get user$(): Observable<UserState> {

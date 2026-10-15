@@ -21,6 +21,7 @@ export class ProfilePageComponent implements OnInit {
 
   public form = this.fb.group(
     {
+      oldPassword: [null, [Validators.required]],
       password: [null, [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s])\\S{8,16}')]],
       passwordConfirm: [null, [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s])\\S{8,16}')]],
     },
@@ -80,16 +81,12 @@ export class ProfilePageComponent implements OnInit {
     this.loading = true;
 
     this.user_service
-      .changePassword(this.f['password'].value)
+      .changePassword(this.f['password'].value, this.f['oldPassword'].value)
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {
           this.loading = false;
           this.form.reset();
-          this.form.clearValidators();
-          Object.keys(this.form.controls).forEach(key => {
-            this.form.controls[key].setErrors(null);
-          });
 
           this.cdr.markForCheck();
           this.translocoService
@@ -99,8 +96,11 @@ export class ProfilePageComponent implements OnInit {
               this.toastrService.success(passwordChanged);
             });
         },
-        () => {
+        error => {
           this.loading = false;
+          if (error.status === 400) {
+            this.toastrService.error(this.translocoService.translate('changePassword.incorrectOldPassword'));
+          }
           this.cdr.markForCheck();
         }
       );
