@@ -23,17 +23,22 @@ import {
   NotesService,
   UserService,
 } from '@app/services';
-import type { Note, NotePayload, Privileges, User } from '@joeseln/types';
+import type {Note, NotePayload, Privileges, User} from '@joeseln/types';
+import {ModalCallback} from "@joeseln/types";
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
-import { Observable, of } from 'rxjs';
-import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {debounceTime, map, skip, switchMap, take,} from 'rxjs/operators';
 import {
   LabBookDrawBoardGridComponent
 } from "@app/modules/labbook/components/draw-board/grid/grid.component";
+import {
+  DescriptionModalComponent
+} from "@app/modules/shared/modals/description/description.component";
+import {ModalState} from "@app/enums/modal-state.enum";
 
 
 interface FormNote {
@@ -207,6 +212,10 @@ export class NotePageComponent implements OnInit, OnDestroy {
             this.initFormChanges();
           }
 
+          if (!privileges.edit) {
+            this.form.disable({emitEvent: false});
+          }
+
           if ("content" in this.initialState) {
             this.safeContent = this.initialState.content
           }
@@ -288,6 +297,31 @@ export class NotePageComponent implements OnInit, OnDestroy {
       },
     } as DialogConfig);
 
+  }
+
+  public get descriptionTranslationKey(): string {
+    return this.initialState?.content ? 'note.details.content.edit' : 'note.details.content.add';
+  }
+
+  public onOpenDescriptionModal(): void {
+    this.modalRef = this.modalService.open(DescriptionModalComponent, {
+      closeButton: false,
+      width: '912px',
+      data: {
+        id: this.id,
+        description: this.initialState?.content ?? '',
+        descriptionKey: 'content',
+        service: this.notesService,
+        liveUpdates: true,
+      },
+    });
+
+    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback?: ModalCallback) => {
+        this.form.markAsPristine();
+        this.refreshChanges.next(true);
+        this.refreshResetValue.next(true);
+        this.initDetails();
+    });
   }
 
   public onUpdateMetadata(): void {

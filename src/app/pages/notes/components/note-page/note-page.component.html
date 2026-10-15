@@ -96,6 +96,18 @@
                   </button>
                 </div>
                 <label>{{ t('note.details.element.content') }}</label>
+
+                <ng-container slot="actions">
+                  <button
+                          *ngIf="!form.disabled"
+                          type="button"
+                          class="btn mlzeln-button-regular mlzeln-button-outline ml-3"
+                          (click)="onOpenDescriptionModal()"
+                          [disabled]="loading"
+                  >
+                    {{ t(descriptionTranslationKey) }}
+                  </button>
+                </ng-container>
                 <div class="content-container"
                      [mathjax]='safeContent'></div>
               </ng-container>
