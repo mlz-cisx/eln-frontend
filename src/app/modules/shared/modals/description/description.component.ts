@@ -7,7 +7,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, filter, switchMap } from 'rxjs/operators';
+import { catchError, filter, finalize, switchMap } from 'rxjs/operators';
 
 interface FormDescription {
   content: string | null;
@@ -75,6 +75,23 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
     this.f.content.setValue(this.initialDescription);
 
     if (this.liveUpdates) {
+      // refresh content at latest state before editing
+      this.loading = true;
+      (this.service.get(this.id) as Observable<any>)
+        .pipe(
+          catchError(() => EMPTY),
+          untilDestroyed(this),
+          finalize(() => {
+            this.loading = false;
+            this.cdr.markForCheck();
+          })
+        )
+        .subscribe(response => {
+          this.initialDescription = response.data[this.descriptionKey] ?? '';
+          this.f.content.setValue(this.initialDescription, { emitEvent: false });
+          this.cdr.markForCheck();
+        });
+
       this.websocketService.subscribeElement(this.id)
         .pipe(
           filter(event => event.model_name !== 'comments' && !this.loading),
