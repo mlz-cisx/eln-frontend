@@ -2,6 +2,9 @@
   <mlzeln-modal [modalFooter]="false">
     <div slot="header">
       {{ t(headerTranslationKey) }}
+      <span *ngIf="conflict"
+            class="conflict-indicator ml-2 mlzeln-button-big mlzeln-button-background"
+            role="status">{{ t('shared.descriptionModal.conflict') }}</span>
     </div>
     <div slot="body">
       <mlzeln-loading [loading]="loading">

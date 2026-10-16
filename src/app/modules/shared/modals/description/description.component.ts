@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalState } from '@app/enums/modal-state.enum';
+import { WebSocketService } from '@app/services';
 import { DialogRef } from '@ngneat/dialog';
 import { FormBuilder } from '@ngneat/reactive-forms';
 import { TranslocoService } from '@jsverse/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, switchMap } from 'rxjs/operators';
 
 interface FormDescription {
   content: string | null;
@@ -18,7 +21,7 @@ interface FormDescription {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DescriptionModalComponent implements OnInit {
+export class DescriptionModalComponent implements OnInit, OnDestroy {
   public id: string = this.modalRef.data.id;
 
   public service: any = this.modalRef.data.service;
@@ -27,7 +30,13 @@ export class DescriptionModalComponent implements OnInit {
 
   public descriptionKey: string = this.modalRef.data.descriptionKey;
 
+  private readonly liveUpdates: boolean = this.modalRef.data.liveUpdates === true;
+
   public loading = false;
+
+  public conflict = false;
+
+  private conflictTimeout?: ReturnType<typeof setTimeout>;
 
   public state = ModalState.Unchanged;
 
@@ -40,7 +49,8 @@ export class DescriptionModalComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly translocoService: TranslocoService,
-    private readonly toastrService: ToastrService
+    private readonly toastrService: ToastrService,
+    private readonly websocketService: WebSocketService
   ) {}
 
   public get f() {
@@ -63,6 +73,46 @@ export class DescriptionModalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.f.content.setValue(this.initialDescription);
+
+    if (this.liveUpdates) {
+      this.websocketService.subscribeElement(this.id)
+        .pipe(
+          filter(event => event.model_name !== 'comments' && !this.loading),
+          switchMap(() => (this.service.get(this.id) as Observable<any>).pipe(
+            // Keep listening when a refresh request fails.
+            catchError(() => EMPTY)
+          )),
+          untilDestroyed(this)
+        )
+        .subscribe(response => {
+          if (this.loading) {
+            return;
+          }
+          const content = response.data[this.descriptionKey] ?? '';
+          if (this.f.content.value !== content) {
+            this.showConflict();
+          }
+          this.initialDescription = content;
+          this.f.content.setValue(this.initialDescription, {emitEvent: false});
+          this.cdr.markForCheck();
+        });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    clearTimeout(this.conflictTimeout);
+    if (this.liveUpdates) {
+      this.websocketService.unsubscribeElement(this.id);
+    }
+  }
+
+  private showConflict(): void {
+    clearTimeout(this.conflictTimeout);
+    this.conflict = true;
+    this.conflictTimeout = setTimeout(() => {
+      this.conflict = false;
+      this.cdr.markForCheck();
+    }, 5000);
   }
 
   public onSubmit(): void {

@@ -1,3 +1,13 @@
 :host {
   display: block;
 }
+
+.conflict-indicator {
+  animation: conflict-blink 1s step-end infinite;
+}
+
+@keyframes conflict-blink {
+  50% {
+    opacity: 0;
+  }
+}
