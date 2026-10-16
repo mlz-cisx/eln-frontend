@@ -7,7 +7,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, filter, finalize, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, filter, finalize, switchMap } from 'rxjs/operators';
 
 interface FormDescription {
   content: string | null;
@@ -39,6 +39,8 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
   private conflictTimeout?: ReturnType<typeof setTimeout>;
 
   public state = ModalState.Unchanged;
+
+  private savedData: any;
 
   public form = this.fb.group<FormDescription>({
     content: null,
@@ -73,6 +75,8 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.f.content.setValue(this.initialDescription);
+    this.f.content.valueChanges.pipe(debounceTime(1000), untilDestroyed(this)).subscribe(() => this.onSubmit());
+    this.modalRef.beforeClose(result => this.onBeforeClose(result));
 
     if (this.liveUpdates) {
       // refresh content at latest state before editing
@@ -132,20 +136,43 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
     }, 5000);
   }
 
-  public onSubmit(): void {
+  private onBeforeClose(result: unknown): boolean {
     if (this.loading) {
+      return false;
+    }
+    if (this.f.content.value !== this.initialDescription) {
+      this.onSubmit(() => this.modalRef.close());
+      return false;
+    }
+    if (!result && this.state === ModalState.Changed) {
+      this.modalRef.close({ state: this.state, data: this.savedData });
+      return false;
+    }
+    return true;
+  }
+
+  public onSubmit(onSaved?: () => void): void {
+    if (this.loading || this.form.invalid || this.f.content.value === this.initialDescription) {
       return;
     }
+    const description = this.description;
     this.loading = true;
 
     this.service
-      .patch(this.id, this.description)
+      .patch(this.id, description)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response: any) => {
           this.state = ModalState.Changed;
           this.loading = false;
-          this.modalRef.close({ state: this.state, data: response });
+          this.savedData = response;
+          this.initialDescription = description[this.descriptionKey];
+          this.cdr.markForCheck();
+          if (this.f.content.value !== this.initialDescription) {
+            this.onSubmit(onSaved);
+          } else {
+            onSaved?.();
+          }
           this.translocoService
             .selectTranslate(this.toastrSuccessTranslationKey)
             .pipe(untilDestroyed(this))

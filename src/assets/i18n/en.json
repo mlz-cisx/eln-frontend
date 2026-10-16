@@ -212,6 +212,7 @@
   "filterSidebar.resetAll": "Reset all",
   "filterSidebar.remember.label": "Remember selected filters",
   "shared.descriptionModal.cancel": "Cancel",
+  "shared.descriptionModal.close": "Close",
   "shared.descriptionModal.conflict": "Conflict",
   "shared.pendingChangesModal.header": "Unsaved changes",
   "shared.pendingChangesModal.confirmationMessage": "You have unsaved changes, do you wish to proceed?",
