@@ -7,12 +7,13 @@ import {
 import {Validators} from '@angular/forms';
 import {ModalState} from '@app/enums/modal-state.enum';
 import {LabbooksService} from '@joeseln/services';
-import type { LabBook } from '@joeseln/types';
+import type {LabBook} from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastrService} from 'ngx-toastr';
+import {environment} from "@environments/environment";
 
 interface FormLabBook {
   title: FormControl<string | null>;
@@ -91,7 +92,20 @@ export class NewLabBookModalComponent implements OnInit {
     }
   }
 
+  private checkContentSize(): boolean {
+    const content = this.f.description.value ?? '';
+    const maxSize = environment.noteMaximumSize ?? 1024; // Default to 1024 KB if not set
+    if (content.length > (maxSize << 10)) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return false;
+    }
+    return true;
+  }
+
   public onSubmit(): void {
+    if (!this.checkContentSize()) {
+      return;
+    }
     if (this.loading) {
       return;
     }

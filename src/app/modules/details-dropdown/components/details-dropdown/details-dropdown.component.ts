@@ -49,8 +49,6 @@ export class DetailsDropdownComponent implements OnInit {
   @Input()
   public redirectDestination?: string[] = ['/'];
 
-  @Input()
-  public newModalComponent?: any;
 
   @Input()
   public backdropClose = true;
@@ -233,16 +231,6 @@ export class DetailsDropdownComponent implements OnInit {
           this.loading = false;
         }
       );
-  }
-
-  public onOpenNewModal(initialState?: any, duplicate?: string): void {
-    this.modalRef = this.modalService.open(this.newModalComponent, {
-      closeButton: false,
-      enableClose: this.backdropClose,
-      data: {service: this.service, duplicate, initialState},
-    });
-
-    this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => this.onModalClose(callback));
   }
 
 

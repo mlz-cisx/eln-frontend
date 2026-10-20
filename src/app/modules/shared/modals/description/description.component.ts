@@ -8,6 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, debounceTime, filter, finalize, switchMap } from 'rxjs/operators';
+import {environment} from "@environments/environment";
 
 interface FormDescription {
   content: string | null;
@@ -30,7 +31,7 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
 
   public descriptionKey: string = this.modalRef.data.descriptionKey;
 
-  private readonly liveUpdates: boolean = this.modalRef.data.liveUpdates === true;
+  private readonly liveUpdates: boolean = this.modalRef.data.liveUpdates;
 
   public loading = false;
 
@@ -41,6 +42,10 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
   public state = ModalState.Unchanged;
 
   private savedData: any;
+
+  private get contentTooLarge(): boolean {
+    return (this.f.content.value?.length ?? 0) > ((environment.noteMaximumSize ?? 1024) * 1024);
+  }
 
   public form = this.fb.group<FormDescription>({
     content: null,
@@ -75,7 +80,17 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.f.content.setValue(this.initialDescription);
-    this.f.content.valueChanges.pipe(debounceTime(1000), untilDestroyed(this)).subscribe(() => this.onSubmit());
+
+    this.f.content.valueChanges
+      .pipe(
+        debounceTime(1000),
+        untilDestroyed(this)
+      )
+      .subscribe(() => {
+        this.onSubmit();
+      });
+
+
     this.modalRef.beforeClose(result => this.onBeforeClose(result));
 
     if (this.liveUpdates) {
@@ -110,6 +125,9 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
             return;
           }
           const content = response.data[this.descriptionKey] ?? '';
+          if (content === (this.initialDescription ?? '')) {
+            return;
+          }
           if (this.f.content.value !== content) {
             this.showConflict();
           }
@@ -140,18 +158,26 @@ export class DescriptionModalComponent implements OnInit, OnDestroy {
     if (this.loading) {
       return false;
     }
+    if (this.contentTooLarge) {
+      return true;
+    }
     if (this.f.content.value !== this.initialDescription) {
       this.onSubmit(() => this.modalRef.close());
       return false;
     }
     if (!result && this.state === ModalState.Changed) {
-      this.modalRef.close({ state: this.state, data: this.savedData });
+      this.modalRef.close({state: this.state, data: this.savedData});
       return false;
     }
     return true;
   }
 
   public onSubmit(onSaved?: () => void): void {
+    if (this.contentTooLarge) {
+      this.toastrService.error('Content exceeds the maximum allowed size.');
+      return;
+    }
+
     if (this.loading || this.form.invalid || this.f.content.value === this.initialDescription) {
       return;
     }

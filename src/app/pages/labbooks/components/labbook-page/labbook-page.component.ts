@@ -839,13 +839,10 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     });
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback?: ModalCallback) => {
-      if (callback?.state === ModalState.Changed) {
-        this.initialState = {...callback.data};
         this.form.markAsPristine();
         this.refreshChanges.next(true);
         this.refreshResetValue.next(true);
         this.initDetails();
-      }
     });
   }
 
