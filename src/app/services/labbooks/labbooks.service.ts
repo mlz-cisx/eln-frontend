@@ -21,7 +21,9 @@ import {SearchResult} from "@joeseln/types";
 import {catchError, map} from 'rxjs/operators';
 import {Observable} from "rxjs";
 import {ErrorserviceService, LogoutService} from "@app/services";
-import { ExportFilter } from '@app/modules/labbook/components/modals/export_select/export-select.component';
+import {
+  ExportFilter
+} from '@app/modules/labbook/components/modals/export_select/export-select.component';
 
 
 @Injectable({
@@ -114,8 +116,14 @@ export class LabbooksService {
     return this.httpClient.put<string[]>(`${this.apiUrl}${id}/elements/update_all/`, elements).pipe(catchError(err => this.errorservice.handleError(err, this.logout)));
   }
 
-  public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
+  public history(id: string, params = new HttpParams()): Observable<{ total: number; data: RecentChanges[] }> {
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      map(data => (
+        {
+          total: data.length,
+          data: data,
+        }))
+    );
   }
 
   public create_note_aside(elem_id: string, params = new HttpParams()): Observable<Boolean> {
@@ -126,8 +134,15 @@ export class LabbooksService {
     return this.httpClient.get<any>(`${this.apiUrl}note_below/${elem_id}/`, {params});
   }
 
-  public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)), map(data => data));
+
+  public versions(id: string, params = new HttpParams()): Observable<{ total: number; data: Version[] }> {
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      map(data => (
+        {
+          total: data.length,
+          data: data,
+        }))
+    );
   }
 
   public previewVersion(id: string, version: string): Observable<any> {

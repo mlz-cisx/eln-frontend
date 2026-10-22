@@ -675,7 +675,9 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal
 }
 
 
-
+.mt-4, .my-4 {
+	margin-top: 0.5rem !important;
+}
 
 
 

@@ -206,6 +206,7 @@
   "recentChanges.wasChanged": "{{ field }} was changed.",
   "recentChanges.createDetailsSpecialField": "{{ field }} was set to {{ newValue }}",
   "recentChanges.changeDetailsSpecialField": "{{ field }} was changed from {{ oldValue }} to {{ newValue }}",
+  "recentChanges.search": "Search for Username",
   "userGroups.unknownUserGroup": "Unknown user group",
   "exportButton.tooltip": "Export",
   "filterSidebar.title": "Filter options",

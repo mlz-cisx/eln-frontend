@@ -9,7 +9,7 @@ export interface Version {
   display?: string;
   last_modified_at?: string;
   last_modified_by?: User;
-  metadata: any;
+  metadata?: any;
   number?: number;
   object_id?: string;
   pk?: string;

@@ -13,13 +13,11 @@ import type {
   PicturePayload,
   PrivilegesData,
   RecentChanges,
-  RecentChangesService,
   Relation,
   RelationPayload,
   RelationPutPayload,
   SketchPayload,
   Version,
-  VersionsService,
 } from '@joeseln/types';
 import type {Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -31,7 +29,7 @@ import {ErrorserviceService, LogoutService} from "@app/services";
   providedIn: 'root',
 })
 export class PicturesService
-  implements TableViewService, RecentChangesService, VersionsService<Picture>, ExportService {
+  implements TableViewService, ExportService {
   public readonly apiUrl = `${environment.apiUrl}/pictures/`;
 
 
@@ -140,19 +138,31 @@ public restore(
   }
   return this.httpClient.patch<Picture>(
     `${this.apiUrl}${id}/restore/`,
-    { pk: id },
-    { params }
+    {pk: id},
+    {params}
   );
 }
 
 
-  public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
+  public history(id: string, params = new HttpParams()): Observable<{ total: number; data: RecentChanges[] }> {
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      map(data => (
+        {
+          total: data.length,
+          data: data,
+        }))
+    );
   }
 
 
-  public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});
+  public versions(id: string, params = new HttpParams()): Observable<{ total: number; data: Version[] }> {
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      map(data => (
+        {
+          total: data.length,
+          data: data,
+        }))
+    );
   }
 
   public previewVersion(id: string, version: string): Observable<any> {

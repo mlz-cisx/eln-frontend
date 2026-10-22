@@ -1,21 +1,34 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { ModalState } from '@app/enums/modal-state.enum';
-import { TableColumn, TableViewComponent } from '@joeseln/table';
-import type { ModalCallback, Version } from '@joeseln/types';
-import { DialogConfig, DialogRef, DialogService } from '@ngneat/dialog';
-import { TranslocoService } from '@jsverse/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { parseISO } from 'date-fns';
-import { take } from 'rxjs/operators';
-import { FinalizeVersionModalComponent } from '../modals/finalize/finalize.component';
-import { VersionPreviewModalComponent } from '../modals/preview/preview.component';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {ModalState} from '@app/enums/modal-state.enum';
+import {TableColumn, TableViewComponent} from '@joeseln/table';
+import type {ModalCallback, Version} from '@joeseln/types';
+import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
+import {TranslocoService} from '@jsverse/transloco';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {parseISO} from 'date-fns';
+import {take} from 'rxjs/operators';
+import {
+  FinalizeVersionModalComponent
+} from '../modals/finalize/finalize.component';
+import {
+  VersionPreviewModalComponent
+} from '../modals/preview/preview.component';
 
 @UntilDestroy()
 @Component({
-    selector: 'mlzeln-versions',
-    templateUrl: './versions.component.html',
-    styleUrls: ['./versions.component.scss'],
-    standalone: false
+  selector: 'mlzeln-versions',
+  templateUrl: './versions.component.html',
+  styleUrls: ['./versions.component.scss'],
+  standalone: false
 })
 export class VersionsComponent implements OnInit {
   @ViewChild('tableView')
@@ -78,12 +91,7 @@ export class VersionsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.refresh?.pipe(untilDestroyed(this)).subscribe(() => {
-      this.getVersions();
-    });
-
     this.initTranslations();
-    this.getVersions();
   }
 
   public initTranslations(): void {
@@ -159,27 +167,7 @@ export class VersionsComponent implements OnInit {
     }
   }
 
-  public getVersions(): void {
-    this.loading = true;
 
-    this.service
-      ?.versions(this.versionId)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (versions: Version[]) => {
-          this.data = [...versions];
-          this.updateVersionInProgress();
-          this.appendVersionInProgress();
-
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
-  }
 
   public onPreviewModal(version: Version, versionNumber?: number): void {
     this.modalRef = this.modalService.open(VersionPreviewModalComponent, {
@@ -204,15 +192,12 @@ export class VersionsComponent implements OnInit {
 
     this.modalRef.afterClosed$.pipe(untilDestroyed(this), take(1)).subscribe((callback: ModalCallback) => {
       this.onModalClose(callback)
-      // TODO without location reload
-      // window.location.reload()
-      this.cdr.detectChanges()
     });
   }
 
   public onModalClose(callback?: ModalCallback): void {
     if (callback?.state === ModalState.Changed) {
-      this.changed.emit({ state: callback.state });
+      this.tableView.loadData();
     }
   }
 }

@@ -1,10 +1,49 @@
-<ng-container *ngIf="data.length">
+<ng-container *transloco="let t">
+  <ng-container slot="search">
+    <div class="flex items-center"
+         style="display: flex; justify-content: center">
+      <div class="search-input">
+        <div class="input-group search-input-group">
+          <input
+                  [formControl]="searchControl"
+                  [placeholder]="t('recentChanges.search')"
+                  class="form-control mlzeln-input"
+                  id="search-header"
+                  name="search-header"
+                  type="text"
+          />
+          <button *ngIf="!searchControl.value"
+                  class="btn btn-sm bg-transparent clear-input"
+                  type="button">
+            <joeseln-icon className="wb-search"></joeseln-icon>
+          </button>
+          <button
+                  (click)="searchControl.patchValue(null)"
+                  *ngIf="searchControl.value"
+                  class="btn btn-sm bg-transparent clear-input"
+                  type="button"
+          >
+            <joeseln-icon className="wb-remove"></joeseln-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container slot="elements">
+  </ng-container>
+</ng-container>
+
+
+<ng-container>
   <mlzeln-table-view
-    #tableView
-    [columns]="listColumns"
-    [data]="data"
-    [columnHeader]="false"
-    [paginationSize]="5"
+      #tableView
+      [columns]="listColumns"
+      [columnHeader]="false"
+      [paginationSize]="5"
+      [for_history]="true"
+      [service]="service"
+      [customId]="changesId"
+      [params]="params"
   ></mlzeln-table-view>
 </ng-container>
 <ng-template #dateCellTemplate let-row>

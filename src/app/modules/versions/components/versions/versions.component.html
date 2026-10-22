@@ -1,11 +1,13 @@
-<ng-container *ngIf="data.length">
+<ng-container>
   <mlzeln-table-view
-    #tableView
-    class="mb-4"
-    [columns]="listColumns"
-    [data]="data"
-    [columnHeader]="false"
-    [paginationSize]="5"
+      #tableView
+      class="mb-4"
+      [columns]="listColumns"
+      [columnHeader]="false"
+      [paginationSize]="5"
+      [for_version]="true"
+      [service]="service"
+      [customId]="versionId"
   ></mlzeln-table-view>
 </ng-container>
 

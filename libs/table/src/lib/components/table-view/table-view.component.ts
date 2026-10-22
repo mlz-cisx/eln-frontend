@@ -37,6 +37,13 @@ export class TableViewComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public selectable = false;
 
+
+  @Input()
+  public for_version = false;
+
+  @Input()
+  public for_history = false;
+
   @Input()
   public sortBy?: string;
 
@@ -266,7 +273,6 @@ export class TableViewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
           this.data = event.data;
         }
-
         this.total = event.total;
         this.loading = false;
         this.loadingMore = false;
@@ -275,8 +281,15 @@ export class TableViewComponent implements OnInit, OnChanges, OnDestroy {
         this.rendered.emit(true);
         this.cdr.markForCheck();
       };
-
-      if (this.relation) {
+      if (this.for_version) {
+        this.serviceSubscription = this.service
+          .versions(this.customId, params)
+          .subscribe(handleResponse);
+      } else if (this.for_history) {
+        this.serviceSubscription = this.service
+          .history(this.customId, params)
+          .subscribe(handleResponse);
+      } else if (this.relation) {
         this.serviceSubscription = this.service
           .getRelations(this.customId, params)
           .subscribe(handleResponse);

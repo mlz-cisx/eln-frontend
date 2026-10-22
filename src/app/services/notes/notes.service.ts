@@ -7,14 +7,13 @@ import type {
   ExportService,
   FinalizeVersion,
   Note,
-  Note_with_privileges, NoteList,
+  Note_with_privileges,
+  NoteList,
   NotePayload,
   PrivilegesData,
   RecentChanges,
-  RecentChangesService,
   Relation,
-  Version,
-  VersionsService,
+  Version
 } from '@joeseln/types';
 import type {Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -25,7 +24,7 @@ import {ErrorserviceService, LogoutService} from "@app/services";
   providedIn: 'root',
 })
 export class NotesService
-  implements TableViewService, RecentChangesService, VersionsService<Note>, ExportService {
+  implements TableViewService, ExportService {
   public readonly apiUrl = `${environment.apiUrl}/notes/`;
 
 
@@ -89,13 +88,25 @@ export class NotesService
     );
   }
 
-  public history(id: string, params = new HttpParams()): Observable<RecentChanges[]> {
-    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params});
+  public history(id: string, params = new HttpParams()): Observable<{ total: number; data: RecentChanges[] }> {
+    return this.httpClient.get<RecentChanges[]>(`${this.apiUrl}${id}/history/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      map(data => (
+        {
+          total: data.length,
+          data: data,
+        }))
+    );
   }
 
 
-  public versions(id: string, params = new HttpParams()): Observable<Version[]> {
-    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params});
+  public versions(id: string, params = new HttpParams()): Observable<{ total: number; data: Version[] }> {
+    return this.httpClient.get<Version[]>(`${this.apiUrl}${id}/versions/`, {params}).pipe(catchError(err => this.errorservice.handleError(err, this.logout)),
+      map(data => (
+        {
+          total: data.length,
+          data: data,
+        }))
+    );
   }
 
   public previewVersion(id: string, version: string): Observable<any> {

@@ -17,7 +17,9 @@ import type {
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {cloneDeep} from 'lodash';
-import { map } from 'rxjs/operators';
+import {debounceTime, map, skip} from 'rxjs/operators';
+import {FormBuilder} from "@ngneat/reactive-forms";
+import {HttpParams} from "@angular/common/http";
 
 @UntilDestroy()
 @Component({
@@ -46,6 +48,10 @@ export class RecentChangesComponent implements OnInit {
   @Input()
   public users?: User[] = [];
 
+  public searchControl = this.fb.control<string | null>(null);
+
+  public params = new HttpParams();
+
   public listColumns: TableColumn[] = [];
 
   public data: any[] = [];
@@ -55,17 +61,34 @@ export class RecentChangesComponent implements OnInit {
 
   public constructor(
     private readonly translocoService: TranslocoService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly fb: FormBuilder,
   ) {
   }
 
   public ngOnInit(): void {
     this.initTranslations();
-    this.getChanges();
+    this.initSearch();
+  }
 
-    this.refresh?.pipe(untilDestroyed(this)).subscribe(() => {
-      this.getChanges();
+  public initSearch(): void {
+
+    this.searchControl.value$.pipe(untilDestroyed(this), skip(1), debounceTime(500)).subscribe(value => {
+      const queryParams = new URLSearchParams(window.location.search);
+
+      if (value) {
+        this.params = this.params.set('search', value);
+        this.tableView.loadData(false, this.params);
+        queryParams.set('search', value);
+        history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+      } else {
+        this.params = this.params.delete('search');
+        this.tableView.loadData(false, this.params);
+        queryParams.delete('search');
+        history.pushState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+      }
     });
+
   }
 
   public initTranslations(): void {
@@ -83,71 +106,6 @@ export class RecentChangesComponent implements OnInit {
       });
   }
 
-  public getChanges(): void {
-
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
-    this.service?.history(this.changesId).pipe(
-      untilDestroyed(this),
-      map((recentChanges: RecentChanges[]) => {
-        const changes: RecentChanges[] = [];
-        let changeRecords: RecentChangesChangeRecord[];
-
-        recentChanges.forEach(change => {
-          changeRecords = [];
-
-          change.change_records.forEach(record => {
-            if (record.field_name === 'metadata') {
-              const oldValue = record.old_value ? this.parseJSON(cloneDeep(record.old_value)) : [];
-              const newValue = record.new_value ? this.parseJSON(cloneDeep(record.new_value)) : [];
-
-              changeRecords.push({
-                field_name: record.field_name,
-                old_value: oldValue.filter(
-                  (oldField: any) =>
-                    !newValue.some(
-                      (newField: any) =>
-                        oldField.pk === newField.pk && oldField.fields?.values?.value === newField.fields?.values?.value
-                    )
-                ),
-                new_value: newValue.filter(
-                  (newField: any) =>
-                    !oldValue.some(
-                      (oldField: any) =>
-                        newField.pk === oldField.pk && newField.fields?.values?.value === oldField.fields?.values?.value
-                    )
-                ),
-              });
-            } else {
-              changeRecords.push({...record});
-            }
-          });
-
-          changes.push({
-            ...change,
-            change_records: [...changeRecords],
-          });
-        });
-
-        this.data = changes;
-      })
-    )
-      //   )
-      // )
-      .subscribe(
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        () => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        }
-      );
-
-  }
 
   public onToggleExpanded(row: RecentChanges): void {
     row.expanded = !row.expanded;
