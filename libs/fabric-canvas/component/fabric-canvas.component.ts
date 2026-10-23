@@ -437,6 +437,7 @@ export class FabricCanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   public storeCanvas(): void {
+    this.cancelCrop();
     const json = JSON.stringify(this.canvas.toJSON());
 
     // Reset history
@@ -1932,7 +1933,7 @@ public bringToFrontAndSubmit(): void {
 
 
   private updateOverlayPositions(): void {
-    if (!this.cropRect) return;
+    if (!this.cropRect || this.cropOverlays.length !== 4) return;
 
     const crop = this.cropRect.getBoundingRect();
     const canvasW = this.canvas.getWidth();
@@ -1975,7 +1976,7 @@ public bringToFrontAndSubmit(): void {
 
     const sync = () => {
       this.updateOverlayPositions();
-      this.canvas.renderAll();
+      this.canvas.requestRenderAll();
     };
 
     this.cropRect.on('moving', sync);
