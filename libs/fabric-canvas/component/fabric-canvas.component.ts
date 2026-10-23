@@ -131,6 +131,7 @@ export class FabricCanvasComponent implements AfterViewInit, OnDestroy {
   public ngOnDestroy(): void {
     this.elementSubscription?.unsubscribe();
     this.websocketService.unsubscribeElement(this.uuid);
+    this.cancelCrop()
   }
 
   @HostListener('document:click', ['$event'])
