@@ -1,7 +1,17 @@
 <ng-container *transloco="let t">
   <ng-container slot="search">
     <div class="flex items-center"
-         style="display: flex; justify-content: center">
+         style="display: flex; justify-content: center; position: relative;">
+
+      <button
+              type="button"
+              class="btn mlzeln-button-regular mlzeln-button-outline ml-3"
+              style="position: absolute; left: 0; top: 6px"
+              (click)="reload_history()"
+              [disabled]="loading"
+      >
+        Reload
+      </button>
       <div class="search-input">
         <div class="input-group search-input-group">
           <input
@@ -28,8 +38,6 @@
         </div>
       </div>
     </div>
-  </ng-container>
-  <ng-container slot="elements">
   </ng-container>
 </ng-container>
 

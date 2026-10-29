@@ -9,15 +9,10 @@ import {
   ViewChild
 } from '@angular/core';
 import {TableColumn, TableViewComponent} from '@joeseln/table';
-import type {
-  RecentChanges,
-  RecentChangesChangeRecord,
-  User
-} from '@joeseln/types';
+import type {RecentChanges, User} from '@joeseln/types';
 import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {cloneDeep} from 'lodash';
-import {debounceTime, map, skip} from 'rxjs/operators';
+import {debounceTime, skip} from 'rxjs/operators';
 import {FormBuilder} from "@ngneat/reactive-forms";
 import {HttpParams} from "@angular/common/http";
 
@@ -104,6 +99,10 @@ export class RecentChangesComponent implements OnInit {
           },
         ];
       });
+  }
+
+  public reload_history() {
+    this.tableView.loadData()
   }
 
 
