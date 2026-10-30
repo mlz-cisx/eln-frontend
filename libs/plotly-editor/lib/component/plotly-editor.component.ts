@@ -1,3 +1,5 @@
+import {FabricImage} from 'fabric';
+import {gzip} from 'pako';
 import {
   ChangeDetectorRef,
   Component,
@@ -17,7 +19,6 @@ import {Subject} from "rxjs";
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {PlotlyViaCDNModule} from 'angular-plotly.js';
-import * as fabric from 'fabric';
 
 declare const Plotly: any;
 
@@ -639,8 +640,10 @@ export class PlotlyEditorComponent {
     try {
       const dataUrl = await Plotly.toImage(element, {
         format: 'png',
-        width: 1200,
-        height: 800
+        // Match the default sketch canvas dimensions.
+        width: 1000,
+        height: 750,
+        scale: 3
       });
 
       await this.create_new_sketch(dataUrl)
@@ -652,86 +655,42 @@ export class PlotlyEditorComponent {
 
 
   public async create_new_sketch(base64Plot: any): Promise<void> {
-    // compose the plot image on an offscreen Fabric.js canvas
-    const CANVAS_W = 1000;
-    const CANVAS_H = 750;
-
-    const staticCanvas = new fabric.StaticCanvas(undefined, {
-      width: CANVAS_W,
-      height: CANVAS_H,
-      backgroundColor: '#ffffff',
-    });
-
     try {
-      const img = await fabric.Image.fromURL(base64Plot);
-
-      // scale the plot image to fit within 80% of the canvas
-      const imgW = img.width!;
-      const imgH = img.height!;
-      const scale = Math.min(CANVAS_W / imgW, CANVAS_H / imgH) * 0.8;
-
-      img.set({
-        left: CANVAS_W / 2,
-        top: CANVAS_H / 2,
+      const image = await FabricImage.fromURL(base64Plot);
+      const scale = Math.min(1000 / image.width, 750 / image.height);
+      image.set({
+        left: 500,
+        top: 375,
         originX: 'center',
         originY: 'center',
         scaleX: scale,
         scaleY: scale,
       });
-
-      staticCanvas.add(img);
-      staticCanvas.renderAll();
-
-      const composedDataUrl = staticCanvas.toDataURL({
-        format: 'jpeg',
-        quality: 0.75,
-        multiplier: 1,
+      const content = JSON.stringify({
+        objects: [image.toObject()],
+        background: '#ffffff',
       });
-
-      const file = this.base64ToFile(composedDataUrl, 'plot.jpeg');
-
+      // bypass image compresion
+      const canvasContent = new Blob([gzip(content)], {type: 'application/gzip'});
       const formData = new FormData();
       formData.append('title', 'NewSketch');
-      formData.append('background_image', file);
-      formData.append('labbook_pk', this.labBookId)
+      formData.append('canvas_content', canvasContent, 'canvas.json.gz');
+      formData.append('labbook_pk', this.labBookId);
 
-      this.picturesService
-        .add(formData)
-        .subscribe(
-          picture => {
-            this.state = ModalState.Changed;
-            this.createElement(40, picture.pk);
-          },
-          () => {
-            this.cdr.markForCheck();
-          }
-        );
+      this.picturesService.add(formData).subscribe(
+        picture => {
+          this.state = ModalState.Changed;
+          this.createElement(40, picture.pk);
+        },
+        () => this.cdr.markForCheck()
+      );
     } catch (err) {
-      console.error('Failed to compose sketch image', err);
-      // fallback: upload the original image
-      const file = this.base64ToFile(base64Plot, 'plot.png');
-
-      const formData = new FormData();
-      formData.append('title', 'NewSketch');
-      formData.append('background_image', file);
-      formData.append('labbook_pk', this.labBookId)
-
-      this.picturesService
-        .add(formData)
-        .subscribe(
-          picture => {
-            this.state = ModalState.Changed;
-            this.createElement(40, picture.pk);
-          },
-          () => {
-            this.cdr.markForCheck();
-          }
-        );
+      console.error('Failed to create sketch from plot', err);
     }
   }
 
 
-  private createElement(child_object_content_type: number, child_object_id: string, width: number = 10, height: number = 10) {
+  private createElement(child_object_content_type: number, child_object_id: string, width: number = 13, height: number = 14) {
     if (!this.labBookId) return;
     const elem: LabBookElementPayload = {
       child_object_content_type: child_object_content_type,
@@ -752,17 +711,6 @@ export class PlotlyEditorComponent {
   }
 
 
-  private base64ToFile(base64: string, filename: string): File {
-    const arr = base64.split(',');
-    const mime = arr[0].match(/:(.*?);/)![1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
 
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type: mime});
-  }
 
 }
