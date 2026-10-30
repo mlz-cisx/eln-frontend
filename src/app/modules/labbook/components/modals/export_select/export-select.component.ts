@@ -55,7 +55,7 @@ export class ExportSelectModalComponent implements OnDestroy {
   };
   readonly containTypeOptions: ContainType[] = [30, 40, 50, 70];
   form: FormGroup = this.fb.group({
-    containTypes: [[70]],
+    containTypes: [[...this.containTypeOptions]],
     startTime: [null],
     endTime: [null],
   });

@@ -10,13 +10,9 @@ class="loading"
     </div>
 
     <div class="lb-export" slot="body">
-      <div *ngIf="isUnfiltered" class="full-export-banner">
-        <ng-container *ngIf="isOnlyComments; else fullExport">
-          Exporting all content with comments
-        </ng-container>
-        <ng-template #fullExport> No filters applied — exporting all content
+      <div *ngIf="isUnfiltered && !isOnlyComments" class="full-export-banner">
+        No filters applied — exporting all content
           without comments
-        </ng-template>
       </div>
 
       <form [formGroup]="form" class="export-select">
