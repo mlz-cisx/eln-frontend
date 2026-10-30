@@ -289,6 +289,8 @@ export class LabBookTableViewComponent implements OnInit, OnDestroy {
   onTableRowEnter(origin: HTMLElement, row: any): void {
     this.hoverList = true;
 
+    this.hideMetaTooltip()
+
     if (!this.tooltipOpen) {
       this.tooltipOpen = true;
 

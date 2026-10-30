@@ -373,6 +373,7 @@ export class LabBookRestoreComponent implements OnInit {
 
     this.hoverList = true;
 
+    this.hideMetaTooltip()
     if (!this.tooltipOpen) {
       this.tooltipOpen = true;
       this.showMetaTooltip(origin, result);
