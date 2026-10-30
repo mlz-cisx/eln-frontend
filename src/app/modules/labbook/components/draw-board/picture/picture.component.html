@@ -16,6 +16,13 @@
                     class="form-control mlzeln-input"
                     [id]="'title-' + uniqueHash"
                     formControlName="pic_title"
+                    #titleInput
+                    [tooltip]="titleInput.value"
+                    [isDisabled]="titleInput.scrollWidth <= titleInput.clientWidth"
+                    container="body"
+                    containerClass="tooltip-file-title-popup"
+                    placement="bottom"
+                    [delay]="500"
                     name="title"
                     [placeholder]="t('labBook.drawBoardPicture.details.title.placeholder')"
                     slot="input"

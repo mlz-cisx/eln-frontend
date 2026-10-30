@@ -324,6 +324,37 @@ ngneat-dialog {
       }
     }
   }
+  &.tooltip-file-title-popup {
+    z-index: 9999;
+
+    .tooltip {
+      &-inner {
+        color: #000;
+        background: #fff;
+
+        border: 2px solid #9ca3af;
+        border-radius: 4px;
+
+        min-width: 250px;
+        max-width: 400px;
+        width: 400px;
+
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+
+        text-align: left;
+        padding: 8px 10px;
+        line-height: 1.4;
+
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .arrow {
+      display: none;
+    }
+  }
 }
 
 .progress {

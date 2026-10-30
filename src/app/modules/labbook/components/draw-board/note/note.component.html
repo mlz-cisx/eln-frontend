@@ -15,6 +15,13 @@
                        class="form-control mlzeln-input"
                        [id]="'subject-' + uniqueHash"
                        formControlName="note_subject"
+                       #titleInput
+                       [tooltip]="titleInput.value"
+                       [isDisabled]="titleInput.scrollWidth <= titleInput.clientWidth"
+                       container="body"
+                       containerClass="tooltip-file-title-popup"
+                       placement="bottom"
+                       [delay]="500"
                        name="subject"
                        [placeholder]="t('labBook.drawBoardNote.details.subject.placeholder')"
                        slot="input"
