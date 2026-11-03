@@ -68,7 +68,7 @@
 </div>
 
 <ng-template #subjectCellTemplate let-row>
-  <div ellipsis [tooltip]="row.subject" containerClass="tooltip-sm"
+  <div class="table-multiline-ellipsis" [tooltip]="row.subject" containerClass="tooltip-sm"
        [delay]="500">
     <a [routerLink]="['/notes', row.pk]">{{ row.subject }}</a>
   </div>

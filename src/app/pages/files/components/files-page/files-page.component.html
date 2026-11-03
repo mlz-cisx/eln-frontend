@@ -68,13 +68,13 @@
 </div>
 
 <ng-template #titleCellTemplate let-row>
-  <div ellipsis [tooltip]="row.title" containerClass="tooltip-sm" [delay]="500">
+  <div class="table-multiline-ellipsis" [tooltip]="row.title" containerClass="tooltip-sm" [delay]="500">
     <a
       [routerLink]="[showSidebar ? '.' : '' + '/files', row.pk]">{{ row.title }}</a>
   </div>
 </ng-template>
 <ng-template #nameCellTemplate let-row>
-  <div ellipsis [tooltip]="row.name" containerClass="tooltip-sm" [delay]="500">
+  <div class="table-multiline-ellipsis" [tooltip]="row.name" containerClass="tooltip-sm" [delay]="500">
     <joeseln-icon class="inline-block mr-2"></joeseln-icon>
     <a
       [routerLink]="[showSidebar ? '.' : '' + '/files', row.pk]">{{ row.name }}</a>

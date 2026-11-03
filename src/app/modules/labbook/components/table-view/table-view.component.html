@@ -48,13 +48,15 @@
 <ng-template #titleCellTemplate let-row>
   <div class="title-hover-container">
     <div class="hover-shield"></div>
-    <a
-        #linkRef
-        (mouseenter)="onTableRowEnter(linkRef, row)"
-        (mouseleave)="onListLeave()"
-        [routerLink]="['/' + row.entity_type + 's', row.entity_id]">
-      {{ row.title }}
-    </a>
+    <div class="table-multiline-ellipsis">
+      <a
+          #linkRef
+          (mouseenter)="onTableRowEnter(linkRef, row)"
+          (mouseleave)="onListLeave()"
+          [routerLink]="['/' + row.entity_type + 's', row.entity_id]">
+        {{ row.title }}
+      </a>
+    </div>
   </div>
 </ng-template>
 <ng-template #createdAtCellTemplate let-row>

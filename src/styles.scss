@@ -711,6 +711,43 @@ ngneat-dialog .ngneat-dialog-backdrop .ngneat-dialog-content:has(.comments-modal
 }
 
 
+.table-multiline-ellipsis {
+  width: 100%;
+  min-width: 0;
+
+  a {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    line-height: 1.4;
+    max-height: calc(4 * 1.4em);
+  }
+}
+
+.details-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.details-title {
+  display: inline-block;
+  max-width: 50vw; // 50% of viewport width
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
 
 
 

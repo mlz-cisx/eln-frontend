@@ -71,7 +71,8 @@
 </div>
 
 <ng-template #subjectCellTemplate let-row>
-  <div ellipsis [tooltip]="row.username" containerClass="tooltip-sm"
+  <div class="table-multiline-ellipsis"
+       [tooltip]="row.username" containerClass="tooltip-sm"
        [delay]="500">
     <a [routerLink]="['/admin/users', row.id]">{{ row.username }}</a>
   </div>

@@ -72,17 +72,20 @@
 </div>
 
 <ng-template #subjectCellTemplate let-row>
-  <div ellipsis [tooltip]="row.groupname" containerClass="tooltip-sm"
+  <div class="table-multiline-ellipsis"
+       [tooltip]="row.groupname" containerClass="tooltip-sm"
        [delay]="500">
     <a [routerLink]="['/admin/group/groupadmins', row.pk]">{{ row.groupname }}
       &nbsp; groupadmins</a>
   </div>
-  <div ellipsis [tooltip]="row.groupname" containerClass="tooltip-sm"
+  <div class="table-multiline-ellipsis"
+       [tooltip]="row.groupname" containerClass="tooltip-sm"
        [delay]="500">
     <a [routerLink]="['/admin/group/groupusers', row.pk]">{{ row.groupname }}
       &nbsp; users</a>
   </div>
-  <div ellipsis [tooltip]="row.groupname" containerClass="tooltip-sm"
+  <div class="table-multiline-ellipsis"
+       [tooltip]="row.groupname" containerClass="tooltip-sm"
        [delay]="500">
     <a [routerLink]="['/admin/group/groupguests', row.pk]">{{ row.groupname }}
       &nbsp; guests</a>

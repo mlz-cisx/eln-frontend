@@ -1,5 +1,8 @@
 <ng-container *transloco="let t">
-  <div style="text-align: center"><strong>{{detailsTitle}}</strong>
+  <div class="details-header">
+    <strong class="details-title" [title]="detailsTitle">
+      {{ detailsTitle }}
+    </strong>
     <mlzeln-details-dropdown
             (pngExportRequested)=trigger_export()
             *ngIf="privileges"
