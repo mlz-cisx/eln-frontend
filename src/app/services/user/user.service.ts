@@ -6,7 +6,7 @@ import {catchError, map} from 'rxjs/operators';
 import type {TokenWithValidity, User} from '@joeseln/types';
 import {AuthService, ErrorserviceService, LogoutService} from '@app/services';
 import {Router} from "@angular/router";
-import {UserState, UserStore} from "@app/services/user/user.store";
+import {UserState} from "@app/services/user/user.store";
 import {UserQuery} from "@app/services/user/user.query";
 
 @Injectable({
@@ -17,7 +17,6 @@ export class UserService {
   constructor(private readonly httpClient: HttpClient,
               private _auth: AuthService,
               private router: Router,
-              private readonly userStore: UserStore,
               private readonly userQuery: UserQuery,
               private readonly errorservice: ErrorserviceService,
               private logout: LogoutService
