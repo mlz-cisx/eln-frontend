@@ -38,14 +38,21 @@
                     [required]="true"
                   >
                     <input
-                      type="text"
-                      class="form-control mlzeln-input"
-                      id="subject"
-                      formControlName="subject"
-                      name="subject"
-                      [placeholder]="t('note.details.subject.placeholder')"
-                      slot="input"
-                      readonly
+                            type="text"
+                            class="form-control mlzeln-input"
+                            id="subject"
+                            formControlName="subject"
+                            #titleInput
+                            [tooltip]="titleInput.value"
+                            [isDisabled]="titleInput.scrollWidth <= titleInput.clientWidth"
+                            container="body"
+                            containerClass="tooltip-file-title-popup"
+                            placement="bottom"
+                            [delay]="500"
+                            name="subject"
+                            [placeholder]="t('note.details.subject.placeholder')"
+                            slot="input"
+                            readonly
                     />
                   </mlzeln-form-input>
                 </div>

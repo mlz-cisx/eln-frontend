@@ -40,14 +40,21 @@
                       [required]="true"
                     >
                       <input
-                        type="text"
-                        class="form-control mlzeln-input"
-                        id="title"
-                        formControlName="title"
-                        name="title"
-                        [placeholder]="t('picture.details.title.placeholder')"
-                        slot="input"
-                        readonly
+                              type="text"
+                              class="form-control mlzeln-input"
+                              id="title"
+                              formControlName="title"
+                              #titleInput
+                              [tooltip]="titleInput.value"
+                              [isDisabled]="titleInput.scrollWidth <= titleInput.clientWidth"
+                              container="body"
+                              containerClass="tooltip-file-title-popup"
+                              placement="bottom"
+                              [delay]="500"
+                              name="title"
+                              [placeholder]="t('picture.details.title.placeholder')"
+                              slot="input"
+                              readonly
                       />
                     </mlzeln-form-input>
                   </div>
