@@ -48,12 +48,18 @@
   box-sizing: border-box;
   overflow: hidden; /* prevents content from spilling out */
   transition: background 0.15s ease, border-color 0.15s ease;
+   /* draggable item cursor */
+  cursor: grab;
 }
 
 .search-dropdown-menu .menu-item:hover {
   background: #e9f2ff !important; /* soft blue highlight */
   border-color: rgba(0, 0, 0, 0.15) !important;
-  cursor: pointer;
+  cursor: grab;
+}
+
+.search-dropdown-menu .menu-item:active {
+  cursor: grabbing;
 }
 
 .search-dropdown-menu a,
@@ -89,6 +95,13 @@
   padding-right: 0.5em;
   border-radius: 0.375rem;
   height: 70%;
+    /* action buttons */
+  cursor: pointer !important;
+}
+
+.row-container button:hover,
+.row-container button:focus {
+  cursor: pointer !important;
 }
 
 .hover-shield {
