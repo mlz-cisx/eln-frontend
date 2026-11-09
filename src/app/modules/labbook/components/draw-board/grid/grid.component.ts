@@ -264,6 +264,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
               // has completed before removing the loading state.
               this.initialRenderFrame = requestAnimationFrame(() => {
                 this.initialRendering = false;
+                if (this.changedPks.size) this.scheduleSync();
                 // Re-enable page scrolling only after the final render.
                 document.body.style.overflow = '';
                 this.cdr.markForCheck();
@@ -361,6 +362,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         position_x: x,
         position_y: y
       });
+      // Persist normalized positions so a later socket refresh cannot restore overlaps.
+      if (x !== el.position_x || y !== el.position_y) {
+        this.changedPks.add(el.pk);
+      }
     }
 
     return cleaned;
