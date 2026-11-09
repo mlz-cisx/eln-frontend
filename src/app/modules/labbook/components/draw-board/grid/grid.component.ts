@@ -8,6 +8,8 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import {
   FilesService,
@@ -22,6 +24,7 @@ import {environment} from '@environments/environment';
 import type {LabBookElement, LabBookElementPayload,} from '@joeseln/types';
 import {DialogRef, DialogService} from '@ngneat/dialog';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {GridsterDeferContent} from 'angular-gridster2';
 import type {GridsterConfig, GridsterItemConfig} from 'angular-gridster2';
 import {
   animationFrameScheduler,
@@ -74,7 +77,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   @Input()
   public editable? = false;
 
-
+  @ViewChildren(GridsterDeferContent)
+  private deferredContent!: QueryList<GridsterDeferContent>;
 
   private updateSubscription: Subscription | null = null;
 
@@ -669,6 +673,12 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     search_text = String(search_text).trim().toLowerCase()
 
     if (element_pk) {
+      // A search target may be outside the observed viewport/overscan.
+      this.cdr.detectChanges();
+      const index = this.drawBoardElements.findIndex(item =>
+        String(item['element'].child_object_id) === String(element_pk)
+      );
+      if (index >= 0) this.deferredContent.get(index)?.activate();
       if (page_jump !== 0) {
         await this.waitForElement(`${element_pk}_title_id`);
         const title = this.getElem(element_pk + '_title_id');

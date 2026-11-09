@@ -6,12 +6,14 @@
             [item]="item"
             *ngFor="let item of drawBoardElements; trackBy: trackByElementId"
     >
-      <mlzeln-labbook-draw-board-element
-          #elementComponent
-          [id]="id"
-          [element]="item['element']"
-          [editable]="editable"
-      ></mlzeln-labbook-draw-board-element>
+      <ng-template gridsterDeferContent>
+        <mlzeln-labbook-draw-board-element
+            #elementComponent
+            [id]="id"
+            [element]="item['element']"
+            [editable]="editable"
+        ></mlzeln-labbook-draw-board-element>
+      </ng-template>
     </gridster-item>
   </gridster>
 </mlzeln-loading>

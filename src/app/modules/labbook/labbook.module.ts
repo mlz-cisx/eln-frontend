@@ -10,7 +10,7 @@ import { TableModule } from '@joeseln/table';
 import { WysiwygEditorModule } from '@joeseln/wysiwyg-editor';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { TranslocoService } from '@jsverse/transloco';
-import { Gridster, GridsterItem } from 'angular-gridster2';
+import { Gridster, GridsterItem, GridsterDeferContent } from 'angular-gridster2';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -99,6 +99,7 @@ import {LabBookTableViewComponent} from "@app/modules/labbook/components/table-v
     WysiwygEditorModule,
     Gridster,
     GridsterItem,
+    GridsterDeferContent,
     CollapseModule,
     BsDropdownModule,
     IconsModule,
