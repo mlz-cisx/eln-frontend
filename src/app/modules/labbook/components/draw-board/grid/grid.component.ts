@@ -88,7 +88,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public options: GridsterConfig = {
     ...gridsterConfig,
     scrollToNewItems: false,
-    itemChangeCallback: () => this.updateAllElements(),
+    itemChangeCallback: (item: GridsterItemConfig) => this.markElementChanged(item),
   };
 
   public socketLoading = false;
@@ -367,39 +367,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  public updateAllElements(elements?: LabBookElementPayload[]): void {
-
-    if (this.updateSubscription) {
-      // if there is a previous update, unsubscribe to cancel it
-      this.updateSubscription.unsubscribe();
-    }
-
-    const elementsPayload =
-      elements ?? this.convertToLabBookElementPayload(this.drawBoardElements);
-
-    this.ngZone.runOutsideAngular(() => {
-      this.updateSubscription = timer(1000)
-        .pipe(
-          switchMap(() => {
-            return this.labBooksService
-              .updateAllElements(this.id, elementsPayload)
-              .pipe(
-                tap(() => {
-                  this.continue_search();
-                }),
-                catchError(() => {
-                  return of(null);
-                }),
-              );
-          }),
-        )
-        .subscribe();
-    });
-  }
-
-
-
-  public partial_updateAllElements(): void {
+  public updateAllElements(): void {
     this.scheduleSync();
   }
 
