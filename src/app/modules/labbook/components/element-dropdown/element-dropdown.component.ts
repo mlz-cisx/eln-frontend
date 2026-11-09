@@ -210,7 +210,6 @@ export class LabBookElementDropdownComponent implements OnInit {
             .pipe(untilDestroyed(this))
             .subscribe(success => {
               this.drawboardGridComponent.softReload()
-              this.drawboardGridComponent.updateAllElements()
               this.cdr.markForCheck()
               this.cdr.detectChanges()
               this.restoreEventsService.notifyThrashed(id);
