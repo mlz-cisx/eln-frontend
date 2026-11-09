@@ -233,14 +233,37 @@ export class LabBookRestoreComponent implements OnInit {
   }
 
   onDragStart(event: DragEvent, result: any) {
-    const data = JSON.stringify({ child_object_id: result.pk, child_object_content_type: result.content_type });
+    const data = JSON.stringify({
+      child_object_id: result.pk,
+      child_object_content_type: result.content_type
+    });
+
     event.dataTransfer?.setData('application/json', data);
+
+    const source = event.currentTarget as HTMLElement;
+    if (source && event.dataTransfer) {
+      const ghost = source.cloneNode(true) as HTMLElement;
+
+      ghost.classList.add('drag-ghost');
+      ghost.style.position = 'fixed';
+      ghost.style.top = '-10000px';
+      ghost.style.left = '-10000px';
+      ghost.style.width = `${source.offsetWidth}px`
+
+
+      document.body.appendChild(ghost);
+
+      event.dataTransfer.setDragImage(ghost, 20, 20);
+
+      requestAnimationFrame(() => ghost.remove());
+    }
   }
+
 
   hide_from_restore_list(element: HTMLElement, pk: any, model: any) {
 
     if (model === 'shared_elements.file') {
-      this.filesService.toggle_hidden_delete(pk, true).subscribe((file)=>{
+      this.filesService.toggle_hidden_delete(pk, true).subscribe((file) => {
         this.search();
       })
     }
