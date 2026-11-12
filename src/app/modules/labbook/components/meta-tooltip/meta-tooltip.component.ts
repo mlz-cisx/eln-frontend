@@ -14,6 +14,7 @@ import {FormBuilder} from "@ngneat/reactive-forms";
 import {
   ContentTypeModelService,
   FilesService,
+  LabbooksService,
   NotesService,
   PicturesService,
   RestoreEventsService
@@ -49,6 +50,7 @@ export class MetaTooltipComponent implements OnInit {
     private readonly filesService: FilesService,
     private readonly notesService: NotesService,
     private readonly picturesService: PicturesService,
+    private readonly labbooksService: LabbooksService,
     private readonly contentTypeModelService: ContentTypeModelService,
     private readonly restoreEvents: RestoreEventsService,
     private overlay: Overlay,
@@ -69,6 +71,15 @@ export class MetaTooltipComponent implements OnInit {
     }
     if (this.elem_type === 'shared_elements.file') {
       this.filesService
+        .get(this.elem_uuid)
+        .pipe()
+        .subscribe(privilegesData => {
+          const html = privilegesData.data.description
+          this.applyHtmlContent(html)
+        });
+    }
+    if (this.elem_type === 'labbooks.labbook') {
+      this.labbooksService
         .get(this.elem_uuid)
         .pipe()
         .subscribe(privilegesData => {

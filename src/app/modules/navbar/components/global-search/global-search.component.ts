@@ -20,6 +20,11 @@ import {debounceTime, skip} from 'rxjs/operators';
 import {
   LabBookDrawBoardGridComponent
 } from "@app/modules/labbook/components/draw-board/grid/grid.component";
+import {ComponentPortal} from '@angular/cdk/portal';
+import {
+  MetaTooltipComponent
+} from "@app/modules/labbook/components/meta-tooltip/meta-tooltip.component";
+import {ConnectedPosition, Overlay, OverlayRef} from '@angular/cdk/overlay';
 
 interface FromSearch {
   search: string | null;
@@ -52,7 +57,7 @@ export class GlobalSearchComponent implements OnInit {
 
   public results: any[] = [];
 
-  private row_height =  this.gridComponent!.options!.fixedRowHeight!  + this.gridComponent!.options!.margin! ;
+  private row_height = this.gridComponent!.options!.fixedRowHeight! + this.gridComponent!.options!.margin!;
 
   public form = this.fb.group<FromSearch>({
     search: null,
@@ -62,13 +67,19 @@ export class GlobalSearchComponent implements OnInit {
     picture: false,
   });
 
+  private overlayRef: OverlayRef | null = null;
+  private hoverList = false;
+  private hoverTooltip = false;
+  private tooltipOpen = false;
+
   public constructor(
     private readonly searchService: SearchService,
     private readonly contentTypeModelService: ContentTypeModelService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
     private readonly labbooksService: LabbooksService,
-    private gridComponent: LabBookDrawBoardGridComponent
+    private gridComponent: LabBookDrawBoardGridComponent,
+    private overlay: Overlay,
   ) {
   }
 
@@ -147,9 +158,10 @@ export class GlobalSearchComponent implements OnInit {
 
   public resetSearch(): void {
     this.form.reset();
+    this.hideMetaTooltip()
   }
 
-  public hideDropdown(labbook_pos_y: any, element_pk: any, content_type:any): void {
+  public hideDropdown(labbook_pos_y: any, element_pk: any, content_type: any): void {
     localStorage.setItem('pageVerticalposition', String((labbook_pos_y) * this.row_height))
     localStorage.setItem('element_pk', String(element_pk))
     localStorage.setItem('content_type', String(content_type))
@@ -157,4 +169,163 @@ export class GlobalSearchComponent implements OnInit {
     this.dropdown.hide();
     this.resetSearch();
   }
+
+
+  showMetaTooltip(origin: HTMLElement, result: any) {
+    if (!result || !result.pk) return;
+
+    this.tooltipOpen = true;
+    this.hoverTooltip = false;
+
+    const leftPosition: ConnectedPosition = {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -10 // Tooltip LEFT of element
+    };
+
+    const rightPosition: ConnectedPosition = {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 10 // Tooltip RIGHT of element
+    };
+
+    let positions: ConnectedPosition[] = [leftPosition, rightPosition]; // Default: left (with right fallback)
+
+    const container = origin.closest('.results-container');
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = origin.getBoundingClientRect();
+
+      // Check if the layout has 2 columns (item width is roughly half of container)
+      const isTwoColumns = itemRect.width <= containerRect.width * 0.6;
+
+      if (isTwoColumns) {
+        const containerCenterX = containerRect.left + containerRect.width / 2;
+        const itemCenterX = itemRect.left + itemRect.width / 2;
+
+        if (itemCenterX >= containerCenterX) {
+          // Right column -> place tooltip on the RIGHT (with left fallback if off-screen)
+          positions = [rightPosition, leftPosition];
+        }
+      }
+    }
+
+    const positionStrategy = this.overlay
+      .position()
+      .flexibleConnectedTo(origin)
+      .withPositions(positions);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      hasBackdrop: false,
+      scrollStrategy: this.overlay.scrollStrategies.reposition()
+    });
+
+    const tooltipPortal = new ComponentPortal(MetaTooltipComponent);
+    const tooltipRef = this.overlayRef.attach(tooltipPortal);
+
+
+    tooltipRef.instance.hoverState.subscribe(state => {
+      if (state === 'enter') {
+        this.hoverTooltip = true;
+
+        // Cancel pending close
+        if (this.closeTimer) {
+          clearTimeout(this.closeTimer);
+          this.closeTimer = null;
+        }
+
+      } else {
+        this.hoverTooltip = false;
+        this.evaluateTooltipClose();
+      }
+    });
+
+
+    if (result.content_type_model === 'shared_elements.file') {
+      tooltipRef.instance.htmlMode = true;
+      tooltipRef.instance.canvasMode = false;
+      tooltipRef.instance.elem_uuid = result.element_pk
+      tooltipRef.instance.elem_type = 'shared_elements.file'
+    }
+
+    if (result.content_type_model === 'pictures.picture') {
+      tooltipRef.instance.canvasMode = true;
+      tooltipRef.instance.htmlMode = false;
+      tooltipRef.instance.elem_uuid = result.element_pk
+      return;
+    }
+
+
+    if (result.content_type_model === 'shared_elements.note') {
+      tooltipRef.instance.htmlMode = true;
+      tooltipRef.instance.canvasMode = false;
+      tooltipRef.instance.elem_uuid = result.element_pk
+      tooltipRef.instance.elem_type = 'shared_elements.note'
+    }
+
+    if (result.content_type_model === 'labbooks.labbook') {
+      tooltipRef.instance.htmlMode = true;
+      tooltipRef.instance.canvasMode = false;
+      tooltipRef.instance.elem_uuid = result.element_pk
+      tooltipRef.instance.elem_type = 'labbooks.labbook'
+    }
+
+  }
+
+
+  hideMetaTooltip() {
+    this.tooltipOpen = false;
+
+
+    this.hoverList = false;
+    this.hoverTooltip = false;
+
+    if (this.closeTimer) {
+      clearTimeout(this.closeTimer);
+      this.closeTimer = null;
+    }
+
+    if (this.overlayRef) {
+      this.overlayRef.dispose();
+      this.overlayRef = null;
+    }
+  }
+
+
+  onListEnter(origin: HTMLElement, result: any) {
+    if (!result || !result.pk) return;   // FIX
+
+    this.hoverList = true;
+
+    this.hideMetaTooltip()
+    if (!this.tooltipOpen) {
+      this.tooltipOpen = true;
+      this.showMetaTooltip(origin, result);
+    }
+  }
+
+
+  private closeTimer: any = null;
+
+  onListLeave() {
+    this.hoverList = false;
+
+    // Start a short grace timer
+    this.closeTimer = setTimeout(() => {
+      this.evaluateTooltipClose();
+    }, 300);
+  }
+
+  evaluateTooltipClose() {
+    if (!this.hoverList && !this.hoverTooltip) {
+      this.hideMetaTooltip();
+    }
+  }
+
+
 }

@@ -119,15 +119,18 @@
               <div class="results-container">
                 <ng-container *ngFor="let result of results">
                   <a
-                    [routerLink]="[result.pk]"
-                    (click)="hideDropdown(result.labbook_pos_y, result.element_pk, result.content_type_model)"
+                     [routerLink]="[result.pk]"
+                     (click)="hideDropdown(result.labbook_pos_y, result.element_pk, result.content_type_model)"
+                     (mouseenter)="onListEnter(itemRef, result)"
+                     (mouseleave)="onListLeave()"
                   >
-                    <li role="menuitem"
+                    <li #itemRef
+                        role="menuitem"
                         class="btn mlzeln-button-regular text-left h-auto w-full pt-1 pb-1 border-b menu-item">
                       <div class="flex">
                         <joeseln-icon
-                          [className]="result.content_type_model | formatContentTypeModel: 'icon'"
-                          class="result-icon self-center"
+                                [className]="result.content_type_model | formatContentTypeModel: 'icon'"
+                                class="result-icon self-center"
                         ></joeseln-icon>
                         <div class="ml-2">
                           <div
