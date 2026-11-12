@@ -116,7 +116,8 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   public search(): void {
-    if (this.searchText?.trim()) {
+    this.loading = false;
+    if (this.searchText?.trim() && this.selectedContentTypes.length > 0) {
       this.loading = true;
       this.params = this.params.set('model', this.selectedContentTypes.join(','));
       this.searchService
@@ -157,8 +158,10 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   public resetSearch(): void {
+    this.selectedContentTypes = [];
     this.form.reset();
     this.hideMetaTooltip()
+    this.search();
   }
 
   public hideDropdown(labbook_pos_y: any, element_pk: any, content_type: any): void {
