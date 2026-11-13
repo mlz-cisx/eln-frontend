@@ -4,7 +4,6 @@ WORKDIR /app
 
 # install dependency
 COPY package*.json ./
-COPY assets/*.tar.gz ./assets/
 RUN npm ci
 
 # copy application code
