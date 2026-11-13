@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  EnvironmentInjector,
   Input,
   OnInit,
   Self,
@@ -10,6 +11,8 @@ import {
 import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {EditorComponent} from '@tinymce/tinymce-angular';
+import type {Editor} from 'tinymce';
+import {registerTexInsert} from './tex-editor/tex-insert-dialog';
 
 type ToolbarMode = 'floating' | 'sliding' | 'scrolling' | 'wrap';
 
@@ -38,7 +41,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     height: this.actual_height,
     plugins: 'preview importcss searchreplace autolink autosave  directionality code visualblocks visualchars image link  codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap emoticons accordion',
     menubar: 'file edit view insert format tools table help',
-    toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code  preview | print | pagebreak anchor codesample | ltr rtl",
+    toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | texeditor | code  preview | print | pagebreak anchor codesample | ltr rtl",
     toolbar_mode: 'sliding' as ToolbarMode,
     quickbars_selection_toolbar: false,
     contextmenu: '',
@@ -47,6 +50,7 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
     highlight_on_focus: false,
     autosave_ask_before_unload: false,
     powerpaste_allow_local_images: true,
+    setup: (editor: Editor) => registerTexInsert(editor, this.environmentInjector),
     file_picker_callback: (cb: any) => {
       const input = document.createElement('input');
       input.setAttribute('type', 'file');
@@ -113,7 +117,8 @@ export class WysiwygEditorComponent implements ControlValueAccessor, OnInit, Aft
 
   private destroy$ = new Subject<void>();
 
-  public constructor(@Self() public readonly ngControl: NgControl, private readonly cdr: ChangeDetectorRef) {
+  public constructor(@Self() public readonly ngControl: NgControl, private readonly cdr: ChangeDetectorRef,
+                     private readonly environmentInjector: EnvironmentInjector) {
     ngControl.valueAccessor = this;
   }
 
