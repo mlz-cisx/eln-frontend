@@ -1,4 +1,5 @@
 {
+  "auth.sessionTimeout": "Session timed out",
   "formInput.select.optgroup.other": "Other results",
   "formInput.select.noMatch": "No match",
   "comments.privateComment.tooltip": "Private (click to make public)",

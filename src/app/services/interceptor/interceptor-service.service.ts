@@ -7,8 +7,10 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
-import {EMPTY, Observable, Subject} from 'rxjs';
-import {catchError, filter, switchMap, take} from 'rxjs/operators';
+import {TranslocoService} from '@jsverse/transloco';
+import {EMPTY, Observable, Subject, throwError} from 'rxjs';
+import {catchError, finalize, switchMap, take, timeout} from 'rxjs/operators';
+import {environment} from '@environments/environment';
 import {AuthService, LogoutService, UserService} from "@app/services";
 
 @Injectable({
@@ -25,6 +27,7 @@ export class InterceptorService implements HttpInterceptor {
     private _user: UserService,
     private _logout: LogoutService,
     private readonly toastrService: ToastrService,
+    private readonly translocoService: TranslocoService,
   ) {
   }
 
@@ -37,6 +40,9 @@ export class InterceptorService implements HttpInterceptor {
       request = this.appendToken(request, token);
     }
     return next.handle(request).pipe(catchError((error: HttpErrorResponse) => {
+        if (request.url === `${environment.apiUrl}/refresh-token`) {
+          return throwError(() => error);
+        }
         if (error.status === 401 && this._auth.getToken()) {
           return this.handle401Error(request, next);
         }
@@ -61,18 +67,29 @@ export class InterceptorService implements HttpInterceptor {
       this.refreshToken.next(null);
 
       return this._user.refreshToken().pipe(
+        timeout(5000),
         switchMap((newToken: string) => {
           this.isRefreshing = false;
-          this.refreshToken.next(newToken);
-          return next.handle(this.appendToken(request, newToken));
+          this.refreshToken.next(newToken || null);
+          return newToken ? next.handle(this.appendToken(request, newToken)) : EMPTY;
+        }),
+        catchError(() => {
+          // log user out immediately if refresh-token encounter any error
+          this._logout.logout();
+          this.toastrService.error(this.translocoService.translate('auth.sessionTimeout'));
+          return EMPTY;
+        }),
+        finalize(() => {
+          this.isRefreshing = false;
+          this.refreshToken.next(null);
         })
       );
     // if refresh is already started, wait untill it finish
     } else {
-      return this.refreshToken.pipe(filter((token) => token !== null),
+      return this.refreshToken.pipe(
         take(1),
         switchMap((token) => {
-          return next.handle(this.appendToken(request, token!));
+          return token ? next.handle(this.appendToken(request, token)) : EMPTY;
         })
       );
     }
