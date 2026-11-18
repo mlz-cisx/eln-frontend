@@ -281,6 +281,9 @@ export class UploadLabBookModalComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
+    this.cdr.markForCheck();
+
     const filePromises: Promise<any>[] = [];
 
     for (const [key, file] of this.file_map.entries()) {
@@ -347,6 +350,8 @@ export class UploadLabBookModalComponent implements OnInit {
         return Promise.all(this.third_run_promises);
     })
     .then(() => {
+          this.loading = false;
+          this.cdr.markForCheck();
           this.toastrService.success('Labbook uploaded');
           this.modalRef.close();
     })

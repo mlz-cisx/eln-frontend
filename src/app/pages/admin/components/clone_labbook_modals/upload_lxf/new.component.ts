@@ -211,6 +211,9 @@ export class UploadLabBookLxfModalComponent implements OnInit {
     await Promise.all(this.file_zipPromises);
     await Promise.all(this.element_Promises);
 
+    this.loading = true;
+    this.cdr.markForCheck();
+
     const clonePromises = this.elements.map((entry, index) => {
       const title =
         entry.title && entry.title.trim().length > 0
@@ -243,6 +246,8 @@ export class UploadLabBookLxfModalComponent implements OnInit {
       this.loading = false;
       this.cdr.markForCheck();
     } else {
+      this.loading = false;
+      this.cdr.markForCheck();
       this.toastrService.success("All files imported successfully!");
       this.modalRef.close();
     }
