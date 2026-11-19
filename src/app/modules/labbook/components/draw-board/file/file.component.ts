@@ -1,4 +1,8 @@
 import {
+  afterNextRender,
+  inject,
+  Injector,
+  signal,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -74,6 +78,10 @@ export var allowedBioTypes: GraphType[] = ['pdb', 'cif', 'xyz'];
     standalone: false
 })
 export class LabBookDrawBoardFileComponent implements OnInit {
+  public readonly contentReady = signal(false);
+
+  private readonly renderInjector = inject(Injector);
+
   public readonly instr_csv_all =  environment.instr_csv_all;
 
   @Input()
@@ -229,10 +237,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
       this.submitted = false
     });
 
-    if (this.preload) {
-      this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
-    }
-
   }
 
   public ngOnDestroy(): void {
@@ -266,9 +270,6 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           {emitEvent: false}
         );
         this.preloaded_content = privilegesData.data.description
-        if (this.preload) {
-          this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content);
-        }
 
         if (this.initialState.created_by.admin) {
           this.background_color = 'background-color: ' + admin_element_background_color;
@@ -284,6 +285,11 @@ export class LabBookDrawBoardFileComponent implements OnInit {
           this.graph.graph_type = detectGraphType(this.initialState.original_filename);
         }
         this.cdr.markForCheck();
+        afterNextRender(() => {
+          if (!this.preload) return;
+          this.renderer.setProperty(this.preload.nativeElement, 'innerHTML', this.preloaded_content ?? '');
+          this.contentReady.set(true);
+        }, {injector: this.renderInjector});
       });
   }
 

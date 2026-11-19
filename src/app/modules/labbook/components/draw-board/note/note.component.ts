@@ -1,4 +1,11 @@
+import {MathjaxDirective} from 'mathjax-angular';
 import {
+  afterNextRender,
+  computed,
+  inject,
+  Injector,
+  signal,
+  viewChild,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -46,6 +53,14 @@ interface FormNote {
     standalone: false
 })
 export class LabBookDrawBoardNoteComponent implements OnInit {
+  private readonly dataReady = signal(false);
+  private readonly mathjax = viewChild(MathjaxDirective);
+  private readonly renderInjector = inject(Injector);
+
+  public readonly contentReady = computed(() =>
+    this.dataReady() && (this.mathjax()?.renderReady() ?? false)
+  );
+
   @Input()
   public id!: string;
 
@@ -207,6 +222,7 @@ export class LabBookDrawBoardNoteComponent implements OnInit {
 
         }
         this.cdr.markForCheck();
+        afterNextRender(() => this.dataReady.set(true), {injector: this.renderInjector});
       });
   }
 

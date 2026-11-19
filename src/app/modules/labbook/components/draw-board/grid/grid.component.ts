@@ -1,4 +1,11 @@
+import {highlightSearchText} from '../../../utils/highlight-search-text';
+import {LabBookDrawBoardElementComponent} from '../element/element.component';
 import {
+  DestroyRef,
+  effect,
+  inject,
+  Injector,
+  viewChildren,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -79,6 +86,10 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   @ViewChildren(GridsterDeferContent)
   private deferredContent!: QueryList<GridsterDeferContent>;
+
+  private readonly elementComponents = viewChildren(LabBookDrawBoardElementComponent);
+  private readonly searchInjector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
 
   private updateSubscription: Subscription | null = null;
 
@@ -673,31 +684,17 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     search_text = String(search_text).trim().toLowerCase()
 
     if (element_pk) {
-      // A search target may be outside the observed viewport/overscan.
-      this.cdr.detectChanges();
-      const index = this.drawBoardElements.findIndex(item =>
-        String(item['element'].child_object_id) === String(element_pk)
-      );
-      if (index >= 0) this.deferredContent.get(index)?.activate();
+      if (content_type !== 'labbooks.labbook' &&
+          !await this.activateSearchTarget(String(element_pk))) return;
       if (page_jump !== 0) {
-        await this.waitForElement(`${element_pk}_title_id`);
         const title = this.getElem(element_pk + '_title_id');
         if (title) {
-          await this.waitForContent(title);
           this.renderer.setStyle(title, 'border', 'thick solid red');
         }
         return;
       }
 
-      if (content_type !== 'labbooks.labbook') {
-        await this.waitForElement(
-          content_type === 'pictures.picture'
-            ? `${element_pk}_title_id`
-            : `${element_pk}_preloaded_id`
-        );
-      }
-
-      await this.highlightSearchResult(
+      this.highlightSearchResult(
         String(element_pk),
         String(content_type),
         search_text
@@ -707,43 +704,35 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   }
 
+  public async activateSearchTarget(elementId: string): Promise<boolean> {
+    this.cdr.detectChanges();
+    const index = this.drawBoardElements.findIndex(item =>
+      String(item['element'].child_object_id) === elementId
+    );
+    if (index < 0) return false;
+    this.deferredContent.get(index)?.activate();
+    return new Promise(resolve => {
+      const finish = (ready: boolean) => {
+        clearTimeout(timeout);
+        unregisterDestroy();
+        resolve(ready);
+        watcher.destroy();
+      };
+      const timeout = setTimeout(() => finish(false), 10000);
+      const unregisterDestroy = this.destroyRef.onDestroy(() => finish(false));
+      const watcher = effect(() => {
+        const target = this.elementComponents().find(component =>
+          String(component.element.child_object_id) === elementId
+        );
+        if (target?.contentReady()) finish(true);
+      }, {injector: this.searchInjector});
+    });
+  }
+
   setBorderIfMatch(elem: HTMLElement, text: string, search_text: string) {
     if (text.toLowerCase().includes(search_text)) {
       this.renderer.setStyle(elem, 'border', 'thick solid red');
     }
-  }
-
-  private waitForElement(
-    id: string,
-    timeoutMs = 10000
-  ): Promise<HTMLElement | null> {
-    return new Promise(resolve => {
-      const existing = document.getElementById(id);
-
-      if (existing) {
-        resolve(existing);
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        const elem = document.getElementById(id);
-
-        if (elem) {
-          observer.disconnect();
-          resolve(elem);
-        }
-      });
-
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
-
-      setTimeout(() => {
-        observer.disconnect();
-        resolve(null);
-      }, timeoutMs);
-    });
   }
 
   trackByElementId(index: number, item: any): string {
@@ -754,10 +743,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.collapseService.setCollapsed(false);
   }
 
-
-  stripImages(html: string): string {
-    return html.replace(/<img[^>]*>/gi, '');
-  }
 
   getElem(id: string) {
     return document.getElementById(id);
@@ -770,74 +755,11 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
 
-  applyHighlighting(elem: HTMLElement, search_text: string) {
-    const html = this.stripImages(elem.innerHTML);
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-    const regex = new RegExp(search_text, "gi");
-
-    let node;
-    while ((node = walker.nextNode())) {
-      const text = node.nodeValue;
-      if (!text) continue;
-
-      if (regex.test(text)) {
-        const wrapper = doc.createElement("span");
-        wrapper.innerHTML = text.replace(
-          regex,
-          '<span style="background-color: yellow; font-weight: bold">$&</span>'
-        );
-
-        const fragment = doc.createDocumentFragment();
-        fragment.append(...wrapper.childNodes);
-
-        node.parentNode?.replaceChild(fragment, node);
-      }
-    }
-    const finalHtml = doc.body.innerHTML;
-    this.renderer.setProperty(elem, "innerHTML", finalHtml);
-
-    return finalHtml;
-  }
-
-  private waitForContent(
-    elem: HTMLElement,
-    timeoutMs = 10000
-  ): Promise<void> {
-    return new Promise(resolve => {
-      if (elem.innerHTML.trim().length > 0) {
-        resolve();
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        if (elem.innerHTML.trim().length > 0) {
-          observer.disconnect();
-          resolve();
-        }
-      });
-
-      observer.observe(elem, {
-        childList: true,
-        subtree: true,
-        characterData: true
-      });
-
-      setTimeout(() => {
-        observer.disconnect();
-        resolve();
-      }, timeoutMs);
-    });
-  }
-
-  private async highlightSearchResult(
+  private highlightSearchResult(
     element_pk: string,
     content_type: string,
     search_text: string
-  ): Promise<void> {
+  ): void {
 
     if (
       content_type === 'shared_elements.note' ||
@@ -847,11 +769,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       const title = this.getElem(element_pk + '_title_id');
 
       if (elem && title) {
-        await this.waitForContent(elem);
-        await this.waitForContent(title);
-
-        const content = this.applyHighlighting(elem, search_text);
-        const title_content = this.getTitleContent(title)
+        const content = highlightSearchText(elem, search_text);
+        const title_content = this.getTitleContent(title).toLowerCase();
         const content_lc = content.toLowerCase();
 
 
@@ -859,23 +778,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
         this.setBorderIfMatch(title, title_content, search_text);
 
         if (
-          content_type === 'shared_elements.note' &&
-          !title_content.includes(search_text) &&
-          !content_lc.includes(search_text)
-        ) {
-          this.renderer.setStyle(
-            title,
-            'background-color',
-            highlight_element_background_color
-          );
-          this.renderer.setStyle(
-            elem,
-            'background-color',
-            highlight_element_background_color
-          );
-        }
-        if (
-          content_type === 'shared_elements.file' &&
           !title_content.includes(search_text) &&
           !content_lc.includes(search_text)
         ) {
@@ -901,7 +803,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       const title = this.getElem(element_pk + '_title_id');
 
       if (title) {
-        await this.waitForContent(title);
         this.renderer.setStyle(title, 'border', 'thick solid red');
       }
       return;
@@ -912,8 +813,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       const elem = this.getElem(element_pk + '_preloaded_id');
 
       if (elem) {
-        await this.waitForContent(elem);
-        const content = this.applyHighlighting(elem, search_text);
+        const content = highlightSearchText(elem, search_text);
         const content_lc = content.toLowerCase();
         this.setBorderIfMatch(elem, content_lc, search_text);
       }
@@ -921,7 +821,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       const title = this.getElem(element_pk + '_title_id');
 
       if (title) {
-        await this.waitForContent(title);
         const title_content = this.getTitleContent(title).toLowerCase();
         this.setBorderIfMatch(title, title_content, search_text);
       }

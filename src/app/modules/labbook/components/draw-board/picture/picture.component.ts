@@ -1,5 +1,9 @@
 import {
   afterEveryRender,
+  afterNextRender,
+  inject,
+  Injector,
+  signal,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -57,6 +61,10 @@ interface FormPicture {
   standalone: false
 })
 export class LabBookDrawBoardPictureComponent implements OnInit {
+  public readonly contentReady = signal(false);
+
+  private readonly renderInjector = inject(Injector);
+
 
   @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
   @ViewChild('fabricCanvas', {static: false}) fabricCanvas!: FabricCanvasComponent;
@@ -228,6 +236,7 @@ export class LabBookDrawBoardPictureComponent implements OnInit {
           this.title_editable = true
         }
         this.cdr.markForCheck();
+        afterNextRender(() => this.contentReady.set(true), {injector: this.renderInjector});
       });
   }
 

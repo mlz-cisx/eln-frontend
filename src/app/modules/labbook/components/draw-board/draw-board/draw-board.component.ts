@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, Input,} from '@angular/core';
+import {LabBookDrawBoardGridComponent} from '../grid/grid.component';
+import {ChangeDetectionStrategy, Component, Input, ViewChild,} from '@angular/core';
 import {UntilDestroy} from '@ngneat/until-destroy';
 
 @UntilDestroy()
@@ -10,6 +11,9 @@ import {UntilDestroy} from '@ngneat/until-destroy';
   standalone: false
 })
 export class LabBookDrawBoardComponent {
+  @ViewChild(LabBookDrawBoardGridComponent)
+  public grid?: LabBookDrawBoardGridComponent;
+
   @Input()
   public id!: string;
 

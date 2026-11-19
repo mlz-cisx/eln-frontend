@@ -1,3 +1,4 @@
+import {highlightSearchText} from '@app/modules/labbook/utils/highlight-search-text';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -342,16 +343,9 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
       });
     });
 
-    const targetId =
-      content_type === 'pictures.picture'
-        ? `${element_pk}_title_id`
-        : `${element_pk}_preloaded_id`;
-
-    const target = await this.waitForElement(targetId);
-
-    if (!target) {
-      return;
-    }
+    if (content_type === 'labbooks.labbook') return;
+    const grid = this.drawBoards?.first?.grid;
+    if (!grid || !await grid.activateSearchTarget(String(element_pk))) return;
 
     if (
       content_type === 'shared_elements.note' ||
@@ -371,10 +365,7 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         return;
       }
 
-      await this.waitForContent(title);
-      await this.waitForContent(elem);
-
-      const content = this.applyHighlighting(
+      const content = highlightSearchText(
         elem,
         search_text
       );
@@ -409,57 +400,9 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         });
       }
 
-      this.renderer.setProperty(
-        elem,
-        'innerHTML',
-        content
-      );
-
-      this.highlighted.subscribe(() => {
-        const reverseContent =
-          this.removeHighlighting(elem);
-
-        this.renderer.setProperty(
-          elem,
-          'innerHTML',
-          reverseContent
-        );
-      });
+      this.highlighted.subscribe(() => this.removeHighlighting(elem));
 
       if (
-        content_type === 'shared_elements.note' &&
-        !titleContent.toLowerCase().includes(search_text) &&
-        !contentLc.includes(search_text)
-      ) {
-        this.renderer.setStyle(
-          title,
-          'background-color',
-          highlight_element_background_color
-        );
-
-        this.renderer.setStyle(
-          elem,
-          'background-color',
-          highlight_element_background_color
-        );
-
-        this.highlighted.subscribe(() => {
-          this.renderer.setStyle(
-            title,
-            'background-color',
-            ''
-          );
-
-          this.renderer.setStyle(
-            elem,
-            'background-color',
-            ''
-          );
-        });
-      }
-
-      if (
-        content_type === 'shared_elements.file' &&
         !titleContent.toLowerCase().includes(search_text) &&
         !contentLc.includes(search_text)
       ) {
@@ -500,8 +443,6 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
         return;
       }
 
-      await this.waitForContent(title);
-
       this.renderer.setStyle(
         title,
         'border',
@@ -514,133 +455,13 @@ export class LabBookPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private waitForElement(
-    id: string,
-    timeoutMs = 10000
-  ): Promise<HTMLElement | null> {
-    return new Promise(resolve => {
-      const existing = document.getElementById(id);
-
-      if (existing) {
-        resolve(existing);
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        const elem = document.getElementById(id);
-
-        if (elem) {
-          observer.disconnect();
-          resolve(elem);
-        }
-      });
-
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
-
-      setTimeout(() => {
-        observer.disconnect();
-        resolve(null);
-      }, timeoutMs);
-    });
-  }
-
-  private waitForContent(
-    elem: HTMLElement,
-    timeoutMs = 10000
-  ): Promise<void> {
-    return new Promise(resolve => {
-      if (elem.innerHTML.trim().length > 0) {
-        resolve();
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        if (elem.innerHTML.trim().length > 0) {
-          observer.disconnect();
-          resolve();
-        }
-      });
-
-      observer.observe(elem, {
-        childList: true,
-        subtree: true,
-        characterData: true
-      });
-
-      setTimeout(() => {
-        observer.disconnect();
-        resolve();
-      }, timeoutMs);
-    });
-  }
-
-  stripImages(html: string): string {
-    return html.replace(/<img[^>]*>/gi, '');
-  }
-
-  applyHighlighting(elem: HTMLElement, search_text: string) {
-    const html = this.stripImages(elem.innerHTML);
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-    const regex = new RegExp(search_text, "gi");
-
-    let node;
-    while ((node = walker.nextNode())) {
-      const text = node.nodeValue;
-      if (!text) continue;
-
-      if (regex.test(text)) {
-        const wrapper = doc.createElement("span");
-        wrapper.innerHTML = text.replace(
-          regex,
-          '<span style="background-color: yellow; font-weight: bold">$&</span>'
-        );
-
-        const fragment = doc.createDocumentFragment();
-        fragment.append(...wrapper.childNodes);
-
-        node.parentNode?.replaceChild(fragment, node);
+  private removeHighlighting(elem: HTMLElement): void {
+    for (const span of Array.from(elem.querySelectorAll('span'))) {
+      if (span.style.backgroundColor === 'yellow' && span.style.fontWeight === 'bold') {
+        span.replaceWith(...Array.from(span.childNodes));
       }
     }
-
-    const finalHtml = doc.body.innerHTML;
-    return finalHtml;
-  }
-
-  removeHighlighting(elem: HTMLElement) {
-    const html = elem.innerHTML;
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_ELEMENT);
-
-    let node;
-    while ((node = walker.nextNode())) {
-      if (
-        node.nodeType === Node.ELEMENT_NODE &&
-        node.nodeName === 'SPAN' &&
-        (node as HTMLElement).style.backgroundColor === 'yellow' &&
-        (node as HTMLElement).style.fontWeight === 'bold'
-      ) {
-        const parent = node.parentNode;
-        if (parent) {
-          while (node.firstChild) {
-            parent.insertBefore(node.firstChild, node);
-          }
-          parent.removeChild(node);
-        }
-      }
-    }
-
-    const finalHtml = doc.body.innerHTML;
-    return finalHtml;
+    elem.normalize();
   }
 
   public initFormChanges(): void {
