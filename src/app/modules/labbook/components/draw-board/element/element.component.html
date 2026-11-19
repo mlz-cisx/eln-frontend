@@ -1,4 +1,3 @@
-  @defer (on viewport) {
   <mlzeln-labbook-draw-board-note
     #elementComponent
     [id]="id"
@@ -6,12 +5,7 @@
     [editable]="editable"
     *ngIf="element.child_object_content_type_model === 'shared_elements.note'"
   ></mlzeln-labbook-draw-board-note>
-  }
-  @placeholder {
-    <p></p>
-  }
 
-  @defer (on viewport) {
   <mlzeln-labbook-draw-board-file
     #elementComponent
     [id]="id"
@@ -19,12 +13,7 @@
     [editable]="editable"
     *ngIf="element.child_object_content_type_model === 'shared_elements.file'"
   ></mlzeln-labbook-draw-board-file>
-  }
-  @placeholder {
-    <p></p>
-  }
 
-  @defer (on viewport) {
   <mlzeln-labbook-draw-board-picture
     #elementComponent
     [id]="id"
@@ -32,8 +21,4 @@
     [editable]="editable"
     *ngIf="element.child_object_content_type_model === 'pictures.picture'"
   ></mlzeln-labbook-draw-board-picture>
-  }
-  @placeholder {
-    <p></p>
-  }
 
