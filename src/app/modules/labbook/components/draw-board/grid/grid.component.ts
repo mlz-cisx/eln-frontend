@@ -5,6 +5,7 @@ import {
   afterNextRender,
   effect,
   inject,
+  signal,
   Injector,
   viewChildren,
   ChangeDetectionStrategy,
@@ -110,7 +111,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public socketLoading = false;
 
-  private initialRendering = false;
+  private readonly initialRendering = signal(false);
 
   /** Socket refresh received before the initial chunks finished rendering. */
   private pendingInitialRenderRefresh = false;
@@ -180,7 +181,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.initialRendering = false;
+    this.initialRendering.set(false);
     if (this.initialRenderFrame !== undefined) {
       cancelAnimationFrame(this.initialRenderFrame);
     }
@@ -198,14 +199,14 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     // through a partially rendered board.
     document.body.style.overflow = 'hidden';
 
-    this.initialRendering = true;
+    this.initialRendering.set(true);
 
     this.labBooksService
       .getElements(this.id)
       .pipe(
         // restore scrolling on error.
         catchError(() => {
-          this.initialRendering = false;
+          this.initialRendering.set(false);
           document.body.style.overflow = '';
           return of([]);
         }),
@@ -254,7 +255,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
           // Empty board case.
           if (isEmpty) {
             this.drawBoardElements = [];
-            this.initialRendering = false;
+            this.initialRendering.set(false);
 
             // Re-enable scrolling immediately.
             document.body.style.overflow = '';
@@ -278,7 +279,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
               // Wait one additional frame to ensure browser paint/layout
               // has completed before removing the loading state.
               this.initialRenderFrame = requestAnimationFrame(() => {
-                this.initialRendering = false;
+                this.initialRendering.set(false);
                 if (this.changedPks.size) this.scheduleSync();
                 // Re-enable page scrolling only after the final render.
                 document.body.style.overflow = '';
@@ -293,7 +294,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
         error: () => {
           // Safety net: always restore scrolling on error.
-          this.initialRendering = false;
+          this.initialRendering.set(false);
           document.body.style.overflow = '';
           this.cdr.markForCheck();
         }
@@ -389,7 +390,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
    * drag/resize callback — mark the item as changed and schedule a debounced update
    */
   private markElementChanged(item: GridsterItemConfig): void {
-    if (this.initialRendering) {
+    if (this.initialRendering()) {
       return;
     }
     const pk = (item as GridsterItemWithElement).element.pk;
@@ -461,7 +462,7 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
   public softReload(): Promise<void> {
     return new Promise<void>((resolve) => {
       // Ignore socket updates until initial chunk rendering finished.
-      if (this.initialRendering) {
+      if (this.initialRendering()) {
         this.pendingInitialRenderRefresh = true;
         return;
       }
@@ -700,11 +701,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public async activateSearchTarget(elementId: string): Promise<boolean> {
     this.cdr.detectChanges();
-    const index = this.drawBoardElements.findIndex(item =>
-      String(item['element'].child_object_id) === elementId
-    );
-    if (index < 0) return false;
-    this.deferredContent.get(index)?.activate();
     return new Promise(resolve => {
       const finish = (ready: boolean) => {
         clearTimeout(timeout);
@@ -715,6 +711,15 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       const timeout = setTimeout(() => finish(false), 10000);
       const unregisterDestroy = this.destroyRef.onDestroy(() => finish(false));
       const watcher = effect(() => {
+        if (this.initialRendering()) return;
+        const index = this.drawBoardElements.findIndex(item =>
+          String((item as GridsterItemWithElement).element.child_object_id) === elementId
+        );
+        if (index < 0) {
+          finish(false);
+          return;
+        }
+        this.deferredContent.get(index)?.activate();
         const target = this.elementComponents().find(component =>
           String(component.element.child_object_id) === elementId
         );
