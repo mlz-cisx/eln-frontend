@@ -2,6 +2,7 @@ import {highlightSearchText} from '../../../utils/highlight-search-text';
 import {LabBookDrawBoardElementComponent} from '../element/element.component';
 import {
   DestroyRef,
+  afterNextRender,
   effect,
   inject,
   Injector,
@@ -36,6 +37,7 @@ import type {GridsterConfig, GridsterItemConfig} from 'angular-gridster2';
 import {
   animationFrameScheduler,
   catchError,
+  concat,
   concatMap,
   from,
   Observable,
@@ -123,8 +125,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
   public modalRef?: DialogRef;
 
-  private readonly chunkPauseMs = 10;
-
   public constructor(
     public readonly labBooksService: LabbooksService,
     public readonly notesService: NotesService,
@@ -203,8 +203,6 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
     this.labBooksService
       .getElements(this.id)
       .pipe(
-        untilDestroyed(this),
-
         // restore scrolling on error.
         catchError(() => {
           this.initialRendering = false;
@@ -227,13 +225,14 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
 
           // Clean layout collisions before rendering.
           const cleaned = this.cleanElements(elements);
-          // Split the dataset into smaller chunks to avoid
-          // freezing Angular/Gridster during initial render.
           const chunks = this.chunk(cleaned);
 
           return from(chunks).pipe(
             concatMap((chunk, index) =>
-              timer(this.chunkPauseMs).pipe(
+              (index === 0
+                ? of(chunk)
+                : concat(this.waitForFirstChunkPaint(), of(chunk))
+              ).pipe(
                 map((): ChunkResult => ({
                     elements: chunk,
                     isEmpty: false,
@@ -246,7 +245,8 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
                 )
             )
           );
-        })
+        }),
+        untilDestroyed(this)
       )
       .subscribe({
         next: ({elements, isEmpty, isLastChunk}) => {
@@ -300,34 +300,28 @@ export class LabBookDrawBoardGridComponent implements OnInit, OnDestroy {
       });
   }
 
-
+  // paint the first 100 items, then append the remainder in one batch.
+  // deferred content keeps off-viewport elemen uninstantiated.
   private chunk<T>(arr: T[]): T[][] {
-    const chunks: T[][] = [];
-    // Fast first paint, then aggressively ramp up
-    const sizes = [
-      100,   // immediate visual feedback
-      500,   // quickly populate screen
-      1500,  // reduce relayout count
-      3000,  // bulk render
-      5000   // finish remaining items
-    ];
+    return arr.length <= 100
+      ? [arr]
+      : [arr.slice(0, 100), arr.slice(100)];
+  }
 
-    let index = 0;
-    let sizeIndex = 0;
-    while (index < arr.length) {
-      const size =
-        sizeIndex < sizes.length
-          ? sizes[sizeIndex]
-          : 5000;
-
-      chunks.push(
-        arr.slice(index, index + size)
-      );
-
-      index += size;
-      sizeIndex++;
-    }
-    return chunks;
+  // allow renederer to paint first 100 items before appending the rest.
+  private waitForFirstChunkPaint(): Observable<never> {
+    return new Observable(subscriber => {
+      let frame: number | undefined;
+      const rendered = afterNextRender(() => {
+        frame = requestAnimationFrame(() => {
+          frame = requestAnimationFrame(() => subscriber.complete());
+        });
+      }, {injector: this.searchInjector});
+      return () => {
+        rendered.destroy();
+        if (frame !== undefined) cancelAnimationFrame(frame);
+      };
+    });
   }
 
   cleanElements<T extends LabBookElement<any>>(elements: T[]): T[] {
