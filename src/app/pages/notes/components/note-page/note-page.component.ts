@@ -18,9 +18,7 @@ import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
 import {
-  AuthService,
-  LabbooksService,
-  NotesService,
+  NotesService, RestoreEventsService,
   UserService,
 } from '@app/services';
 import type {Note, NotePayload, Privileges, User} from '@joeseln/types';
@@ -38,7 +36,7 @@ import {
 import {
   DescriptionModalComponent
 } from "@app/modules/shared/modals/description/description.component";
-import {ModalState} from "@app/enums/modal-state.enum";
+
 
 
 interface FormNote {
@@ -101,12 +99,10 @@ export class NotePageComponent implements OnInit, OnDestroy {
     private readonly translocoService: TranslocoService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly titleService: Title,
     private readonly modalService: DialogService,
-    private readonly labbooksService: LabbooksService,
     private user_service: UserService,
-    private gridComponent: LabBookDrawBoardGridComponent
+    private gridComponent: LabBookDrawBoardGridComponent,
+    private readonly restoreEvents: RestoreEventsService,
   ) {
   }
 
@@ -128,6 +124,12 @@ export class NotePageComponent implements OnInit, OnDestroy {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
     });
+
+    this.restoreEvents.version_restored$
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.initDetails()
+      });
 
 
     this.initSidebar();

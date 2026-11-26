@@ -8,7 +8,7 @@ import {
   Output
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {PicturesService} from '@app/services';
+import {PicturesService, RestoreEventsService} from '@app/services';
 import type { ModalCallback, Picture } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
@@ -53,7 +53,8 @@ export class PicturePreviewComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly picturesService: PicturesService,
     private readonly fb: FormBuilder,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly restoreEvents: RestoreEventsService,
   ) {
   }
 
@@ -90,6 +91,7 @@ export class PicturePreviewComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {
+          this.restoreEvents.notifyVersionRestored(this.id!);
           this.state = ModalState.Changed;
           this.modalRef.close({state: this.state});
           this.translocoService

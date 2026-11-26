@@ -18,14 +18,16 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-import {AuthService, FilesService, UserService} from '@app/services';
+import {
+  FilesService,
+  RestoreEventsService,
+  UserService
+} from '@app/services';
 import type {File, FilePayload, Privileges, User} from '@joeseln/types';
 import {ModalCallback} from "@joeseln/types";
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {ToastrService} from 'ngx-toastr';
 import {Observable, of} from 'rxjs';
 import {debounceTime, map, skip, switchMap, take,} from 'rxjs/operators';
 import {
@@ -42,7 +44,7 @@ import {environment} from "@environments/environment";
 import {
   DescriptionModalComponent
 } from "@app/modules/shared/modals/description/description.component";
-import {ModalState} from "@app/enums/modal-state.enum";
+
 
 interface FormFile {
   title: FormControl<string | null>;
@@ -121,16 +123,13 @@ export class FilePageComponent implements OnInit, OnDestroy {
     public readonly filesService: FilesService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
-    private readonly toastrService: ToastrService,
-    private readonly translocoService: TranslocoService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
     private gridComponent: LabBookDrawBoardGridComponent,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private readonly restoreEvents: RestoreEventsService,
   ) {
   }
 
@@ -163,6 +162,12 @@ export class FilePageComponent implements OnInit, OnDestroy {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
     });
+
+    this.restoreEvents.version_restored$
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.initDetails()
+      });
 
     this.initSidebar();
     this.initSearchInput();

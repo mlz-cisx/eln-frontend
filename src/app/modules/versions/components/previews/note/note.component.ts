@@ -8,7 +8,7 @@ import {
   Output
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {NotesService} from '@app/services';
+import {NotesService, RestoreEventsService} from '@app/services';
 import type { ModalCallback, Note } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
@@ -55,7 +55,8 @@ export class NotePreviewComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly notesService: NotesService,
     private readonly fb: FormBuilder,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly restoreEvents: RestoreEventsService,
   ) {
   }
 
@@ -101,6 +102,7 @@ export class NotePreviewComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {
+          this.restoreEvents.notifyVersionRestored(this.id!);
           this.state = ModalState.Changed;
           this.modalRef.close({state: this.state});
           this.translocoService

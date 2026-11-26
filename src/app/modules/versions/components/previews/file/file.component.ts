@@ -8,7 +8,7 @@ import {
   Output
 } from '@angular/core';
 import {ModalState} from '@app/enums/modal-state.enum';
-import {FilesService} from '@app/services';
+import {FilesService, RestoreEventsService} from '@app/services';
 import type { File, ModalCallback } from '@joeseln/types';
 import {DialogRef} from '@ngneat/dialog';
 import {FormBuilder} from '@ngneat/reactive-forms';
@@ -57,7 +57,8 @@ export class FilePreviewComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly filesService: FilesService,
     private readonly fb: FormBuilder,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly restoreEvents: RestoreEventsService,
   ) {
   }
 
@@ -127,6 +128,7 @@ export class FilePreviewComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         () => {
+          this.restoreEvents.notifyVersionRestored(this.id!);
           this.state = ModalState.Changed;
           this.modalRef.close({state: this.state});
           this.translocoService

@@ -11,7 +11,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import {Validators} from '@angular/forms';
-import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   CommentsComponent
@@ -19,13 +18,15 @@ import {
 import {
   NewCommentModalComponent
 } from '@app/modules/comment/components/modals/new/new.component';
-import {AuthService, PicturesService, UserService} from '@app/services';
+import {
+  PicturesService,
+  RestoreEventsService,
+  UserService
+} from '@app/services';
 import type {Picture, Privileges, User} from '@joeseln/types';
 import {DialogConfig, DialogRef, DialogService} from '@ngneat/dialog';
 import {FormBuilder, FormControl} from '@ngneat/reactive-forms';
-import {TranslocoService} from '@jsverse/transloco';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {ToastrService} from 'ngx-toastr';
 import {Observable, of} from 'rxjs';
 import {debounceTime, map, skip, switchMap,} from 'rxjs/operators';
 import {
@@ -114,16 +115,12 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     public readonly picturesService: PicturesService,
     private readonly fb: FormBuilder,
     private readonly cdr: ChangeDetectorRef,
-    private readonly toastrService: ToastrService,
-    private readonly translocoService: TranslocoService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly userService: UserService,
-    private readonly titleService: Title,
     private readonly modalService: DialogService,
     private user_service: UserService,
     private gridComponent: LabBookDrawBoardGridComponent,
+    private readonly restoreEvents: RestoreEventsService,
   ) {
     afterEveryRender(() => {
       this.resizeChild()
@@ -142,6 +139,12 @@ export class PicturePageComponent implements OnInit, OnDestroy {
     this.user_service.user$.pipe(untilDestroyed(this)).subscribe(state => {
       this.currentUser = state.user;
     });
+
+    this.restoreEvents.version_restored$
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        void this.fabricCanvas.restoreCanvasContent();
+      });
 
     this.initSidebar();
     this.initSearchInput();
