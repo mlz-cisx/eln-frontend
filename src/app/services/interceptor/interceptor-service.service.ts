@@ -8,8 +8,8 @@ import {
 } from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
 import {TranslocoService} from '@jsverse/transloco';
-import {EMPTY, Observable, Subject, throwError} from 'rxjs';
-import {catchError, finalize, switchMap, take, timeout} from 'rxjs/operators';
+import {EMPTY, Observable, of, Subject, throwError} from 'rxjs';
+import {catchError, defaultIfEmpty, finalize, switchMap, take, timeout} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {AuthService, LogoutService, UserService} from "@app/services";
 
@@ -76,7 +76,12 @@ export class InterceptorService implements HttpInterceptor {
         catchError(() => {
           // log user out immediately if refresh-token encounter any error
           this._logout.logout();
-          this.toastrService.error(this.translocoService.translate('auth.sessionTimeout'));
+          this.translocoService.selectTranslate('auth.sessionTimeout').pipe(
+            take(1),
+            timeout(1000),
+            defaultIfEmpty(''),
+            catchError(() => of(''))
+          ).subscribe((message) => this.toastrService.error(message || 'Session timed out'));
           return EMPTY;
         }),
         finalize(() => {
