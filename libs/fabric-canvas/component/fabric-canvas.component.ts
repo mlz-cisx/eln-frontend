@@ -438,6 +438,7 @@ export class FabricCanvasComponent implements AfterViewInit, OnDestroy {
 
   public storeCanvas(): void {
     this.cancelCrop();
+    this.finishShape()
     const json = JSON.stringify(this.canvas.toJSON());
 
     // Reset history
@@ -655,6 +656,7 @@ public bringToFrontAndSubmit(): void {
   }
 
   startPointMode(): void {
+    this.finishShape()
     this.canvas.selection = false;
 
     // Disable interaction on all existing objects (background, shapes, images)
@@ -677,7 +679,7 @@ public bringToFrontAndSubmit(): void {
     this.vertexCircles = [];
 
     this.canvas.on('mouse:down', (opt) => {
-      const pointer = this.canvas.getViewportPoint(opt.e);
+      const pointer = this.canvas.getScenePoint(opt.e);
       const point = {x: pointer.x, y: pointer.y};
       this.points.push(point);
 
