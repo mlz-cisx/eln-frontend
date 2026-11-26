@@ -44,7 +44,7 @@
     "@types/offscreencanvas": "^2019.7.3",
     "@types/three": "^0.182.0",
     "3dmol": "^2.5.3",
-    "angular-gridster2": "git+https://github.com/mlz-cisx/angular-gridster2.git#0d9319bf2b975d35eed6e86c11827c4892682718",
+    "angular-gridster2": "git+https://github.com/mlz-cisx/angular-gridster2.git#7327ad6e389008dc7a8aa32cb3d5191ca9e64bc4",
     "angular-plotly.js": "^6.0.0",
     "angular-resizable-element": "^5",
     "angularx-qrcode": "^21.0.5",
